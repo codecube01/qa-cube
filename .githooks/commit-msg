@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Refuses a commit message that names a real project's task. Messages end up in the
+# published history, in release notes and in PR listings.
+set -euo pipefail
+
+root=$(git rev-parse --show-toplevel)
+checker="$root/.github/scripts/check_identifiers.py"
+[ -f "$checker" ] || exit 0
+
+python3 "$checker" --files "$1" || {
+  echo
+  echo "Commit message refused. Describe the lesson by its mechanics, not by its ticket."
+  exit 1
+}

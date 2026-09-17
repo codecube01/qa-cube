@@ -1,0 +1,28 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "qa-cube",
+  "description": "A portable QA test-session engine for Claude Code.",
+  "owner": {
+    "name": "Vadim Glushonkov"
+  },
+  "plugins": [
+    {
+      "name": "qa-cube",
+      "source": "./",
+      "description": "A QA test-session engine: a manager plus the qa-analyst/qa-manual/qa-automator subagents, a session file scheme, reports and a mandatory retro. One flow for many projects — everything project-specific (tracker, test management, environments, autotests) lives in the project's own profile.",
+      "author": {
+        "name": "Vadim Glushonkov"
+      },
+      "category": "testing",
+      "homepage": "https://github.com/codecube01/qa-cube",
+      "keywords": [
+        "qa",
+        "testing",
+        "test-sessions",
+        "test-management",
+        "qa-automation",
+        "subagents"
+      ]
+    }
+  ]
+}

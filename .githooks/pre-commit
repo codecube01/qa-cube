@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+# Refuses a commit that carries an identifier from a real project — in the staged
+# content or in a file name. The engine is published outside the projects its lessons
+# come from. Enable with: git config core.hooksPath .githooks
+set -euo pipefail
+
+root=$(git rev-parse --show-toplevel)
+checker="$root/.github/scripts/check_identifiers.py"
+[ -x "$checker" ] || [ -f "$checker" ] || exit 0
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -n "$staged" ] || exit 0
+
+status=0
+
+# added lines only: existing history is not re-litigated on every commit
+added=$(git diff --cached -U0 | grep '^+' | grep -v '^+++' || true)
+if [ -n "$added" ]; then
+  printf '%s' "$added" | python3 "$checker" --stdin --label "staged changes" || status=1
+fi
+
+# the branch name shows up in PR listings and merge commits
+branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || true)
+if [ -n "$branch" ] && [ "$branch" != "HEAD" ]; then
+  python3 "$checker" --text "$branch" --label "branch name" || status=1
+fi
+
+# file names travel too
+if ! python3 "$checker" --text "$staged" --label "file names"; then
+  status=1
+fi
+
+if [ "$status" -ne 0 ]; then
+  echo
+  echo "Commit refused. Fix the content, or bypass deliberately with --no-verify."
+fi
+exit "$status"

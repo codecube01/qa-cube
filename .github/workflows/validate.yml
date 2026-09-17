@@ -1,0 +1,72 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Plugin structure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # tags are needed for the version check below
+
+      - name: Structural checks
+        run: python3 .github/scripts/validate-plugin.py
+
+      - name: Shell syntax
+        run: |
+          for f in $(git ls-files '*.sh'); do
+            bash -n "$f" && echo "ok: $f"
+          done
+
+      - name: Python compiles
+        run: |
+          # every shipped script, not just the ones a test imports
+          python3 -m compileall -q $(git ls-files '*.py') && echo "ok: all .py files compile"
+
+      - name: Unit tests
+        run: python3 -m unittest discover -s tests -v
+
+      - name: No project identifiers in commit messages
+        run: |
+          # what to inspect: a PR's own commits, or the commits this push added
+          if [ -n "${{ github.event.pull_request.base.sha }}" ]; then
+            range="${{ github.event.pull_request.base.sha }}..HEAD"
+          elif [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ] && [ -n "${{ github.event.before }}" ]; then
+            range="${{ github.event.before }}..HEAD"
+          else
+            range="HEAD~1..HEAD"
+          fi
+          echo "inspecting $range"
+          git log --format='%H%n%B%n---' "$range" 2>/dev/null > messages.txt || git log -1 --format='%H%n%B' > messages.txt
+          python3 .github/scripts/check_identifiers.py --files messages.txt
+
+      - name: No project identifiers in the PR title or body
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          python3 .github/scripts/check_identifiers.py --text "$PR_TITLE" --label "PR title"
+          python3 .github/scripts/check_identifiers.py --text "$PR_BODY" --label "PR body"
+
+      - name: Version is not moving backwards
+        run: |
+          version=$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          latest=$(git tag -l 'v*' --sort=-v:refname | head -1)
+          if [ -z "$latest" ]; then
+            echo "No release tags yet; current version is $version."
+            exit 0
+          fi
+          # sort -V puts the smaller version first; the current one must not be it
+          smallest=$(printf '%s\n%s\n' "$version" "${latest#v}" | sort -V | head -1)
+          if [ "$version" != "${latest#v}" ] && [ "$smallest" = "$version" ]; then
+            echo "::error::plugin.json is at $version, which is older than the latest tag $latest"
+            exit 1
+          fi
+          echo "plugin.json $version vs latest tag $latest — fine."

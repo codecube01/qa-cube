@@ -1,0 +1,19 @@
+{
+  "name": "qa-cube",
+  "description": "A QA test-session engine: a manager plus the qa-analyst/qa-manual/qa-automator subagents, a session file scheme, retros. Project specifics live in the project's .claude/qa-profile.md.",
+  "version": "0.16.0",
+  "author": {
+    "name": "Vadim Glushonkov"
+  },
+  "homepage": "https://github.com/codecube01/qa-cube",
+  "repository": "https://github.com/codecube01/qa-cube",
+  "license": "MIT",
+  "keywords": [
+    "qa",
+    "testing",
+    "test-sessions",
+    "test-management",
+    "qa-automation",
+    "subagents"
+  ]
+}

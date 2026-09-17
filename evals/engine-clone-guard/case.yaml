@@ -1,0 +1,34 @@
+schema_version: "1.0"
+name: engine-clone-guard
+description: >
+  `engine-clone` points at the plugin's install cache, not at a clone. The retro must
+  refuse that address — an edit there is silently thrown away by the next update — and
+  route the lesson to the project or to `<sessions>/engine-feedback.md` instead.
+tags: [step-7, retro, degradation]
+context:
+  scaffold_script: setup.sh
+execution:
+  prompt: >
+    Using the qa-cube engine's own rules and this project's `.claude/qa-profile.md`,
+    answer in one short paragraph, without changing any files: when a test session's
+    retro produces a lesson about the engine's own process, where exactly does that
+    lesson go in this project, and what happens to the plugin's version?
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill]
+runs: 2
+graders:
+  - name: refuses-the-installation-as-an-address
+    type: llm
+    weight: 3
+    criteria: >
+      The answer recognises that the profile's `engine-clone` is not a real clone but the
+      plugin's installation (a path inside ~/.claude/plugins), that editing the engine
+      there is pointless because the next update writes past it, and that the lesson is
+      therefore re-addressed: whatever can be phrased through this project goes into its
+      profile or skills, and the universal remainder into
+      `<sessions>/engine-feedback.md`. It also says the plugin's version is NOT bumped
+      and `plugin update` is not run in this mode.
+  - name: names-the-feedback-log
+    type: regex
+    weight: 1
+    pattern: engine-feedback

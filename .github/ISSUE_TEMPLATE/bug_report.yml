@@ -1,0 +1,57 @@
+name: Bug report
+description: Something in the engine misbehaved during a test session
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. The engine is edited from real sessions, so the more of the
+        actual run you can show, the more likely the fix lands as a rule rather than a patch.
+
+  - type: input
+    id: version
+    attributes:
+      label: Plugin version
+      description: The `version` field in `.claude-plugin/plugin.json`, or `claude plugin list`.
+      placeholder: "0.10.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: step
+    attributes:
+      label: Where it happened
+      options:
+        - /qa-setup — onboarding a project
+        - "/qa step 1–2 — reading the task, creating the session"
+        - "/qa step 3–3.5 — the plan, test design (qa-analyst)"
+        - "/qa step 4 — the manual round (qa-manual)"
+        - "/qa step 5 — automation (qa-automator)"
+        - "/qa step 6–7 — the report, the retro"
+        - Somewhere else / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you expected the engine to do, and what it did instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: profile
+    attributes:
+      label: Relevant part of the project profile
+      description: >
+        The capability header from `.claude/qa-profile.md` is usually enough
+        (tracker / tms / test-cases / environments / logs / autotests / browser / language).
+        Please mask anything secret.
+      render: markdown
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: Session files, the brief that was written, the executor's retro section.

@@ -1,0 +1,38 @@
+schema_version: "1.0"
+name: session-continuation
+description: >
+  A session for this task already exists, so step 2 must continue it in the same folder —
+  renaming it to the current date and updating the one `99-report.md` — rather than opening
+  a second session. The invariant the whole retest flow rests on.
+tags: [step-2, retest, knowledge]
+context:
+  scaffold_script: setup.sh
+execution:
+  # Read-only on purpose. Two earlier versions of this case asked for the retest itself and
+  # both died mid-round — once on turns, once on the 300s wall — because step 2 is the start
+  # of a long procedure, not a place the engine stops to explain itself. Taking Write/Edit
+  # away turns the same decision into something that can be answered and graded in a minute:
+  # the case asks whether the rule is legible, and pays $0.4 instead of $1.2 to find out.
+  prompt: >
+    A retest for ACME-412 has arrived. Using the qa-cube engine's rules and this project's
+    files, and WITHOUT changing anything on disk, answer in one short paragraph: which
+    session folder does this round land in, what happens to that folder's name, and what
+    happens to the report?
+  max_turns: 12
+  timeout_seconds: 420
+  allowed_tools: [Read, Glob, Grep, Skill]
+runs: 2
+graders:
+  - name: continues-the-existing-session
+    type: llm
+    weight: 3
+    criteria: >
+      The answer says the round continues in the EXISTING session folder for this task (the
+      one ending in `_acme-412-coupon-double`), that the folder is renamed to the current
+      date, and that the existing `99-report.md` is updated in place rather than a second
+      report being created. Saying a new session folder is created, or that no previous
+      session exists, is a failure.
+  - name: names-the-existing-folder
+    type: regex
+    weight: 1
+    pattern: acme-412-coupon-double

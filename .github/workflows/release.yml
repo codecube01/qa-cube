@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publish release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Structural checks
+        run: python3 .github/scripts/validate-plugin.py
+
+      - name: Tag name carries no project identifier
+        run: python3 .github/scripts/check_identifiers.py --text "$GITHUB_REF_NAME" --label "tag name"
+
+      - name: Tag must match plugin.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          version=$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          if [ "$tag" != "$version" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} does not match plugin.json version ${version}."
+            echo 'The tag is what humans read; plugin.json is what "claude plugin update" reads. They must agree.'
+            exit 1
+          fi
+          echo "tag ${GITHUB_REF_NAME} matches plugin.json ${version}."
+
+      - name: Release notes from CHANGELOG
+        id: notes
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          # the section for this version, up to the next "## [" heading
+          awk -v v="$version" '
+            $0 ~ "^## \\[" v "\\]" { grab = 1; next }
+            grab && /^## \[/ { exit }
+            grab { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then
+            echo "::warning::CHANGELOG.md has no section for ${version}; falling back to generated notes."
+            echo "See the commit history for what changed." > notes.md
+          fi
+          cat notes.md
+
+      - name: Build the plugin archive
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          # only what the plugin actually needs at runtime — docs/ and .superpowers/
+          # are working material and would just bloat the download
+          zip -r "qa-cube-${version}.zip" \
+            .claude-plugin skills agents hooks \
+            PROFILE-CONTRACT.md README.md CHANGELOG.md ROADMAP.md LICENSE \
+            -x '*/.DS_Store'
+          unzip -l "qa-cube-${version}.zip" | tail -1
+
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          gh release create "$GITHUB_REF_NAME" \
+            --title "qa-cube ${version}" \
+            --notes-file notes.md \
+            "qa-cube-${version}.zip"

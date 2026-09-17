@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/rename-session.sh\"",
+            "timeout": 10,
+            "statusMessage": "Renaming the session after the task number"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/rename-session.sh\"",
+            "timeout": 10,
+            "statusMessage": "Renaming the session after the task number"
+          }
+        ]
+      }
+    ]
+  }
+}

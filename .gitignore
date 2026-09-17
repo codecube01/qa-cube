@@ -1,0 +1,7 @@
+docs/
+.DS_Store
+.superpowers/
+CLAUDE.md
+
+# eval run artifacts
+evals/results/

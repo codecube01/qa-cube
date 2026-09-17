@@ -1,0 +1,25 @@
+schema_version: "1.0"
+name: degradations-declared
+description: >
+  A profile where almost every capability is `none`: the manager must apply the
+  degradation table — no autotest step, no test cases, free-form input and a question
+  about the session's mode — instead of promising work the project cannot support.
+tags: [step-0, degradation]
+context:
+  scaffold_script: setup.sh
+execution:
+  prompt: /qa the password reset email never arrives for addresses that contain a plus sign
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill, Write]
+runs: 2
+graders:
+  - name: degradations-applied
+    type: llm
+    weight: 3
+    criteria: >
+      The answer reflects the profile's `none` capabilities: it does not promise an
+      autotest (autotests: none — the automation step is skipped), does not promise a
+      TMS case (tms/test-cases: none), and does not promise to post a tracker comment
+      (tracker: none). With tracker: none it also asks the user for the session's mode,
+      or states that the session runs as a full cycle. Mentioning that some of these are
+      unavailable is correct; silently promising them is the failure.

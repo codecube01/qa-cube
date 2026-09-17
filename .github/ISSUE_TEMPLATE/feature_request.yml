@@ -1,0 +1,34 @@
+name: Idea for the flow
+description: A rule, a step or a capability the engine is missing
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The engine grows from lessons, not from wishes: the strongest proposals name the
+        session that went wrong and what it cost. «A rule that would work in any project»
+        belongs in the engine; anything naming a specific tool or environment belongs in a
+        project profile instead.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What went wrong, concretely
+      description: The situation in a session where the current flow failed you.
+    validations:
+      required: true
+
+  - type: textarea
+    id: rule
+    attributes:
+      label: The rule you would add
+      description: Phrased as an instruction an executor or the manager could follow.
+    validations:
+      required: true
+
+  - type: input
+    id: address
+    attributes:
+      label: Where it belongs
+      description: "Engine (which file/step), a project profile, or not sure."
+      placeholder: "skills/qa/SKILL.md, step 4"

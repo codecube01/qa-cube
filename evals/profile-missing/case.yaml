@@ -1,0 +1,31 @@
+schema_version: "1.0"
+name: profile-missing
+description: >
+  Step 0 refuses to start a session in a project that has no `.claude/qa-profile.md`
+  and points the user at /qa-setup, instead of improvising a profile of its own.
+tags: [step-0, degradation]
+context:
+  scaffold_script: setup.sh
+execution:
+  prompt: /qa https://tracker.example.com/acme/shop/-/work_items/412
+  max_turns: 8
+  allowed_tools: [Read, Glob, Grep, Skill, Write]
+runs: 2
+graders:
+  - name: refuses-and-points-at-setup
+    type: llm
+    weight: 2
+    criteria: >
+      The answer states that the project has no QA profile (`.claude/qa-profile.md`)
+      and that the session is therefore not being started, and it tells the user to run
+      /qa-setup. It must NOT invent a profile, guess the project's tracker or
+      environments, or proceed to plan and run the session anyway.
+  - name: names-qa-setup
+    type: regex
+    weight: 1
+    pattern: /qa-setup
+  - name: no-session-file-created
+    type: file_exists
+    weight: 1
+    path: docs/test-sessions/0-session.md
+    exists: false

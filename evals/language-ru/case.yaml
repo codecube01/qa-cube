@@ -1,0 +1,27 @@
+schema_version: "1.0"
+name: language-ru
+description: >
+  `language: ru` in the profile governs the session's output even though the engine's own
+  instructions are in English and the user wrote in English — the most easily lost rule
+  in the whole corpus, because everything the agent reads at that moment is English.
+tags: [step-0, language]
+context:
+  scaffold_script: setup.sh
+execution:
+  prompt: /qa the checkout total is wrong when a discount coupon is applied twice
+  max_turns: 10
+  allowed_tools: [Read, Glob, Grep, Skill, Write]
+runs: 2
+graders:
+  # One question, nothing else. A criterion that also explains WHY the rule exists gives a
+  # cheap judge room to grade the content instead of the language: the first version of this
+  # grader voted FAIL three times on an answer written in flawless Russian, while the regex
+  # below passed on the very same text.
+  - name: answers-in-russian
+    type: llm
+    weight: 2
+    criteria: Is the assistant's message written in Russian? PASS if yes, FAIL if it is in English or any other language. Judge nothing else — content, correctness and completeness are irrelevant here.
+  - name: cyrillic-present
+    type: regex
+    weight: 2
+    pattern: "[А-Яа-яЁё]"
