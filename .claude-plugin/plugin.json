@@ -1,7 +1,7 @@
 {
   "name": "qa-cube",
   "description": "A QA test-session engine: a manager plus the qa-analyst/qa-manual/qa-automator subagents, a session file scheme, retros. Project specifics live in the project's .claude/qa-profile.md.",
-  "version": "0.16.0",
+  "version": "0.16.14",
   "author": {
     "name": "Vadim Glushonkov"
   },

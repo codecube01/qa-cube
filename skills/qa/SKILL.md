@@ -72,10 +72,29 @@ from the profile (Tracker section): the description and **the comments, mandator
 related changes live. Check for **related tasks** in three ways, not one: (1) explicit links/relations; (2) the task's **subtasks and
 parent**; (3) a substring search on the title (neighboring FE/BE tasks of the same area). Empty relations do not mean «there are none». If a
 frontend task has a related backend task in a suitable status on the same environment, we test them in **one session** (and vice versa).
-Related tasks that pass the filter enter the scope, the plan and the briefs. For a **parent** task, the acceptance scope is set by **the
-labels of the subtasks currently in a testing status**: accepting the FE subtask means a verdict on the frontend, while requirements that
-cannot be met without the backend are addressed to the backend task; **if no such task exists in the tracker at all, that is a finding for
-the analyst**, not the executor's fault. Precedent: the parent had only an FE subtask, and no BE task existed for half of the requirements.
+Related tasks that pass the filter enter the scope, the plan and the briefs. **Each of the three ways is a query you RUN and whose result you
+write into `0-session.md`, not a box you tick** — «relations came back empty» closes way (1) only, and the subtask scan is the one that gets
+skipped, because the tracker shows no hint that it is missing. Where the tracker's API makes subtasks awkward to list (a timeout on the
+child-of filter, a parent field that is not searchable), the project's tracker skill names the working route; run it. And **every related
+task that enters the scope is read the same way the main one is — description AND comments in full**, never by its title in a listing.
+
+For a **parent** task, the acceptance scope is set by **the labels of the subtasks currently in a testing status**: accepting the FE subtask
+means a verdict on the frontend, while requirements that cannot be met without the backend are addressed to the backend task; **if no such
+task exists in the tracker at all, that is a finding for the analyst**, not the executor's fault. Precedent: the parent had only an FE
+subtask, and no BE task existed for half of the requirements.
+
+**A task whose own description is written in the USER's voice and that carries no labels is a container — the engineering spec is in a
+subtask, and testing the container instead costs the round its scope.** The tell is in the text itself: user stories, «I as an officer want
+…», numbered FR/AC phrased as outcomes rather than as interfaces, and no label saying which layer is being accepted. A spec written for
+implementers looks different — tables of columns and types, endpoint signatures with response codes, configuration keys, a status mapping —
+and it lives one level down, under a label. Both texts are real requirements and they do not contradict each other; they answer different
+questions, and the acceptance verdict belongs to the lower one. Reading only the container yields verdicts that are not wrong but are
+addressed to nobody: the defects land against a task that implements nothing, and the criteria the implementers actually committed to are
+never checked. The check is one query at step 1 and it is cheap; the correction after delivery is not — it re-frames every finding.
+Precedent: two full rounds were accepted against a parent's user-story spec; the backend subtask, found only when the customer asked, held
+its own acceptance criteria, an explicit signature scheme «over the raw body, without re-serialisation», a required status field on the
+neighbouring entity and a background reconciler with a default interval — four of the round's findings turned out to be verbatim violations
+of a spec the round had never read, and several «requirements gaps for the analyst» turned out to be answered there.
 
 **Start preconditions** — not met → tell the user and do not begin:
 - **the mode is determined**: the status of the task (and of the related ones in scope) determines the session's mode — **full cycle**
