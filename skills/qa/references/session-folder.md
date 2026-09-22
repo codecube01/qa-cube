@@ -20,6 +20,7 @@ a way the folder has already been broken once, and the precedent that closes it 
 **Continuing a session: round 2+**
 
 - date the round's trigger before anything else
+- a round whose trigger is the requirements arriving, not a fix — and which therefore launches nobody
 - renaming brings the whole name to the convention, not just the date
 - what the executor's brief carries over is the line-by-line verdict, not the gist
 - re-launch the analyst only when the input changed
@@ -68,6 +69,29 @@ search that every round's step 2 starts with: a grep for the task id across fold
 acquired a spec task two months in; round 2 renamed the folder by date alone, and the customer caught the missing id.
 
 Read all the previous files before planning the round — plan, results, report, retro — and apply their lessons immediately.
+
+### A round whose trigger is the REQUIREMENTS arriving, not a fix — and which therefore launches nobody
+
+The dating above answers «new deploy or the same one», and the shape most rounds take follows from it. There is a third answer,
+and it is the one a session started on a requirement-less task is heading for: **nothing was deployed, and what arrived is the
+answer to the report's own questions to the analyst.** A numbered question that asks for a value gets a numbered one-line
+answer — a type, a number, an owner — and each of those lines is a requirement the previous round did not have. The round it
+triggers does no environment work and starts no executor: there is nothing new to observe, and re-measuring the same build
+produces the same evidence at full price. Its whole product is a re-framing, and it is worth the pass because the delivered
+report is now wrong in the reader's hands — it presents as open questions things the customer has answered, and it carries
+findings whose cell says «needs an analyst's decision» about a decision that has since been made. Those cells lose that
+sentence and gain the value, with the measured gap stated against it; the questions section becomes a table of answers and what
+each one implies; items closed as «no requirement exists» are re-rated exactly as `report.md` requires of any new source of
+requirements — some come back as findings, stronger than the candidates they replace, because a violated clause beats a gap.
+Say in the report, in one line, that the round did not go to the environment and why; a reader who sees a fresh round assumes
+fresh measurements. Two riders. The same round is the moment to re-check what the answers did to the SCOPE, not only to the
+verdicts: an answer of the form «I was wrong, it is the other flow» closes an uncovered item outright and demotes another, and
+neither happens if only the pass/fail column is revisited. And this is the entry that pays for writing the questions well in
+the first place — numbered, one per item, each asking for a value rather than for a yes/no, and delivered through the channel
+the poser actually reads. Precedent: a spike with no requirements at all was accepted by registering behaviour and asking four
+numbered questions; the poser answered all four within five hours, one answer set a limit five times higher than the measured
+one, another said «I was wrong, it is the other flow» — and the round that turned those four lines into requirements ran
+without a single executor.
 
 ### What the executor's brief carries over is the line-by-line verdict, not the gist
 
