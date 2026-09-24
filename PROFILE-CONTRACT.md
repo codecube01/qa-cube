@@ -5,6 +5,16 @@ committed to the project's repository: a colleague gets a working `/qa` along wi
 Bulky sections may be moved out into the subfiles `.claude/qa-profile/*.md` (with the profile
 referring to them explicitly); the profile's scripts live in `.claude/qa-profile/scripts/`.
 
+**Next to the profile lives its counterpart, `.claude/qa-cube-feedback.md` — the project's layer
+of engine rules.** The two never carry the same rule: the profile holds what is true only for
+this project (a tool, an environment, a service, a team convention); the feedback file holds
+what would hold in anyone's project — the retro's lessons about the process, kept here because
+with `engine-clone: none` there is no clone of the engine to write them into. Every `/qa`
+session reads its open rows as additions to the engine, and `/qa-setup` offers them upstream.
+It is committed with the profile for the same reason. The retro writes it, not `/qa-setup`, and
+its format is described in the engine (`skills/qa/SKILL.md`, «Engine feedback») and in the
+file's own header.
+
 The profile is created and updated by the `/qa-setup` skill; editing it by hand is fine too —
 it is ordinary markdown. Its readers are Claude sessions (the `/qa` manager and the
 qa-analyst/qa-manual/qa-automator subagents), so the format is free: what matters is answering
@@ -41,7 +51,7 @@ The profile's first section is a declaration:
 
 ```markdown
 ## Capabilities
-contract-version: 5    # the contract version the profile matches; set by /qa-setup
+contract-version: 6    # the contract version the profile matches; set by /qa-setup
 tracker: gitlab        # jira | <other> | none — none: the input is free-form text only
 tms: qase              # <other> | none — none: cases = md files next to the sessions
 test-cases: upfront    # inline | none — upfront: qa-analyst writes the cases before the run; inline: qa-manual writes them from the facts; none: we do not maintain cases
@@ -91,8 +101,9 @@ instead of retelling it; only what the skills do not have stays in the profile.
 | **Knowledge** | what to read before a session (the structure, the README); where to write the retro's product findings. The recommended organization: **one domain = one file** (the business logic + that domain's API contract + its known defects) — then the rule «read the profile doc for the feature» hands the agent the API contract too, without reading a general reference; cross-domain API conventions go into a separate small file |
 
 `sessions` and `engine-clone` are just paths and require no sections. `engine-clone` is `none` for
-everyone who does not develop the engine itself — that is the normal case, and the retro then keeps
-its engine-level lessons in `<sessions>/engine-feedback.md` instead of applying them.
+everyone who does not develop the engine itself — that is the normal case, and the retro then writes
+its engine-level lessons into `.claude/qa-cube-feedback.md` (see the top of this file), from where
+every session applies them.
 
 ## Example: a profile skeleton (the fictional project acme-shop)
 
@@ -100,7 +111,7 @@ its engine-level lessons in `<sessions>/engine-feedback.md` instead of applying 
 # QA profile of the acme-shop project
 
 ## Capabilities
-contract-version: 5
+contract-version: 6
 tracker: jira
 tms: testrail
 test-cases: upfront
@@ -126,7 +137,7 @@ language: en
 
 ## Contract versions
 
-The current version is **5**. A profile with no `contract-version` field counts as version 1.
+The current version is **6**. A profile with no `contract-version` field counts as version 1.
 Every change to the contract (a new key, a new mandatory question in a section, a
 rename) bumps the version and gets a row in the history — `/qa-setup` reads it to know
 which sections to walk during a migration, and `/qa` to know what to warn about.
@@ -138,3 +149,4 @@ which sections to walk during a migration, and `/qa` to know what to warn about.
 | 3 | the **Logs** key and section (`logs`) were added, and searching by trace id moved from Environments to Logs; /qa-setup gained the «Access channels» step (MCP → CLI → generating a REST skill, the user chooses) and the interview's final open question |
 | 4 | token economy (the migration = moving content around, every section): (a) **a thin CLAUDE.md** — move the QA specifics (tracker pitfalls, report formats, numbering conventions) out of the project's CLAUDE.md into the subfiles `.claude/qa-profile/*.md`, leaving the project map in CLAUDE.md; (b) **TL;DR headers** — give every profile subfile a first screen with the short working flow, the pitfalls below; (c) **knowledge by domain** — split the API contracts out of the general reference into per-domain knowledge-base files (one domain = business + API + defects), with cross-domain conventions in a separate small file; (d) in /qa the manager now lists in the task files exactly what the executor should read (an engine edit, the profile is untouched) |
 | 5 | the **`test-cases`** key was added (`upfront｜inline｜none`, absence = `inline` — behavior unchanged) along with the `qa-analyst` role: with `upfront` the cases are written from the requirements before the run and `qa-manual` does not create them. Sections affected: **TMS** (where file cases live with `tms: none` — the default `docs/test-cases/`). Profiles with the old behavior need no migration: the key may be left out |
+| 6 | **two layers of rules, no duplicates.** With `engine-clone: none` the retro's engine-level lessons moved from `<sessions>/engine-feedback.md` to **`.claude/qa-cube-feedback.md`**, next to the profile, and every `/qa` session now reads its open rows as additions to the engine; the profile keeps only what is true for this project alone. The migration: (a) move the file — the header, the «Closed» block and the `offered`/`declined` marks included; (b) walk the profile and its subfiles for rules that would hold in any project (earlier retros rephrased such lessons into the profile so they would apply sooner) and move each into the feedback file as an open row stamped with the installed plugin version, leaving in the profile only its application to this project, if it has one; show the user the list of what moved. No header key changes |

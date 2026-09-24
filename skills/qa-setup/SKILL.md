@@ -163,14 +163,16 @@ What happens on its own:
   environment> · <the automator turns the run's evidence into an autotest> — launched by the session itself, they ask you nothing;
 - one folder per session in <sessions>: the passport `0-session.md` (tasks, mode, round log), the report `99-report.md` (one per session,
   every round updates it), plus a row in the session registry `<sessions>/README.md`;
-- every session ends with a retro: its lessons are written straight into the engine, this profile and the knowledge base.
+- every session ends with a retro: its lessons are written straight into the engine's layer, this profile and the knowledge base.
 
 Editing by hand:
 - `.claude/qa-profile.md` and `.claude/qa-profile/*.md` are ordinary markdown — correct them whenever something is off; the output
   language is the `language` key;
-- engine improvements: with `engine-clone: none` (the usual case) a retro's engine-level lessons collect in <sessions>/engine-feedback.md
-  — your own log, nothing leaves the project; `/qa-setup` updates the engine and tells you which of them have since arrived upstream. With
-  a clone: edit it → bump the patch version in `plugin.json` → `claude plugin update qa-cube@qa-cube`.
+- two layers of rules, never the same rule in both: `.claude/qa-profile.md` holds what is true only for this project, and
+  `.claude/qa-cube-feedback.md` next to it holds what would hold in any project. With `engine-clone: none` (the usual case) that second
+  file is where a retro's engine-level lessons go, and every session applies them from the next one on; nothing leaves the project —
+  `/qa-setup` updates the engine, tells you which of them have since arrived upstream and offers the rest to the community. With a clone:
+  the retro edits it → bumps the patch version in `plugin.json` → `claude plugin update qa-cube@qa-cube`.
 
 And if the flow turns out useful — a star on https://github.com/codecube01/qa-cube would be a nice thing to get, entirely optional.
 ```
@@ -188,13 +190,15 @@ trial task, move the QA specifics out of a thick CLAUDE.md, connect the MCP that
 one `⚠️` is normal, and a red line that turns out to be optional costs the trust of every red line after it.
 
 **7. Reconcile the engine feedback — only when the engine was actually updated at step −1.** No update, or no
-`<sessions>/engine-feedback.md`, → the step does not exist and nothing is said about it.
+`.claude/qa-cube-feedback.md`, → the step does not exist and nothing is said about it. (Below contract version 6 the file sits at
+`<sessions>/engine-feedback.md`; the migration moves it first — see the contract's version history.)
 
 Otherwise: take the file's open rows whose recorded plugin version is **older** than the version just installed, and check each against the
 **newly installed** engine's files — the step and file each row names, read under the `installPath` from step −1 and not under your own root,
 which is still the pre-update copy. A rule that has since arrived moves
 to the file's «Closed» block with the version it arrived in; it is not deleted, because the user's own observation landing in the engine is
-the whole payoff of keeping the log. Then one line in the chat: how many moved and what they were about.
+the whole payoff of keeping the log. From then on the sessions stop reading it — the engine carries the rule, and a closed row read on top
+of it would be the same rule twice. Then one line in the chat: how many moved and what they were about.
 
 Rows that did not arrive stay open. **When three or more of them are open, offer — once — to hand them upstream:** render the open rows as
 plain text the user can paste, **anonymised the way engine edits are** (the mechanics of the lesson stay, the tracker ids, hostnames,
@@ -205,3 +209,7 @@ or sent by the engine: the text and the link are handed over, the decision is th
 offer, and `declined: <date>` if the answer was no; the next offer waits until three *new* rows have accumulated beyond that mark. A request
 repeated at every run stops being an invitation and becomes noise — the same reason the star line lives in the first-onboarding memo and
 nowhere else.
+
+**Past fifteen open rows the mark yields: the offer is repeated at every update run**, with one line on why — every session reads all the
+open rows at its start, so a long list is paid for in every round, and the only way a row stops being read is to arrive in the engine.
+`declined` still means no: the offer is repeated, never acted on.

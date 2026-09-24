@@ -39,6 +39,23 @@ section of `PROFILE-CONTRACT.md` (the plugin root, next to this skill: `../../PR
 block** the session: tell the user in one line that the profile is behind (what is new — from the version history) and that `/qa-setup`
 closes the gap, then carry on with degradations for the missing keys.
 
+**Then the project's layer of engine rules — `.claude/qa-cube-feedback.md`, next to the profile.** Read its open rows right after the
+profile (the «Closed» block is skipped: the engine already carries those). Each row is a rule about the process that a retro in this project
+learned and could not write into the engine for want of a clone (step 7); each names its address in the engine — a catalogue, a step, an
+agent's instruction — and from the moment it is written it counts as one more entry at that address: when a step sends you to
+`references/planning.md`, the rows addressed to `planning.md` are part of what you read there. Two consequences:
+- **a row addressed to an executor's own instruction (`agents/qa-*.md`) reaches that executor only through you** — the executor never reads
+  this file, so the row goes into the brief's rules verbatim, or the lesson was paid for and is never applied;
+- **where a row contradicts the engine's text, the row wins** — it is the later lesson, learned on this project — and the retro records the
+  contradiction as an observation: an engine update that argues with the user's rule is exactly what `/qa-setup` needs to see when it
+  reconciles the file.
+
+No file → nothing to read. A profile still below contract version 6 may keep the rows at the old address, `<sessions>/engine-feedback.md` —
+read them from there; the contract-version line above already tells the user that `/qa-setup` moves the file.
+
+The profile and this file never carry the same rule — **two layers**: the profile holds what is true only for this project, the feedback
+file holds what would hold in anyone's. Step 7 decides which is which.
+
 The `<sessions>` path below is the value of `sessions` from the profile (e.g. `docs/test-sessions/`).
 
 ## Roles
@@ -384,8 +401,10 @@ pass**. There are four addresses for fixes:
   **update the installed plugin**, because installation copies the files into a cache and without this the edits will not apply: bump the
   patch version in `<engine-clone>/.claude-plugin/plugin.json`, then `claude plugin marketplace update qa-cube && claude plugin update
   qa-cube@qa-cube`. The changes take effect from the next launch of claude (the current session finishes on the old copy — that is fine, the
-  retro is the finale anyway). **Without a clone the lesson is re-addressed, not dropped** — the degradation row at the end of this file says
-  where it goes, and `<sessions>/engine-feedback.md` catches the universal remainder;
+  retro is the finale anyway). **Without a clone the lesson is written, not dropped — as a row of `.claude/qa-cube-feedback.md`**, in the
+  form it would take as an entry at its engine address, and from the next session on it applies from there (step 0). It is **not** rephrased
+  into the profile to make it work sooner: it already works from the next session, and a copy in the profile is a duplicate that drifts
+  from the row and never reaches upstream (the «Engine feedback» section below);
 - **anything that goes into the engine is anonymised — no identifiers from the project.** The engine is a portable plugin that gets
   published outside the project it was written in, so its files must never carry a task id from your tracker (`ABC-123`, `service#456`), an
   environment hostname, a service, a company or an account name. Write the precedent by its mechanics — «precedent: a retest where the
@@ -400,16 +419,18 @@ pass**. There are four addresses for fixes:
   version bump is the retro's most expensive mistake: the engine has several consumers, and their profiles drift apart silently, without a
   single warning from `/qa`. The converse matters too: **an edit that does not affect the profile does not bump the contract version** —
   otherwise every project gets a false «your profile is behind» alarm and a needless `/qa-setup` run;
-- **the project's profile and local skills** — tooling pitfalls, access, code maps: if an executor tripped over a project skill, the pitfall
-  gets written into it;
+- **the project's profile and local skills** — what is true for this project alone: tooling pitfalls, access, code maps; if an executor
+  tripped over a project skill, the pitfall gets written into it;
 - **the project's knowledge base** (the path comes from the profile) — what was learned about the **product**: API contracts, feature
   behavior, limits, «why it is this way». This is exactly what the manager reads at step 1, and that is how sessions feed the sessions that
   follow. Fixes about the **working process** go into the engine or the profile, not into the knowledge. When moving a finding over,
   distinguish a contract from an observation: a regularity drawn from N runs without support from the spec is recorded with the note
   «observation», not as an assertion. Precedent: «the cascade picks X first», from three lucky runs, went into the KB as a fact and was
   refuted by the fourth;
-- in doubt whether it is the engine or the profile: the rule would work in any project → the engine; it mentions a specific
-  tool/environment/class → the profile.
+- in doubt whether it is the engine or the profile: the rule would work in any project → the engine (without a clone — the feedback
+  file); it mentions a specific tool/environment/class → the profile. **A lesson with both halves is split, not copied**: the mechanics go
+  to the engine's layer, and only their application here («on this environment that means X») to the profile — every rule lives in
+  exactly one layer.
 
 **Inside the engine, a lesson has two addresses and they are not interchangeable.** A rule keyed to a situation — this shape of scenario,
 this state of the environment, this kind of executor failure — goes into the matching `references/` catalogue as one more entry
@@ -488,7 +509,8 @@ determined). It goes into no file; the report's «Open questions» is its file-s
 upstream 0.12.0 — `/qa-setup` will update it, entirely optional». Otherwise, and **on any failure of the check — no network, a 404, a slow
 answer — say nothing at all**: the line is a convenience, not a result, and an unrelated fetch may not add noise to a session's finale.
 Nothing updates a plugin on its own, so this line is the only place the user learns the engine has moved. The rest of the engine's
-housekeeping — fetching the update, reconciling `engine-feedback.md`, offering it upstream — is `/qa-setup`'s and never a session's.
+housekeeping — fetching the update, reconciling `.claude/qa-cube-feedback.md`, offering it upstream — is `/qa-setup`'s and never a
+session's.
 
 **9. After delivery the session is still open.** Almost anything the user says once the report has been delivered is either an uncaught
 defect in your work or a gap in the rules, and each is handled **one at a time, immediately** — what is saved up for «the next retro» gets
@@ -509,11 +531,22 @@ deleted.
 
 ## Engine feedback
 
-`<sessions>/engine-feedback.md` — where a retro's **engine** lessons go when there is no clone to apply them to (step 7). It is the user's
-own log: a session sends nothing from it and asks nothing of them. The columns are the retro's plus the version the row was written under —
-«observation · rule · address in the engine · plugin version» — and the file's header says so, so it reads cold. Rows are never deleted: a
-lesson that has since arrived in the engine moves to a «Closed» block at the bottom with the version it arrived in — the only place the user
-sees their observation land. Reconciling the file, and offering the remainder upstream, is `/qa-setup`'s work.
+`.claude/qa-cube-feedback.md` — next to the profile, and its counterpart: **the project's layer of engine rules**. The two layers never
+overlap: the profile holds what is true only for this project, this file holds what would hold in anyone's — the retro's engine lessons when
+there is no clone to write them into (step 7). It is committed with the profile for the same reason the profile is: a colleague's session
+gets the whole rule set with the clone. It is not a log waiting for upstream: every session reads its open rows at step 0 and applies them
+at their addresses.
+
+The columns are the retro's plus the version the row was written under — «observation · rule · address in the engine · plugin version» —
+and the file's header says so, so it reads cold. The rule is written as the entry it would become in the engine, by its mechanics; the
+observation may name the project, since the file lives inside it, and `/qa-setup` anonymises the rows before offering them upstream. A
+session sends nothing from it and asks nothing of the user. Rows are never deleted: a lesson that has since arrived in the engine moves to a
+«Closed» block at the bottom with the version it arrived in — the only place the user sees their observation land — and is no longer read,
+because the engine now carries it. Reconciling the file, and offering the open rows upstream, is `/qa-setup`'s work.
+
+Precedent: under the earlier rule the retro rephrased whatever universal lesson it could into the profile, so that it would apply from the
+next session; those lessons never reached the reconciliation, which reads only this file, and sat in one project's profile as rules nobody
+else would ever get — while the same lesson, arriving later from upstream, stood next to its own paraphrase.
 
 ## Capability degradations
 
@@ -528,7 +561,7 @@ sees their observation land. Reconciling the file, and offering the remainder up
 | browser | do not include UI scenarios in the plan; if the task is purely frontend, the session is blocked with an explicit message to the user |
 | secrets | the sessions need no secrets; a scenario requiring credentials came up — the executor records a blocker in the result (credentials are neither requested nor invented) and the manager raises it with the user |
 | knowledge | the step «read the product knowledge» is skipped; product findings from the retro are placed in `<sessions>/../knowledge/` (create it at the first finding) |
-| engine-clone (also: no `.git` there, or the path sits inside `~/.claude/plugins/`) | the retro does not edit the engine — the normal state for a plugin installed from the marketplace. The lesson is re-addressed: whatever is phrasable through this project goes into the profile or a project skill, the universal remainder into `<sessions>/engine-feedback.md`. No version bump, no `plugin update` — the engine arrives from upstream via `/qa-setup` |
+| engine-clone (also: no `.git` there, or the path sits inside `~/.claude/plugins/`) | the retro does not edit the engine — the normal state for a plugin installed from the marketplace. An engine lesson becomes a row of `.claude/qa-cube-feedback.md` and applies from the next session (step 0); only what holds for this project alone goes into the profile or a project skill, and no rule goes into both. No version bump, no `plugin update` — the engine arrives from upstream via `/qa-setup` |
 
 ## Boundaries
 

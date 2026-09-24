@@ -20,7 +20,7 @@ Useful flags while iterating:
 
 | Flag | Why |
 |---|---|
-| `--case <name>` | one case instead of all five |
+| `--case <name>` | one case instead of all six |
 | `--ablation none` | skip the no-plugin baseline arm — halves the cost, loses the «did the plugin cause this» signal |
 | `--runs 1` | one run per case instead of the declared two |
 | `--keep-temp` | keep each run's sandbox (`home/cwd` is the fixture project) for debugging |
@@ -61,9 +61,10 @@ accept. `validate-plugin.py` stays the thing that runs on every push.
 | `language-ru` | `language: ru` governs the output even though every instruction in front of the agent at that moment is in English |
 | `session-continuation` | a second round lands in the existing session folder and updates the one `99-report.md` |
 
-Three of the five are **behavioural** — the engine is handed a session and the graders read what it
-did (`profile-missing`, `degradations-declared`, `language-ru`). Two are **knowledge** cases: they
-ask the engine to state a rule rather than act it out (`session-continuation`, `engine-clone-guard`).
+Three of the six are **behavioural** — the engine is handed a session and the graders read what it
+did (`profile-missing`, `degradations-declared`, `language-ru`). Three are **knowledge** cases: they
+ask the engine to state a rule rather than act it out (`session-continuation`, `engine-clone-guard`,
+`feedback-layer`).
 That is a deliberate trade and worth knowing when you read a green board. Both of those rules live at
 the start or the end of a long procedure, and a run that has to reach them costs three times as much
 and dies on the wall clock as often as it succeeds — `session-continuation` was behavioural twice and
@@ -72,7 +73,8 @@ thing. A knowledge case proves the rule is legible and reachable; it does not pr
 under pressure. When a rule matters enough to justify $1.50 a run, write the behavioural version and
 give it `timeout_seconds` and `Bash` (step 2 renames folders with `mv` — without Bash the engine
 cannot do what the case is grading).
-| `engine-clone-guard` | an `engine-clone` that points at the plugin's installation is refused, and the lesson goes to the project or to `engine-feedback.md` |
+| `engine-clone-guard` | an `engine-clone` that points at the plugin's installation is refused, and the lesson goes to `.claude/qa-cube-feedback.md` |
+| `feedback-layer` | two layers, no duplicates: a universal lesson goes to `.claude/qa-cube-feedback.md` and not into the profile, a project-only one to the profile; an open row applies in the next session, a closed one does not |
 
 ## Writing another case
 
@@ -94,7 +96,7 @@ Four things are easy to get wrong — each one cost a paid run to find:
   nothing was created here» — never to assert that the fixture exists.
 - **A `regex` grader over the last message is a blunt instrument.** `not_contains: autotest` fails
   the correct answer «autotests: none, so no autotest will be written». Keep regexes for things
-  that can only appear on the right path (`/qa-setup`, `engine-feedback`, Cyrillic text) and leave
+  that can only appear on the right path (`/qa-setup`, `qa-cube-feedback`, Cyrillic text) and leave
   judgement to an `llm` grader.
 - **Keep an `llm` criterion to one question, and say what NOT to judge.** The judge is a cheap
   model. The first version of `answers-in-russian` explained why the language rule exists and what

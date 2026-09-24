@@ -1,0 +1,44 @@
+schema_version: "1.0"
+name: feedback-layer
+description: >
+  Two layers of rules, no duplicates. With `engine-clone: none` a universal lesson becomes a
+  row of `.claude/qa-cube-feedback.md` — not a paraphrase in the profile — and a lesson true
+  only for this project goes into the profile. The next session applies the open rows and
+  skips the closed ones.
+tags: [step-0, step-7, retro, knowledge]
+context:
+  scaffold_script: setup.sh
+execution:
+  # A knowledge case for the same reason as session-continuation: step 0 and step 7 sit at
+  # the two ends of a long procedure, and a run that has to reach both dies on the wall clock.
+  prompt: >
+    Using the qa-cube engine's rules and this project's files, and WITHOUT changing anything
+    on disk, answer briefly. A retro produced two lessons: (1) «a negative check parked at
+    the end of a round can need a state the round has already consumed — order negatives by
+    their preconditions»; (2) «the local build of acme-shop needs `make seed` before any
+    coupon exists». Where does each lesson go? And when the next session writes a manual
+    tester's brief, which of the rows in `.claude/qa-cube-feedback.md` does it apply?
+  max_turns: 12
+  timeout_seconds: 420
+  allowed_tools: [Read, Glob, Grep, Skill]
+runs: 2
+graders:
+  - name: routes-each-lesson-to-one-layer
+    type: llm
+    weight: 3
+    criteria: >
+      The answer sends lesson (1) to `.claude/qa-cube-feedback.md` as a row (because the engine
+      has no clone to edit here) and lesson (2) to the project's profile or a project skill,
+      and does NOT put lesson (1) into the profile as well. Judge only the routing, not the
+      wording.
+  - name: applies-open-skips-closed
+    type: llm
+    weight: 2
+    criteria: >
+      The answer says the next session applies the OPEN row (a retest of a state bug starts
+      from a freshly created object) and does not apply the row under «Closed», because the
+      engine already carries it. Judge only this, not the rest of the answer.
+  - name: names-the-feedback-file
+    type: regex
+    weight: 1
+    pattern: qa-cube-feedback

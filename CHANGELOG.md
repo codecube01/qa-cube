@@ -9,6 +9,30 @@ Patch versions are bumped by the retro step of a session whenever the engine is 
 not every version becomes a release: a release is cut when there is something worth reading
 about.
 
+## [0.17.0] — 2026-09-24
+
+Two layers of rules. **Profile contract 6**: `/qa` reports the profile as behind, and
+`/qa-setup` migrates it.
+
+### Changed
+
+- **Engine lessons apply from the next session, without a clone.** They go into
+  `.claude/qa-cube-feedback.md` next to the profile, and every session reads its open rows.
+  Before, they sat in `<sessions>/engine-feedback.md`, which no session read.
+- **Every rule lives in one layer.** Rules true only for this project go into the profile, and
+  rules true for any project go into the feedback file. A lesson with both halves is split.
+- **`/qa-setup`**: a row that has arrived in the engine is closed and no longer read. Past
+  15 open rows, it offers to hand them upstream at every update.
+
+### Migration (contract 6)
+
+`/qa-setup` moves the feedback file to its new place, and moves the profile's universal
+rules into it.
+
+### Also in this version
+
+Retro patches 0.16.1–0.16.34: entries in `planning.md`, `manual-brief.md`, `report.md`.
+
 ## [0.16.0] — 2026-09-17
 
 First public release. Nothing is asked of the projects already running the engine: the
