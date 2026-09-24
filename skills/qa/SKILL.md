@@ -37,7 +37,11 @@ update would silently switch cases off in profiles written before version 5.
 **The contract version.** Compare the profile's `contract-version` (no field → 1) with the current version in the «Contract versions»
 section of `PROFILE-CONTRACT.md` (the plugin root, next to this skill: `../../PROFILE-CONTRACT.md`). The profile is behind → **do not
 block** the session: tell the user in one line that the profile is behind (what is new — from the version history) and that `/qa-setup`
-closes the gap, then carry on with degradations for the missing keys.
+closes the gap, then carry on with degradations for the missing keys. **That line is the session's first message to the user, sent the
+moment the comparison is made — before the tracker is read or any other tool is called, and never folded into a later status update or
+left for the finale's action block.** Tool output is collapsed in the user's console, so a gap noticed «in passing» while reading the
+profile is a gap the user never sees. Precedent: a session compared the versions, found the profile one behind, said nothing and went on
+reading the task; the user had to ask twice — «did you read the profile?», then «why didn't you say the contract is behind?».
 
 **Then the project's layer of engine rules — `.claude/qa-cube-feedback.md`, next to the profile.** Read its open rows right after the
 profile (the «Closed» block is skipped: the engine already carries those). Each row is a rule about the process that a retro in this project
@@ -84,7 +88,7 @@ The executors ask no questions — not one of them.
 
 ## The pipeline
 
-**1. Understand the task and assemble the bundle.** The input is a link/id of a tracker task or free-form text. Read the task with the tools
+**1. Understand the task and assemble the bundle.** **Where entering the environment needs the user's hands (per the profile), the liveness oracle is this step's FIRST call** — a dead session then overlaps your reading instead of following it; the entry in `references/manual-brief.md` is read only at step 4, too late for this rule. The input is a link/id of a tracker task or free-form text. Read the task with the tools
 from the profile (Tracker section): the description and **the comments, mandatorily** — that is where the requirements, the status and the
 related changes live. Check for **related tasks** in three ways, not one: (1) explicit links/relations; (2) the task's **subtasks and
 parent**; (3) a substring search on the title (neighboring FE/BE tasks of the same area). Empty relations do not mean «there are none». If a
@@ -112,6 +116,13 @@ Precedent: two full rounds were accepted against a parent's user-story spec; the
 its own acceptance criteria, an explicit signature scheme «over the raw body, without re-serialisation», a required status field on the
 neighbouring entity and a background reconciler with a default interval — four of the round's findings turned out to be verbatim violations
 of a spec the round had never read, and several «requirements gaps for the analyst» turned out to be answered there.
+**The word «container» is earned by the subtask, not by the parent's voice.** Where the only subtask is a layer label with an empty
+description and no comments, there is no lower spec — the parent's user-voice text IS the acceptance reference, and the subtask only names
+which layer's verdict is being given. Say that plainly in `0-session.md` and in the chat («the spec is the parent's; the subtask sets the
+layer»), and route whatever the labelled layer cannot deliver to the missing sibling as a finding for the analyst. Calling such a parent a
+container reads as «its requirements are not the ones we test», and the user will ask. Precedent: a parent with a full FR/AC spec was
+announced as a container because it was user-voiced and unlabelled; its only subtask was an empty frontend item, and the user's first
+question was why the spec they had written was being set aside.
 
 **Start preconditions** — not met → tell the user and do not begin:
 - **the mode is determined**: the status of the task (and of the related ones in scope) determines the session's mode — **full cycle**

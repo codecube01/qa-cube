@@ -104,6 +104,16 @@ The automator will write the test from your result without re-checking by hand. 
   Environments section; **in a project with `logs: none` there is no trace id — just write the request and response bodies, no need to note
   its absence in every finding**);
 - the preconditions you had to create (entities, settings), and how you created them.
+- **every time you write down is read off the output of the call it dates** — print `new Date().toISOString()` (or the shell's `date -u`)
+  in the same call as the measurement, never estimate it from how long the run «feels». A section header stamped «~12:30» while the clock
+  said 11:20 misdates every observation under it, and on a shared environment the times are what ties an observation to a build or to
+  somebody else's action. Precedent: an executor stamped four sections by estimate and found the real clock an hour behind only at the
+  final fingerprint — the stamps had to be rewritten before delivery.
+- **text the user sees is quoted as RENDERED, never with the template's markup.** A caption read from the bundle arrives as
+  `<b>{email}</b> …`, and pasting the rendered string back in that form makes the one question a text finding exists to answer —
+  «is the markup visible on screen?» — unanswerable from your file. Quote `textContent` (or the screenshot), and mark emphasis in your own
+  notation (`**…**`); where the raw markup does reach the screen, say so in words, because that is itself a defect. Precedent: a result
+  quoted a dialog title as «…<b>address</b>?», and the manager had to reopen the dialog to learn the tags were rendered as bold.
 
 ## 3. The case
 

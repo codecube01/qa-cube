@@ -11,6 +11,7 @@ have prevented it is never the one you were looking for.
 **Is this a finding at all**
 
 - a known defect blocked the target scenario — it stops being background and enters the findings
+- a `pass` that holds only because today's data hides a mechanism already known to be wrong — a latent finding, filed now
 - a `fail` on an attribute of a requirement — check the neighbouring tab, column or block first
 - «the capability is missing» — not a defect until a requirement for exactly this carrier is found
 - «the data is gone» on a test environment — first a question about a cleanup, then a finding
@@ -52,6 +53,8 @@ brief such defects are usually listed as «not findings of this round» — but 
 closed, staying silent about it means hiding the reason for the gap: it goes into the report in a new role («blocks the verification of X»),
 and the decision on its priority is the manager's, asking the user if necessary. Precedent: the executor hesitated over whether they were
 entitled to raise a background defect that had become the main result of the round's first half.
+
+**A `pass` that holds only because today's DATA hides a mechanism the round already knows to be wrong is a latent finding, and it is filed in the round that saw the mechanism — not left as a caveat on the pass.** The shape: the executor establishes how the thing works (a list re-sorted on the client over only the loaded page, a total summed over the visible rows, a match on a prefix that happens to be unique) and notes that on the current records the output is still right. The verdict then reads «pass, with a caveat», which is true and is exactly the wrong artifact: the caveat lives in the result file and the knowledge base, the requirement row is green, and nobody re-measures a green row. The collection grows, the coincidence ends, and the next round has to report a regression of a requirement that was never actually met — with the customer reading it as something the latest build broke. Two moves. Name the condition that would break it, and look for it in the data NOW (an object created early and changed late, a second page, a duplicate prefix): where it already exists, the pass was never a pass. Where it does not, the row is `partial` with the mechanism as the reason, and a finding is filed at the priority of the damage once the condition arrives — the mechanism is the defect, the data only postpones the symptom. Precedent: a default sort order was accepted as a pass on the note «the client re-sorts only the loaded page; on today's data the page boundaries are not crossed»; a month later the collection had grown by half, the order broke at the seventh position, and the retest had to present as a new regression what the first round had already described in words.
 
 **Before assigning a `fail` on an attribute of a requirement — check whether it is covered by another part of the screen** (a neighboring
 tab, a table column, a different block). The answer is usually already in the result a line below: the executor describes what they actually
