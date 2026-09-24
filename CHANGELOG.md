@@ -9,6 +9,13 @@ Patch versions are bumped by the retro step of a session whenever the engine is 
 not every version becomes a release: a release is cut when there is something worth reading
 about.
 
+## [Unreleased]
+
+### Fixed
+
+- **Agent frontmatter is valid YAML.** The `description` of `qa-analyst` and `qa-manual` held a
+  colon followed by a space unquoted, which strict parsers reject. It is quoted now.
+
 ## [0.17.0] — 2026-09-24
 
 Two layers of rules. **Profile contract 6**: `/qa` reports the profile as behind, and
