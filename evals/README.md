@@ -28,17 +28,16 @@ Useful flags while iterating:
 
 ### What a pass actually costs
 
-Measured, not estimated — the first calibration pass of this suite, one run per case with no
-baseline arm, cost **$3.50 and took eight minutes**. Per case it ranged from $0.30
-(`profile-missing`, which stops after a few turns) to $1.26 (`degradations-declared`, which reads
-the profile and most of the pipeline before answering). A run is a real session, so its cost
-follows how far the engine gets, not some flat per-call price.
+Measured, not estimated. The full pass (six cases, `runs: 2`, with the baseline arm) cost
+**$4.06 and took about ten minutes** on 2026-09-24. A run with the plugin costs $0.10–0.30,
+and a baseline run $0.05–0.25. A run is a real session, so its cost follows how far the engine
+gets, not a flat per-call price.
 
-That makes the declared `runs: 2` with the baseline arm about **$14 a pass**. So in practice:
+So in practice:
 
-- **routine check** — `--runs 1 --ablation none`, about $3.50;
-- **before a release that matters** — the full pass, for the repeat runs (a judge is not
-  deterministic) and the «did the plugin cause this» delta.
+- **routine check** — `--runs 1 --ablation none`, about $1.50;
+- **before a release that matters** — the full pass, about $4, for the repeat runs (a judge is
+  not deterministic) and the «did the plugin cause this» delta.
 
 Set `--max-cost-usd` if you want a ceiling, but know what it does: it is checked *before* each run
 launches and does not stop runs already in flight, so a low ceiling will still spend whatever the
@@ -102,7 +101,9 @@ Four things are easy to get wrong — each one cost a paid run to find:
   model. The first version of `answers-in-russian` explained why the language rule exists and what
   the engine's instructions are written in — and the judge voted FAIL three times on an answer
   written in flawless Russian, while the regex on the same text passed. Ask one thing, forbid the
-  rest explicitly.
+  rest explicitly. And if the judge fails a plainly correct answer 3/3 after two rewordings, stop
+  rewording: `degradations-declared` lost four paid passes that way on «the mode defaults to full
+  cycle». A check that comes down to a word is a regex.
 - **A fixture that triggers a second rule measures two things at once.** `session-continuation`
   originally dated its existing session in the previous month, which set off the monthly sweep;
   the run spent every turn archiving folders and fixing links and never reached the sentence the
