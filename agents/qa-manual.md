@@ -15,7 +15,11 @@ Read, in this order:
   do not go back to the tracker), `1-plan.md`, and your own brief file;
 - the **project profile** `.claude/qa-profile.md` — it is a short map;
 - **targeted**, the files from the brief's «What to read» section: the manager has already picked the profile subfiles and knowledge-base
-  sections relevant to this task.
+  sections relevant to this task. **The list picks what to read — a file, or the sections named after it; what it picks is read whole,
+  with Read, before the first request to the environment** — a topical grep does not surface the pitfall filed under a neighbouring heading
+  (you search by the feature, the trap sits in the API conventions). Write the rules that apply to this round out as todo items while
+  reading: a rule read passively gets broken in the same run. The list always carries the engine's `shell-pitfalls.md` — read it before your
+  first shell command.
 
 Do not read the remaining profile subfiles in full — go there only when stuck (auth broke → the auth section, and so on); a subfile's first
 screen is the quick flow, the pitfalls come below. The brief has no «What to read» section — fallback: the profile's
@@ -36,22 +40,29 @@ The check goes exclusively through the real UI while watching network requests. 
 requests and other detours **are not a check** and their results will not be accepted; at most they are supporting evidence in a separate
 section.
 
-Auth, the browser instance and the accumulated UI-checking techniques are in the profile, Browser section; the safety rules from there (what
-must never be typed into forms) are not negotiable. The browser does not work — do not invent a detour: record in the result exactly what
+The UI-checking and page-scripting techniques are in the engine's `browser-techniques.md` (on a browser round the brief gives its path and
+the sections to read): its first screen and those sections before the first page script, any other section when you reach its topic. Auth, the browser instance and the project's own UI
+quirks are in the profile, Browser section, which wins where the two differ; its safety rules (what must never be typed into forms) are not
+negotiable. The browser does not work — do not invent a detour: record in the result exactly what
 fails (the step, the error, a screenshot) and tell the manager in your final summary, because access is theirs to fix.
 
 ## 1. The check
 
 Walk the brief's scenarios top to bottom — they are sorted by priority.
 
-**Before the scenarios — a sanity check of the environment** per the profile (Environments section): on shared environments other people's
+**Before the scenarios — a sanity check of the environment** per the profile (Environments section) and the snapshot
+`<sessions>/environment-state.md` the brief names (a fact dated before the last deploy is re-checked, not trusted): on shared environments other people's
 runs overwrite settings, so check and set what you need before the first operation. A step that failed because of clobbered settings gets
 rerun calmly — that is normal for a shared environment, not an anomaly.
 
 For each scenario:
 
 - fire real requests at the environment; never inline a request body with credentials (login/password/token) into the command — Write it to
-  a temp file in the scratchpad and pass the file, so that secrets stay out of argv and the command history;
+  a temp file in the scratchpad and pass the file, so that secrets stay out of argv and the command history. **Read the secrets source by
+  exact key names, never by substring** (a substring match hands back the first hit — a user name in the password slot), build auth headers
+  inside the script, and never print cookies, tokens or passwords;
+- pace batches of API calls (~0.7 s apart) and retry on `429`; after a dropped connection or a timeout, re-read the actual state before
+  going on — the call may have gone through;
 - verify the business effect, not the response code: after action X, did Y actually change (balance, status, record). «200 OK» is not a
   check result;
 - write the result to `*manual-result*.md` **immediately**, before moving to the next scenario. No buffering;
@@ -104,6 +115,9 @@ The automator will write the test from your result without re-checking by hand. 
   Environments section; **in a project with `logs: none` there is no trace id — just write the request and response bodies, no need to note
   its absence in every finding**);
 - the preconditions you had to create (entities, settings), and how you created them.
+- **identifiers are never truncated** — not in the result, not in your own intermediate listings: several systems answer an unknown or
+  shortened id with an empty result rather than a 404, so a cut id reads as «nothing there». Print it whole or pass it by substitution into
+  the next command; long lists go to a file in the scratchpad.
 - **every time you write down is read off the output of the call it dates** — print `new Date().toISOString()` (or the shell's `date -u`)
   in the same call as the measurement, never estimate it from how long the run «feels». A section header stamped «~12:30» while the clock
   said 11:20 misdates every observation under it, and on a shared environment the times are what ties an observation to a build or to
@@ -206,6 +220,7 @@ As your final text, return a short 5–10 line summary to the manager; the detai
 - Do not launch a long process (seeding via a test run and the like) in the background expecting to «wait for a notification» — it will
   never reach you. Wait synchronously; if it did go to the background — record a checkpoint in the result (what was launched, where the log
   is, what remains) and finish: the manager will wait it out and resume you.
+- **Shell pitfalls of the harness (macOS, zsh), waiting included** — `shell-pitfalls.md`, from your reading list.
 - **Never paste passwords, tokens or keys anywhere**: not into session files (the folders may be backed up off-site), not into TMS cases.
   Take credentials from the profile's `secrets` source; mask values in request evidence (`Authorization: <TOKEN>`), refer to entities by
   name.

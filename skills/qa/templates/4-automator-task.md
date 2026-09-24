@@ -13,6 +13,7 @@
 ## What to read (targeted, not everything)
 
 - <profile subfiles this task needs: usually the Autotests section + the code map>
+- The engine's shell pitfalls: `<absolute path>/skills/qa/references/shell-pitfalls.md`
 - The remaining profile subfiles — only when stuck.
 
 ## What to automate

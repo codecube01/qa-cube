@@ -124,7 +124,8 @@ the channel from step 3 — and thereby validates it too (a generated skill, an 
 **5. Writing it down.**
 - `.claude/qa-profile.md`: `contract-version` — the current version from «Contract versions» in `PROFILE-CONTRACT.md`; the «Capabilities»
   header (every header key of the contract) + sections only for the capabilities ≠ none, each answering the contract's questions and referring to the project's skills instead
-  of retelling them. Anything bulky (the code map, browser techniques) goes into the subfiles `.claude/qa-profile/*.md`. With `test-cases` ≠
+  of retelling them. Anything bulky (the code map, the project's own browser techniques) goes into the subfiles `.claude/qa-profile/*.md` — the universal
+  browser recipes ship with the engine (`skills/qa/references/browser-techniques.md`) and are not copied into the profile. With `test-cases` ≠
   none and `tms: none`, state the path for file cases in the TMS section (the default is `docs/test-cases/`);
 - **`engine-clone` — the default is `none`, and asking otherwise takes an explicit yes.** Ask outright: «Do you develop the qa-cube engine
   itself? Yes → the path to your git clone. No (the usual case) → none, and the engine will simply update from upstream.» **Never derive the
@@ -136,8 +137,12 @@ the channel from step 3 — and thereby validates it too (a generated skill, an 
 - **check how thick CLAUDE.md is** (the contract's «A thin CLAUDE.md» rule): CLAUDE.md is loaded into every session and every subagent — QA
   specifics in it (tracker pitfalls with precedents, report formats, numbering/priority conventions) are paid for by everyone. Having found
   such sections — offer the user to move them into the subfiles `.claude/qa-profile/*.md` (`tracker.md`, `reporting.md`, say), leaving in
-  CLAUDE.md the project map (what this is, the structure, the accounts, the status) and the links. Every subfile gets a TL;DR header (the
-  quick flow on the first screen, the pitfalls below);
+  CLAUDE.md the project map (what this is, the structure, the accounts) and the links. Every subfile gets a TL;DR header (the
+  quick flow on the first screen, the pitfalls below). **A «status» or «state of the environment» section is QA specifics too** — it
+  grows a paragraph per tested task: split it into `<sessions>/environment-state.md` (what the environment holds now, each fact dated)
+  and the registry `<sessions>/README.md` (what was tested), leaving a pointer in CLAUDE.md. The registry itself follows
+  `skills/qa/templates/registry.md`: a table only, the verdict cell one phrase — a raw archive or paragraph-long cells in it are unloaded
+  into the rows, the session reports and the snapshot;
 - show the user the finished profile in full and suggest running `/qa` on a trial task — the first session usually uncovers a couple of
   holes in the profile, and its retro will close them.
 

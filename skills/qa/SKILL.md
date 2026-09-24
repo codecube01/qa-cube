@@ -15,6 +15,8 @@ project question: how to read tasks, how to create cases, how to reach the envir
 — while reading the task (step 1), Environments and Browser — before the preflight check (step 4), Autotests — while writing the automator's
 brief (step 5), the project's report format — at step 6. The pipeline below points at the profile at each such spot. A subfile the session
 does not need (browser.md on a pure backend task) is not read at all; a subfile's first screen is the quick flow, the pitfalls come below.
+**Targeting picks the file, or the sections named after it; what is picked is read whole, with Read** — a topical grep misses a pitfall filed under another heading,
+and `cat` of a large file spills into persisted output, to be read again.
 
 **The session's language is `language` from the profile** (no field → the language of this file, i.e. English): everything the user sees is
 written in it — the whole conversation plus every artifact: the plan, the briefs, the result files, the report, the retro, the TMS cases,
@@ -116,13 +118,7 @@ Precedent: two full rounds were accepted against a parent's user-story spec; the
 its own acceptance criteria, an explicit signature scheme «over the raw body, without re-serialisation», a required status field on the
 neighbouring entity and a background reconciler with a default interval — four of the round's findings turned out to be verbatim violations
 of a spec the round had never read, and several «requirements gaps for the analyst» turned out to be answered there.
-**The word «container» is earned by the subtask, not by the parent's voice.** Where the only subtask is a layer label with an empty
-description and no comments, there is no lower spec — the parent's user-voice text IS the acceptance reference, and the subtask only names
-which layer's verdict is being given. Say that plainly in `0-session.md` and in the chat («the spec is the parent's; the subtask sets the
-layer»), and route whatever the labelled layer cannot deliver to the missing sibling as a finding for the analyst. Calling such a parent a
-container reads as «its requirements are not the ones we test», and the user will ask. Precedent: a parent with a full FR/AC spec was
-announced as a container because it was user-voiced and unlabelled; its only subtask was an empty frontend item, and the user's first
-question was why the spec they had written was being set aside.
+A parent whose only subtask is an empty layer label is not a container — its spec is the reference (`references/planning.md`).
 
 **Start preconditions** — not met → tell the user and do not begin:
 - **the mode is determined**: the status of the task (and of the related ones in scope) determines the session's mode — **full cycle**
@@ -215,10 +211,12 @@ makes the manual brief the 9th).
 `99-report.md` (the report).** The number 99 keeps the report last in the folder listing no matter how many rounds there are, and removes
 the question «which report is the current one»: there is always exactly one. Round 2+ does not create `*-report-2.md` — it edits
 `99-report.md`: the «What is confirmed», «Findings», «Not covered», «Automation», «Environment leftovers» and «Tracker comment» sections are
-brought to their **current state** (a finding's status changes — `fixed in R2`, `reproduces in R2`, `regression R2`; new ones are appended
-to the same running table), while the round's delta goes as a block at the top of «Round history». Nothing from past rounds is erased
-silently: a fact that stopped being true changes its status, it does not vanish.
-**3. The plan.** Scenarios by priority: first the business-critical ones and whatever the task fixed/changed, then the negative ones, then
+brought to their **current state** (a fixed finding leaves the table for the «Fixed» block below it, a live one keeps its row with a date in
+the cell, new ones are appended, a fixed one that breaks again returns under its own id as «regression R<n>» — `references/report.md`),
+while the round's delta goes as a block at the top of «Round history». Nothing
+from past rounds is erased silently: a fact that stopped being true moves to where its new status says, it does not vanish.
+**3. The plan.** Fixtures, access and what is flaky come from `<sessions>/environment-state.md`; a fact older than the build is
+re-measured first. Scenarios by priority: first the business-critical ones and whatever the task fixed/changed, then the negative ones, then
 the regression around them. Each scenario carries an expected business effect (what must change), not «get a 200». **Execution order ≠
 priority order:** negatives that do not mutate the environment under expected behavior are run before mutating positives — a clean state is
 worth more; but keep in mind that on a buggy server a «safe» negative may mutate the environment after all (account for that in the artifact
@@ -271,8 +269,9 @@ an executor is briefed once, and a situation you did not foresee cannot be added
 - `2-manual-task.md`: the context in one paragraph, the environment, the scenarios with their expected effects, where to write the result,
   and **the targeted reading list**: which profile subfiles and knowledge-base files (and, where needed, which of their sections) are
   relevant to exactly this task — you built the plan and know that better than the executor (a BE task needs no browser techniques; a task
-  about fees needs the wallets domain). The executor reads what is listed plus the profile map itself; everything else — only when stuck. Do
-  not retell the project's knowledge — the executor will take it from the profile and the project's skills;
+  about fees needs the wallets domain). The executor reads what is listed — a file, or the sections named after it — whole, plus the
+  profile map; the rest — only when stuck. **Plus the engine's references, by ABSOLUTE path** (the executor's cwd is the project):
+  `shell-pitfalls.md` always, `browser-techniques.md` on a browser round with the sections you picked from its contents. Do not retell the project's knowledge — the executor will take it from the profile and the project's skills;
 - launch `Agent` with `subagent_type: "qa-manual"`; in the prompt — `Output language: <language>` as the first line, then the path to the
   session folder and to the brief file. Wait for it to finish (the notification arrives on its own) and do nothing on its behalf;
 - accepting `3-manual-result.md`: failures carry trace ids (with `logs: none` do not require them and do not make the executor note their
@@ -313,7 +312,7 @@ a test; what should be asserted is the degenerate outcome («each variant occurr
 done» in the report with a reason; that is a valid outcome:
 - `4-automator-task.md`: the scenarios, a reference to `3-manual-result.md` as the evidence, the candidate per the profile's code map, the
   case id (with `test-cases: upfront` — from the analyst, the manual tester merely confirms it; with `inline` — from the manual tester),
-  **the targeted reading list** (which profile/knowledge subfiles are needed — as in the manual tester's brief); the names of any
+  **the targeted reading list** (as in the manual tester's brief, `shell-pitfalls.md` included); the names of any
   helpers/methods you mention — and the concrete values of their parameters, if you quote them in the brief — must be verified by grepping
   the code rather than from memory (an inexact name or number = an extra iteration for the automator). **A rule of the project's own profile
   is checked against the specific helper before it goes into the brief as an instruction** — «these helpers assert 200 internally, so add a
@@ -347,21 +346,20 @@ report, the registries and the knowledge base, and every entry in that file was 
 requirements» is the analyst's cases with the manual tester's verdict on each (requirement → case → pass/fail/not covered); «Not covered» is
 the «Uncovered requirements» section from `0-session.md`, brought to its current state per the run's results (the manual tester may have
 closed a row with a fact from the environment or, conversely, added a reason). Cases whose expectation the analyst marked `assumption` under
-a «spec-grade» verdict are presented as requirements gaps with an explicit «needs an analyst's decision».
+a «spec-grade» verdict are presented as requirements gaps with an explicit «needs an analyst's decision», in the report's second table.
 
 **What counts as a finding.** Only what reproduces and has been confirmed: anything «presumed» from automated runs is first confirmed by
 hand. Environment leftovers (test data, traces of a run) are not filed as bugs. Before assigning a priority — reconcile against the
 **verbatim** text of the requirement: behavior explicitly stated in the spec is not a bug, at most a UX observation.
 
-**How a finding is shaped for the tracker — the title line, the split by layer, what stays out of the cells, and what goes to the
-side-findings registry instead of the report — is in `references/report.md`**, which you have already read at the start of this step.
+A finding's tracker shape (title, layer split, cells, side findings) and its priority calibration — `references/report.md`.
 
 **Priorities (the default, if the profile did not set its own scale):** `Blocker` (blocks usage or release) → `Critical` (security, or a
 mismatch with the requirements that genuinely blocks a section) → `Major` (misleading behavior, data and audit quality, requirements gaps) →
 `Minor` (cosmetics). Calibration: data quality and completeness are `Major`, not `Critical`.
 
-**ID numbering:** running across the project, numbers are not reused, gaps are normal; before assigning one, find the current maximum across
-all the reports (by grep) rather than continuing from memory. The prefixes and the current maximum come from the profile.
+**ID numbering:** running across the project, numbers are not reused, gaps are normal; take the current maximum across all the reports by
+grep BEFORE the draft (after it, the grep finds your own fresh numbers), never from memory. The prefixes and conventions come from the profile.
 
 **A finding's cell — the order is mandatory**, 3–5 lines and **no more than ~850 characters** (the limit is the same for a Critical and a
 Minor; longer, and the tracker's reader stops reading while the customer sends the report back to be shortened). **Before delivering, run
@@ -462,16 +460,17 @@ A lesson without an address is not a lesson. A hygiene rule: if a patch to an in
 text instead of adding yet another phrasing — and if a third entry in one catalogue turns out to share a mechanism, that is a family, not
 three entries.
 
-**8. The finale.** Update `0-session.md` (the status, a row in the round log) and **the session registry `<sessions>/README.md`** — one
-line: the task, the date of the last round, the verdict in one phrase, what was left on the environment, the folder (no such file — create
-it: it is the entry point for the question «what has already been tested» and the source of the sanity check before the next run). **Do not
-keep a run log in the project's CLAUDE.md** — that file is loaded into every session: it holds only the project map and pointers to the
-registries, facts about the product go into the knowledge base, and techniques into the profile's subfiles. A run log that has grown there
-is a reason to unload it in that same retro. Precedent: 79% of the file was a log of 18 runs. To the user — the step-6.5 delivery repeated
+**8. The finale.** Update `0-session.md` (the status, a row in the round log) and **the session registry `<sessions>/README.md`** — the
+session's row, per `templates/registry.md`: a table and nothing else, the verdict one phrase, the details in the report (no file — create
+it) — and **`<sessions>/environment-state.md`**, per `templates/environment-state.md`: what the environment holds now, each fact
+dated and replaced, not appended. Together they are the sanity check's source.
+**The project's CLAUDE.md gets neither — no run log, no «current state» section**: loaded into every session, it holds the map and
+pointers; product facts go into the knowledge base, techniques into the profile. Found grown there — unload it
+in that retro. To the user — the step-6.5 delivery repeated
 in full (the paragraph below) and **the tracker comment**: check the write permission in the profile —
 writing is not allowed → hand over ready-made text for the user to paste themselves. **Keep the comment short — 3–5 lines:** the verdict in
 one phrase, how many findings there are and where they live, what is not covered, a link to the report. There is no need to retell the
-findings in it — the findings table from the report is what goes to the tracker. **Never omit the autotest line**: no test was written —
+findings in it — the report's findings tables are what goes to the tracker. **Never omit the autotest line**: no test was written —
 write exactly that («autotest: none», with a reason if you like), otherwise the task's reader cannot tell «we didn't write one» from «we
 forgot to mention it». For a bundle of tasks there is one comment covering all of them. Deliver it in the chat and leave it in
 `99-report.md` (the section is rewritten for the current round's verdict).
@@ -577,7 +576,7 @@ else would ever get — while the same lesson, arriving later from upstream, sto
 ## Boundaries
 
 - **Browser work belongs to `qa-manual`, not to a role of its own.** A UI check is run through the real interface while watching the network
-  (the rule and the techniques are in the agent's instruction and the profile's Browser section), and the manager's preflight at step 4
+  (the rule is in the agent's instruction, the techniques in `references/browser-techniques.md` and the profile), and the manager's preflight at step 4
   verifies the access before the executor is launched. There is no separate web-tester and none is planned: a UI scenario and an API scenario
   belong to the same round, and splitting them would cost a hand-off in the middle of it.
 - The manual tester and the automator work **sequentially** (the manual tester's result is the automator's input). Do not introduce parallel

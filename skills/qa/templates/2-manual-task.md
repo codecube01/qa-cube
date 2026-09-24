@@ -10,6 +10,7 @@
 - Env: <env>
 - Requirements: spec-grade | draft — <one-phrase rationale>
 - Cases (with `test-cases: upfront`): <case ids from the analyst; those are what we run>
+- Environment state: `<sessions>/environment-state.md` — the snapshot for the sanity check (or «none yet»)
 - Documentation: <paths in the project knowledge base relevant to the task>
 - QA findings: <paths to findings from past sessions, if the section has any>
 
@@ -17,6 +18,8 @@
 
 - <profile subfiles this task needs: e.g. `.claude/qa-profile/auth-and-api.md` §1, §3>
 - <KB files/sections for the task's domain>
+- The engine's shell pitfalls: `<absolute path>/skills/qa/references/shell-pitfalls.md`
+- <a browser round: the engine's techniques, `<absolute path>/skills/qa/references/browser-techniques.md` — the first screen + §<the sections this task needs>>
 - The remaining profile subfiles — only when stuck.
 
 ## Scenarios

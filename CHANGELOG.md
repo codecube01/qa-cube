@@ -11,15 +11,35 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+### Added
+
+- **`references/browser-techniques.md`** — browser and API-probing recipes that projects kept
+  in their profiles. The brief names the sections a round needs.
+- **`references/shell-pitfalls.md`** — macOS/zsh harness pitfalls for both executors, waiting
+  included, in one place instead of two agent prompts.
+- **~40 process lessons moved in from a project profile**: retest dating, server-side checks
+  behind the frontend, priority calibration, what «not covered» may claim about a mock-up.
+- **A second findings table, «Findings without a violated clause»**: requirements gaps,
+  blocking known defects, latent defects. The first table keeps only quoted violations.
+
 ### Changed
 
+- **Profile contract 7: runs leave nothing in CLAUDE.md.** The environment's state lives in
+  `<sessions>/environment-state.md`, read at planning and by the executor's sanity check.
+- **The registry is a table and nothing else**, per `templates/registry.md`.
+- **One defect, one id; two defects, two ids.** A finding split across layers keeps its id for
+  its own half.
+- **Harness refusals are one family** in `manual-brief.md`. A user's permission buys one repeat
+  of the refused call, not a loop.
 - **A merge into `main` is a release.** Work goes to `dev`; the merge tags the version and
-  publishes the release. How-to — in CONTRIBUTING.md.
+  publishes the release. See CONTRIBUTING.md.
 
 ### Fixed
 
-- **Agent frontmatter is valid YAML.** The `description` of `qa-analyst` and `qa-manual` held a
-  colon followed by a space unquoted, which strict parsers reject. It is quoted now.
+- **A fixed finding leaves the table**, and one that breaks again returns under its own id
+  as «regression R<n>».
+- **Agent frontmatter is valid YAML.** The `description` of `qa-analyst` and `qa-manual` held
+  an unquoted colon, which strict parsers reject.
 
 ## [0.17.0] — 2026-09-24
 

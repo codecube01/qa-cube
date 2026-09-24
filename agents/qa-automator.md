@@ -78,3 +78,5 @@ As your final text, return a 5-line summary to the manager.
   in code, credentials are read from the config/env per the project's convention (the profile's Autotests section). The source of values is
   the profile's `secrets`; mask them in request examples (`Authorization: <TOKEN>`).
 - Compile and run only your own test — do not launch whole suites without a reason (the launch rules are in the profile).
+- **Shell pitfalls of the harness (macOS, zsh)** — reading with Read, not `cat`, waiting, background tasks — are in the engine's
+  `shell-pitfalls.md`; the brief's reading list gives its path, and it is read before your first shell command.

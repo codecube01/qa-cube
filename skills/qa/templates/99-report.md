@@ -25,7 +25,15 @@ _A living document: one per session, every round updates it in place. The sectio
 |---|---|---|
 | **<ID> · <Blocker\|Critical\|Major\|Minor>** | <FR/AC numbers + source, not prose> | **<A bold phrase in business language: what is broken from the user's point of view>** <evidence with numbers: what the spec requires versus what came out.> <The risk in user terms.> **<Needs an analyst's decision: …>** *Tech.: <root cause, endpoint, trace id, date>* |
 
-<Whatever got fixed during this session goes in a block below the table: «Fixed: <ID · priority> — <what it was, what confirmed the fix>»; details — in «Round history».>
+### Findings without a violated clause
+
+<In the task's scope, but no clause of the requirements is broken: a requirements gap (the spec is silent or contradicts itself), a known defect that blocked a requirement's verification, a latent defect (a pass that holds only on today's data). Same columns, priorities and id numbering as above; goes to the tracker as its own block. No such findings — drop the subsection. A wish («not required, but…») is neither table: side findings.>
+
+| № · Priority | Requirement | Description and risk |
+|---|---|---|
+| **<ID> · <priority>** | <the clause it touches, quoted — or «FR-N is silent on …»> | **<what is missing or at risk, in business language>** <evidence> **<Needs an analyst's decision: …>** |
+
+<Whatever got fixed during this session goes in a block below the tables: «Fixed: <ID · priority> — <what it was, what confirmed the fix>»; details — in «Round history». A fixed finding that breaks again returns to its table under its own id, the cell opening with «regression R<n>, <date>».>
 
 <Whatever is already filed in the tracker goes in a line below the table: «Outside the table (not carried to the tracker): <what reproduces>, <date>, already filed as <task>».>
 
