@@ -271,7 +271,10 @@ an executor is briefed once, and a situation you did not foresee cannot be added
   relevant to exactly this task — you built the plan and know that better than the executor (a BE task needs no browser techniques; a task
   about fees needs the wallets domain). The executor reads what is listed — a file, or the sections named after it — whole, plus the
   profile map; the rest — only when stuck. **Plus the engine's references, by ABSOLUTE path** (the executor's cwd is the project):
-  `shell-pitfalls.md` always, `browser-techniques.md` on a browser round with the sections you picked from its contents. Do not retell the project's knowledge — the executor will take it from the profile and the project's skills;
+  `shell-pitfalls.md` always, `browser-techniques.md` on a browser round with the sections you picked from its contents — and a round is a
+  browser round by its INSTRUMENT, not its subject: an API or contract round driven from the page console trips the same tool limits (a
+  timeout on a polling loop, truncated output), so the file goes in. Do not retell the project's knowledge — the executor will take it from
+  the profile and the project's skills;
 - launch `Agent` with `subagent_type: "qa-manual"`; in the prompt — `Output language: <language>` as the first line, then the path to the
   session folder and to the brief file. Wait for it to finish (the notification arrives on its own) and do nothing on its behalf;
 - accepting `3-manual-result.md`: failures carry trace ids (with `logs: none` do not require them and do not make the executor note their

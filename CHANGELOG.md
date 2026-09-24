@@ -21,6 +21,8 @@ section gathers everything since the previous one.
   behind the frontend, priority calibration, what «not covered» may claim about a mock-up.
 - **A second findings table, «Findings without a violated clause»**: requirements gaps,
   blocking known defects, latent defects. The first table keeps only quoted violations.
+- **More browser and shell recipes**: the ~1000-character output cut, the Apollo cache as a
+  totals oracle, an expired session that still shows data, the SPA catch-all, alias batches.
 
 ### Changed
 
@@ -29,6 +31,10 @@ section gathers everything since the previous one.
 - **The registry is a table and nothing else**, per `templates/registry.md`.
 - **One defect, one id; two defects, two ids.** A finding split across layers keeps its id for
   its own half.
+- **A requirement whose surface is missing is sorted in one order**: a live carrier task gives
+  a line under the table, no carrier gives an analyst's gap, own scope gives a FAIL.
+- **A round is a browser round by its instrument**: an API round from the page console gets
+  `browser-techniques.md` too.
 - **Harness refusals are one family** in `manual-brief.md`. A user's permission buys one repeat
   of the refused call, not a loop.
 - **A merge into `main` is a release.** Work goes to `dev`; the merge tags the version and
