@@ -221,8 +221,8 @@ offers the text and a link to the issue tracker; posting it is your call, never 
 
 Version history is in [CHANGELOG.md](CHANGELOG.md); what is deliberately not built yet — in
 [ROADMAP.md](ROADMAP.md); how to propose a change — in [CONTRIBUTING.md](CONTRIBUTING.md). A release is a milestone for humans, not the delivery channel:
-the marketplace clones the branch, and `claude plugin update` reads `version` from `plugin.json`,
-never a tag.
+the marketplace clones `main`, and `claude plugin update` reads `version` from `plugin.json`,
+never a tag. Work in progress lives on `dev`.
 
 ## License
 

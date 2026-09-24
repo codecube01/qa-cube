@@ -2,7 +2,7 @@ name: Validate
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
   workflow_dispatch:
 
@@ -70,3 +70,20 @@ jobs:
             exit 1
           fi
           echo "plugin.json $version vs latest tag $latest — fine."
+
+      - name: A release PR carries its CHANGELOG section
+        # a merge into main is a release (release.yml), so a PR that brings main a new
+        # version must bring the notes for it — after the merge it is too late to ask
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        run: |
+          version=$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+            echo "v$version is already released; this PR does not cut a new one."
+            exit 0
+          fi
+          if ! grep -qE "^## \[$version\]" CHANGELOG.md; then
+            echo "::error::merging this PR releases v$version, but CHANGELOG.md has no «## [$version]» section."
+            echo 'Rename [Unreleased] to the version (and add a fresh empty [Unreleased] above it).'
+            exit 1
+          fi
+          echo "CHANGELOG.md has the section for $version."

@@ -69,16 +69,19 @@ how to add a case.
 
 ## Releases
 
-Versions are bumped constantly by retros, so releases are cut deliberately rather than
-automatically:
+Two branches. **`dev`** takes every change, retros included, each with its patch bump, and
+the entries pile up under `[Unreleased]`. **`main`** is what the marketplace hands out, so a
+merge into it is a delivery whether it is called a release or not — and that is why it is one:
 
-```bash
-# CHANGELOG.md gets a section for the version first
-git tag v0.11.0 && git push origin v0.11.0
-```
+1. open a PR `dev → main`;
+2. in it, rename `[Unreleased]` in `CHANGELOG.md` to the version in `plugin.json` and put a
+   fresh empty `[Unreleased]` above it — CI refuses a PR to `main` that brings a new version
+   without its section;
+3. merge. The release workflow sees a version with no tag yet, tags the merge commit
+   `vX.Y.Z`, builds the archive and publishes the release with the notes from that section.
 
-The tag must match `version` in `plugin.json` — the release workflow refuses to run otherwise.
-It then builds the archive and publishes the release with the notes from `CHANGELOG.md`.
+A merge that does not change the version releases nothing. Versions skip numbers between
+releases (0.17.1 → 0.17.9): the patches in between lived on `dev`.
 
 ## No identifiers from real projects
 

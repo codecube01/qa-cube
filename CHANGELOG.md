@@ -5,11 +5,16 @@ All notable changes to qa-cube are recorded here. The format follows
 `.claude-plugin/plugin.json` — that field, not a git tag, is what `claude plugin update`
 reads. A release tag `vX.Y.Z` must always match it.
 
-Patch versions are bumped by the retro step of a session whenever the engine is edited, so
-not every version becomes a release: a release is cut when there is something worth reading
-about.
+Patch versions are bumped on `dev` by the retro step of a session whenever the engine is
+edited, so not every version becomes a release: a release is a merge into `main`, and its
+section gathers everything since the previous one.
 
 ## [Unreleased]
+
+### Changed
+
+- **A merge into `main` is a release.** Work goes to `dev`; the merge tags the version and
+  publishes the release. How-to — in CONTRIBUTING.md.
 
 ### Fixed
 

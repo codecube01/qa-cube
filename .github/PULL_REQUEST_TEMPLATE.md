@@ -16,3 +16,4 @@
       question, a rename)? If yes — `PROFILE-CONTRACT.md` gets a version bump and a history
       row; if no — the contract version stays put
 - [ ] `CHANGELOG.md` has an entry under `[Unreleased]`
+- [ ] A PR into `main` releases: `[Unreleased]` is renamed to the version in `plugin.json`
