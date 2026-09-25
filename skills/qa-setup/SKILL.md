@@ -125,7 +125,7 @@ the channel from step 3 — and thereby validates it too (a generated skill, an 
 - `.claude/qa-profile.md`: `contract-version` — the current version from «Contract versions» in `PROFILE-CONTRACT.md`; the «Capabilities»
   header (every header key of the contract) + sections only for the capabilities ≠ none, each answering the contract's questions and referring to the project's skills instead
   of retelling them. Anything bulky (the code map, the project's own browser techniques) goes into the subfiles `.claude/qa-profile/*.md` — the universal
-  browser recipes ship with the engine (`skills/qa/references/browser-techniques.md`) and are not copied into the profile. With `test-cases` ≠
+  browser and API recipes ship with the engine (`skills/qa/references/browser-techniques.md`, `api-techniques.md`) and are not copied into the profile. With `test-cases` ≠
   none and `tms: none`, state the path for file cases in the TMS section (the default is `docs/test-cases/`);
 - **`engine-clone` — the default is `none`, and asking otherwise takes an explicit yes.** Ask outright: «Do you develop the qa-cube engine
   itself? Yes → the path to your git clone. No (the usual case) → none, and the engine will simply update from upstream.» **Never derive the

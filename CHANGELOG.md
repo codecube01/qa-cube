@@ -13,8 +13,10 @@ section gathers everything since the previous one.
 
 ### Added
 
-- **`references/browser-techniques.md`** — browser and API-probing recipes that projects kept
-  in their profiles. The brief names the sections a round needs.
+- **`references/browser-techniques.md`** — browser recipes that projects kept in their
+  profiles. The brief names the sections a round needs.
+- **`references/api-techniques.md`** — request-level recipes for any round with API calls, shell
+  rounds included; its «GraphQL» section is named only for a GraphQL API.
 - **`references/shell-pitfalls.md`** — macOS/zsh harness pitfalls for both executors, waiting
   included, in one place instead of two agent prompts.
 - **~100 process lessons moved in from project profiles**: retest dating, asynchronous

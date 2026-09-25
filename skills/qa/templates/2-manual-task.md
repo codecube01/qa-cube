@@ -20,6 +20,7 @@
 - <KB files/sections for the task's domain>
 - The engine's shell pitfalls: `<absolute path>/skills/qa/references/shell-pitfalls.md`
 - <a browser round: the engine's techniques, `<absolute path>/skills/qa/references/browser-techniques.md` — the first screen + §<the sections this task needs>>
+- <a round with API requests: `<absolute path>/skills/qa/references/api-techniques.md` — the first screen + §<the sections, «GraphQL» only for a GraphQL API>>
 - The remaining profile subfiles — only when stuck.
 
 ## Scenarios

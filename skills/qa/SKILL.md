@@ -271,9 +271,10 @@ an executor is briefed once, and a situation you did not foresee cannot be added
   relevant to exactly this task — you built the plan and know that better than the executor (a BE task needs no browser techniques; a task
   about fees needs the wallets domain). The executor reads what is listed — a file, or the sections named after it — whole, plus the
   profile map; the rest — only when stuck. **Plus the engine's references, by ABSOLUTE path** (the executor's cwd is the project):
-  `shell-pitfalls.md` always, `browser-techniques.md` on a browser round with the sections you picked from its contents — and a round is a
-  browser round by its INSTRUMENT, not its subject: an API or contract round driven from the page console trips the same tool limits (a
-  timeout on a polling loop, truncated output), so the file goes in. Do not retell the project's knowledge — the executor will take it from
+  `shell-pitfalls.md` always; `api-techniques.md` on any round that sends requests to the API (its «GraphQL» section only where the
+  product's API is GraphQL); `browser-techniques.md` on a browser round — a round is one by its INSTRUMENT, not its subject: an API round
+  driven from the page console trips the same tool limits (a timeout on a polling loop, truncated output), so it gets both. The sections of
+  each — picked from its contents. Do not retell the project's knowledge — the executor will take it from
   the profile and the project's skills;
 - launch `Agent` with `subagent_type: "qa-manual"`; in the prompt — `Output language: <language>` as the first line, then the path to the
   session folder and to the brief file. Wait for it to finish (the notification arrives on its own) and do nothing on its behalf;
@@ -315,7 +316,7 @@ a test; what should be asserted is the degenerate outcome («each variant occurr
 done» in the report with a reason; that is a valid outcome:
 - `4-automator-task.md`: the scenarios, a reference to `3-manual-result.md` as the evidence, the candidate per the profile's code map, the
   case id (with `test-cases: upfront` — from the analyst, the manual tester merely confirms it; with `inline` — from the manual tester),
-  **the targeted reading list** (as in the manual tester's brief, `shell-pitfalls.md` included); the names of any
+  **the targeted reading list** (as in the manual tester's brief, the engine's references included); the names of any
   helpers/methods you mention — and the concrete values of their parameters, if you quote them in the brief — must be verified by grepping
   the code rather than from memory (an inexact name or number = an extra iteration for the automator). **A rule of the project's own profile
   is checked against the specific helper before it goes into the brief as an instruction** — «these helpers assert 200 internally, so add a

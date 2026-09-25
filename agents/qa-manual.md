@@ -43,7 +43,9 @@ and the browser is not raised just to reach the API — a page console adds the 
 more.
 
 The UI-checking and page-scripting techniques are in the engine's `browser-techniques.md` (on a browser round the brief gives its path and
-the sections to read): its first screen and those sections before the first page script, any other section when you reach its topic. Auth, the browser instance and the project's own UI
+the sections to read): its first screen and those sections before the first page script, any other section when you reach its topic. The
+request-level recipes — the contract, the replay, reading the answer, GraphQL — are in `api-techniques.md`, given on any round with API
+calls, from the shell or the page alike, and read the same way before the first request. Auth, the browser instance and the project's own UI
 quirks are in the profile, Browser section, which wins where the two differ; its safety rules (what must never be typed into forms) are not
 negotiable. The browser does not work — do not invent a detour: record in the result exactly what
 fails (the step, the error, a screenshot) and tell the manager in your final summary, because access is theirs to fix.

@@ -180,7 +180,7 @@ clone>`) but not for distributing to a team — it only works where that path ex
 .claude-plugin/         plugin.json, marketplace.json
 skills/qa/              the test-session engine: SKILL.md — the pipeline's procedure,
                         references/ — the lesson catalogues for steps 2, 3, 4 and 6, plus the
-                        browser recipes and shell pitfalls the executors read,
+                        browser, API and shell recipes the executors read,
                         templates/ — the session file skeletons,
                         scripts/check_session.py — secrets and table checks over a session's files
 skills/qa-setup/        wiring a project in and updating its profile: interview → profile

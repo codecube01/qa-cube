@@ -23,9 +23,3 @@ and each line below has cost a round. What belongs to one project's tooling stay
   A heredoc fed to the system Python has failed with a "Non-UTF8 code" SyntaxError and not run at all — silently enough to be mistaken for an empty result.
   The same goes for a request BODY with nested quotes or non-ASCII text: it is written to a file and passed by path, never through argv —
   keep argv for one-line reads.
-- **A login or other redirect chain scripted outside the browser is walked hop by hop**, reading `Location` and `Set-Cookie` at each step —
-  an auto-following client hides where a cookie is set and where the flow breaks. Send a browser-like `User-Agent` (plus the `Origin` and
-  `Referer` the flow expects): public hosts answer a library's default one with `403`.
-- **Trim a response's output only when it succeeded; an error response from `curl`/Python is printed whole** (in a page the same rule
-  reads «the whole error object», `browser-techniques.md`). A «keep the interesting keys» filter turned a `400` into `{}`, which read as
-  «the contract promises an error schema and sends an empty body» — the formatter nearly became the source of a finding.
