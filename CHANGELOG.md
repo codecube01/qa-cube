@@ -54,6 +54,10 @@ section gathers everything since the previous one.
 
 ### Fixed
 
+- **The leak checker covers more than task ids**: hosts and URLs, emails, legal entities, IPs,
+  home paths, entity ids, secrets and a private denylist, over the files and the published history.
+- **Example names that traced back to a project** (skill names, domain vocabulary) are replaced
+  with neutral ones.
 - **A fixed finding leaves the table**, and one that breaks again returns under its own id
   as «regression R<n>».
 - **Agent frontmatter is valid YAML.** The `description` of `qa-analyst` and `qa-manual` held

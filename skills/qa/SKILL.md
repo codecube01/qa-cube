@@ -222,7 +222,7 @@ priority order:** negatives that do not mutate the environment under expected be
 worth more; but keep in mind that on a buggy server a «safe» negative may mutate the environment after all (account for that in the artifact
 estimate). **A scenario that closes a requirement with a couple of cheap reads goes before scenarios with fragile preconditions, not after**
 — otherwise the answer to «is the requirement met» is hostage to someone else's cause: in one session the check «the field is served to both
-consumers» (two GETs) sat after the trader scenario and would have gone unverified had the executor not raised IP2P matching.
+consumers» (two GETs) sat after a scenario with fragile preconditions and would have gone unverified had the executor not raised it on their own.
 
 The source of the scenarios is **the task's requirements and the product's behavior, not the implementation**. We test as a black box: do
 not pull MR/PR diffs by default — it clutters the context and skews the optics («I read how it was done and decided it was right» — whereas
@@ -504,7 +504,7 @@ Retro edits:
 - knowledge base — a new domain 12-auth-service.md (challenges, TTL, sessions)
 - engine — 0.6.1 → 0.6.2: the findings rules into step 6, the priority scale into qa-manual
 - profile — reporting.md: the project specifics stayed; auth-and-api.md: the rate limit and the 307/401 oracle
-- skill temporal-qa — three new workflow prefixes
+- skill orders-qa — three new job prefixes
 ``` Commit only if asked.
 
 **The last thing the session prints is the action block: `⚠️` for «I cannot close this without you», `💡` for «worth doing, safe to

@@ -10,6 +10,11 @@ jobs:
   validate:
     name: Plugin structure
     runs-on: ubuntu-latest
+    env:
+      # the private denylist of real names (check_identifiers.py); a repository secret, so the
+      # list itself is never in git and its hits are printed masked. Empty on forks — then the
+      # other detectors still run.
+      QA_CUBE_DENYLIST: ${{ secrets.QA_CUBE_DENYLIST }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,6 +50,11 @@ jobs:
           echo "inspecting $range"
           git log --format='%H%n%B%n---' "$range" 2>/dev/null > messages.txt || git log -1 --format='%H%n%B' > messages.txt
           python3 .github/scripts/check_identifiers.py --files messages.txt
+
+      - name: No project identifiers anywhere in the published history
+        # every commit message and every line ever added on HEAD and the remote branches:
+        # a leak removed from the tree is still published until the history is rewritten
+        run: python3 .github/scripts/check_identifiers.py --history
 
       - name: No project identifiers in the PR title or body
         if: github.event_name == 'pull_request'

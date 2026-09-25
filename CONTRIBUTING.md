@@ -94,8 +94,17 @@ drop the address. The mechanics are the lesson; the number is a client's data.
 Session files, a project profile and a project's knowledge base are the exception: they live
 inside their project and may name anything.
 
-This is enforced by CI, not by good intentions — `validate-plugin.py` fails on a task-shaped
-identifier and tells you the file and line.
+This is enforced by CI, not by good intentions. `.github/scripts/check_identifiers.py` is the one
+definition of a leak — tracker ids, hosts and URLs outside an allow-list, email and IP addresses,
+home directory paths, random-looking entity ids, secret shapes, and the names from a private
+denylist — and the git hooks, `validate-plugin.py` and CI all call it, on file contents, file and
+branch names, commit messages, PR metadata and the whole published history
+(`check_identifiers.py --history`).
+
+Real company, client and service names cannot be guessed by a regex, so they come from a
+denylist that never enters git: one term per line in `.identifiers.local` at the repo root
+(git-ignored), and in CI the `QA_CUBE_DENYLIST` repository secret. A term also catches its
+hyphenated, joined and dotted spellings, and hits are printed masked.
 
 ## Style
 

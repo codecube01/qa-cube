@@ -99,7 +99,7 @@ Otherwise the item is filed as a question for the analyst without a number — w
 neighboring cabinet, from another role, on another platform or in another client is checked with two questions: (1) is there a
 task/requirement for exactly this carrier — search its own repository and tracker, not just the task you are testing; (2) was it ever there
 — a control experiment on a build without the task. Both answers «no» = a missing capability, and its place is the side-findings registry as
-a question for the product, not a Major in the task's report. Precedent: «the merchant cabinet has no column selection» moved from Major
+a question for the product, not a Major in the task's report. Precedent: «the partner cabinet has no column selection» moved from Major
 into the registry — no requirements for that frontend exist at all, and the control was not on the old build either.
 
 **«The data is gone» on a test environment is first a question about a cleanup, and only then a finding.** Before filing a defect of the
