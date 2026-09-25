@@ -43,6 +43,15 @@ Once the test is green, **update the case** (with `test-cases: none` there is no
 task is enough): the automation flag and the link to the test go in per the TMS section's rules, and only once the test really exists and
 carries the case link in the code.
 
+**Where there is a case, one the test covers only in part still gets the flag — plus a line in its description naming which steps stay
+manual.** The typical source is a step merged into an existing test: a binary flag, read alone, tells the next reader that every step is
+covered (where the TMS has a «partially automated» status, the profile's TMS section decides whether it is set instead — the line is
+written either way). Record the line in `*automator-result*.md` too: the manager checks it at acceptance, as it checks the manual tester's
+case corrections. Write the boundary from the test's code, not from your brief: the neighbouring assertions of the method you merged into often cover more
+of the case than the brief asked for, and then a step moves from «manual» to «partly covered». Precedent: a case flagged automated after a
+merge carried «steps 1–3 and 7 — autotest, steps 5 and 6 — manual»; on a later case the boundary drawn from the brief alone called a step
+manual that the method's existing assertions already half-covered.
+
 **2. The autotest.**
 - **Check the existing coverage first** — before writing a separate test: grep the test code (endpoint, tags, case links, «also covers» in
   comments) and search the TMS for a test already covering this area. Order of preference: (1) a test already exists and covers it — write

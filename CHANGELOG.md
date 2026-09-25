@@ -31,6 +31,8 @@ section gathers everything since the previous one.
   before/after set.
 - **Report sections «Closed by a development decision» and «Awaiting the analyst's decision»**:
   a decided item is not a finding; a scope a comment left open awaits the analyst.
+- **A partly covered case names its manual steps**: `qa-automator` sets the automation flag and
+  writes the coverage boundary into the case, drawn from the test's code rather than the brief.
 
 ### Changed
 

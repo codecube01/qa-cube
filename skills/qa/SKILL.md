@@ -328,8 +328,8 @@ done» in the report with a reason; that is a valid outcome:
 - **asking for the price of the coverage, say what measures it:** run logs often lack timestamps on step lines, so a step's duration is
   unreadable from the log — then measure by a run on reverted code, repeated when the run-to-run spread rivals the delta;
 - accepting `5-automator-result.md` (the checker first, as in step 4 — test code carries credentials more often than prose does): the test was actually run (the run log is cited), the case exists in the TMS, and the test-to-case link
-  in the code matches the case (with `test-cases: none` there is no case — then what gets checked is the link to the tracker task per the
-  profile's convention).
+  in the code matches the case, and a partly covered case names its manual steps (with `test-cases: none` there is no case — then what gets
+  checked is the link to the tracker task per the profile's convention).
 
 **6. The report** `99-report.md`: the verdict (done / bugs / blocked), **the goal's own verdict**, what is confirmed against the requirements, the findings, what is not
 covered and why, what was automated, the links (task, case, test), the open questions — the goal is zero. **There is one report per session
