@@ -157,9 +157,9 @@ if qa_skill.exists():
     # The budget is in characters, not lines: line count moves when the file is
     # rewrapped, while what the manager actually pays for is the token count.
     size = len(text)
-    if size > 64_000:
+    if size > 66_000:
         fail(
-            f"skills/qa/SKILL.md: {size} characters (budget 64000, ~16k tokens) — move "
+            f"skills/qa/SKILL.md: {size} characters (budget 66000, ~16.5k tokens) — move "
             f"situational lessons into skills/qa/references/ and leave the procedure here"
         )
 

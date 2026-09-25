@@ -331,7 +331,7 @@ done» in the report with a reason; that is a valid outcome:
   in the code matches the case (with `test-cases: none` there is no case — then what gets checked is the link to the tracker task per the
   profile's convention).
 
-**6. The report** `99-report.md`: the verdict (done / bugs / blocked), what is confirmed against the requirements, the findings, what is not
+**6. The report** `99-report.md`: the verdict (done / bugs / blocked), **the goal's own verdict**, what is confirmed against the requirements, the findings, what is not
 covered and why, what was automated, the links (task, case, test), the open questions — the goal is zero. **There is one report per session
 and it always lives under the number 99:** round 2+ does not create a new file but updates this one — bringing the sections to their current
 state and appending the delta («what got fixed, what did not, what newly broke») as a block at the top of «Round history». The skeleton is
@@ -362,7 +362,8 @@ mismatch with the requirements that genuinely blocks a section) → `Major` (mis
 `Minor` (cosmetics). Calibration: data quality and completeness are `Major`, not `Critical`.
 
 **ID numbering:** running across the project, numbers are not reused, gaps are normal; take the current maximum across all the reports by
-grep BEFORE the draft (after it, the grep finds your own fresh numbers), never from memory. The prefixes and conventions come from the profile.
+grep BEFORE the draft (after it, the grep finds your own fresh numbers), never from memory, counting assignments, not mentions (a brief's «start
+at N»). The prefixes and conventions come from the profile.
 
 **A finding's cell — the order is mandatory**, 3–5 lines and **no more than ~850 characters** (the limit is the same for a Critical and a
 Minor; longer, and the tracker's reader stops reading while the customer sends the report back to be shortened). **Before delivering, run

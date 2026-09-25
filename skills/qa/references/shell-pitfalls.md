@@ -12,13 +12,20 @@ and each line below has cost a round. What belongs to one project's tooling stay
 - **A wait is a bounded poll in the FOREGROUND.** A foreground `sleep` is refused, and a background task's completion never reaches a
   subagent — so the wait is one call that checks the condition in a loop and returns when it holds or its limit runs out: a Python script
   (`time.sleep` inside it) or, in a page, the `MessageChannel` loop from `browser-techniques.md`, kept under the tool call's timeout. A wait
-  longer than one call is a checkpoint — what your instruction says to do with a long process.
+  longer than one call is a checkpoint — what your instruction says to do with a long process. **A measurement due at an exact second is
+  never `sleep N && curl` across the tool's time limit** — past it the call is backgrounded or killed unpredictably and the point lands in
+  the wrong second: one background script owns the whole schedule and writes each timestamped result to a file, judged by that file.
 - **zsh is not bash.** An unquoted `$VAR` is not word-split, and `set -- $pair` inside `for` sets no positionals — use arrays or Python. A
   word starting with `=` is expanded (`echo ===X===` fails). An unquoted glob that matches nothing aborts the command — quote `'*.md'`.
 - **A minified bundle is searched with `python3` + `re`, not `grep`.** macOS grep (ugrep) aborts with «exceeds complexity limits» on
   wide quantifiers (`.{0,400}`) over one-line JS; `re.finditer` over the same file answers at once.
 - **A script whose source carries non-ASCII text (Cyrillic strings, quoted UI captions) goes into a file via Write, not into a heredoc.**
   A heredoc fed to the system Python has failed with a "Non-UTF8 code" SyntaxError and not run at all — silently enough to be mistaken for an empty result.
+  The same goes for a request BODY with nested quotes or non-ASCII text: it is written to a file and passed by path, never through argv —
+  keep argv for one-line reads.
+- **A login or other redirect chain scripted outside the browser is walked hop by hop**, reading `Location` and `Set-Cookie` at each step —
+  an auto-following client hides where a cookie is set and where the flow breaks. Send a browser-like `User-Agent` (plus the `Origin` and
+  `Referer` the flow expects): public hosts answer a library's default one with `403`.
 - **Trim a response's output only when it succeeded; an error response from `curl`/Python is printed whole** (in a page the same rule
   reads «the whole error object», `browser-techniques.md`). A «keep the interesting keys» filter turned a `400` into `{}`, which read as
   «the contract promises an error schema and sends an empty body» — the formatter nearly became the source of a finding.

@@ -4,6 +4,7 @@ _A living document: one per session, every round updates it in place. The sectio
 
 **Source:** <the tracker task + related tasks pulled into scope>
 **Current verdict (round N, <date>):** <one phrase — done / bugs / blocked>
+**The task's goal:** <the user story in one line — achieved / not achieved / not confirmed, and why; never folded into the requirement count>
 **Method:** <how it was checked: API, browser, logs>
 
 | Round | Date | Env | Trigger | Verdict |
@@ -32,6 +33,18 @@ _A living document: one per session, every round updates it in place. The sectio
 | № · Priority | Requirement | Description and risk |
 |---|---|---|
 | **<ID> · <priority>** | <the clause it touches, quoted — or «FR-N is silent on …»> | **<what is missing or at risk, in business language>** <evidence> **<Needs an analyst's decision: …>** |
+
+### Closed by a development decision
+
+<Items development decided in the task's comments («done differently», «skipped on purpose», «left as is»): not findings, no row above. Drop the subsection when there are none.>
+
+| Requirement | Development's decision | What the round measured |
+|---|---|---|
+| <FR/AC> | <quoted, with its date> | <whether the decision's premise holds — a fact, not an objection> |
+
+### Awaiting the analyst's decision
+
+<Items a comment addressed but left open — deferred, dropped or still owed: the question, stated plainly. A gap in the spec's own text is not here — it is a row of «Findings without a violated clause». Drop the subsection when there are none.>
 
 <Whatever got fixed during this session goes in a block below the tables: «Fixed: <ID · priority> — <what it was, what confirmed the fix>»; details — in «Round history». A fixed finding that breaks again returns to its table under its own id, the cell opening with «regression R<n>, <date>».>
 

@@ -17,8 +17,8 @@ section gathers everything since the previous one.
   in their profiles. The brief names the sections a round needs.
 - **`references/shell-pitfalls.md`** — macOS/zsh harness pitfalls for both executors, waiting
   included, in one place instead of two agent prompts.
-- **~40 process lessons moved in from a project profile**: retest dating, server-side checks
-  behind the frontend, priority calibration, what «not covered» may claim about a mock-up.
+- **~100 process lessons moved in from project profiles**: retest dating, asynchronous
+  read-back, identity per contour, consuming oracles, browser-tool quirks, a goal verdict.
 - **A second findings table, «Findings without a violated clause»**: requirements gaps,
   blocking known defects, latent defects. The first table keeps only quoted violations.
 - **More browser and shell recipes**: the ~1000-character output cut, the Apollo cache as a
@@ -29,6 +29,8 @@ section gathers everything since the previous one.
   identity check before an irreversible call for `qa-automator`.
 - **Security findings**: severity against the standard, a bypass proven by a symmetric
   before/after set.
+- **Report sections «Closed by a development decision» and «Awaiting the analyst's decision»**:
+  a decided item is not a finding; a scope a comment left open awaits the analyst.
 
 ### Changed
 
@@ -41,9 +43,8 @@ section gathers everything since the previous one.
   a line under the table, no carrier gives an analyst's gap, own scope gives a FAIL.
 - **A round is a browser round by its instrument**: an API round from the page console gets
   `browser-techniques.md` too.
-- **Harness refusals are one family** in `manual-brief.md`. A user's permission buys one repeat
-  of the refused call, not a loop.
-  Only a harmless call is reworded around the classifier; a refused mutation never is.
+- **Harness refusals are one family** in `manual-brief.md`: a permission buys one repeat, only
+  a harmless call is reworded, a refused mutation never is.
 - **A merge into `main` is a release.** Work goes to `dev`; the merge tags the version and
   publishes the release. See CONTRIBUTING.md.
 
