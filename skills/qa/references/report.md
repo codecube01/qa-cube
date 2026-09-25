@@ -31,6 +31,7 @@ have prevented it is never the one you were looking for.
 **Setting the priority**
 
 - «will the user see it today» — and two calibrations colliding on one finding
+- a security finding: severity against the standard, and the bypass proven by a symmetric before/after set
 
 **Wording a finding**
 
@@ -134,6 +135,10 @@ trigger) stays in the table, stating explicitly that the existing fix does not c
 ## Setting the priority
 
 **The second question after «what is broken» is «will the user see it today».** A defect observable only through the API — the screen that would show it does not exist yet, and no live task carries it (where one does, the row is a line under the table, «A requirement whose SURFACE is missing») — is a `Minor` with the deferred risk named, not a `Major` in advance; the customer's first question about such a row is «what is the risk?», and a priority that cannot answer it gets lowered and the cell rewritten. **Where that rule collides with another calibration on the same finding** («data and audit quality — `Major`»), two questions decide it: can it still be repaired later (a record in an append-only journal cannot be rewritten, so «no screen yet, they will fix it in time» does not hold), and is it a requirements gap, which the scale rates `Major` whether or not a screen exists. Write the choice and its reasoning into the cell, so the customer argues with the reasoning, not with the label. Precedent: two generations of a role name in a write-once journal whose field no screen displayed — the irreversibility, not the visibility, set the priority.
+
+**The severity of a security finding is reconciled with the standard or the widespread practice BEFORE it is written — «sounds serious» is not a calibration.** For authentication and cryptography the anchor is the governing RFC or the reference implementation, not the first impression: ask whether the behaviour is a common, documented relaxation and what the attacker must already hold to exploit it. Precedent: a one-time code accepted twice within its validity window went in as `Major`; the TOTP RFC showed it to be a widespread relaxation, exploitable only after an interception that has already happened — a `Minor`.
+
+**A finding of the shape «the protection is bypassed / access was gained» is proven by a FULL and SYMMETRIC before/after measurement over SEVERAL representative operations — before the conclusion is written.** Whatever the cell will claim («full access»), measure the same set in the protected state and after the bypass: a profile read, a data read, the ability to mutate. The set measured «after» must contain the set measured «before»; three endpoints before and one after, extrapolated into «full access», is a claim the round does not hold. Precedent: after a second-factor bypass only the profile read was measured, the conclusion spoke of full access, the customer asked for proof of the other two — and the whole scenario, logins and factor setup included, had to be replayed.
 
 ## Wording a finding
 

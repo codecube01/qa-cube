@@ -64,7 +64,15 @@ For each scenario:
 - pace batches of API calls (~0.7 s apart) and retry on `429`; after a dropped connection or a timeout, re-read the actual state before
   going on — the call may have gone through;
 - verify the business effect, not the response code: after action X, did Y actually change (balance, status, record). «200 OK» is not a
-  check result;
+  check result — and neither is `success: true`, which can be a silent no-op. **Read back after EVERY write, in the same script**, not
+  once at the end of a sweep: a field that «saved successfully» without being written is found at once instead of three calls later;
+- **before the FIRST write probe, snapshot every scalar field of the entity** (the full read, not only the fields you plan to touch).
+  A «harmless» probe that clears or rewrites a neighbouring field leaves nothing to restore it from — the snapshot costs one call, a lost
+  original is lost for good;
+- **a VALID mutation refused unexpectedly → a per-field matrix in one pass, not hypotheses one at a time.** One probe per input field
+  (paced) sorts the fields into «written» / «silent no-op» / «always refused» in a single round; guessing (the format? a field pair? an
+  enum?) burns a call per guess. Every probe is a write that may land, so the matrix goes only on the round's own entity, within the
+  brief's mutation budget, and after the snapshot above;
 - write the result to `*manual-result*.md` **immediately**, before moving to the next scenario. No buffering;
 - **single-use artifacts (an invite link, a one-time token, the only application in the queue) are consumed by any touch, including a trial
   one** — work out the semantics on a deliberately expendable instance and take your measurement on a clean one: one touch per control

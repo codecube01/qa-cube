@@ -32,6 +32,7 @@ entry, so a family is read whole or not at all.
 - the fields the client requests ≠ what the server can filter or search by — closed by a probe
 - a backend task — recon through the logs before the first expendable action
 - an automation-only task whose feature shipped long ago — measure the coverage gap: live contract, existing tests, delta; ask FIRST whether the requirement is observable from outside at all; and the task's own QA checklist is dated evidence
+- the fields that arrived with the fix — a search zone of their own on a retest, read in every control read-back of the first round
 - **The reference environment** — the build without the task is the only baseline: a refactoring task planned as a diff · a RECOMPOSITION, where it is mandatory and goes first
 - **The order of the server-side checks** — one probe, read seven ways: a permissions negative on a VALID payload and its control on a read · a junk sweep splits in two · the free negative matrix · a fixture that reaches a NEW guard · a borrowed object · proving the guard you lean on · a server guard hidden behind a CLIENT one
 - **The tracker is searched at step 1** — by the subject noun, closed tasks included: a comment pointing elsewhere · the task that OWNS the requirement · the task that HOLDS the list being retested · a search the tracker REFUSED
@@ -203,6 +204,12 @@ with a fresh INDIRECT observation (a later session's note in the knowledge base 
 build) far more cheaply than with a re-run. Say which of the two it was; silence reads as the round having missed the dates.
 
 *The previous round's record may live ONLY in the TMS — search it by the title and by EVERY task id of the bundle before concluding that no session existed or that a case has to be written.* The session-folder search is keyed by the task you were handed, and on an automation-only task that key misses in two ordinary ways: the earlier round was run under the sibling task's id (the front-end half of the pair, which closed first), and its folder never reached the repository at all. Meanwhile the case it produced carries both ids, the verdict with its date, the parameter names, and the negatives it measured — exactly the evidence the automator needs. One TMS search by the title's subject noun settles three things at once: the mode (a dated manual pass exists), the deliverable (flag an existing case instead of creating a duplicate) and the expectations for the minimal run. Precedent: a search of the session folders by the back-end task's id came back empty; the TMS listing for the feature's area returned a case created three months earlier under the front-end task's id, marked as passed on both layers, with a pointer to a session folder that no longer existed — the round flagged that case instead of writing a second one.
+
+**The fields that arrived WITH the fix are a search zone of their own on a retest, not background.** Give them a separate item in the plan,
+and in the first round after the contract changed read them in EVERY control read-back rather than in a minimal selection (the «minimal
+selection» rule is about mutations, not about control queries) — a value drifting between operations is visible only that way. Precedent:
+a retest's target scenario came back «fixed», and the round's only defect — a timestamp that moved on unrelated operations — lived in the
+new fields and was seen only because they stood in every read.
 
 ### The order of the server-side checks
 

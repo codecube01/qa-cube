@@ -56,6 +56,13 @@ carries the case link in the code.
   reach you, and your stop on «waiting for it to finish» hangs until the manager pokes you. Wait synchronously (foreground, with a generous
   timeout); if the run did go to the background — record a checkpoint in the result (what was launched, the path to the log, what remains)
   and finish: the manager will wait the run out and resume you with a message carrying the verdict.
+- **An identifier that feeds an IRREVERSIBLE operation (a credential reset, a block, a deletion) is taken only after the record's own
+  identity field has been compared with the entity the test itself created.** A lookup by name is usually a substring or prefix filter, and
+  «the first element of the list» is whoever matched first — on a shared environment, possibly a live account. For a reversible call a wrong
+  hit costs a red run; here it rewrites somebody else's credentials with no way back. Wrap the lookup in a helper that asserts the identity
+  (login, name) before returning the id, and target only entities the test created. Precedent: a password-reset step took the account's id
+  from a name-filtered listing the way sixty neighbouring call sites did; the executor added the identity check, and it became the step's
+  real safety line.
 - If the feature is broken — the test must fail honestly, never masked with soft assertions. In that case mark the test as disabled per the
   project's convention (with the reason) and describe the bug in the result.
 - Record every iteration (what failed, what you changed) in `*automator-result*.md` immediately.

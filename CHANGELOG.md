@@ -23,6 +23,12 @@ section gathers everything since the previous one.
   blocking known defects, latent defects. The first table keeps only quoted violations.
 - **More browser and shell recipes**: the ~1000-character output cut, the Apollo cache as a
   totals oracle, an expired session that still shows data, the SPA catch-all, alias batches.
+- **Recipes for design mock-ups and the stale-bundle white page**; the output filter blocks
+  the reply, not the execution.
+- **Write-probe hygiene** for `qa-manual` (snapshot first, read back after every write) and an
+  identity check before an irreversible call for `qa-automator`.
+- **Security findings**: severity against the standard, a bypass proven by a symmetric
+  before/after set.
 
 ### Changed
 
@@ -37,6 +43,7 @@ section gathers everything since the previous one.
   `browser-techniques.md` too.
 - **Harness refusals are one family** in `manual-brief.md`. A user's permission buys one repeat
   of the refused call, not a loop.
+  Only a harmless call is reworded around the classifier; a refused mutation never is.
 - **A merge into `main` is a release.** Work goes to `dev`; the merge tags the version and
   publishes the release. See CONTRIBUTING.md.
 
