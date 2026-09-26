@@ -16,7 +16,7 @@ its endpoints, its wrappers, its own auth flow — stays in the profile. Every r
 
 ## Contents
 
-- requests and answers — the replay, the status and raw text, an error body printed whole, a redirect chain hop by hop
+- requests and answers — the replay, the status and raw text, an error body printed whole, a redirect chain hop by hop, a write-then-read helper that checks the read's own status
 - does it exist — the SPA catch-all and the responder that answers every key alike
 - GraphQL (only where the product's API is GraphQL) — the schema, replaying an operation, the error object and a null `data`, the client's cache, what arrived and what is missing
 

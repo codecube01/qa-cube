@@ -243,6 +243,15 @@ for path in sorted(engine_files):
     for problem in scan_lines(text, str(path.relative_to(ROOT))):
         fail(f"{problem} — anonymise it (keep the mechanics, drop the address)")
 
+# --- the edit itself: counts in the text, and ratchets against HEAD ----------
+# A retro edits the engine from another project's session and never sees this
+# repository's own review rules; the mechanical half of that review lives in
+# check_engine_edits.py (version bump, CHANGELOG, index groups, counts in words).
+from check_engine_edits import problems as edit_problems  # noqa: E402
+
+for problem in edit_problems(ROOT):
+    fail(problem)
+
 # --- report ------------------------------------------------------------------
 if problems:
     print(f"✘ {len(problems)} problem(s) found:\n")

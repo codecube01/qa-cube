@@ -40,6 +40,14 @@ claude plugin marketplace update qa-cube && claude plugin update qa-cube@qa-cube
 
 The new copy is picked up by the next launch of `claude`.
 
+A retro that edits the engine from a session follows `skills/qa/references/engine-edits.md`:
+search for the entry that already says it, rewrite rather than patch, a CHANGELOG line, the
+checks, and a review of the diff by a subagent with fresh eyes. A hand edit is held to the same
+list. `validate-plugin.py` carries its mechanical half — an engine change with no version bump,
+a bump with no CHANGELOG line, a catalogue section that gained an entry while its index stayed
+the same, a count in words that no longer matches its list — checked against the last commit,
+so it speaks only about the edit in progress.
+
 ## Two rules that are easy to miss
 
 1. **Every engine edit bumps the patch version** in `.claude-plugin/plugin.json`. Without it

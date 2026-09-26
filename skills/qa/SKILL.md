@@ -411,9 +411,10 @@ pass**. There are four addresses for fixes:
   path is not inside `~/.claude/plugins/`. Any of the three fails (and a missing key always fails) → the address is an *installation*, not a
   clone, and the lesson takes the route below instead. The marketplace copy carries no `.git` and the cache is a flat copy that the next
   `plugin update` writes past, so an edit at either address disappears without an error — while the version bump is reported as if the lesson
-  had landed. **With a valid clone** edit the files directly, with no git operations — the user is the one who pushes to git — and then
-  **update the installed plugin**, because installation copies the files into a cache and without this the edits will not apply: bump the
-  patch version in `<engine-clone>/.claude-plugin/plugin.json`, then `claude plugin marketplace update qa-cube && claude plugin update
+  had landed. **With a valid clone** edit the files directly, with no git operations that change the repository — the user is the one who
+  commits and pushes — **by `references/engine-edits.md`, read whole before the first engine edit** (a twin searched for first; a
+  CHANGELOG line, the validator and a fresh-eyes review of the diff last), and then **update the installed plugin**, because
+  installation copies the files into a cache and without this the edits will not apply: bump the patch version in `<engine-clone>/.claude-plugin/plugin.json`, then `claude plugin marketplace update qa-cube && claude plugin update
   qa-cube@qa-cube`. The changes take effect from the next launch of claude (the current session finishes on the old copy — that is fine, the
   retro is the finale anyway). **Without a clone the lesson is written, not dropped — as a row of `.claude/qa-cube-feedback.md`**, in the
   form it would take as an entry at its engine address, and from the next session on it applies from there (step 0). It is **not** rephrased

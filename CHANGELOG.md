@@ -43,6 +43,10 @@ section gathers everything since the previous one.
   side's own signal, not on the client's state.
 - **Browser and API recipes**: screenshot-first batches when the selected tab drifts, a feature
   gated on tab visibility, a write-then-read helper that checks the read's own status.
+- **`references/engine-edits.md`** — how a retro with an engine clone edits the engine: find the
+  twin entry first, rewrite rather than patch, a CHANGELOG line, the checks, a fresh-eyes review.
+- **`validate-plugin.py` checks the edit in progress against HEAD**: a bump without CHANGELOG, an
+  engine change without a bump, a new entry without an index line, a stale count in words.
 
 ### Changed
 
