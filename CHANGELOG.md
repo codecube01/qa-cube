@@ -35,6 +35,14 @@ section gathers everything since the previous one.
   a decided item is not a finding; a scope a comment left open awaits the analyst.
 - **A partly covered case names its manual steps**: `qa-automator` sets the automation flag and
   writes the coverage boundary into the case, drawn from the test's code rather than the brief.
+- **Planning lessons**: a permissions fix dated by a call on a non-existent id, a fixture built
+  through an admin API diffed against a working object, the operation that really is irreversible,
+  a reported number searched for in the reporting layer, a component with no executions dated
+  by its neighbours.
+- **A `pass` about the other side** («the remote device switched», «the peer accepted») rests on that
+  side's own signal, not on the client's state.
+- **Browser and API recipes**: screenshot-first batches when the selected tab drifts, a feature
+  gated on tab visibility, a write-then-read helper that checks the read's own status.
 
 ### Changed
 
@@ -47,6 +55,10 @@ section gathers everything since the previous one.
   a line under the table, no carrier gives an analyst's gap, own scope gives a FAIL.
 - **A round is a browser round by its instrument**: an API round from the page console gets
   `browser-techniques.md` too.
+- **The one repeat of a refused mutation is made by the manager**, in its own session: a
+  permission relayed to the executor does not reach the executor's classifier.
+- **A fixture that changes shared behaviour is disarmed right after its scenario**, not in the
+  final cleanup; `localStorage` keys are named per run and removed by exact list.
 - **Harness refusals are one family** in `manual-brief.md`: a permission buys one repeat, only
   a harmless call is reworded, a refused mutation never is.
 - **A merge into `main` is a release.** Work goes to `dev`; the merge tags the version and
