@@ -22,6 +22,8 @@
 - <a browser round: the engine's techniques, `<absolute path>/skills/qa/references/browser-techniques.md` — the first screen + §<the sections this task needs>>
 - <a round with API requests: `<absolute path>/skills/qa/references/api-techniques.md` — the first screen + §<the sections, «GraphQL» only for a GraphQL API>>
 - The remaining profile subfiles — only when stuck.
+- <a session that may die in minutes: split this list into «Before the session-bound steps» (only what those steps cannot be run safely
+  without) and «After them» — `manual-brief.md`, «The rule below is about the ORDER of what dies with the access»>
 
 ## Scenarios
 

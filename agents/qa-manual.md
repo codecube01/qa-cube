@@ -17,9 +17,10 @@ Read, in this order:
 - **targeted**, the files from the brief's «What to read» section: the manager has already picked the profile subfiles and knowledge-base
   sections relevant to this task. **The list picks what to read — a file, or the sections named after it; what it picks is read whole,
   with Read, before the first request to the environment** — a topical grep does not surface the pitfall filed under a neighbouring heading
-  (you search by the feature, the trap sits in the API conventions). Write the rules that apply to this round out as todo items while
-  reading: a rule read passively gets broken in the same run. The list always carries the engine's `shell-pitfalls.md` — read it before your
-  first shell command.
+  (you search by the feature, the trap sits in the API conventions). Where the brief splits the list into «before the session-bound steps»
+  and «after», that split sets the moment instead: the first part before those steps, the rest right after them. Write the rules that
+  apply to this round out as todo items while reading: a rule read passively gets broken in the same run. The list always carries the
+  engine's `shell-pitfalls.md` — read it before your first shell command.
 
 Do not read the remaining profile subfiles in full — go there only when stuck (auth broke → the auth section, and so on); a subfile's first
 screen is the quick flow, the pitfalls come below. The brief has no «What to read» section — fallback: the profile's
@@ -63,8 +64,9 @@ For each scenario:
 
 - fire real requests at the environment; never inline a request body with credentials (login/password/token) into the command — Write it to
   a temp file in the scratchpad and pass the file, so that secrets stay out of argv and the command history. **Read the secrets source by
-  exact key names, never by substring** (a substring match hands back the first hit — a user name in the password slot), build auth headers
-  inside the script, and never print cookies, tokens or passwords;
+  exact key names, never by substring** (a substring match hands back the first hit — a user name in the password slot), learning the
+  names from the file's structure printed with its values replaced (`shell-pitfalls.md`); build auth headers inside the script, and never
+  print cookies, tokens or passwords;
 - pace batches of API calls (~0.7 s apart) and retry on `429`; after a dropped connection or a timeout, re-read the actual state before
   going on — the call may have gone through;
 - verify the business effect, not the response code: after action X, did Y actually change (balance, status, record). «200 OK» is not a

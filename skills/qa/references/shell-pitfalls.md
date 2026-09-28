@@ -19,6 +19,11 @@ and each line below has cost a round. What belongs to one project's tooling stay
   word starting with `=` is expanded (`echo ===X===` fails). An unquoted glob that matches nothing aborts the command — quote `'*.md'`.
 - **A minified bundle is searched with `python3` + `re`, not `grep`.** macOS grep (ugrep) aborts with «exceeds complexity limits» on
   wide quantifiers (`.{0,400}`) over one-line JS; `re.finditer` over the same file answers at once.
+- **The shape of a secrets file is read with its VALUES replaced, never through a filter that masks the keys it guesses are secret.**
+  A mask keyed on field names (`key`, `priv`, `token`) prints every secret stored under a name it did not foresee — a short alias, a
+  nested map keyed by address — straight into the transcript, and nothing warns that it did. Print the structure instead: keys and value
+  types (or lengths) at every level, with no value at all. Precedent: a keys file masked by «`key` or `priv` in the name» printed every
+  private key in full, because they sat under a two-letter field.
 - **A script whose source carries non-ASCII text (Cyrillic strings, quoted UI captions) goes into a file via Write, not into a heredoc.**
   A heredoc fed to the system Python has failed with a "Non-UTF8 code" SyntaxError and not run at all — silently enough to be mistaken for an empty result.
   The same goes for a request BODY with nested quotes or non-ASCII text: it is written to a file and passed by path, never through argv —

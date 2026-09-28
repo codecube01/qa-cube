@@ -24,7 +24,8 @@ section gathers everything since the previous one.
 - **A second findings table, «Findings without a violated clause»**: requirements gaps,
   blocking known defects, latent defects. The first table keeps only quoted violations.
 - **More browser and shell recipes**: the ~1000-character output cut, the Apollo cache as a
-  totals oracle, an expired session that still shows data, the SPA catch-all, alias batches.
+  totals oracle, an expired session that still shows data, the SPA catch-all, alias batches,
+  a secrets file inspected with its values replaced rather than masked by guessed key names.
 - **Recipes for design mock-ups and the stale-bundle white page**; the output filter blocks
   the reply, not the execution.
 - **Write-probe hygiene** for `qa-manual` (snapshot first, read back after every write) and an
@@ -38,11 +39,14 @@ section gathers everything since the previous one.
 - **Planning lessons**: a permissions fix dated by a call on a non-existent id, a fixture built
   through an admin API diffed against a working object, the operation that really is irreversible,
   a reported number searched for in the reporting layer, a component with no executions dated
-  by its neighbours.
+  by its neighbours, a fix meant to let a workaround be removed branched on the workaround's state.
+- **Retest and reconciliation lessons**: a finding closed in passing by a neighbouring session is
+  closed only for the halves it measured; a value stored at the event is retested on a fresh record.
 - **A `pass` about the other side** («the remote device switched», «the peer accepted») rests on that
   side's own signal, not on the client's state.
 - **Browser and API recipes**: screenshot-first batches when the selected tab drifts, a feature
-  gated on tab visibility, a write-then-read helper that checks the read's own status.
+  gated on tab visibility, a write-then-read helper that checks the read's own status, a
+  substitution that fakes an ABSENT object by replacing the `null` whole.
 - **`references/engine-edits.md`** — how a retro with an engine clone edits the engine: find the
   twin entry first, rewrite rather than patch, a CHANGELOG line, the checks, a fresh-eyes review.
 - **`validate-plugin.py` checks the edit in progress against HEAD**: a bump without CHANGELOG, an
@@ -50,6 +54,10 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **A ready-to-paste issue file carries the finding's id in its body**, so the filed task is
+  found by id later.
+- **The step-1 tracker search also reads task descriptions**: an entity specified inside a
+  module-titled spec is found there, and that spec says what a field is for before the report does.
 - **Profile contract 7: runs leave nothing in CLAUDE.md.** The environment's state lives in
   `<sessions>/environment-state.md`, read at planning and by the executor's sanity check.
 - **The registry is a table and nothing else**, per `templates/registry.md`.
@@ -65,6 +73,8 @@ section gathers everything since the previous one.
   final cleanup; `localStorage` keys are named per run and removed by exact list.
 - **Harness refusals are one family** in `manual-brief.md`: a permission buys one repeat, only
   a harmless call is reworded, a refused mutation never is.
+- **A brief on a fragile session splits its reading list** into «before the session-bound steps»
+  and «after»; `qa-manual` reads it in that order.
 - **A merge into `main` is a release.** Work goes to `dev`; the merge tags the version and
   publishes the release. See CONTRIBUTING.md.
 

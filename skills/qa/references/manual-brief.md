@@ -25,7 +25,7 @@ entry, so a family is read whole or not at all.
 - a browser-native auth dialog is invisible to the extension — four symptoms, each sufficient: ask for the entry at once
 - preflight finds the environment in the WRONG state — is that state itself one of the scenarios?
 - the scenarios are about an entity's states — is there an instance of each state on the environment
-- access to the environment is unstable — batch the evidence first, interact afterwards
+- access to the environment is unstable — batch the evidence first, interact afterwards; where one contour outlives the session, partition by what dies with it — the reading list included
 - the waits in the brief exceed an hour — say whether isolated environments may run in parallel
 - a hypothesis about flakiness or survivability — a control instance and the budget of expendables
 - a round about appearance in the user's own environment — settle the window and the focus at preflight
@@ -67,7 +67,7 @@ entry, so a family is read whole or not at all.
 - a previous finding quoted into the brief — say whether the value is a raw enum or a caption on screen
 - write out «what remains», not only «what recon says is fixed»
 - the findings already filed against the surfaces the round looks at — named with their ids
-- a discrepancy found passively — dated, or reproduced by a fresh action, before it is called live
+- a discrepancy found passively — dated, or reproduced by a fresh action, before it is called live; a value stored at the event confirms no fix either — secure a fresh carrier
 
 **While the executor is running**
 
@@ -222,6 +222,17 @@ entry, so a family is read whole or not at all.
   and the independent API's negatives immediately after; the executor deliberately departed from it, ran the
   whole session-bound contour first and recorded why — the credentials-based contour could be caught up at any
   time, the session could not.
+
+  *And the brief's reading list obeys the same partition.* The executor's standing rule is to read the whole list before
+  the first request, and on a session that dies in minutes that rule and «session-bound steps first» cannot both be
+  kept — the executor breaks one of them, silently or by its own judgment, and reports the conflict in its retro. Split
+  the list in the brief: the few files the session-bound steps cannot be run safely without (the access and
+  browser pitfalls, the contract snapshot to compare against) are read before them, and everything else — the spec in
+  full, the knowledge sections, the reporting conventions — right after, before the first independent-contour step.
+  Precedent: a retest brief listed a dozen files «read whole before anything» and in the same breath told the executor
+  the session might die in minutes; the executor read two, ran the session-bound block, read the rest afterwards, and
+  asked in its retro for exactly this split.
+
 - **if access to the environment is unstable** (a short session, entry only by hand from the user, a flapping environment) — prescribe the
   order «**first a batch capture of all the evidence, then the interactive part**» in the brief: the contract/schemas, reference numbers for
   every filter value, samples of live records, anchor ids — into the result file within the first few calls, and only then the UI scenarios
@@ -530,6 +541,18 @@ entry, so a family is read whole or not at all.
   arose» → «reproduces / fixed». Precedent: a mismatch inherited from before the fix was nearly reported as the defect living on. The fresh
   action is the TARGET operation alone: operations that re-synchronise the same state through another path (a neighbouring write that
   refreshes the whole record) mask the trigger under test, so the brief names them as forbidden for the duration of the check.
+
+  *And where the defect lives in a value WRITTEN AT THE MOMENT OF AN EVENT — a failure message, a snapshot, a rendered text stored with
+  the record — the old record can neither confirm the fix nor show the defect alive, so the retest starts by securing a fresh carrier.*
+  A fix to how such a value is produced changes only the records produced after it; the record the finding was filed on keeps its old
+  text for good, and re-reading it after the deploy yields the same evidence as before — which reads as «not fixed» and is only «not
+  re-written». One read of the old record at planning shows which case you are in, and the plan then budgets the event itself: a fresh
+  instance of the failure, reached by whatever route the environment still allows (a route the previous round used may have lost its
+  lever — an operation removed from the contract, a fixture consumed). The old record does not leave the report: whichever consumer
+  prints the stored value verbatim still shows the defect on history, and that is a residue for the team to decide on — a migration or
+  nothing — not a regression and not a part of the fix's verdict. Precedent: a retest of a leaked internal error in a stored failure
+  text found the original row unchanged after the deploy; the fix held on the first failure produced after it, and the row stayed
+  visible, raw, in the one console that prints the stored text as it is.
 
 - **In a retest brief, write out not only «what recon says is fixed» but also «what remains».** Recon of a distribution usually shows both;
   a remainder named in advance gets checked by the executor in the same motion and comes back as a separate finding rather than as a doubt.
