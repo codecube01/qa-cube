@@ -123,6 +123,10 @@ class Version(unittest.TestCase):
     def test_edit_outside_the_engine_needs_no_bump(self):
         self.assertEqual(ce.version_problems([".github/scripts/x.py", "tests/t.py"], "0.1.1", "0.1.1", False), [])
 
+    def test_bytecode_beside_an_engine_script_needs_no_bump(self):
+        pyc = "skills/qa/scripts/__pycache__/check_session.cpython-312.pyc"
+        self.assertEqual(ce.version_problems([pyc], "0.1.1", "0.1.1", False), [])
+
     def test_clean_tree_is_quiet(self):
         self.assertEqual(ce.version_problems([], "0.1.1", "0.1.1", False), [])
 

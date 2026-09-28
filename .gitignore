@@ -1,5 +1,7 @@
 docs/
 .DS_Store
+__pycache__/
+*.pyc
 .superpowers/
 CLAUDE.md
 

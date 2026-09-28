@@ -147,7 +147,8 @@ def version_problems(changed: list[str], old_version: str | None, new_version: s
     out = []
     if old_version is None:
         return out
-    engine = [p for p in changed if p.startswith(ENGINE_PATHS)]
+    # bytecode an import leaves beside a script is no edit (CI imports check_session.py before this runs)
+    engine = [p for p in changed if p.startswith(ENGINE_PATHS) and "__pycache__/" not in p and not p.endswith(".pyc")]
     if engine and new_version == old_version:
         out.append(f"the engine changed ({', '.join(engine[:3])}{'…' if len(engine) > 3 else ''}) but "
                    f".claude-plugin/plugin.json is still {old_version} — bump the patch version, or the "
