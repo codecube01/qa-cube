@@ -20,7 +20,7 @@ entry, so a family is read whole or not at all.
 - entering the environment needs a human — test the access with the session's FIRST call, before reading anything
 - each entry spends a one-time artifact — choose the role and probe the existing session first; a scripted and a browser session are independent carriers
 - preflight opens the round's target screen, not just the session — a self-explained observation is a candidate finding
-- the manager's recon verifies the address, never the answer
+- the manager's recon verifies the address, never the answer — and hands over the VALUES the probe returned
 - access refused on every host of the environment — suspect the browser profile, not the environment
 - a browser-native auth dialog is invisible to the extension — four symptoms, each sufficient: ask for the entry at once
 - preflight finds the environment in the WRONG state — is that state itself one of the scenarios?
@@ -176,6 +176,15 @@ entry, so a family is read whole or not at all.
   holds: **stop at the first response that proves the address is right.** If the answer to «is this the correct call» is already in hand, the next
   call belongs to the executor. Precedent: a manager's «quick sanity» grew from four probes into a full create-poll-finalize cycle, and the user
   stopped the session to ask why the manager was running the flow at all.
+
+  *And what the address probe already returned is handed over whole: the VALUES of the fields the round is about on the sampled record,
+  never only the fact that their keys exist.* The probe is taken to check the address, so the manager prints the key names and moves on;
+  «the key is present in every record» then reaches the executor as «the field is populated», and an empty string or a `null` on one of the
+  endpoints — visible in the response the manager already held — is rediscovered mid-round, after the plan was built on the field. It is
+  the rule of «Constants uncovered by your recon go into the brief as numbers» (below), applied to the probe's own response.
+  Precedent: an address probe on three list endpoints reported the filter's field «present in the record of each»; on one of them it was an
+  empty string on every record, the only finding of the round, and the executor lost a pass rebuilding its reference data from another
+  endpoint.
 
 - **the user usually has several browser profiles, and they differ not only in sessions but in network egress — when access is refused,
   check first whether it is the right profile, not the environment.** The symptom: the environment answers with the same error (403/timeout)

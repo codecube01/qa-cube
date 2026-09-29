@@ -25,7 +25,8 @@ section gathers everything since the previous one.
   blocking known defects, latent defects. The first table keeps only quoted violations.
 - **More browser and shell recipes**: the ~1000-character output cut, the Apollo cache as a
   totals oracle, an expired session that still shows data, the SPA catch-all, alias batches,
-  a secrets file inspected with its values replaced rather than masked by guessed key names.
+  a secrets file inspected with its values replaced rather than masked by guessed key names,
+  per-call unique temp files for a helper that runs in two processes at once.
 - **Recipes for design mock-ups and the stale-bundle white page**; the output filter blocks
   the reply, not the execution.
 - **Write-probe hygiene** for `qa-manual` (snapshot first, read back after every write) and an
@@ -39,9 +40,12 @@ section gathers everything since the previous one.
 - **Planning lessons**: a permissions fix dated by a call on a non-existent id, a fixture built
   through an admin API diffed against a working object, the operation that really is irreversible,
   a reported number searched for in the reporting layer, a component with no executions dated
-  by its neighbours, a fix meant to let a workaround be removed branched on the workaround's state.
+  by its neighbours, a fix meant to let a workaround be removed branched on the workaround's state,
+  a deploy behind a gateway dated by the round's own executions rather than the router's schema.
 - **Retest and reconciliation lessons**: a finding closed in passing by a neighbouring session is
   closed only for the halves it measured; a value stored at the event is retested on a fresh record.
+- **Window and lever lessons**: a short-lived window is sized by its shortest run and prepared in
+  full before its trigger; a lost event is manufactured by suppressing one subscription, not the handshake.
 - **A `pass` about the other side** («the remote device switched», «the peer accepted») rests on that
   side's own signal, not on the client's state.
 - **Browser and API recipes**: screenshot-first batches when the selected tab drifts, a feature
@@ -54,6 +58,8 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **The manager's address probe hands over the values it saw**, not only that the fields' keys exist —
+  an empty field on one endpoint is visible in the probe already.
 - **A ready-to-paste issue file carries the finding's id in its body**, so the filed task is
   found by id later.
 - **The step-1 tracker search also reads task descriptions**: an entity specified inside a

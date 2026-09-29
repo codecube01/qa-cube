@@ -15,6 +15,10 @@ and each line below has cost a round. What belongs to one project's tooling stay
   longer than one call is a checkpoint — what your instruction says to do with a long process. **A measurement due at an exact second is
   never `sleep N && curl` across the tool's time limit** — past it the call is backgrounded or killed unpredictably and the point lands in
   the wrong second: one background script owns the whole schedule and writes each timestamped result to a file, judged by that file.
+- **A helper that can run in two processes at once writes its temp files under a name unique to the call** — `mktemp`, or the pid plus a
+  counter. A fixed `_out.txt` shared by a background batch and the foreground checks lets one call's body land in another call's
+  comparison, and it reads as a product answer: a `200` with a body of the wrong shape. Precedent: a background batch of detail reads
+  overwrote the listing response a foreground check was comparing, and one false failure cost a re-run of the whole scenario.
 - **zsh is not bash.** An unquoted `$VAR` is not word-split, and `set -- $pair` inside `for` sets no positionals — use arrays or Python. A
   word starting with `=` is expanded (`echo ===X===` fails). An unquoted glob that matches nothing aborts the command — quote `'*.md'`.
 - **A minified bundle is searched with `python3` + `re`, not `grep`.** macOS grep (ugrep) aborts with «exceeds complexity limits» on
