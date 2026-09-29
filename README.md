@@ -179,7 +179,8 @@ clone>`) but not for distributing to a team — it only works where that path ex
 ```
 .claude-plugin/         plugin.json, marketplace.json
 skills/qa/              the test-session engine: SKILL.md — the pipeline's procedure,
-                        references/ — the lesson catalogues for steps 2, 3, 4 and 6,
+                        references/ — the lesson catalogues for steps 2, 3, 4 and 6, plus the
+                        browser, API and shell recipes the executors read,
                         templates/ — the session file skeletons,
                         scripts/check_session.py — secrets and table checks over a session's files
 skills/qa-setup/        wiring a project in and updating its profile: interview → profile
@@ -202,9 +203,11 @@ its profile, its skills and its knowledge base — they start working with the v
 Lessons about the **process** belong to the engine, and where they go depends on one profile key:
 
 - **`engine-clone: none`** — the normal case for a plugin installed from the marketplace. The engine
-  is read-only, so such a lesson is re-addressed to the project wherever it can be, and whatever
-  stays universal is logged in `<sessions>/engine-feedback.md`. Nothing is sent anywhere and nothing
-  asks you to send it.
+  is read-only, so such a lesson is written into `.claude/qa-cube-feedback.md`, next to the
+  profile, and every session applies it from the next one on. That makes two layers of rules
+  that never repeat each other: the profile holds what is true only for your project, the
+  feedback file what would hold in anyone's. Nothing is sent anywhere and nothing asks you to
+  send it.
 - **`engine-clone: <path to a git clone>`** — for anyone working on the engine itself. The retro
   edits the clone, bumps the patch version in `plugin.json` and runs `claude plugin marketplace
   update qa-cube && claude plugin update qa-cube@qa-cube` (installing a plugin **copies** its files
@@ -213,13 +216,14 @@ Lessons about the **process** belong to the engine, and where they go depends on
 
 Nothing updates a plugin on its own. A session mentions in one line when the engine is behind
 upstream, and `/qa-setup` is what actually updates it — and, having done so, says which of your
-logged observations have since arrived in the original. If you ever want to hand the rest over, it
+feedback rows have since arrived in the original (those stop being read: the engine carries them
+now). If you ever want to hand the rest over, it
 offers the text and a link to the issue tracker; posting it is your call, never the engine's.
 
 Version history is in [CHANGELOG.md](CHANGELOG.md); what is deliberately not built yet — in
 [ROADMAP.md](ROADMAP.md); how to propose a change — in [CONTRIBUTING.md](CONTRIBUTING.md). A release is a milestone for humans, not the delivery channel:
-the marketplace clones the branch, and `claude plugin update` reads `version` from `plugin.json`,
-never a tag.
+the marketplace clones `main`, and `claude plugin update` reads `version` from `plugin.json`,
+never a tag. Work in progress lives on `dev`.
 
 ## License
 

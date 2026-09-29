@@ -20,7 +20,7 @@ Useful flags while iterating:
 
 | Flag | Why |
 |---|---|
-| `--case <name>` | one case instead of all five |
+| `--case <name>` | one case instead of all six |
 | `--ablation none` | skip the no-plugin baseline arm — halves the cost, loses the «did the plugin cause this» signal |
 | `--runs 1` | one run per case instead of the declared two |
 | `--keep-temp` | keep each run's sandbox (`home/cwd` is the fixture project) for debugging |
@@ -28,17 +28,16 @@ Useful flags while iterating:
 
 ### What a pass actually costs
 
-Measured, not estimated — the first calibration pass of this suite, one run per case with no
-baseline arm, cost **$3.50 and took eight minutes**. Per case it ranged from $0.30
-(`profile-missing`, which stops after a few turns) to $1.26 (`degradations-declared`, which reads
-the profile and most of the pipeline before answering). A run is a real session, so its cost
-follows how far the engine gets, not some flat per-call price.
+Measured, not estimated. The full pass (six cases, `runs: 2`, with the baseline arm) cost
+**$4.06 and took about ten minutes** on 2026-09-24. A run with the plugin costs $0.10–0.30,
+and a baseline run $0.05–0.25. A run is a real session, so its cost follows how far the engine
+gets, not a flat per-call price.
 
-That makes the declared `runs: 2` with the baseline arm about **$14 a pass**. So in practice:
+So in practice:
 
-- **routine check** — `--runs 1 --ablation none`, about $3.50;
-- **before a release that matters** — the full pass, for the repeat runs (a judge is not
-  deterministic) and the «did the plugin cause this» delta.
+- **routine check** — `--runs 1 --ablation none`, about $1.50;
+- **before a release that matters** — the full pass, about $4, for the repeat runs (a judge is
+  not deterministic) and the «did the plugin cause this» delta.
 
 Set `--max-cost-usd` if you want a ceiling, but know what it does: it is checked *before* each run
 launches and does not stop runs already in flight, so a low ceiling will still spend whatever the
@@ -61,9 +60,10 @@ accept. `validate-plugin.py` stays the thing that runs on every push.
 | `language-ru` | `language: ru` governs the output even though every instruction in front of the agent at that moment is in English |
 | `session-continuation` | a second round lands in the existing session folder and updates the one `99-report.md` |
 
-Three of the five are **behavioural** — the engine is handed a session and the graders read what it
-did (`profile-missing`, `degradations-declared`, `language-ru`). Two are **knowledge** cases: they
-ask the engine to state a rule rather than act it out (`session-continuation`, `engine-clone-guard`).
+Three of the six are **behavioural** — the engine is handed a session and the graders read what it
+did (`profile-missing`, `degradations-declared`, `language-ru`). Three are **knowledge** cases: they
+ask the engine to state a rule rather than act it out (`session-continuation`, `engine-clone-guard`,
+`feedback-layer`).
 That is a deliberate trade and worth knowing when you read a green board. Both of those rules live at
 the start or the end of a long procedure, and a run that has to reach them costs three times as much
 and dies on the wall clock as often as it succeeds — `session-continuation` was behavioural twice and
@@ -72,7 +72,8 @@ thing. A knowledge case proves the rule is legible and reachable; it does not pr
 under pressure. When a rule matters enough to justify $1.50 a run, write the behavioural version and
 give it `timeout_seconds` and `Bash` (step 2 renames folders with `mv` — without Bash the engine
 cannot do what the case is grading).
-| `engine-clone-guard` | an `engine-clone` that points at the plugin's installation is refused, and the lesson goes to the project or to `engine-feedback.md` |
+| `engine-clone-guard` | an `engine-clone` that points at the plugin's installation is refused, and the lesson goes to `.claude/qa-cube-feedback.md` |
+| `feedback-layer` | two layers, no duplicates: a universal lesson goes to `.claude/qa-cube-feedback.md` and not into the profile, a project-only one to the profile; an open row applies in the next session, a closed one does not |
 
 ## Writing another case
 
@@ -94,13 +95,15 @@ Four things are easy to get wrong — each one cost a paid run to find:
   nothing was created here» — never to assert that the fixture exists.
 - **A `regex` grader over the last message is a blunt instrument.** `not_contains: autotest` fails
   the correct answer «autotests: none, so no autotest will be written». Keep regexes for things
-  that can only appear on the right path (`/qa-setup`, `engine-feedback`, Cyrillic text) and leave
+  that can only appear on the right path (`/qa-setup`, `qa-cube-feedback`, Cyrillic text) and leave
   judgement to an `llm` grader.
 - **Keep an `llm` criterion to one question, and say what NOT to judge.** The judge is a cheap
   model. The first version of `answers-in-russian` explained why the language rule exists and what
   the engine's instructions are written in — and the judge voted FAIL three times on an answer
   written in flawless Russian, while the regex on the same text passed. Ask one thing, forbid the
-  rest explicitly.
+  rest explicitly. And if the judge fails a plainly correct answer 3/3 after two rewordings, stop
+  rewording: `degradations-declared` lost four paid passes that way on «the mode defaults to full
+  cycle». A check that comes down to a word is a regex.
 - **A fixture that triggers a second rule measures two things at once.** `session-continuation`
   originally dated its existing session in the previous month, which set off the monthly sweep;
   the run spent every turn archiving folders and fixing links and never reached the sentence the

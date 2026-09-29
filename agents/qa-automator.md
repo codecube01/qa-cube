@@ -43,6 +43,15 @@ Once the test is green, **update the case** (with `test-cases: none` there is no
 task is enough): the automation flag and the link to the test go in per the TMS section's rules, and only once the test really exists and
 carries the case link in the code.
 
+**Where there is a case, one the test covers only in part still gets the flag — plus a line in its description naming which steps stay
+manual.** The typical source is a step merged into an existing test: a binary flag, read alone, tells the next reader that every step is
+covered (where the TMS has a «partially automated» status, the profile's TMS section decides whether it is set instead — the line is
+written either way). Record the line in `*automator-result*.md` too: the manager checks it at acceptance, as it checks the manual tester's
+case corrections. Write the boundary from the test's code, not from your brief: the neighbouring assertions of the method you merged into often cover more
+of the case than the brief asked for, and then a step moves from «manual» to «partly covered». Precedent: a case flagged automated after a
+merge carried «steps 1–3 and 7 — autotest, steps 5 and 6 — manual»; on a later case the boundary drawn from the brief alone called a step
+manual that the method's existing assertions already half-covered.
+
 **2. The autotest.**
 - **Check the existing coverage first** — before writing a separate test: grep the test code (endpoint, tags, case links, «also covers» in
   comments) and search the TMS for a test already covering this area. Order of preference: (1) a test already exists and covers it — write
@@ -56,6 +65,13 @@ carries the case link in the code.
   reach you, and your stop on «waiting for it to finish» hangs until the manager pokes you. Wait synchronously (foreground, with a generous
   timeout); if the run did go to the background — record a checkpoint in the result (what was launched, the path to the log, what remains)
   and finish: the manager will wait the run out and resume you with a message carrying the verdict.
+- **An identifier that feeds an IRREVERSIBLE operation (a credential reset, a block, a deletion) is taken only after the record's own
+  identity field has been compared with the entity the test itself created.** A lookup by name is usually a substring or prefix filter, and
+  «the first element of the list» is whoever matched first — on a shared environment, possibly a live account. For a reversible call a wrong
+  hit costs a red run; here it rewrites somebody else's credentials with no way back. Wrap the lookup in a helper that asserts the identity
+  (login, name) before returning the id, and target only entities the test created. Precedent: a password-reset step took the account's id
+  from a name-filtered listing the way sixty neighbouring call sites did; the executor added the identity check, and it became the step's
+  real safety line.
 - If the feature is broken — the test must fail honestly, never masked with soft assertions. In that case mark the test as disabled per the
   project's convention (with the reason) and describe the bug in the result.
 - Record every iteration (what failed, what you changed) in `*automator-result*.md` immediately.
@@ -78,3 +94,6 @@ As your final text, return a 5-line summary to the manager.
   in code, credentials are read from the config/env per the project's convention (the profile's Autotests section). The source of values is
   the profile's `secrets`; mask them in request examples (`Authorization: <TOKEN>`).
 - Compile and run only your own test — do not launch whole suites without a reason (the launch rules are in the profile).
+- **Shell pitfalls of the harness (macOS, zsh)** — reading with Read, not `cat`, waiting, background tasks — are in the engine's
+  `shell-pitfalls.md`; the brief's reading list gives its path, and it is read before your first shell command. For an API test the list
+  also carries `api-techniques.md` (the contract, the error body, GraphQL introspection) — read before the first request the test makes.

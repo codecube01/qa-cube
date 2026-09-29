@@ -13,11 +13,9 @@ staged=$(git diff --cached --name-only --diff-filter=ACMR)
 
 status=0
 
-# added lines only: existing history is not re-litigated on every commit
-added=$(git diff --cached -U0 | grep '^+' | grep -v '^+++' || true)
-if [ -n "$added" ]; then
-  printf '%s' "$added" | python3 "$checker" --stdin --label "staged changes" || status=1
-fi
+# added lines only: existing history is not re-litigated on every commit; each line is
+# judged under its own file, so a test fixture keeps its waiver and nothing else does
+git diff --cached -U0 --no-color | python3 "$checker" --diff || status=1
 
 # the branch name shows up in PR listings and merge commits
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || true)

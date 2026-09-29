@@ -1,0 +1,6 @@
+# check_identifiers.py --accept-history: published findings accepted on purpose,
+# as hashes of (commit, file, value) — the list itself names nothing
+fab1be807a903033c9bebb00  ae8bba4513 PROFILE-CONTRACT.md: a name from the private denylist
+2c6045a88cab850c374de7a0  ae8bba4513 PROFILE-CONTRACT.md: a name from the private denylist
+244a75022a5dfe052b256517  ae8bba4513 skills/qa/SKILL.md: a name from the private denylist
+5c466a5b3d16a2d4a7503792  ae8bba4513 skills/qa/SKILL.md: a name from the private denylist

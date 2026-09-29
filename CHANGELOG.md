@@ -5,9 +5,119 @@ All notable changes to qa-cube are recorded here. The format follows
 `.claude-plugin/plugin.json` — that field, not a git tag, is what `claude plugin update`
 reads. A release tag `vX.Y.Z` must always match it.
 
-Patch versions are bumped by the retro step of a session whenever the engine is edited, so
-not every version becomes a release: a release is cut when there is something worth reading
-about.
+Patch versions are bumped on `dev` by the retro step of a session whenever the engine is
+edited, so not every version becomes a release: a release is a merge into `main`, and its
+section gathers everything since the previous one.
+
+## [Unreleased]
+
+### Added
+
+- **`references/browser-techniques.md`** — browser recipes that projects kept in their
+  profiles. The brief names the sections a round needs.
+- **`references/api-techniques.md`** — request-level recipes for any round with API calls, shell
+  rounds included; its «GraphQL» section is named only for a GraphQL API.
+- **`references/shell-pitfalls.md`** — macOS/zsh harness pitfalls for both executors, waiting
+  included, in one place instead of two agent prompts.
+- **~100 process lessons moved in from project profiles**: retest dating, asynchronous
+  read-back, identity per contour, consuming oracles, browser-tool quirks, a goal verdict.
+- **A second findings table, «Findings without a violated clause»**: requirements gaps,
+  blocking known defects, latent defects. The first table keeps only quoted violations.
+- **More browser and shell recipes**: the ~1000-character output cut, the Apollo cache as a
+  totals oracle, an expired session that still shows data, the SPA catch-all, alias batches,
+  a secrets file inspected with its values replaced rather than masked by guessed key names,
+  per-call unique temp files for a helper that runs in two processes at once.
+- **Recipes for design mock-ups and the stale-bundle white page**; the output filter blocks
+  the reply, not the execution.
+- **Write-probe hygiene** for `qa-manual` (snapshot first, read back after every write) and an
+  identity check before an irreversible call for `qa-automator`.
+- **Security findings**: severity against the standard, a bypass proven by a symmetric
+  before/after set.
+- **Report sections «Closed by a development decision» and «Awaiting the analyst's decision»**:
+  a decided item is not a finding; a scope a comment left open awaits the analyst.
+- **A partly covered case names its manual steps**: `qa-automator` sets the automation flag and
+  writes the coverage boundary into the case, drawn from the test's code rather than the brief.
+- **Planning lessons**: a permissions fix dated by a call on a non-existent id, a fixture built
+  through an admin API diffed against a working object, the operation that really is irreversible,
+  a reported number searched for in the reporting layer, a component with no executions dated
+  by its neighbours, a fix meant to let a workaround be removed branched on the workaround's state,
+  a deploy behind a gateway dated by the round's own executions rather than the router's schema.
+- **Retest and reconciliation lessons**: a finding closed in passing by a neighbouring session is
+  closed only for the halves it measured; a value stored at the event is retested on a fresh record.
+- **Window and lever lessons**: a short-lived window is sized by its shortest run and prepared in
+  full before its trigger; a lost event is manufactured by suppressing one subscription, not the handshake.
+- **A `pass` about the other side** («the remote device switched», «the peer accepted») rests on that
+  side's own signal, not on the client's state.
+- **Browser and API recipes**: screenshot-first batches when the selected tab drifts, a feature
+  gated on tab visibility, a write-then-read helper that checks the read's own status, a
+  substitution that fakes an ABSENT object by replacing the `null` whole.
+- **`references/engine-edits.md`** — how a retro with an engine clone edits the engine: find the
+  twin entry first, rewrite rather than patch, a CHANGELOG line, the checks, a fresh-eyes review.
+- **`validate-plugin.py` checks the edit in progress against HEAD**: a bump without CHANGELOG, an
+  engine change without a bump, a new entry without an index line, a stale count in words.
+
+### Changed
+
+- **The manager's address probe hands over the values it saw**, not only that the fields' keys exist —
+  an empty field on one endpoint is visible in the probe already.
+- **A ready-to-paste issue file carries the finding's id in its body**, so the filed task is
+  found by id later.
+- **The step-1 tracker search also reads task descriptions**: an entity specified inside a
+  module-titled spec is found there, and that spec says what a field is for before the report does.
+- **Profile contract 7: runs leave nothing in CLAUDE.md.** The environment's state lives in
+  `<sessions>/environment-state.md`, read at planning and by the executor's sanity check.
+- **The registry is a table and nothing else**, per `templates/registry.md`.
+- **One defect, one id; two defects, two ids.** A finding split across layers keeps its id for
+  its own half.
+- **A requirement whose surface is missing is sorted in one order**: a live carrier task gives
+  a line under the table, no carrier gives an analyst's gap, own scope gives a FAIL.
+- **A round is a browser round by its instrument**: an API round from the page console gets
+  `browser-techniques.md` too.
+- **The one repeat of a refused mutation is made by the manager**, in its own session: a
+  permission relayed to the executor does not reach the executor's classifier.
+- **A fixture that changes shared behaviour is disarmed right after its scenario**, not in the
+  final cleanup; `localStorage` keys are named per run and removed by exact list.
+- **Harness refusals are one family** in `manual-brief.md`: a permission buys one repeat, only
+  a harmless call is reworded, a refused mutation never is.
+- **A brief on a fragile session splits its reading list** into «before the session-bound steps»
+  and «after»; `qa-manual` reads it in that order.
+- **A merge into `main` is a release.** Work goes to `dev`; the merge tags the version and
+  publishes the release. See CONTRIBUTING.md.
+
+### Fixed
+
+- **The leak checker covers more than task ids**: hosts and URLs, emails, legal entities, IPs,
+  home paths, entity ids, secrets and a private denylist, over the files and the published history.
+- **Example names that traced back to a project** (skill names, domain vocabulary) are replaced
+  with neutral ones.
+- **A fixed finding leaves the table**, and one that breaks again returns under its own id
+  as «regression R<n>».
+- **Agent frontmatter is valid YAML.** The `description` of `qa-analyst` and `qa-manual` held
+  an unquoted colon, which strict parsers reject.
+
+## [0.17.0] — 2026-09-24
+
+Two layers of rules. **Profile contract 6**: `/qa` reports the profile as behind, and
+`/qa-setup` migrates it.
+
+### Changed
+
+- **Engine lessons apply from the next session, without a clone.** They go into
+  `.claude/qa-cube-feedback.md` next to the profile, and every session reads its open rows.
+  Before, they sat in `<sessions>/engine-feedback.md`, which no session read.
+- **Every rule lives in one layer.** Rules true only for this project go into the profile, and
+  rules true for any project go into the feedback file. A lesson with both halves is split.
+- **`/qa-setup`**: a row that has arrived in the engine is closed and no longer read. Past
+  15 open rows, it offers to hand them upstream at every update.
+
+### Migration (contract 6)
+
+`/qa-setup` moves the feedback file to its new place, and moves the profile's universal
+rules into it.
+
+### Also in this version
+
+Retro patches 0.16.1–0.16.34: entries in `planning.md`, `manual-brief.md`, `report.md`.
 
 ## [0.16.0] — 2026-09-17
 

@@ -1,11 +1,19 @@
 name: Release
 
+# A merge into main is a release. main is what the marketplace hands out, so whatever lands
+# there has been delivered already; the release only puts a name, notes and an archive on it.
+# Work accumulates on dev with patch bumps; a version reaches main — and gets its tag — once.
 on:
   push:
-    tags: ['v*']
+    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -13,28 +21,35 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # the existing tags decide whether this version is new
+
+      - name: Is this version new?
+        id: version
+        run: |
+          version=$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+            echo "v$version is already released — nothing to do."
+            echo "new=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "v$version is new — releasing."
+            echo "new=true" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Structural checks
+        if: steps.version.outputs.new == 'true'
         run: python3 .github/scripts/validate-plugin.py
 
       - name: Tag name carries no project identifier
-        run: python3 .github/scripts/check_identifiers.py --text "$GITHUB_REF_NAME" --label "tag name"
-
-      - name: Tag must match plugin.json
-        run: |
-          tag="${GITHUB_REF_NAME#v}"
-          version=$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
-          if [ "$tag" != "$version" ]; then
-            echo "::error::tag ${GITHUB_REF_NAME} does not match plugin.json version ${version}."
-            echo 'The tag is what humans read; plugin.json is what "claude plugin update" reads. They must agree.'
-            exit 1
-          fi
-          echo "tag ${GITHUB_REF_NAME} matches plugin.json ${version}."
+        if: steps.version.outputs.new == 'true'
+        run: python3 .github/scripts/check_identifiers.py --text "${{ steps.version.outputs.tag }}" --label "tag name"
 
       - name: Release notes from CHANGELOG
-        id: notes
+        if: steps.version.outputs.new == 'true'
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${{ steps.version.outputs.version }}"
           # the section for this version, up to the next "## [" heading
           awk -v v="$version" '
             $0 ~ "^## \\[" v "\\]" { grab = 1; next }
@@ -48,8 +63,9 @@ jobs:
           cat notes.md
 
       - name: Build the plugin archive
+        if: steps.version.outputs.new == 'true'
         run: |
-          version="${GITHUB_REF_NAME#v}"
+          version="${{ steps.version.outputs.version }}"
           # only what the plugin actually needs at runtime — docs/ and .superpowers/
           # are working material and would just bloat the download
           zip -r "qa-cube-${version}.zip" \
@@ -58,12 +74,15 @@ jobs:
             -x '*/.DS_Store'
           unzip -l "qa-cube-${version}.zip" | tail -1
 
-      - name: Create the release
+      - name: Tag and create the release
+        if: steps.version.outputs.new == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          version="${GITHUB_REF_NAME#v}"
-          gh release create "$GITHUB_REF_NAME" \
-            --title "qa-cube ${version}" \
+          # gh creates the tag on this commit; a tag made with GITHUB_TOKEN triggers no
+          # further workflows, so there is no second run to guard against
+          gh release create "${{ steps.version.outputs.tag }}" \
+            --target "$GITHUB_SHA" \
+            --title "qa-cube ${{ steps.version.outputs.version }}" \
             --notes-file notes.md \
-            "qa-cube-${version}.zip"
+            "qa-cube-${{ steps.version.outputs.version }}.zip"

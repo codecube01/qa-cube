@@ -13,13 +13,23 @@ execution:
   allowed_tools: [Read, Glob, Grep, Skill, Write]
 runs: 2
 graders:
-  - name: degradations-applied
+  # The fixture has no application on purpose, so the session stops at the start to ask how to
+  # reach the environment. One criterion carrying every condition at once scored near-identical
+  # answers anywhere from FAIL×3 to PASS×3 — the cheap judge loses a six-clause question. Split
+  # into one question per grader, per «Writing another case» in evals/README.md.
+  - name: promises-nothing-ruled-out
     type: llm
-    weight: 3
+    weight: 2
     criteria: >
-      The answer reflects the profile's `none` capabilities: it does not promise an
-      autotest (autotests: none — the automation step is skipped), does not promise a
-      TMS case (tms/test-cases: none), and does not promise to post a tracker comment
-      (tracker: none). With tracker: none it also asks the user for the session's mode,
-      or states that the session runs as a full cycle. Mentioning that some of these are
-      unavailable is correct; silently promising them is the failure.
+      Does the answer promise to write an autotest, to create a test case, or to post a comment
+      to a tracker? PASS if it promises none of the three. Saying they are unavailable or will
+      not be done is not a promise. A report, a session file or a plan is none of the three.
+      Judge nothing else: stopping to ask how to reach the environment is expected here.
+  # A regex, not a judge: the haiku judge failed «the mode defaults to full cycle» 3/3 on every
+  # run, across three wordings of the criterion. Naming the mode is a vocabulary check anyway —
+  # the engine's word for it is «full cycle», and asking for the mode says «mode».
+  - name: settles-the-mode
+    type: regex
+    weight: 1
+    pattern: "full[- ]cycle|which mode"
+    flags: i

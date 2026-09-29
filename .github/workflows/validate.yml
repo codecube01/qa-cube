@@ -2,7 +2,7 @@ name: Validate
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
   workflow_dispatch:
 
@@ -10,6 +10,11 @@ jobs:
   validate:
     name: Plugin structure
     runs-on: ubuntu-latest
+    env:
+      # the private denylist of real names (check_identifiers.py); a repository secret, so the
+      # list itself is never in git and its hits are printed masked. Empty on forks — then the
+      # other detectors still run.
+      QA_CUBE_DENYLIST: ${{ secrets.QA_CUBE_DENYLIST }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,6 +51,11 @@ jobs:
           git log --format='%H%n%B%n---' "$range" 2>/dev/null > messages.txt || git log -1 --format='%H%n%B' > messages.txt
           python3 .github/scripts/check_identifiers.py --files messages.txt
 
+      - name: No project identifiers anywhere in the published history
+        # every commit message and every line ever added on HEAD and the remote branches:
+        # a leak removed from the tree is still published until the history is rewritten
+        run: python3 .github/scripts/check_identifiers.py --history
+
       - name: No project identifiers in the PR title or body
         if: github.event_name == 'pull_request'
         env:
@@ -70,3 +80,20 @@ jobs:
             exit 1
           fi
           echo "plugin.json $version vs latest tag $latest — fine."
+
+      - name: A release PR carries its CHANGELOG section
+        # a merge into main is a release (release.yml), so a PR that brings main a new
+        # version must bring the notes for it — after the merge it is too late to ask
+        if: github.event_name == 'pull_request' && github.base_ref == 'main'
+        run: |
+          version=$(python3 -c "import json; print(json.load(open('.claude-plugin/plugin.json'))['version'])")
+          if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+            echo "v$version is already released; this PR does not cut a new one."
+            exit 0
+          fi
+          if ! grep -qE "^## \[$version\]" CHANGELOG.md; then
+            echo "::error::merging this PR releases v$version, but CHANGELOG.md has no «## [$version]» section."
+            echo 'Rename [Unreleased] to the version (and add a fresh empty [Unreleased] above it).'
+            exit 1
+          fi
+          echo "CHANGELOG.md has the section for $version."

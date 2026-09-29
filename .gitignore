@@ -1,7 +1,12 @@
 docs/
 .DS_Store
+__pycache__/
+*.pyc
 .superpowers/
 CLAUDE.md
 
 # eval run artifacts
 evals/results/
+
+# the private denylist of real names — never in git (see .github/scripts/check_identifiers.py)
+.identifiers.local

@@ -13,6 +13,8 @@
 ## What to read (targeted, not everything)
 
 - <profile subfiles this task needs: usually the Autotests section + the code map>
+- The engine's shell pitfalls: `<absolute path>/skills/qa/references/shell-pitfalls.md`
+- <an API test: `<absolute path>/skills/qa/references/api-techniques.md` — the first screen + §<the sections, «GraphQL» only for a GraphQL API>>
 - The remaining profile subfiles — only when stuck.
 
 ## What to automate

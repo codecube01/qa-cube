@@ -15,6 +15,8 @@ project question: how to read tasks, how to create cases, how to reach the envir
 — while reading the task (step 1), Environments and Browser — before the preflight check (step 4), Autotests — while writing the automator's
 brief (step 5), the project's report format — at step 6. The pipeline below points at the profile at each such spot. A subfile the session
 does not need (browser.md on a pure backend task) is not read at all; a subfile's first screen is the quick flow, the pitfalls come below.
+**Targeting picks the file, or the sections named after it; what is picked is read whole, with Read** — a topical grep misses a pitfall filed under another heading,
+and `cat` of a large file spills into persisted output, to be read again.
 
 **The session's language is `language` from the profile** (no field → the language of this file, i.e. English): everything the user sees is
 written in it — the whole conversation plus every artifact: the plan, the briefs, the result files, the report, the retro, the TMS cases,
@@ -37,7 +39,28 @@ update would silently switch cases off in profiles written before version 5.
 **The contract version.** Compare the profile's `contract-version` (no field → 1) with the current version in the «Contract versions»
 section of `PROFILE-CONTRACT.md` (the plugin root, next to this skill: `../../PROFILE-CONTRACT.md`). The profile is behind → **do not
 block** the session: tell the user in one line that the profile is behind (what is new — from the version history) and that `/qa-setup`
-closes the gap, then carry on with degradations for the missing keys.
+closes the gap, then carry on with degradations for the missing keys. **That line is the session's first message to the user, sent the
+moment the comparison is made — before the tracker is read or any other tool is called, and never folded into a later status update or
+left for the finale's action block.** Tool output is collapsed in the user's console, so a gap noticed «in passing» while reading the
+profile is a gap the user never sees. Precedent: a session compared the versions, found the profile one behind, said nothing and went on
+reading the task; the user had to ask twice — «did you read the profile?», then «why didn't you say the contract is behind?».
+
+**Then the project's layer of engine rules — `.claude/qa-cube-feedback.md`, next to the profile.** Read its open rows right after the
+profile (the «Closed» block is skipped: the engine already carries those). Each row is a rule about the process that a retro in this project
+learned and could not write into the engine for want of a clone (step 7); each names its address in the engine — a catalogue, a step, an
+agent's instruction — and from the moment it is written it counts as one more entry at that address: when a step sends you to
+`references/planning.md`, the rows addressed to `planning.md` are part of what you read there. Two consequences:
+- **a row addressed to an executor's own instruction (`agents/qa-*.md`) reaches that executor only through you** — the executor never reads
+  this file, so the row goes into the brief's rules verbatim, or the lesson was paid for and is never applied;
+- **where a row contradicts the engine's text, the row wins** — it is the later lesson, learned on this project — and the retro records the
+  contradiction as an observation: an engine update that argues with the user's rule is exactly what `/qa-setup` needs to see when it
+  reconciles the file.
+
+No file → nothing to read. A profile still below contract version 6 may keep the rows at the old address, `<sessions>/engine-feedback.md` —
+read them from there; the contract-version line above already tells the user that `/qa-setup` moves the file.
+
+The profile and this file never carry the same rule — **two layers**: the profile holds what is true only for this project, the feedback
+file holds what would hold in anyone's. Step 7 decides which is which.
 
 The `<sessions>` path below is the value of `sessions` from the profile (e.g. `docs/test-sessions/`).
 
@@ -67,7 +90,7 @@ The executors ask no questions — not one of them.
 
 ## The pipeline
 
-**1. Understand the task and assemble the bundle.** The input is a link/id of a tracker task or free-form text. Read the task with the tools
+**1. Understand the task and assemble the bundle.** **Where entering the environment needs the user's hands (per the profile), the liveness oracle is this step's FIRST call** — a dead session then overlaps your reading instead of following it; the entry in `references/manual-brief.md` is read only at step 4, too late for this rule. The input is a link/id of a tracker task or free-form text. Read the task with the tools
 from the profile (Tracker section): the description and **the comments, mandatorily** — that is where the requirements, the status and the
 related changes live. Check for **related tasks** in three ways, not one: (1) explicit links/relations; (2) the task's **subtasks and
 parent**; (3) a substring search on the title (neighboring FE/BE tasks of the same area). Empty relations do not mean «there are none». If a
@@ -95,6 +118,7 @@ Precedent: two full rounds were accepted against a parent's user-story spec; the
 its own acceptance criteria, an explicit signature scheme «over the raw body, without re-serialisation», a required status field on the
 neighbouring entity and a background reconciler with a default interval — four of the round's findings turned out to be verbatim violations
 of a spec the round had never read, and several «requirements gaps for the analyst» turned out to be answered there.
+A parent whose only subtask is an empty layer label is not a container — its spec is the reference (`references/planning.md`).
 
 **Start preconditions** — not met → tell the user and do not begin:
 - **the mode is determined**: the status of the task (and of the related ones in scope) determines the session's mode — **full cycle**
@@ -187,16 +211,18 @@ makes the manual brief the 9th).
 `99-report.md` (the report).** The number 99 keeps the report last in the folder listing no matter how many rounds there are, and removes
 the question «which report is the current one»: there is always exactly one. Round 2+ does not create `*-report-2.md` — it edits
 `99-report.md`: the «What is confirmed», «Findings», «Not covered», «Automation», «Environment leftovers» and «Tracker comment» sections are
-brought to their **current state** (a finding's status changes — `fixed in R2`, `reproduces in R2`, `regression R2`; new ones are appended
-to the same running table), while the round's delta goes as a block at the top of «Round history». Nothing from past rounds is erased
-silently: a fact that stopped being true changes its status, it does not vanish.
-**3. The plan.** Scenarios by priority: first the business-critical ones and whatever the task fixed/changed, then the negative ones, then
+brought to their **current state** (a fixed finding leaves the table for the «Fixed» block below it, a live one keeps its row with a date in
+the cell, new ones are appended, a fixed one that breaks again returns under its own id as «regression R<n>» — `references/report.md`),
+while the round's delta goes as a block at the top of «Round history». Nothing
+from past rounds is erased silently: a fact that stopped being true moves to where its new status says, it does not vanish.
+**3. The plan.** Fixtures, access and what is flaky come from `<sessions>/environment-state.md`; a fact older than the build is
+re-measured first. Scenarios by priority: first the business-critical ones and whatever the task fixed/changed, then the negative ones, then
 the regression around them. Each scenario carries an expected business effect (what must change), not «get a 200». **Execution order ≠
 priority order:** negatives that do not mutate the environment under expected behavior are run before mutating positives — a clean state is
 worth more; but keep in mind that on a buggy server a «safe» negative may mutate the environment after all (account for that in the artifact
 estimate). **A scenario that closes a requirement with a couple of cheap reads goes before scenarios with fragile preconditions, not after**
 — otherwise the answer to «is the requirement met» is hostage to someone else's cause: in one session the check «the field is served to both
-consumers» (two GETs) sat after the trader scenario and would have gone unverified had the executor not raised IP2P matching.
+consumers» (two GETs) sat after a scenario with fragile preconditions and would have gone unverified had the executor not raised it on their own.
 
 The source of the scenarios is **the task's requirements and the product's behavior, not the implementation**. We test as a black box: do
 not pull MR/PR diffs by default — it clutters the context and skews the optics («I read how it was done and decided it was right» — whereas
@@ -243,8 +269,13 @@ an executor is briefed once, and a situation you did not foresee cannot be added
 - `2-manual-task.md`: the context in one paragraph, the environment, the scenarios with their expected effects, where to write the result,
   and **the targeted reading list**: which profile subfiles and knowledge-base files (and, where needed, which of their sections) are
   relevant to exactly this task — you built the plan and know that better than the executor (a BE task needs no browser techniques; a task
-  about fees needs the wallets domain). The executor reads what is listed plus the profile map itself; everything else — only when stuck. Do
-  not retell the project's knowledge — the executor will take it from the profile and the project's skills;
+  about fees needs the wallets domain). The executor reads what is listed — a file, or the sections named after it — whole, plus the
+  profile map; the rest — only when stuck. **Plus the engine's references, by ABSOLUTE path** (the executor's cwd is the project):
+  `shell-pitfalls.md` always; `api-techniques.md` on any round that sends requests to the API (its «GraphQL» section only where the
+  product's API is GraphQL); `browser-techniques.md` on a browser round — a round is one by its INSTRUMENT, not its subject: an API round
+  driven from the page console trips the same tool limits (a timeout on a polling loop, truncated output), so it gets both. The sections of
+  each — picked from its contents. Do not retell the project's knowledge — the executor will take it from
+  the profile and the project's skills;
 - launch `Agent` with `subagent_type: "qa-manual"`; in the prompt — `Output language: <language>` as the first line, then the path to the
   session folder and to the brief file. Wait for it to finish (the notification arrives on its own) and do nothing on its behalf;
 - accepting `3-manual-result.md`: failures carry trace ids (with `logs: none` do not require them and do not make the executor note their
@@ -285,7 +316,7 @@ a test; what should be asserted is the degenerate outcome («each variant occurr
 done» in the report with a reason; that is a valid outcome:
 - `4-automator-task.md`: the scenarios, a reference to `3-manual-result.md` as the evidence, the candidate per the profile's code map, the
   case id (with `test-cases: upfront` — from the analyst, the manual tester merely confirms it; with `inline` — from the manual tester),
-  **the targeted reading list** (which profile/knowledge subfiles are needed — as in the manual tester's brief); the names of any
+  **the targeted reading list** (as in the manual tester's brief, the engine's references included); the names of any
   helpers/methods you mention — and the concrete values of their parameters, if you quote them in the brief — must be verified by grepping
   the code rather than from memory (an inexact name or number = an extra iteration for the automator). **A rule of the project's own profile
   is checked against the specific helper before it goes into the brief as an instruction** — «these helpers assert 200 internally, so add a
@@ -298,10 +329,10 @@ done» in the report with a reason; that is a valid outcome:
 - **asking for the price of the coverage, say what measures it:** run logs often lack timestamps on step lines, so a step's duration is
   unreadable from the log — then measure by a run on reverted code, repeated when the run-to-run spread rivals the delta;
 - accepting `5-automator-result.md` (the checker first, as in step 4 — test code carries credentials more often than prose does): the test was actually run (the run log is cited), the case exists in the TMS, and the test-to-case link
-  in the code matches the case (with `test-cases: none` there is no case — then what gets checked is the link to the tracker task per the
-  profile's convention).
+  in the code matches the case, and a partly covered case names its manual steps (with `test-cases: none` there is no case — then what gets
+  checked is the link to the tracker task per the profile's convention).
 
-**6. The report** `99-report.md`: the verdict (done / bugs / blocked), what is confirmed against the requirements, the findings, what is not
+**6. The report** `99-report.md`: the verdict (done / bugs / blocked), **the goal's own verdict**, what is confirmed against the requirements, the findings, what is not
 covered and why, what was automated, the links (task, case, test), the open questions — the goal is zero. **There is one report per session
 and it always lives under the number 99:** round 2+ does not create a new file but updates this one — bringing the sections to their current
 state and appending the delta («what got fixed, what did not, what newly broke») as a block at the top of «Round history». The skeleton is
@@ -319,21 +350,21 @@ report, the registries and the knowledge base, and every entry in that file was 
 requirements» is the analyst's cases with the manual tester's verdict on each (requirement → case → pass/fail/not covered); «Not covered» is
 the «Uncovered requirements» section from `0-session.md`, brought to its current state per the run's results (the manual tester may have
 closed a row with a fact from the environment or, conversely, added a reason). Cases whose expectation the analyst marked `assumption` under
-a «spec-grade» verdict are presented as requirements gaps with an explicit «needs an analyst's decision».
+a «spec-grade» verdict are presented as requirements gaps with an explicit «needs an analyst's decision», in the report's second table.
 
 **What counts as a finding.** Only what reproduces and has been confirmed: anything «presumed» from automated runs is first confirmed by
 hand. Environment leftovers (test data, traces of a run) are not filed as bugs. Before assigning a priority — reconcile against the
 **verbatim** text of the requirement: behavior explicitly stated in the spec is not a bug, at most a UX observation.
 
-**How a finding is shaped for the tracker — the title line, the split by layer, what stays out of the cells, and what goes to the
-side-findings registry instead of the report — is in `references/report.md`**, which you have already read at the start of this step.
+A finding's tracker shape (title, layer split, cells, side findings) and its priority calibration — `references/report.md`.
 
 **Priorities (the default, if the profile did not set its own scale):** `Blocker` (blocks usage or release) → `Critical` (security, or a
 mismatch with the requirements that genuinely blocks a section) → `Major` (misleading behavior, data and audit quality, requirements gaps) →
 `Minor` (cosmetics). Calibration: data quality and completeness are `Major`, not `Critical`.
 
-**ID numbering:** running across the project, numbers are not reused, gaps are normal; before assigning one, find the current maximum across
-all the reports (by grep) rather than continuing from memory. The prefixes and the current maximum come from the profile.
+**ID numbering:** running across the project, numbers are not reused, gaps are normal; take the current maximum across all the reports by
+grep BEFORE the draft (after it, the grep finds your own fresh numbers), never from memory, counting assignments, not mentions (a brief's «start
+at N»). The prefixes and conventions come from the profile.
 
 **A finding's cell — the order is mandatory**, 3–5 lines and **no more than ~850 characters** (the limit is the same for a Critical and a
 Minor; longer, and the tracker's reader stops reading while the customer sends the report back to be shortened). **Before delivering, run
@@ -380,12 +411,15 @@ pass**. There are four addresses for fixes:
   path is not inside `~/.claude/plugins/`. Any of the three fails (and a missing key always fails) → the address is an *installation*, not a
   clone, and the lesson takes the route below instead. The marketplace copy carries no `.git` and the cache is a flat copy that the next
   `plugin update` writes past, so an edit at either address disappears without an error — while the version bump is reported as if the lesson
-  had landed. **With a valid clone** edit the files directly, with no git operations — the user is the one who pushes to git — and then
-  **update the installed plugin**, because installation copies the files into a cache and without this the edits will not apply: bump the
-  patch version in `<engine-clone>/.claude-plugin/plugin.json`, then `claude plugin marketplace update qa-cube && claude plugin update
+  had landed. **With a valid clone** edit the files directly, with no git operations that change the repository — the user is the one who
+  commits and pushes — **by `references/engine-edits.md`, read whole before the first engine edit** (a twin searched for first; a
+  CHANGELOG line, the validator and a fresh-eyes review of the diff last), and then **update the installed plugin**, because
+  installation copies the files into a cache and without this the edits will not apply: bump the patch version in `<engine-clone>/.claude-plugin/plugin.json`, then `claude plugin marketplace update qa-cube && claude plugin update
   qa-cube@qa-cube`. The changes take effect from the next launch of claude (the current session finishes on the old copy — that is fine, the
-  retro is the finale anyway). **Without a clone the lesson is re-addressed, not dropped** — the degradation row at the end of this file says
-  where it goes, and `<sessions>/engine-feedback.md` catches the universal remainder;
+  retro is the finale anyway). **Without a clone the lesson is written, not dropped — as a row of `.claude/qa-cube-feedback.md`**, in the
+  form it would take as an entry at its engine address, and from the next session on it applies from there (step 0). It is **not** rephrased
+  into the profile to make it work sooner: it already works from the next session, and a copy in the profile is a duplicate that drifts
+  from the row and never reaches upstream (the «Engine feedback» section below);
 - **anything that goes into the engine is anonymised — no identifiers from the project.** The engine is a portable plugin that gets
   published outside the project it was written in, so its files must never carry a task id from your tracker (`ABC-123`, `service#456`), an
   environment hostname, a service, a company or an account name. Write the precedent by its mechanics — «precedent: a retest where the
@@ -400,16 +434,18 @@ pass**. There are four addresses for fixes:
   version bump is the retro's most expensive mistake: the engine has several consumers, and their profiles drift apart silently, without a
   single warning from `/qa`. The converse matters too: **an edit that does not affect the profile does not bump the contract version** —
   otherwise every project gets a false «your profile is behind» alarm and a needless `/qa-setup` run;
-- **the project's profile and local skills** — tooling pitfalls, access, code maps: if an executor tripped over a project skill, the pitfall
-  gets written into it;
+- **the project's profile and local skills** — what is true for this project alone: tooling pitfalls, access, code maps; if an executor
+  tripped over a project skill, the pitfall gets written into it;
 - **the project's knowledge base** (the path comes from the profile) — what was learned about the **product**: API contracts, feature
   behavior, limits, «why it is this way». This is exactly what the manager reads at step 1, and that is how sessions feed the sessions that
   follow. Fixes about the **working process** go into the engine or the profile, not into the knowledge. When moving a finding over,
   distinguish a contract from an observation: a regularity drawn from N runs without support from the spec is recorded with the note
   «observation», not as an assertion. Precedent: «the cascade picks X first», from three lucky runs, went into the KB as a fact and was
   refuted by the fourth;
-- in doubt whether it is the engine or the profile: the rule would work in any project → the engine; it mentions a specific
-  tool/environment/class → the profile.
+- in doubt whether it is the engine or the profile: the rule would work in any project → the engine (without a clone — the feedback
+  file); it mentions a specific tool/environment/class → the profile. **A lesson with both halves is split, not copied**: the mechanics go
+  to the engine's layer, and only their application here («on this environment that means X») to the profile — every rule lives in
+  exactly one layer.
 
 **Inside the engine, a lesson has two addresses and they are not interchangeable.** A rule keyed to a situation — this shape of scenario,
 this state of the environment, this kind of executor failure — goes into the matching `references/` catalogue as one more entry
@@ -430,16 +466,17 @@ A lesson without an address is not a lesson. A hygiene rule: if a patch to an in
 text instead of adding yet another phrasing — and if a third entry in one catalogue turns out to share a mechanism, that is a family, not
 three entries.
 
-**8. The finale.** Update `0-session.md` (the status, a row in the round log) and **the session registry `<sessions>/README.md`** — one
-line: the task, the date of the last round, the verdict in one phrase, what was left on the environment, the folder (no such file — create
-it: it is the entry point for the question «what has already been tested» and the source of the sanity check before the next run). **Do not
-keep a run log in the project's CLAUDE.md** — that file is loaded into every session: it holds only the project map and pointers to the
-registries, facts about the product go into the knowledge base, and techniques into the profile's subfiles. A run log that has grown there
-is a reason to unload it in that same retro. Precedent: 79% of the file was a log of 18 runs. To the user — the step-6.5 delivery repeated
+**8. The finale.** Update `0-session.md` (the status, a row in the round log) and **the session registry `<sessions>/README.md`** — the
+session's row, per `templates/registry.md`: a table and nothing else, the verdict one phrase, the details in the report (no file — create
+it) — and **`<sessions>/environment-state.md`**, per `templates/environment-state.md`: what the environment holds now, each fact
+dated and replaced, not appended. Together they are the sanity check's source.
+**The project's CLAUDE.md gets neither — no run log, no «current state» section**: loaded into every session, it holds the map and
+pointers; product facts go into the knowledge base, techniques into the profile. Found grown there — unload it
+in that retro. To the user — the step-6.5 delivery repeated
 in full (the paragraph below) and **the tracker comment**: check the write permission in the profile —
 writing is not allowed → hand over ready-made text for the user to paste themselves. **Keep the comment short — 3–5 lines:** the verdict in
 one phrase, how many findings there are and where they live, what is not covered, a link to the report. There is no need to retell the
-findings in it — the findings table from the report is what goes to the tracker. **Never omit the autotest line**: no test was written —
+findings in it — the report's findings tables are what goes to the tracker. **Never omit the autotest line**: no test was written —
 write exactly that («autotest: none», with a reason if you like), otherwise the task's reader cannot tell «we didn't write one» from «we
 forgot to mention it». For a bundle of tasks there is one comment covering all of them. Deliver it in the chat and leave it in
 `99-report.md` (the section is rewritten for the current round's verdict).
@@ -468,7 +505,7 @@ Retro edits:
 - knowledge base — a new domain 12-auth-service.md (challenges, TTL, sessions)
 - engine — 0.6.1 → 0.6.2: the findings rules into step 6, the priority scale into qa-manual
 - profile — reporting.md: the project specifics stayed; auth-and-api.md: the rate limit and the 307/401 oracle
-- skill temporal-qa — three new workflow prefixes
+- skill orders-qa — three new job prefixes
 ``` Commit only if asked.
 
 **The last thing the session prints is the action block: `⚠️` for «I cannot close this without you», `💡` for «worth doing, safe to
@@ -488,7 +525,8 @@ determined). It goes into no file; the report's «Open questions» is its file-s
 upstream 0.12.0 — `/qa-setup` will update it, entirely optional». Otherwise, and **on any failure of the check — no network, a 404, a slow
 answer — say nothing at all**: the line is a convenience, not a result, and an unrelated fetch may not add noise to a session's finale.
 Nothing updates a plugin on its own, so this line is the only place the user learns the engine has moved. The rest of the engine's
-housekeeping — fetching the update, reconciling `engine-feedback.md`, offering it upstream — is `/qa-setup`'s and never a session's.
+housekeeping — fetching the update, reconciling `.claude/qa-cube-feedback.md`, offering it upstream — is `/qa-setup`'s and never a
+session's.
 
 **9. After delivery the session is still open.** Almost anything the user says once the report has been delivered is either an uncaught
 defect in your work or a gap in the rules, and each is handled **one at a time, immediately** — what is saved up for «the next retro» gets
@@ -509,11 +547,22 @@ deleted.
 
 ## Engine feedback
 
-`<sessions>/engine-feedback.md` — where a retro's **engine** lessons go when there is no clone to apply them to (step 7). It is the user's
-own log: a session sends nothing from it and asks nothing of them. The columns are the retro's plus the version the row was written under —
-«observation · rule · address in the engine · plugin version» — and the file's header says so, so it reads cold. Rows are never deleted: a
-lesson that has since arrived in the engine moves to a «Closed» block at the bottom with the version it arrived in — the only place the user
-sees their observation land. Reconciling the file, and offering the remainder upstream, is `/qa-setup`'s work.
+`.claude/qa-cube-feedback.md` — next to the profile, and its counterpart: **the project's layer of engine rules**. The two layers never
+overlap: the profile holds what is true only for this project, this file holds what would hold in anyone's — the retro's engine lessons when
+there is no clone to write them into (step 7). It is committed with the profile for the same reason the profile is: a colleague's session
+gets the whole rule set with the clone. It is not a log waiting for upstream: every session reads its open rows at step 0 and applies them
+at their addresses.
+
+The columns are the retro's plus the version the row was written under — «observation · rule · address in the engine · plugin version» —
+and the file's header says so, so it reads cold. The rule is written as the entry it would become in the engine, by its mechanics; the
+observation may name the project, since the file lives inside it, and `/qa-setup` anonymises the rows before offering them upstream. A
+session sends nothing from it and asks nothing of the user. Rows are never deleted: a lesson that has since arrived in the engine moves to a
+«Closed» block at the bottom with the version it arrived in — the only place the user sees their observation land — and is no longer read,
+because the engine now carries it. Reconciling the file, and offering the open rows upstream, is `/qa-setup`'s work.
+
+Precedent: under the earlier rule the retro rephrased whatever universal lesson it could into the profile, so that it would apply from the
+next session; those lessons never reached the reconciliation, which reads only this file, and sat in one project's profile as rules nobody
+else would ever get — while the same lesson, arriving later from upstream, stood next to its own paraphrase.
 
 ## Capability degradations
 
@@ -528,12 +577,12 @@ sees their observation land. Reconciling the file, and offering the remainder up
 | browser | do not include UI scenarios in the plan; if the task is purely frontend, the session is blocked with an explicit message to the user |
 | secrets | the sessions need no secrets; a scenario requiring credentials came up — the executor records a blocker in the result (credentials are neither requested nor invented) and the manager raises it with the user |
 | knowledge | the step «read the product knowledge» is skipped; product findings from the retro are placed in `<sessions>/../knowledge/` (create it at the first finding) |
-| engine-clone (also: no `.git` there, or the path sits inside `~/.claude/plugins/`) | the retro does not edit the engine — the normal state for a plugin installed from the marketplace. The lesson is re-addressed: whatever is phrasable through this project goes into the profile or a project skill, the universal remainder into `<sessions>/engine-feedback.md`. No version bump, no `plugin update` — the engine arrives from upstream via `/qa-setup` |
+| engine-clone (also: no `.git` there, or the path sits inside `~/.claude/plugins/`) | the retro does not edit the engine — the normal state for a plugin installed from the marketplace. An engine lesson becomes a row of `.claude/qa-cube-feedback.md` and applies from the next session (step 0); only what holds for this project alone goes into the profile or a project skill, and no rule goes into both. No version bump, no `plugin update` — the engine arrives from upstream via `/qa-setup` |
 
 ## Boundaries
 
 - **Browser work belongs to `qa-manual`, not to a role of its own.** A UI check is run through the real interface while watching the network
-  (the rule and the techniques are in the agent's instruction and the profile's Browser section), and the manager's preflight at step 4
+  (the rule is in the agent's instruction, the techniques in `references/browser-techniques.md` and the profile), and the manager's preflight at step 4
   verifies the access before the executor is launched. There is no separate web-tester and none is planned: a UI scenario and an API scenario
   belong to the same round, and splitting them would cost a hand-off in the middle of it.
 - The manual tester and the automator work **sequentially** (the manual tester's result is the automator's input). Do not introduce parallel

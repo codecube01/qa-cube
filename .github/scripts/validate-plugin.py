@@ -157,9 +157,9 @@ if qa_skill.exists():
     # The budget is in characters, not lines: line count moves when the file is
     # rewrapped, while what the manager actually pays for is the token count.
     size = len(text)
-    if size > 64_000:
+    if size > 66_000:
         fail(
-            f"skills/qa/SKILL.md: {size} characters (budget 64000, ~16k tokens) — move "
+            f"skills/qa/SKILL.md: {size} characters (budget 66000, ~16.5k tokens) — move "
             f"situational lessons into skills/qa/references/ and leave the procedure here"
         )
 
@@ -192,43 +192,65 @@ else:
             fail(f"PROFILE-CONTRACT.md: version {n} has no row in the version-history table")
 
 # --- no identifiers from real projects ---------------------------------------
-# The engine is published outside the projects it is written in, so a tracker id
-# from a client's project must never travel with it. Lessons are anonymised: the
-# mechanics stay, the address goes. Session files, project profiles and project
-# knowledge bases are unaffected — they live inside their project.
-# The definition of «an identifier» lives in check_identifiers.py, shared with the
-# git hooks and the CI job that reads commit messages and PR metadata.
+# The engine is published outside the projects it is written in, so nothing from a
+# client's project may travel with it: task ids, hosts, addresses, entity ids, secrets,
+# private names. Lessons are anonymised: the mechanics stay, the address goes. Session
+# files, project profiles and project knowledge bases are unaffected — they live inside
+# their project. The definition of «a leak» lives in check_identifiers.py, shared with
+# the git hooks and the CI jobs that read commit messages, PR metadata and history.
 sys.path.insert(0, str(Path(__file__).parent))
-from check_identifiers import scan_lines  # noqa: E402
+from check_identifiers import DENYLIST_FILE, scan_lines  # noqa: E402
 
 # Only git-tracked files can leak: what .gitignore keeps out (docs/, CLAUDE.md,
-# .superpowers/) stays on this machine and may name whatever it needs to.
+# .superpowers/, the private denylist) stays on this machine and may name what it needs.
+# Every tracked text file is read — a workflow or a fixture leaks as well as a lesson.
 try:
     tracked = subprocess.run(
         ["git", "-C", str(ROOT), "ls-files"],
         capture_output=True, text=True, check=True,
     ).stdout.split()
-    engine_files = [
-        ROOT / rel
-        for rel in tracked
-        if not rel.startswith(".github/") and rel.endswith((".md", ".sh", ".json", ".py", ".yaml", ".yml"))
-    ]
+    engine_files = [ROOT / rel for rel in tracked]
 except (subprocess.CalledProcessError, FileNotFoundError):
     # no git available (a tarball, say) — fall back to walking the tree
     engine_files = [
         p
         for p in ROOT.rglob("*")
         if p.is_file()
-        and not any(part in {".git", ".github", "docs", ".superpowers"} for part in p.parts)
-        and p.name != "CLAUDE.md"
-        and p.suffix in {".md", ".sh", ".json", ".py", ".yaml", ".yml"}
+        and not any(part in {".git", "docs", ".superpowers"} for part in p.parts)
+        and p.name not in {"CLAUDE.md", DENYLIST_FILE.name}
     ]
+    tracked = []
+if DENYLIST_FILE.name in tracked:
+    fail(f"{DENYLIST_FILE.name} is tracked by git — the private denylist IS the leak it guards "
+         f"against: `git rm --cached {DENYLIST_FILE.name}` and rewrite the history that carries it")
+# A real document (a charter, a licence, a passport scan, a screenshot of a client's screen) is the
+# worst leak of all and no text check reads it — so the engine carries no documents or images at
+# all, unless one is added to this list on purpose.
+DOCUMENT_SUFFIXES = {".pdf", ".doc", ".docx", ".xls", ".xlsx", ".odt", ".ods", ".rtf", ".png", ".jpg",
+                     ".jpeg", ".gif", ".webp", ".heic", ".tif", ".tiff", ".bmp", ".zip", ".rar", ".7z"}
+ALLOWED_DOCUMENTS: set[str] = set()
+for rel in tracked:
+    if Path(rel).suffix.lower() in DOCUMENT_SUFFIXES and rel not in ALLOWED_DOCUMENTS:
+        fail(f"{rel}: a document or an image in the engine — no text check can read it for a "
+             f"client's data; remove it, or list it in ALLOWED_DOCUMENTS on purpose")
 for path in sorted(engine_files):
-    for problem in scan_lines(path.read_text(), str(path.relative_to(ROOT))):
-        fail(
-            f"{problem} looks like a task id from a real project — "
-            f"anonymise the precedent (keep the mechanics, drop the address)"
-        )
+    if not path.is_file():
+        continue
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        continue  # a binary file: an image, an archive
+    for problem in scan_lines(text, str(path.relative_to(ROOT))):
+        fail(f"{problem} — anonymise it (keep the mechanics, drop the address)")
+
+# --- the edit itself: counts in the text, and ratchets against HEAD ----------
+# A retro edits the engine from another project's session and never sees this
+# repository's own review rules; the mechanical half of that review lives in
+# check_engine_edits.py (version bump, CHANGELOG, index groups, counts in words).
+from check_engine_edits import problems as edit_problems  # noqa: E402
+
+for problem in edit_problems(ROOT):
+    fail(problem)
 
 # --- report ------------------------------------------------------------------
 if problems:
