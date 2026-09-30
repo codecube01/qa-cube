@@ -13,6 +13,14 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **A precision fix is calibrated on the old build first**: `planning.md` («The reference
+  environment») — when the fixed build rounds its own read channel, the old build is the only
+  place the oracle can be calibrated; accumulating series, one account per series.
+- **The automation question travels with the round's result**: `SKILL.md` step 5 — three
+  lines (the change and its merge state, the verdict, what the test would assert) above the
+  options, since the user has not seen the delivery yet.
+- **The old build's own logs as a reference**: `planning.md` («The reference environment») —
+  a low-traffic service may still hold the previous build's records on the environment itself.
 - **`references/browser-techniques.md`** — browser recipes that projects kept in their
   profiles. The brief names the sections a round needs.
 - **`references/api-techniques.md`** — request-level recipes for any round with API calls, shell
@@ -26,7 +34,8 @@ section gathers everything since the previous one.
 - **More browser and shell recipes**: the ~1000-character output cut, the Apollo cache as a
   totals oracle, an expired session that still shows data, the SPA catch-all, alias batches,
   a secrets file inspected with its values replaced rather than masked by guessed key names,
-  per-call unique temp files for a helper that runs in two processes at once.
+  per-call unique temp files for a helper that runs in two processes at once, zsh's special
+  parameters (`path`, `status`, `argv`) that a helper must not use as names, `local` included.
 - **Recipes for design mock-ups and the stale-bundle white page**; the output filter blocks
   the reply, not the execution.
 - **Write-probe hygiene** for `qa-manual` (snapshot first, read back after every write) and an
@@ -58,6 +67,13 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **The `SKILL.md` budget is 70k characters** (from 66k) — the file had reached 65.8k.
+- **An unnamed finding is read as «left out of the fix» only if it ever reached the tracker** —
+  one the customer never pasted stays in the table and goes into this round's comment.
+- **Tabs of headless libraries: `focus()` and a real click after the pointer sequence**, since
+  which one works changes with the library's build.
+- **Dating the build: the replaced bundle can be pulled from a browser cache**, and two builds
+  are diffed by their literals, not by minified code.
 - **The manager's address probe hands over the values it saw**, not only that the fields' keys exist —
   an empty field on one endpoint is visible in the probe already.
 - **A ready-to-paste issue file carries the finding's id in its body**, so the filed task is

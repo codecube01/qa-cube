@@ -310,7 +310,11 @@ run.** A cheap merge into an existing test can still be work nobody wants: a fea
 deserve no test at all, whatever the run costs. So the question to the user before launching the automator is not only «this run is
 expensive?» but also «is this feature worth a test at all?» — and it is asked **before**, not after the automator has edited the code.
 Precedent: the manager sliced the automation as steps merged into three existing tests (the cheapest possible form) and launched the
-automator; the user's answer was «we only automate bigger features, this is just a filter», and the edits had to be reverted mid-run. **And
+automator; the user's answer was «we only automate bigger features, this is just a filter», and the edits had to be reverted mid-run.
+**That question travels with the round's result**: it comes before the delivery at 6.5, so the user has not yet seen what the manual round
+found — put three lines above the options (what the change is and whether it is merged, the round's verdict with its counts, what the test
+would assert), or the user dismisses the choice and asks for exactly those lines first. Precedent: a bare automation dialog was dismissed
+with «first explain what you did, what automation needs, and what that merge request is». **And
 translate a statistical criterion into a stable assertion yourself**: the manual run's acceptance threshold («each variant ≥20 %») flakes in
 a test; what should be asserted is the degenerate outcome («each variant occurred at least once»). In doubt — record «no automation was
 done» in the report with a reason; that is a valid outcome:

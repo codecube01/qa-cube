@@ -21,6 +21,10 @@ and each line below has cost a round. What belongs to one project's tooling stay
   overwrote the listing response a foreground check was comparing, and one false failure cost a re-run of the whole scenario.
 - **zsh is not bash.** An unquoted `$VAR` is not word-split, and `set -- $pair` inside `for` sets no positionals — use arrays or Python. A
   word starting with `=` is expanded (`echo ===X===` fails). An unquoted glob that matches nothing aborts the command — quote `'*.md'`.
+  Some lowercase names are zsh's own special parameters and do not hold a value of yours. `path` is tied to `PATH`, so `path=$3` in a
+  helper leaves every later command `command not found` — `local path=$1` included, `local` does not protect it; `fpath`, `cdpath` and
+  `manpath` are tied the same way. `status` is read-only (the assignment aborts with `read-only variable`), `argv=…` rewrites the
+  positional parameters, `pipestatus` is overwritten by the next pipeline — name variables `url_path`, `code`, `args`.
 - **A minified bundle is searched with `python3` + `re`, not `grep`.** macOS grep (ugrep) aborts with «exceeds complexity limits» on
   wide quantifiers (`.{0,400}`) over one-line JS; `re.finditer` over the same file answers at once.
 - **The shape of a secrets file is read with its VALUES replaced, never through a filter that masks the keys it guesses are secret.**
