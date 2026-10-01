@@ -167,6 +167,13 @@ The automator will write the test from your result without re-checking by hand. 
   «is the markup visible on screen?» — unanswerable from your file. Quote `textContent` (or the screenshot), and mark emphasis in your own
   notation (`**…**`); where the raw markup does reach the screen, say so in words, because that is itself a defect. Precedent: a result
   quoted a dialog title as «…<b>address</b>?», and the manager had to reopen the dialog to learn the tags were rendered as bold.
+- **a candidate whose symptom is visible on the screen gets a screenshot ON DISK, taken the moment you confirm it.** Screenshot the failing
+  state with `save_to_disk: true`, copy the file the tool returns into `screenshots/` of the session folder (create it with the first one)
+  under the candidate's name — `c<N>.png`, `<N>` being its line in the candidates list at the bottom of the file, with the round's suffix
+  from round 2 on (`c<N>-2.png`) — and end the candidate's line with `📎 c<N>.png`. Not a finding id: ids are assigned in the report, and
+  the manager renames the file there. A screenshot the tool only showed you dies with your context, while the manager needs it — a finding
+  about text on screen is published only with a screenshot or the bundle's string, and whoever files the bug attaches it. The save is
+  refused (`browser-techniques.md`) — describe on the candidate's line what you saw, in words and with no marker; the round goes on.
 
 ## 3. The case
 

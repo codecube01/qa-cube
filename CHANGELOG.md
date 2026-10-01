@@ -13,6 +13,14 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **Screenshots of on-screen defects**: the manual tester saves one per candidate into the session's
+  `screenshots/`, the manager renames it to the finding's id and the report cell names it as
+  `📎 <ID>.png`; `check_session.py` confirms every marker resolves to a file.
+
+- **Reading-list partition and the bulk dump on a page-session contour**: `manual-brief.md` —
+  the shell pitfalls stay before the session-bound block whenever it touches the shell; a dump
+  reachable only through the page lives in the page's memory, derivatives go to disk.
+
 - **A precision fix is calibrated on the old build first**: `planning.md` («The reference
   environment») — when the fixed build rounds its own read channel, the old build is the only
   place the oracle can be calibrated; accumulating series, one account per series.

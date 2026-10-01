@@ -60,7 +60,8 @@ Pitfalls and the full recipes, by topic, below.
 - **A minified bundle fragment is replaced before printing, always** — it nearly always looks like a query string. Do not hunt for the definition of a minified helper by `name=`: whitespace in builds is unpredictable and the filter cuts such selections; the usage site explains the behaviour.
 - **A secret the flow shows once (a TOTP seed) is printed character by character** (`.split('').join(' ')`) — whole, it is cut as base64. It goes to the secrets store, never into session files.
 - **A large captured text (an export, a payload) is compared, not printed**: hash it line by line (sha256, via `crypto.subtle`) in the page and compare against a local copy. **A UI caption is checked against the spec the same way — in code, character by character, printing the positions that differ with their character codes**: look-alike letters (a letter with and without its diacritic, Latin against Cyrillic) are invisible to the eye, and arguing over one costs a round.
-- **A screenshot saved to disk may be refused where a plain one passes** — describe what you saw in words instead.
+- **A screenshot saved to disk may be refused where a plain one passes** — describe what you saw in words instead; for a candidate's
+  screenshot that goes on its line, with no `📎` marker (`qa-manual.md`, «Recording»).
 
 ## Intercepting, replaying and substituting network
 

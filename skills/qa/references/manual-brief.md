@@ -236,8 +236,11 @@ entry, so a family is read whole or not at all.
   the first request, and on a session that dies in minutes that rule and «session-bound steps first» cannot both be
   kept — the executor breaks one of them, silently or by its own judgment, and reports the conflict in its retro. Split
   the list in the brief: the few files the session-bound steps cannot be run safely without (the access and
-  browser pitfalls, the contract snapshot to compare against) are read before them, and everything else — the spec in
-  full, the knowledge sections, the reporting conventions — right after, before the first independent-contour step.
+  browser pitfalls, the contract snapshot to compare against, the engine's shell pitfalls whenever that block may
+  touch the shell at all) are read before them, and everything else — the spec in full, the knowledge sections,
+  the reporting conventions — right after, before the first independent-contour step. The shell pitfalls are named
+  because the executor's own instruction reads them before its first shell command, and a brief that defers them
+  overrides that instruction.
   Precedent: a retest brief listed a dozen files «read whole before anything» and in the same breath told the executor
   the session might die in minutes; the executor read two, ran the session-bound block, read the rest afterwards, and
   asked in its retro for exactly this split.
@@ -248,8 +251,11 @@ entry, so a family is read whole or not at all.
   with a periodic access check. Then a loss of access costs you part of the scenarios rather than the whole round. Precedent: one approach
   burned down entirely on a dead session, and the second survived only thanks to this order. **The same holds for a bulk source even when
   it is stable** (an execution history, a log index): the raw dump is taken ONCE into a file and every later question is a local computation
-  over it — going back to the network for the same history costs minutes and shifts the sample's boundaries between answers; and the
-  parsing filters are built one condition at a time, since an `A and B or C` returned every event through operator precedence;
+  over it — going back to the network for the same history costs minutes and shifts the sample's boundaries between answers. Where the
+  source answers only inside a page session (the cookies never leave the page), «the file» is the page's own memory — `window.__…` or
+  `localStorage`, chosen by whether a navigation lies in between (`browser-techniques.md`, «The page-scripting sandbox and its limits») —
+  with only the derivatives and full ids written to disk; a brief ordering the raw dump onto disk orders a download the executor will not
+  make. And the parsing filters are built one condition at a time, since an `A and B or C` returned every event through operator precedence;
 
 - **if the waits in the brief exceed an hour** — decide and state explicitly whether observations may be spread across isolated environments
   (browser profiles, contours) and run in parallel: «one session at a time» forbids logging in over a live session but does not forbid two

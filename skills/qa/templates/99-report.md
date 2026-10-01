@@ -20,11 +20,11 @@ _A living document: one per session, every round updates it in place. The sectio
 
 <⚠️ If the project profile defines its own report format — render by that one, not by this template.>
 
-<The table holds ONLY CURRENT findings (open/reproducing) that come from the task's requirements; side findings go to the side-findings registry and are listed with a link BELOW the table. The table gets copied into the tracker as a whole, so its cells carry no file paths, no ids from other runs and no round numbers — only words, dates and identifiers a developer understands (tracker tasks, entities, endpoints).>
+<The table holds ONLY CURRENT findings (open/reproducing) that come from the task's requirements; side findings go to the side-findings registry and are listed with a link BELOW the table. The table gets copied into the tracker as a whole, so its cells carry no file paths (a screenshot's `📎 <ID>.png` name is the one exception), no ids from other runs and no round numbers — only words, dates and identifiers a developer understands (tracker tasks, entities, endpoints).>
 
 | № · Priority | Requirement | Description and risk |
 |---|---|---|
-| **<ID> · <Blocker\|Critical\|Major\|Minor>** | <FR/AC numbers + source, not prose> | **<A bold phrase in business language: what is broken from the user's point of view>** <evidence with numbers: what the spec requires versus what came out.> <The risk in user terms.> **<Needs an analyst's decision: …>** *Tech.: <root cause, endpoint, trace id, date>* |
+| **<ID> · <Blocker\|Critical\|Major\|Minor>** | <FR/AC numbers + source, not prose> | **<A bold phrase in business language: what is broken from the user's point of view>** <evidence with numbers: what the spec requires versus what came out.> <The risk in user terms.> **<Needs an analyst's decision: …>** *Tech.: <root cause, endpoint, trace id, date>, 📎 <ID>.png — if a screenshot exists>* |
 
 ### Findings without a violated clause
 

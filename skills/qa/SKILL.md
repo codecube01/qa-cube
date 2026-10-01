@@ -368,7 +368,10 @@ mismatch with the requirements that genuinely blocks a section) → `Major` (mis
 
 **ID numbering:** running across the project, numbers are not reused, gaps are normal; take the current maximum across all the reports by
 grep BEFORE the draft (after it, the grep finds your own fresh numbers), never from memory, counting assignments, not mentions (a brief's «start
-at N»). The prefixes and conventions come from the profile.
+at N»). The prefixes and conventions come from the profile. **The screenshot follows the id:** in the same pass, a candidate that becomes a
+finding has its `screenshots/c<N>….png` renamed to `<ID>….png` (the round suffix stays) and its `📎` in the executor's result follows;
+the cell's *Tech.* part ends with `📎 <ID>.png` (with that suffix, `📎 <ID>-2.png`) — the bare file name, the one thing a person filing the
+bug needs to pick the attachment; the checker below confirms every marker resolves to a file.
 
 **A finding's cell — the order is mandatory**, 3–5 lines and **no more than ~850 characters** (the limit is the same for a Critical and a
 Minor; longer, and the tracker's reader stops reading while the customer sends the report back to be shortened). **Before delivering, run
