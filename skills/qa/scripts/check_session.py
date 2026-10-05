@@ -16,10 +16,13 @@ Four rules the engine states in prose and, until now, asked an agent to honour b
   damage is invisible in a rendered preview — the row simply reads as if the author wrote it that way.
 - **a finding's cell stays under ~850 characters.** Past the limit the tracker's reader stops reading
   and the customer sends the report back to be shortened.
-- **a `📎 <file>` marker names a file that exists in the folder's `screenshots/`.** The executor saves
-  a screenshot under the candidate's name and the manager renames it to the finding's id when the
-  report assigns one; a marker left pointing at the old name sends whoever files the bug looking for
-  an attachment that is not there.
+- **a `📎 <file>` marker names a readable file that exists in the folder's `screenshots/`.** The
+  executor saves a screenshot under the candidate's name and the manager renames it to the finding's
+  id when the report assigns one; a marker left pointing at the old name sends whoever files the bug
+  looking for an attachment that is not there. The file itself is read too: the browser tool returns a
+  plain screenshot as a JPEG shrunk to its image budget, and with a `scale` below 1 the captions in it
+  are a few pixels tall — a JPEG under `MIN_SHOT_WIDTH` is that, and an extension that lies about the
+  format is caught on the way.
 
 Exit code 0 when nothing was found, 1 when something was. Every problem is printed as
 `file:line: what`, so the output pastes straight into a result file.
@@ -184,16 +187,68 @@ def scan_tables(lines: list[str], max_cell: int) -> list[tuple[int, str]]:
 # finding about a broken image is the product's asset, not ours — so only the marker is resolved.
 SCREENSHOT = re.compile(r"📎\s*`?([\w.-]+\.(?:png|jpe?g|webp))`?", re.I)
 
+# A plain screenshot at `scale` 1 of a desktop viewport comes back 1200+ px wide; the ones taken at
+# 0.5–0.7 came back 600–870, and their captions could not be read. A `zoom` is a PNG at one pixel per
+# CSS pixel and is readable at any size, so only a JPEG is held to the width. Precedent: a round that
+# switched to `scale` 0.5 against a tiled render kept it for every saved screenshot.
+MIN_SHOT_WIDTH = 1000
+
+EXTENSIONS = {"png": ("png",), "jpeg": ("jpg", "jpeg"), "webp": ("webp",)}
+
+
+def image_info(path: Path) -> tuple[str, int] | None:
+    """(format, width) from the file's own header — stdlib only, no PIL on a stock macOS."""
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    if data[:8] == b"\x89PNG\r\n\x1a\n" and len(data) >= 24:
+        return "png", int.from_bytes(data[16:20], "big")
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "webp", 0  # width varies by sub-format; the format is what is checked
+    if data[:2] == b"\xff\xd8":
+        i = 2
+        while i + 9 < len(data):
+            if data[i] != 0xFF:
+                i += 1
+                continue
+            marker = data[i + 1]
+            # SOF0–SOF15 carry the frame size; C4 (DHT), C8 (JPG) and CC (DAC) share the range and do not
+            if 0xC0 <= marker <= 0xCF and marker not in (0xC4, 0xC8, 0xCC):
+                return "jpeg", int.from_bytes(data[i + 7:i + 9], "big")
+            if marker in (0x01, 0xFF) or 0xD0 <= marker <= 0xD9:
+                i += 2 if marker != 0xFF else 1
+                continue
+            i += 2 + int.from_bytes(data[i + 2:i + 4], "big")
+        return "jpeg", 0
+    return None
+
 
 def scan_screenshots(lines: list[str], folder: Path) -> list[tuple[int, str]]:
     out: list[tuple[int, str]] = []
     for n, line in enumerate(lines, 1):
         for match in SCREENSHOT.finditer(line):
             name = match.group(1)
-            if not (folder / "screenshots" / name).is_file():
+            path = folder / "screenshots" / name
+            if not path.is_file():
                 out.append(
                     (n, f"`📎 {name}` has no file in `screenshots/` — a candidate's screenshot is renamed "
                         f"to the finding's id when the id is assigned; rename it, or fix the marker")
+                )
+                continue
+            info = image_info(path)
+            if info is None:
+                continue  # an empty or unknown file: nothing to measure, and the marker itself resolves
+            fmt, width = info
+            if name.rsplit(".", 1)[-1].lower() not in EXTENSIONS[fmt]:
+                out.append(
+                    (n, f"`{name}` is a {fmt.upper()} under another extension — keep the extension the "
+                        f"tool's file came with, and fix the marker")
+                )
+            if fmt == "jpeg" and 0 < width < MIN_SHOT_WIDTH:
+                out.append(
+                    (n, f"`{name}` is a JPEG {width} px wide — a screenshot shrunk past reading (a `scale` "
+                        f"below 1); retake it as a `zoom` of the region with `save_to_disk` (a PNG, 1:1)")
                 )
     return out
 

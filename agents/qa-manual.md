@@ -182,13 +182,18 @@ The automator will write the test from your result without re-checking by hand. 
   «is the markup visible on screen?» — unanswerable from your file. Quote `textContent` (or the screenshot), and mark emphasis in your own
   notation (`**…**`); where the raw markup does reach the screen, say so in words, because that is itself a defect. Precedent: a result
   quoted a dialog title as «…<b>address</b>?», and the manager had to reopen the dialog to learn the tags were rendered as bold.
-- **a candidate whose symptom is visible on the screen gets a screenshot ON DISK, taken the moment you confirm it.** Screenshot the failing
-  state with `save_to_disk: true`, copy the file the tool returns into `screenshots/` of the session folder (create it with the first one)
-  under the candidate's name — `c<N>.png`, `<N>` being its line in the candidates list at the bottom of the file, with the round's suffix
-  from round 2 on (`c<N>-2.png`) — and end the candidate's line with `📎 c<N>.png`. Not a finding id: ids are assigned in the report, and
-  the manager renames the file there. A screenshot the tool only showed you dies with your context, while the manager needs it — a finding
-  about text on screen is published only with a screenshot or the bundle's string, and whoever files the bug attaches it. The save is
-  refused (`browser-techniques.md`) — describe on the candidate's line what you saw, in words and with no marker; the round goes on.
+- **a candidate whose symptom is visible on the screen gets a screenshot ON DISK, taken the moment you confirm it — as a `zoom`.** Take
+  `zoom` with `save_to_disk: true` over the region that holds the symptom (in the screenshot's coordinates, up to ~1200 px wide): it
+  returns a lossless PNG at one pixel per CSS pixel. A plain screenshot is a JPEG shrunk to the tool's image budget, and with a `scale`
+  below 1 its captions cannot be read — a `scale` that cured a tiled render is never carried over to these. Copy the file the tool returns
+  into `screenshots/` of the session folder (create it with the first one) under the candidate's name, keeping its extension — `c<N>.png`,
+  `<N>` being its line in the candidates list at the bottom of the file, with the round's suffix from round 2 on (`c<N>-2.png`) — and end
+  the candidate's line with `📎 c<N>.png`. Not a finding id: ids are assigned in the report, and the manager renames the file there. A
+  screenshot the tool only showed you dies with your context, while the manager needs it — a finding about text on screen is published
+  only with a screenshot or the bundle's string, and whoever files the bug attaches it. `check_session.py` flags a narrow JPEG and a wrong
+  extension. Precedent: a round switched to `scale` 0.5 against a tiled render, kept it for every saved screenshot, and the report went out
+  with captions nobody could read. The save is refused (`browser-techniques.md`) — describe on the candidate's line what you saw, in words
+  and with no marker; the round goes on.
 
 ## 3. The case
 

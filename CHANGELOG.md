@@ -35,6 +35,12 @@ section gathers everything since the previous one.
   question» and the six questions of a sanctioned mutation are filled in, not remembered; their `manual-brief.md` families
   keep the precedents.
 
+### Fixed
+
+- **A candidate's screenshot is a `zoom`, readable**: `qa-manual.md` saves a lossless PNG of the region instead of a plain
+  screenshot, which came back shrunk and, with `scale` below 1, unreadable; `check_session.py` flags a JPEG under 1000 px
+  wide and an extension that does not match the file's format.
+
 ## [0.17.56] — 2026-10-05
 
 ### Added

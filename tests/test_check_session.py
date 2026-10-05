@@ -199,6 +199,47 @@ class ScreenshotTest(unittest.TestCase):
     def test_a_placeholder_in_a_template_is_quiet(self):
         self.assertEqual(self.shots("*Tech.: …, 📎 <ID>.png*\n"), [])
 
+    # Headers only: the checker reads the size from them and never decodes the picture.
+    @staticmethod
+    def png(width: int) -> bytes:
+        return b"\x89PNG\r\n\x1a\n" + b"\x00\x00\x00\x0dIHDR" + width.to_bytes(4, "big") + (500).to_bytes(4, "big")
+
+    @staticmethod
+    def jpeg(width: int) -> bytes:
+        app0 = b"\xff\xe0\x00\x10JFIF\x00" + b"\x00" * 9  # a segment before the frame, as the tool writes it
+        sof0 = b"\xff\xc0\x00\x11\x08" + (500).to_bytes(2, "big") + width.to_bytes(2, "big") + b"\x03" + b"\x00" * 9
+        return b"\xff\xd8" + app0 + sof0 + b"\xff\xd9"
+
+    def put(self, name: str, data: bytes) -> None:
+        (self.dir / "screenshots" / name).write_bytes(data)
+
+    def test_a_jpeg_shrunk_by_scale_is_caught(self):
+        """The tool's plain screenshot at `scale` 0.6: 739 px wide, captions five pixels tall."""
+        self.put("c1.jpg", self.jpeg(739))
+        found = self.shots("📎 c1.jpg\n")
+        self.assertEqual(len(found), 1)
+        self.assertIn("739", found[0])
+        self.assertIn("zoom", found[0])
+
+    def test_a_jpeg_at_full_scale_is_quiet(self):
+        self.put("c1.jpg", self.jpeg(1232))
+        self.assertEqual(self.shots("📎 c1.jpg\n"), [])
+
+    def test_a_small_zoom_is_quiet(self):
+        """A `zoom` is a PNG at one pixel per CSS pixel — narrow, and readable."""
+        self.put("c1.png", self.png(314))
+        self.assertEqual(self.shots("📎 c1.png\n"), [])
+
+    def test_a_jpeg_named_png_is_caught(self):
+        self.put("c1.png", self.jpeg(1232))
+        found = self.shots("📎 c1.png\n")
+        self.assertEqual(len(found), 1)
+        self.assertIn("JPEG under another extension", found[0])
+
+    def test_jpg_and_jpeg_are_one_format(self):
+        self.put("c1.jpeg", self.jpeg(1232))
+        self.assertEqual(self.shots("📎 c1.jpeg\n"), [])
+
 
 # --- the driver ---------------------------------------------------------------------------------
 
