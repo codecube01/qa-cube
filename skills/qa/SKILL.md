@@ -64,6 +64,11 @@ file holds what would hold in anyone's. Step 7 decides which is which.
 
 The `<sessions>` path below is the value of `sessions` from the profile (e.g. `docs/test-sessions/`).
 
+**The manager runs the shell too** — the sweep, preflight, on-chain and bundle recon — so `references/shell-pitfalls.md` is read whole
+before the session's first shell command beyond reading the profile. Precedent: a manager inspected a secrets file through a mask keyed on
+field names and printed every private key into the transcript — the exact pitfall that file already names, read by the executors and never
+by the manager.
+
 ## Roles
 
 **QA Manager — that is you, the main session.** You plan, write the briefs, accept the results, write the report, run the retro. You do not
@@ -305,7 +310,12 @@ of a run is as much an input to the decision as the value of the coverage.** A s
 conclusion (a series for a distribution, long waits for workers) costs minutes in every nightly run — estimate that price and, if it is
 noticeable, put the decision to the user **before** launching the automator, not after. Precedent: two tests (30 payments and 20 payouts
 with a wait for the cascade) were written and then stopped by the user on the very first run with the words «that run is too expensive» —
-the price was visible from the manual result in advance. **The size of the feature is an independent ground, alongside the cost of the
+the price was visible from the manual result in advance. **The estimate is computed from the manual result's own timings, not guessed:**
+count the operations the steps will wait on (each one through its asynchronous pipeline — create to callback to final read), multiply by
+the durations the round measured, and add every propagation lag a step must sit out; a figure put to the user from intuition under-prices
+exactly the waits, and the choice was made at a price that does not exist. Precedent: a merge into an existing test was offered at «about
+50 s» and chosen; it cost 131 s — two operations of ~50 s each plus a setting lag, all three durations printed in the manual result.
+**The size of the feature is an independent ground, alongside the cost of the
 run.** A cheap merge into an existing test can still be work nobody wants: a feature the size of one query parameter (a filter, a flag) may
 deserve no test at all, whatever the run costs. So the question to the user before launching the automator is not only «this run is
 expensive?» but also «is this feature worth a test at all?» — and it is asked **before**, not after the automator has edited the code.
@@ -314,7 +324,10 @@ automator; the user's answer was «we only automate bigger features, this is jus
 **That question travels with the round's result**: it comes before the delivery at 6.5, so the user has not yet seen what the manual round
 found — put three lines above the options (what the change is and whether it is merged, the round's verdict with its counts, what the test
 would assert), or the user dismisses the choice and asks for exactly those lines first. Precedent: a bare automation dialog was dismissed
-with «first explain what you did, what automation needs, and what that merge request is». **And
+with «first explain what you did, what automation needs, and what that merge request is». **An answer to that question that is
+itself a question — «isn't a test required by our rules?» — is a question, not the choice**: answer it on the merits, then put the choice
+again; acting on it starts work nobody ordered. Precedent: a reply of that shape was read as «write it», and the user stopped the first tool
+call of the automator's brief with «that was a question, not a request». **And
 translate a statistical criterion into a stable assertion yourself**: the manual run's acceptance threshold («each variant ≥20 %») flakes in
 a test; what should be asserted is the degenerate outcome («each variant occurred at least once»). In doubt — record «no automation was
 done» in the report with a reason; that is a valid outcome:

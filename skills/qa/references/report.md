@@ -38,7 +38,7 @@ have prevented it is never the one you were looking for.
 
 **Wording a finding**
 
-- a finding about appearance names the conditions of observation — width, zoom, locale, theme
+- a finding about appearance names the conditions of observation — width, zoom, locale, theme; a device-class branch reached by spoofing detection proves the branch, not what that device shows
 - «the wrong HTTP code arrived» — filed only with proof that the right code does reach the client
 - a finding read off a NUMERIC CODE — name the dictionary, and prove the mapping by behaviour
 - the title line is the dedup key, so it carries the where and the when
@@ -188,6 +188,8 @@ appears. Without that the priority is inflated by an order of magnitude: a narro
 Precedent: «the card's title is clipped in half, the full value is nowhere to be found» was taken in a 1190 px window and filed as a Major;
 at 1366–1920 px the value is fully visible and the defect lives only below ~1300 px — after the measurements the finding became a Minor with
 the threshold stated.
+
+*And a branch reserved for a device class — the mobile one above all — reached by SPOOFING the client's detection is evidence that the branch exists, never of what that device's user sees.* The spoof flips one flag on a desktop layout, so everything the round then observes is a desktop screen showing the other branch's component; whether a real user of that device can reach the screen at all is a separate question, and it is answered by the screen at that device's width before a single finding is written there. Where the product has no layout for that width — the content overflows, the control that opens the flow sits off-screen — the branch is unreachable for the people it was built for: findings about its wording are void, the requirement's verdict is at most partial (the component exists, the path to it does not), and the missing layout is put to the analyst as a scope question rather than filed as a defect of the task. Precedent: a round filed a Minor about the text a phone user would see above a wallet button, taken on a desktop window with the mobile flag spoofed; the customer opened the platform in mobile emulation, found no mobile layout at all — the form could not even be opened — and the finding was withdrawn with its id burned, the requirement re-rated from pass to partial.
 
 **A defect of the kind «the wrong HTTP code arrived» is filed only together with proof that the right code does reach the client.** Find on
 the same host any request that returns the expected code (in one session — a `403` from a public endpoint without the whitelist header) and

@@ -92,6 +92,12 @@ For each scenario:
   cheaper than the second attempt. Precedent: a removal refused with «X is not a member» was retried and burned a second user signature;
   introspection would have shown the member list lives only on the backend's side;
 - write the result to `*manual-result*.md` **immediately**, before moving to the next scenario. No buffering;
+- **a change in the MIDDLE of the result file (a row into an earlier table, a correction above the last section) goes through the Edit
+  tool, never through a script that slices the text** — a slice whose tail term is forgotten (`s[:j] + new` instead of
+  `s[:j] + new + s[j:]`) silently drops everything after the insertion point, the next append lands on the stump, and the harness reports
+  only «the file changed». After any scripted write, re-list the headings (`grep -n '^## '`) against what the file held before. Precedent:
+  one forgotten tail term erased five of a round's nine steps from the result, noticed only at acceptance; they were rebuilt from the
+  scratch logs;
 - **single-use artifacts (an invite link, a one-time token, the only application in the queue) are consumed by any touch, including a trial
   one** — work out the semantics on a deliberately expendable instance and take your measurement on a clean one: one touch per control
   point. «Let me first check whether the object is still alive» is already a consumption. **A channel that hands artifacts back as «the

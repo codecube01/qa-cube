@@ -1,7 +1,8 @@
 # Shell pitfalls of the harness
 
-Read by `qa-manual` and `qa-automator` before their first shell command; the brief gives the path. The harness runs on macOS with zsh,
-and each line below has cost a round. What belongs to one project's tooling stays in its profile.
+Read by `qa-manual` and `qa-automator` before their first shell command (the brief gives the path), and by the manager before its own —
+preflight and recon run the same shell. The harness runs on macOS with zsh, and each line below has cost a round. What belongs to one
+project's tooling stays in its profile.
 
 - **Open markdown with the Read tool, never `cat` through the shell.** The profile's subfiles and knowledge files are large, a large output
   spills into a persisted-output file, and the file has to be read again anyway. The shell is for commands, not for reading.
