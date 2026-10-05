@@ -15,6 +15,25 @@ section gathers everything since the previous one.
 
 - **A wallet signature request is a human click too, free typed-data signatures included**: `manual-brief.md`
   («Your own harness refuses a call») — a page script records or refuses wallet calls, never originates them.
+- **A size budget for every catalogue and agent instruction** (`check_engine_edits.py`): each is read whole, so an
+  edit past its budget makes room — folds a family, merges a precedent — instead of growing; `engine-edits.md` says so.
+- **The form of a rule is chosen by what failed** (`engine-edits.md`, «Before writing»): a rule broken under pressure,
+  an output of the wrong shape, an omitted element, a mechanical slip and a situational case each get their own form —
+  an entry, a recipe, a template slot, a script check, a condition.
+- **`scripts/session.py`**: `next-file` names a round-2+ file, `max-id` finds the highest finding id assigned across
+  every report, `sweep` archives past months' folders, rewrites their links and checks every session path resolves
+  (`links` on its own); SKILL.md step 2 and the ID numbering call it instead of counting by hand.
+
+### Changed
+
+- **The pause protocol is a section of the brief template**, not a catalogue entry: `templates/2-manual-task.md` carries the
+  request line's fields and what the executor does after the pause; the `manual-brief.md` entry keeps the manager's half and
+  the precedents.
+- **Recon facts are a table of the brief template** with a kind, a source, a date and a boundary per row; five
+  `manual-brief.md` entries on what recon may hand over become one family, «What a recon fact may claim».
+- **Open hypotheses and the sanctioned probe are sections of the brief template**: the eight shapes of «handed over as a
+  question» and the six questions of a sanctioned mutation are filled in, not remembered; their `manual-brief.md` families
+  keep the precedents.
 
 ## [0.17.56] — 2026-10-05
 

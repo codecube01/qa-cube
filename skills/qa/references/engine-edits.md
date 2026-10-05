@@ -20,6 +20,23 @@ line. The steps below are that review, moved to the place where the edit is made
 - **The address is decided by the section's definition, not by the neighbour that looks alike.** Read the head of the section or family
   the lesson is headed for and check that the lesson's case falls under what the head defines. Precedent: a rider about a task that
   states a checkable claim was filed under «the task has NO requirements at all», whose head defines that as «nothing but a title».
+- **The form is decided by what failed, before a word of the rule is written.** The same lesson holds in one form and backfires in
+  another, and prose in a catalogue is only one of the forms:
+
+  | What failed | The form that holds | Where it lives |
+  |---|---|---|
+  | knew the rule and broke it under pressure — the user waiting, a competing incentive | a flat rule plus the thought that comes just before the break («I'll just check it myself, it's faster») | the entry |
+  | did the work, but the output came out the wrong shape — a bloated brief, a buried verdict | a recipe: what the output IS, its parts in order; never a list of «don't» | the step or the template that produces it |
+  | left out one element of something it produces anyway — a field of the brief, a line of the report | a slot in the template it fills in | `templates/`, not prose beside the template |
+  | mechanical: countable or matchable, the same every time | a check in a script, with its test | `scripts/check_session.py` for session files, `scripts/session.py` for the folder's housekeeping; the entry shrinks to a pointer |
+  | right in one situation, wrong in another | a condition on something the agent can observe | the entry |
+
+  No nuance clauses: «don't X unless it matters» reopens the very negotiation the rule exists to close, so a real exception is written
+  as a condition of its own on an observable fact. This is also how a catalogue over its budget makes room: an entry that is really a
+  slot or a check leaves the catalogue for the template or the script. Precedent: the output language lived only in the profile, which an
+  executor reaches late, and the executors kept narrating in the engine's language until it became a slot — the first line of every prompt, a field of the brief;
+  and three report checks (the column count, the cell length, a secret value) went out wrong at least once each while they were rules
+  to keep in mind, until they became `check_session.py`.
 - A family, the third-patch rule and the engine/profile split are in step 7 of `../SKILL.md` and hold here unchanged.
 
 ## Writing
@@ -45,7 +62,10 @@ line. The steps below are that review, moved to the place where the edit is made
    `python3 <engine-clone>/.github/scripts/validate-plugin.py` and
    `git -C <engine-clone> diff -U0 | python3 <engine-clone>/.github/scripts/check_identifiers.py --diff`.
    The validator also ratchets the edit against the last commit: an engine change with no bump, a bump with no CHANGELOG line, a section
-   that gained an entry while its index group stayed the same, a count that no longer matches its list. Reading the repository (`git diff`,
+   that gained an entry while its index group stayed the same, a count that no longer matches its list. It also holds every catalogue
+   and agent instruction to a size budget, because each is read whole and every entry is paid for in every session: over it, the same
+   edit makes room — entries sharing a mechanism folded into one family, a second precedent merged into the first — and the number in
+   `check_engine_edits.py` is not the retro's to raise. Reading the repository (`git diff`,
    `git show`) is not a «git operation» in step 7's sense; adding, committing, stashing or switching branches is. A failure is fixed and
    the checks re-run — the retro does not end on a red validator.
 3. **A review with fresh eyes — one subagent (`general-purpose`), launched with no context from the session.** Its brief: the clone's

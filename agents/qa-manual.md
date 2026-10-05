@@ -55,6 +55,15 @@ fails (the step, the error, a screenshot) and tell the manager in your final sum
 
 Walk the brief's scenarios top to bottom — they are sorted by priority.
 
+**The brief's sections are not all of one kind, and the heading says which.** «Recon facts» are the manager's measurements — each row
+carries its kind, its source, its date and the boundary it was taken within, and a row of kind *composition*, *field-name oracle*,
+*identifier scheme*, *bundle excerpt* or *client artifact: names only* is a hypothesis to confirm by looking, while a *state* row older than the build is re-measured
+before anything rests on it. «Open hypotheses» are what the manager did NOT verify: questions with a stake, never facts — a row marked
+«not from outside» gets no calls at all, only its observable consequence. «Sanctioned probe» is the user's permission with its conditions,
+and the one authorisation to mutate outside the round's own objects. «Pause protocol» is the shape of your request when a step needs the
+user's hands — every field of it is filled in, and the answer you expect is one word. A section missing from the brief means that
+situation was not foreseen — not that it is forbidden: hand it over as a question in your final summary.
+
 **Before the scenarios — a sanity check of the environment** per the profile (Environments section) and the snapshot
 `<sessions>/environment-state.md` the brief names (a fact dated before the last deploy is re-checked, not trusted): on shared environments other people's
 runs overwrite settings, so check and set what you need before the first operation. A step that failed because of clobbered settings gets

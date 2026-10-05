@@ -164,12 +164,12 @@ them cost, are in `references/planning.md`.
 
 If there is a critical ambiguity (which environment? which direction?) — one question to the user now, and no questions after that.
 
-**2. Create or continue the session.** First, the monthly sweep: session folders from previous months (`<sessions>/YYYY-MM-DD_*` whose month
-is older than the current one) get moved with a dumb `mv` into that month's archive `<sessions>/<YYYY-MM>/` (create it if needed). The
-invariant: the root of `<sessions>/` holds what is alive (the current month and active retests), the month folders hold closed history; do
-not touch `side-findings.md` or the neighboring non-session folders. **Anything actually moved → read
-`references/session-folder.md`, section «Sweeping», before going on**: `mv` breaks every link to a session folder silently, and fixing them
-is a pass of its own that two sessions have already paid for. Nothing to move — read nothing.
+**2. Create or continue the session.** First, the monthly sweep: `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/session.py" sweep
+<sessions>` moves the session folders of previous months into their month archives `<sessions>/<YYYY-MM>/`, rewrites every link to them
+and, when it moved anything, checks that every path naming a session folder resolves. The invariant: the root of `<sessions>/` holds what is alive (the
+current month and active retests), the month folders hold closed history; `side-findings.md` and the non-session folders stay. **It
+printed an unresolved link or a folder it could not move → read `references/session-folder.md`, section «Sweeping», and fix it by hand
+before going on.** Nothing printed — read nothing.
 
 Then check whether a session for this task (and for the related ones) already exists: search for the task id in folder names and in
 `0-session.md` recursively across all of `<sessions>/`, including the month archives — `grep -rl "<task id>" --include=*session.md
@@ -210,7 +210,7 @@ The number in a name is the order of the file's appearance, i.e. the order of wo
 starts with the plan. From there the numbering is **running across the folder and is never reset**: a file gets the next free number at the
 moment of creation, and the round is marked with a digit suffix. A second round continues from 8 — `8-manual-task-2.md`,
 `9-manual-result-2.md`, `10-retro-2.md`; if a plan reappears too, it goes under its own number in the same sequence (`8-plan-2.md`, which
-makes the manual brief the 9th).
+makes the manual brief the 9th). In round 2+ the name comes from `session.py next-file <folder> <role> <round>`, not from counting.
 
 **Two files sit outside the numbering — they are not duplicated but updated in place: `0-session.md` (the session's entry point) and
 `99-report.md` (the report).** The number 99 keeps the report last in the folder listing no matter how many rounds there are, and removes
@@ -379,9 +379,9 @@ A finding's tracker shape (title, layer split, cells, side findings) and its pri
 mismatch with the requirements that genuinely blocks a section) → `Major` (misleading behavior, data and audit quality, requirements gaps) →
 `Minor` (cosmetics). Calibration: data quality and completeness are `Major`, not `Critical`.
 
-**ID numbering:** running across the project, numbers are not reused, gaps are normal; take the current maximum across all the reports by
-grep BEFORE the draft (after it, the grep finds your own fresh numbers), never from memory, counting assignments, not mentions (a brief's «start
-at N»). The prefixes and conventions come from the profile. **The screenshot follows the id:** in the same pass, a candidate that becomes a
+**ID numbering:** running across the project, numbers are not reused, gaps are normal; the next number is
+`session.py max-id <sessions> --prefix <prefix>`, run BEFORE the draft (after it, it finds your own fresh numbers), never taken from memory —
+it counts assignments across every report, the month archives included, not mentions. The prefixes and conventions come from the profile. **The screenshot follows the id:** in the same pass, a candidate that becomes a
 finding has its `screenshots/c<N>….png` renamed to `<ID>….png` (the round suffix stays) and its `📎` in the executor's result follows;
 the cell's *Tech.* part ends with `📎 <ID>.png` (with that suffix, `📎 <ID>-2.png`) — the bare file name, the one thing a person filing the
 bug needs to pick the attachment; the checker below confirms every marker resolves to a file.

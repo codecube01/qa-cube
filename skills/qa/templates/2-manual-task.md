@@ -14,6 +14,63 @@
 - Documentation: <paths in the project knowledge base relevant to the task>
 - QA findings: <paths to findings from past sessions, if the section has any>
 
+## Recon facts (what the manager measured — one row per fact, the value itself, never a retelling)
+
+| Fact (the value) | Kind | Source | Taken on | Boundary: what was examined, through which channel | Refuted by |
+|---|---|---|---|---|---|
+| <`POST /v2/orders`, TTL 600 s, the field's value on the sampled record> | contract value | probe call / introspection | <date, build> | <endpoints, records, keys examined> | — |
+| <the row menu has three items> | composition — confirm by looking | bundle / localisation map | <date, build> | <chunks searched> | a screen that differs is a result, not a discrepancy to reconcile |
+
+Kinds, each with what its row must add:
+- **contract value** (a limit, a path + method, an operation name, a dictionary) — the number, verified by one probe call; an endpoint found only in docs
+  and not probed is marked `unverified`;
+- **composition of the interface** (controls, columns, row actions) — a string in the bundle proves a string exists, not that a component renders it;
+- **field-name oracle** (a pair whose NAMES promise the distinction: requested/actual, original/current) — a hypothesis, never the primary oracle;
+  «if the two hold one value, the oracle is dead, do not interpret it»; a mechanism-based oracle (a recomputation, a categorical switch) goes first;
+- **identifier scheme** (`<prefix>-<entity id>`, a file named after the account) — a convention read off objects created before <date>; the object's
+  own id field is the address, the scheme is the fallback; «not found» means the address is wrong, not the object absent;
+- **bundle excerpt** — the fragment with its identifiers as they appear, never its reconstructed meaning; a LOWER bound on what the product does
+  («one carrier found» is a floor to extend, «none found» is your ignorance, not the product's absence);
+- **client artifact: names only** (a query document from a captured request or a generated client) — composition is exact, types are unknown;
+  never «can be relied on»; an independent introspection is the executor's first step;
+- **mechanism** («this path does not go through the outbox») — from the knowledge base, dated by the BUILD it was measured on; «if the behaviour
+  differs, the knowledge base is stale and that is a result»;
+- **state / count** («in state X», «free remainder 0», «observations 4/4/3») — dated to the minute, with the window, the filter and the page;
+  «re-check that the precondition still holds; if not — do not bend it, look for a direct discriminator and say so»;
+- **negative** («nothing of that kind here») — a property of the places looked, in the terms the executor will look in (the screen's columns,
+  not the response's keys), plus the channel;
+- **ids of a short-lived contour** (an adjacent system's object and its counterpart) — collected while that session lives; a name is not a lookup key there.
+
+A row without a value is not a fact — it goes to «Open hypotheses». A state older than the build is re-measured before anything rests on it.
+
+## Open hypotheses (what the manager did NOT verify — a question with its stake, never a fact, a verdict or a menu of answers)
+
+| Hypothesis | Why it matters (what it closes) | What settles it | From outside? |
+|---|---|---|---|
+| <is there an object in state X on the environment?> | <closes requirement Y> | <the aggregate query> | yes |
+| <the block in this response is produced by the reworked method> | — | nothing the product exposes | no — spend no calls; measure <the observable consequence> instead |
+
+The wording that keeps a row a question:
+- a claim about the environment's state — «is there an object in state X? it would close Y», never «there is none, record it as not covered»;
+- a doubt about an instrument — «check whether it can do X; if it can, that closes Y», never «if there is no such setting, record it as not covered»;
+- a seeding route you have not run — «as far as I know this route yields …; I have not run it — if it does not, the question is what else produces this state»;
+- a link between two records made by TIME — «matched by time only — the join by id is the question»;
+- the shape of the fix — «the marker not being found is not a verdict; verify by behaviour»;
+- the fixer's correction to the previous round's description, or the team's claim about the environment — quoted verbatim, attributed, with the
+  observation that settles it; the measurement is the verdict, the author's account is not;
+- a hypothesis nothing outside the product can settle — marked so, no attempt expected, replaced by its observable consequence;
+- a probe's expected outcomes — illustrations only, closing with «any other outcome is also a result, and a third one is more valuable than either».
+
+## Sanctioned probe (a mutation the user authorised — one block per probe; delete the section otherwise)
+
+- Probe: <the call, the object, the hostile value(s), what the permission said>
+- Combining hostile values: <allowed into one artifact if each stays identifiable in the output; one failing the operation → unwind into separate probes | not allowed>
+- Unanticipated refusal: <names the cause literally → the response proves the mechanism, no control; generic → one control call with <a value known to resolve> is authorised, leaving <residue>>
+- Overshoot cap: <exceed the available amount by the smallest amount that still proves the guard is gone>
+- Reverse: <works | known not to work — the stuck value is the expected artifact and the evidence; record it under environment artifacts, not as a protocol failure>
+- Budget unit: <one pair of mutations per PROPERTY to be shown, on the same object, each reversed before the next; restorations count>
+- A process the probe starts: <not terminated by you — record its id, state and attempt count at the end of the round; the report hands the decision to the team>
+
 ## What to read (targeted, not everything)
 
 - <profile subfiles this task needs: e.g. `.claude/qa-profile/auth-and-api.md` §1, §3>
@@ -24,6 +81,33 @@
 - The remaining profile subfiles — only when stuck.
 - <a session that may die in minutes: split this list into «Before the session-bound steps» (only what those steps cannot be run safely
   without) and «After them» — `manual-brief.md`, «The rule below is about the ORDER of what dies with the access»>
+
+## Pause protocol (a step needs the user's own hands — delete the section otherwise)
+
+The executor prepares everything up to the step (forms, interceptors, **a recorder of the state the pause is about, armed BEFORE the
+request goes out**, every entry written to storage that survives a navigation), appends to the result, and ends its turn with a request
+message opening with `CLICK NEEDED:` (the marker the manager greps the result for); the manager relays it and returns the user's answer by a direct message to the same agent. The request line carries, every time:
+
+- Environment: <browser profile / instance id — the id, never its label — then the tab and the button; a tab id alone means nothing outside the executor's own group>
+- Account to type: <the exact handle — a pre-filled login form may hold a neighbour's>
+- What the step does TO THE STAND: <amount, recipient, which entity changes>
+- Kind of window: <a free, reversible signature | an irreversible transaction, with its fee>
+- Network allowed: <the one network on which confirming is allowed; a window on any other — reject, whatever it would prove>
+- Boundary instead of a value: <«click at any value up to X, above that — do not click», when the on-screen value is computed live>
+- Do not reload the page; do not work in this environment until the round ends
+- Expected answer: one word («done» / «clicked») — the executor re-reads the state itself; ask for at most 1–2 concrete VALUES
+- Wrong click (confirmed where cancel was asked): <recorded as a fact; the scenario is replayed only if the stand was affected>
+- A second window (signature → send) cannot be merged into one request: announce it in advance, the user stays at the keyboard
+
+After the pause the executor re-reads the actual state and the tab list (ids die), checks WHOSE session came back, compares the page's
+load time with the recorder's last entry and re-arms it; the state wins over the answer, with a note in the result. The environment may be
+gone on return (browser closed, logged out, a pause of a day) — re-create the preparation, replay nothing already accepted; only the
+session died while the page still holds an unsaved artifact — re-enter in a separate tab of the same profile, never navigate or reload the
+prepared page.
+
+A result visible ONLY to a human (a chat message, an email, a screen with no API): state the expectation as numbers BEFORE the observation
+(«one message, six items, order A→B→C»), mark which points the executor can obtain without the human (an orchestrator history, a job's
+payload, a delivery log), and write the limit of confidence («confirmed in aggregate, per-item timestamps not taken»).
 
 ## Scenarios
 

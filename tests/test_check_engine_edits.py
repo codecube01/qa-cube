@@ -131,11 +131,38 @@ class Version(unittest.TestCase):
         self.assertEqual(ce.version_problems([], "0.1.1", "0.1.1", False), [])
 
 
+class Budgets(unittest.TestCase):
+    def test_a_listed_file_over_its_budget_is_caught(self):
+        rel = "skills/qa/references/planning.md"
+        found = ce.budget_problems("x" * (ce.BUDGETS[rel] + 1), rel)
+        self.assertEqual(len(found), 1)
+        self.assertIn("make room in the same edit", found[0])
+
+    def test_a_listed_file_at_its_budget_is_quiet(self):
+        rel = "skills/qa/references/planning.md"
+        self.assertEqual(ce.budget_problems("x" * ce.BUDGETS[rel], rel), [])
+
+    def test_an_unlisted_file_gets_the_default(self):
+        rel = "skills/qa/references/a-new-catalogue.md"
+        self.assertEqual(ce.budget_problems("x" * ce.DEFAULT_BUDGET, rel), [])
+        self.assertEqual(len(ce.budget_problems("x" * (ce.DEFAULT_BUDGET + 1), rel)), 1)
+
+    def test_every_budget_names_a_file_that_exists(self):
+        # a renamed catalogue would silently fall back to the default and fail every edit
+        self.assertEqual([rel for rel in ce.BUDGETS if not (REPO / rel).is_file()], [])
+
+
 class Corpus(unittest.TestCase):
     def test_catalogues_as_they_stand_pass_the_counts(self):
         found = []
         for path in sorted(REPO.glob(ce.CATALOGUES)):
             found += ce.count_problems(path.read_text(), str(path.relative_to(REPO)))
+        self.assertEqual(found, [])
+
+    def test_catalogues_and_agents_as_they_stand_fit_their_budgets(self):
+        found = []
+        for path in sorted([*REPO.glob(ce.CATALOGUES), *REPO.glob(ce.AGENTS)]):
+            found += ce.budget_problems(path.read_text(), str(path.relative_to(REPO)))
         self.assertEqual(found, [])
 
 
