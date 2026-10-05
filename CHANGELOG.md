@@ -11,6 +11,11 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+### Added
+
+- **A wallet signature request is a human click too, free typed-data signatures included**: `manual-brief.md`
+  («Your own harness refuses a call») — a page script records or refuses wallet calls, never originates them.
+
 ## [0.17.56] — 2026-10-05
 
 ### Added
