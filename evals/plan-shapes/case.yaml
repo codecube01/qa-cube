@@ -1,0 +1,105 @@
+schema_version: "1.0"
+name: plan-shapes
+description: >
+  Step 3 on a task that plants seven scenario shapes from `references/planning.md` — a
+  refactoring with «everything else as before», a per-window limit, an already-elapsed state,
+  an external journal as the oracle, a guard requirement, a worker's batch pass, and a claim
+  that «the rest was checked». The graders ask, one per shape, whether the plan covers it.
+  The case exists to compare how the manager meets the catalogue — reading it whole, or
+  planning by its index and having a reviewer read it — so it is scored per shape, not
+  pass/fail.
+tags: [step-3, planning, experiment]
+# Not part of the pre-release pass: run it only with `--judge-model sonnet` and read the plans
+# yourself. The default haiku judge failed five of the seven shapes on plans that carried all seven
+# (2026-10-05), and sonnet still flips a verdict mid-answer — the evidence is a 13–18k-character
+# plan, which is more than a cheap judge holds against one narrow question.
+context:
+  scaffold_script: setup.sh
+execution:
+  # Stops after the plan on purpose: the shapes are decided at step 3, and a run that goes on to
+  # launch executors costs three times as much and dies on the wall clock.
+  prompt: >
+    /qa Task: coupon engine refactoring. Mode: full cycle. Environment: local.
+    Description: the coupon application code in checkout was rewritten from the legacy
+    `CouponApplier` to the new rules engine; the behaviour must stay exactly as before for
+    customers. Requirements: (1) a coupon cannot be applied more than 3 times per 24 hours per
+    customer; (2) an expired coupon is refused with the message «This coupon has expired»;
+    (3) every successfully applied coupon sends one webhook to the loyalty service, with the
+    order id and the coupon code; (4) a guest (not logged in) cannot apply a coupon at all —
+    the field is hidden and the API refuses it; (5) the nightly worker aggregates the day's
+    coupon usage into the `coupon_usage_daily` report table. Developer's note: the rest of the
+    checkout flow was re-checked by us and is correct, only the coupon part changed.
+    Do steps 0–3 only: read the profile, create the session, write `0-session.md` and `1-plan.md`
+    — and then STOP: do not launch any executor, do not write any other session file. As your
+    final message, paste the full text of `1-plan.md` and nothing else.
+  max_turns: 30
+  timeout_seconds: 900
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Bash, Agent]
+runs: 2
+graders:
+  # One question per grader, judged on the plan text the run pasted as its last message.
+  - name: baseline-is-the-previous-build
+    type: llm
+    weight: 1
+    criteria: >
+      Does the plan use the PREVIOUS build (the one before the refactoring, e.g. `make run-previous`
+      or «the old build») as the reference for «the behaviour must stay exactly as before» — comparing
+      the new build against it, or recording the old build's behaviour first? PASS if yes. FAIL if
+      «as before» is checked only against the requirements text or not at all. Judge nothing else.
+  - name: window-has-two-readings
+    type: llm
+    weight: 1
+    criteria: >
+      For the limit «no more than 3 times per 24 hours», does the plan test or explicitly distinguish
+      BOTH readings of the window — a sliding 24-hour window and a calendar day (midnight reset)? PASS
+      if both readings appear, or if the plan names the ambiguity and plans a check that tells them
+      apart. FAIL if the limit is tested as a single count with no reading named. Judge nothing else.
+  - name: expired-coupon-is-obtained-not-assumed
+    type: llm
+    weight: 1
+    criteria: >
+      Does the plan say HOW an expired coupon will be obtained — by creating one with a past expiry
+      via the admin API, by backdating, by seeding, or by naming it as a precondition that must be
+      manufactured — rather than assuming one exists on the environment? PASS if the plan names the
+      way to obtain it. FAIL if it only says «apply an expired coupon». Judge nothing else.
+  - name: webhook-counted-at-the-receiver
+    type: llm
+    weight: 1
+    criteria: >
+      For the webhook requirement, does the plan verify the delivery at the RECEIVER — the loyalty
+      mock's log (`loyalty-mock.log`), a count of received requests, their payload — rather than only
+      the checkout response? PASS if the receiver's record is the oracle (counting exactly one per
+      applied coupon counts). FAIL if the webhook is checked only from the sending side or not at all.
+      Judge nothing else.
+  - name: guard-failure-opens-a-chain
+    type: llm
+    weight: 1
+    criteria: >
+      For the guest guard (requirement 4), does the plan say what to measure IF the guard fails —
+      i.e. if a guest CAN apply a coupon through the API: what that opens downstream (a webhook sent
+      for a guest, usage counted for nobody, a discount with no customer)? PASS if the plan plans the
+      consequence of a failed guard in the same round. FAIL if the guard is only pass/fail. Judge
+      nothing else.
+  - name: worker-pass-is-planned
+    type: llm
+    weight: 1
+    criteria: >
+      For the nightly worker (requirement 5), does the plan address the worker's PASS itself — how it
+      is triggered on the local environment (run manually, wait for the schedule, or ask), which day's
+      events it aggregates, or what happens to events that arrive around the day boundary? PASS if at
+      least one of those is planned. FAIL if the plan only checks that the report table has rows.
+      Judge nothing else.
+  - name: developer-claim-is-not-accepted
+    type: llm
+    weight: 1
+    criteria: >
+      The task says «the rest of the checkout flow was re-checked by us and is correct». Does the
+      plan treat that as a CLAIM rather than a fact — by planning a regression check of the rest of
+      the checkout (even a minimal one), or by explicitly marking it as not verified / out of scope
+      with a reason? PASS if either. FAIL if the plan silently excludes the rest of checkout because
+      the developer said it is fine. Judge nothing else.
+  - name: stopped-after-the-plan
+    type: regex
+    weight: 1
+    pattern: "manual-task|manual-result|automator"
+    match: not_contains

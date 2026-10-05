@@ -73,6 +73,7 @@ under pressure. When a rule matters enough to justify $1.50 a run, write the beh
 give it `timeout_seconds` and `Bash` (step 2 renames folders with `mv` — without Bash the engine
 cannot do what the case is grading).
 | `engine-clone-guard` | an `engine-clone` that points at the plugin's installation is refused, and the lesson goes to `.claude/qa-cube-feedback.md` |
+| `plan-shapes` | a step-3 experiment, not a gate: a task with seven planted scenario shapes, one grader per shape — for comparing two ways of meeting `planning.md`; judge with `--judge-model sonnet` and read the plans yourself (see the case's header) |
 | `feedback-layer` | two layers, no duplicates: a universal lesson goes to `.claude/qa-cube-feedback.md` and not into the profile, a project-only one to the profile; an open row applies in the next session, a closed one does not |
 
 ## Writing another case
