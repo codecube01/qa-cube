@@ -72,6 +72,12 @@ manual that the method's existing assertions already half-covered.
   (login, name) before returning the id, and target only entities the test created. Precedent: a password-reset step took the account's id
   from a name-filtered listing the way sixty neighbouring call sites did; the executor added the identity check, and it became the step's
   real safety line.
+- **The test code never names a session folder — not in a comment, a javadoc or a disable reason.** A session folder is working
+  material: the monthly sweep moves it into an archive, a round renames it, and in some projects it is not under version control at all,
+  while the code is committed and outlives all of that. The way back from a test to its evidence is the case link and the tracker task id
+  the code already carries; the session registry finds the folder from either. Write the fact itself into the comment («the server fills the
+  projection asynchronously, so read it by polling») instead of where it was found. Precedent: a sweep of a few dozen session folders had to rewrite
+  links in test comments, and the same pass found links that the previous month's sweep had missed — dead since then, in committed code.
 - If the feature is broken — the test must fail honestly, never masked with soft assertions. In that case mark the test as disabled per the
   project's convention (with the reason) and describe the bug in the result.
 - Record every iteration (what failed, what you changed) in `*automator-result*.md` immediately.

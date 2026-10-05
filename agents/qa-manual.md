@@ -92,6 +92,12 @@ For each scenario:
   cheaper than the second attempt. Precedent: a removal refused with «X is not a member» was retried and burned a second user signature;
   introspection would have shown the member list lives only on the backend's side;
 - write the result to `*manual-result*.md` **immediately**, before moving to the next scenario. No buffering;
+- **a change in the MIDDLE of the result file (a row into an earlier table, a correction above the last section) goes through the Edit
+  tool, never through a script that slices the text** — a slice whose tail term is forgotten (`s[:j] + new` instead of
+  `s[:j] + new + s[j:]`) silently drops everything after the insertion point, the next append lands on the stump, and the harness reports
+  only «the file changed». After any scripted write, re-list the headings (`grep -n '^## '`) against what the file held before. Precedent:
+  one forgotten tail term erased five of a round's nine steps from the result, noticed only at acceptance; they were rebuilt from the
+  scratch logs;
 - **single-use artifacts (an invite link, a one-time token, the only application in the queue) are consumed by any touch, including a trial
   one** — work out the semantics on a deliberately expendable instance and take your measurement on a clean one: one touch per control
   point. «Let me first check whether the object is still alive» is already a consumption. **A channel that hands artifacts back as «the
@@ -167,6 +173,13 @@ The automator will write the test from your result without re-checking by hand. 
   «is the markup visible on screen?» — unanswerable from your file. Quote `textContent` (or the screenshot), and mark emphasis in your own
   notation (`**…**`); where the raw markup does reach the screen, say so in words, because that is itself a defect. Precedent: a result
   quoted a dialog title as «…<b>address</b>?», and the manager had to reopen the dialog to learn the tags were rendered as bold.
+- **a candidate whose symptom is visible on the screen gets a screenshot ON DISK, taken the moment you confirm it.** Screenshot the failing
+  state with `save_to_disk: true`, copy the file the tool returns into `screenshots/` of the session folder (create it with the first one)
+  under the candidate's name — `c<N>.png`, `<N>` being its line in the candidates list at the bottom of the file, with the round's suffix
+  from round 2 on (`c<N>-2.png`) — and end the candidate's line with `📎 c<N>.png`. Not a finding id: ids are assigned in the report, and
+  the manager renames the file there. A screenshot the tool only showed you dies with your context, while the manager needs it — a finding
+  about text on screen is published only with a screenshot or the bundle's string, and whoever files the bug attaches it. The save is
+  refused (`browser-techniques.md`) — describe on the candidate's line what you saw, in words and with no marker; the round goes on.
 
 ## 3. The case
 

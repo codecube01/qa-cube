@@ -11,6 +11,85 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.17.56] — 2026-10-05
+
+### Added
+
+- **A device-class branch reached by spoofing detection**: `report.md` (the appearance entry) — proves the branch
+  exists, not what that device's user sees; check the screen at that device's width before writing findings there.
+- **The pause protocol: a session that dies, a human's reload, a chain**: `manual-brief.md` — re-entry in a separate
+  tab, the page holding an unsaved artifact is never navigated or reloaded; an in-page recorder is guarded by «do not
+  reload» and re-armed after; the request names the only network on which confirming is allowed.
+- **A probe that is accepted and starts a background process**: `manual-brief.md` («A sanctioned mutating probe»,
+  now six questions) — the executor records the process and leaves the decision to the team.
+- **Asking the user to create an instrument**: `planning.md` («The human's instrument has PROPERTIES») — say what
+  it is for, what to name it, and that its secret is not wanted.
+- **A blocked value is unmeasured**, a lost tab group is reselected by device id, a tiled hidden-tab screenshot
+  is retaken with `scale`: `browser-techniques.md`.
+- **The manager reads the shell pitfalls too**: `SKILL.md` step 0, `shell-pitfalls.md` header.
+- **A scenario that needs a NEW login is a human step**: `planning.md` («A step that requires typing a
+  financial or credential-shaped value») — a sub-user or a narrower-role account the environment lacks is
+  registered by the user before the round; the brief hands over the identity, not the sign-up recipe.
+- **A no-requirements round: its twin first, a case on invariants**: `planning.md` («the task has NO
+  requirements at all») — a twin found by title in a neighbouring project gives the reference spec; the case
+  holds only the invariants, behaviour awaiting the analyst stays out.
+- **A check with two carriers of one proof is probed with the pair that disagrees**: `planning.md` («The main
+  run and its control») — the required carrier wrong beside the old one right shows whether the server
+  combines them by «or»; single-carrier matrices cannot.
+- **The result's headings are listed against the brief's steps before acceptance**: `manual-brief.md`
+  («Accepting the result») — a step with no section is missing evidence, whatever the summary cites.
+- **Mid-file edits of the result go through Edit, not a slicing script**: `qa-manual` — a forgotten tail
+  term silently truncates the file; re-list the headings after any scripted write.
+- **A contradiction between the task and a later neighbour is reconciled before it is asked**: `planning.md`
+  («The tracker is searched at step 1») — a later text by the requirements' owner is the answer; only its residue
+  becomes a question, and the reading a preflight check.
+- **An automation price is computed, not guessed**: `SKILL.md` step 5 — the waited-on operations times the
+  durations the manual result measured, plus propagation lags, before the figure is put to the user.
+- **A manual scenario keeps its discrimination in the autotest only if the brief restates it**: `planning.md`
+  («The main run and its control», degenerate oracle) — ask of every step whether it would fail on the
+  build without the task, given the state the host test leaves behind.
+- **A recon link between two records is joined by id, never by time**: `manual-brief.md` («What you
+  have not checked yourself is handed over as a question») — a value matched to an event, or a change
+  to an actor, by a coincidence on the clock goes into the brief as an unjoined hypothesis.
+- **No session-folder paths in test code**: `qa-automator` — comments, javadoc and disable reasons
+  name the fact, not the folder it was found in; the way back to the evidence is the case link and
+  the task id.
+- **The restore of a shared fixture is timed by the decision, not the trigger**: `planning.md` (flipping a
+  setting inside a window) — a disarm «right after the operation» re-arms the setting before a lagging
+  decision reads it; `manual-brief.md`'s «disarmed the moment its scenario is done» now points there.
+- **Every carrier of one state is counted from the schema**: `planning.md` («The main run and its
+  control», «the field is not saved») — a scan for every field returning the type, not only the
+  endpoints the task names.
+- **Screenshots of on-screen defects**: the manual tester saves one per candidate into the session's
+  `screenshots/`, the manager renames it to the finding's id and the report cell names it as
+  `📎 <ID>.png`; `check_session.py` confirms every marker resolves to a file.
+- **Reading-list partition and the bulk dump on a page-session contour**: `manual-brief.md` —
+  the shell pitfalls stay before the session-bound block whenever it touches the shell; a dump
+  reachable only through the page lives in the page's memory, derivatives go to disk.
+- **A precision fix is calibrated on the old build first**: `planning.md` («The reference
+  environment») — when the fixed build rounds its own read channel, the old build is the only
+  place the oracle can be calibrated; accumulating series, one account per series.
+- **The automation question travels with the round's result**: `SKILL.md` step 5 — three
+  lines (the change and its merge state, the verdict, what the test would assert) above the
+  options, since the user has not seen the delivery yet; a reply that is itself a question is answered,
+  then the choice is put again — it is not acted on.
+- **The old build's own logs as a reference**: `planning.md` («The reference environment») —
+  a low-traffic service may still hold the previous build's records on the environment itself.
+- **zsh's special parameters** (`path`, `status`, `argv`) that a helper must not use as names, `local`
+  included: `shell-pitfalls.md`.
+
+### Changed
+
+- **The `SKILL.md` budget is 70k characters** (from 66k) — the file had reached 65.8k.
+- **An unnamed finding is read as «left out of the fix» only if it ever reached the tracker** —
+  one the customer never pasted stays in the table and goes into this round's comment.
+- **Tabs of headless libraries: `focus()` and a real click after the pointer sequence**, since
+  which one works changes with the library's build.
+- **Dating the build: the replaced bundle can be pulled from a browser cache**, and two builds
+  are diffed by their literals, not by minified code.
+
+## [0.17.39] — 2026-09-29
+
 ### Added
 
 - **`references/browser-techniques.md`** — browser recipes that projects kept in their

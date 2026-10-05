@@ -166,6 +166,40 @@ class StructureTest(unittest.TestCase):
         self.assertEqual(len(check_session.scan_structure(text.splitlines(), 3)), 1)
 
 
+# --- screenshots ------------------------------------------------------------------------------------
+
+
+class ScreenshotTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self._tmp.name)
+        self.addCleanup(self._tmp.cleanup)
+        (self.dir / "screenshots").mkdir()
+        (self.dir / "screenshots" / "ACME-12.png").write_bytes(b"")
+
+    def shots(self, text: str) -> list[str]:
+        return [m for _, m in check_session.scan_screenshots(text.splitlines(), self.dir)]
+
+    def test_a_marker_whose_file_exists_is_quiet(self):
+        self.assertEqual(self.shots("| **ACME-12 · Major** | FR-1 | broken *Tech.: 📎 ACME-12.png* |\n"), [])
+
+    def test_a_marker_left_on_the_candidate_name_is_caught(self):
+        """The rename at id assignment is the step that gets forgotten."""
+        found = self.shots("*Tech.: 📎 c3.png*\n")
+        self.assertEqual(len(found), 1)
+        self.assertIn("c3.png", found[0])
+
+    def test_a_marker_in_backticks_is_resolved_too(self):
+        self.assertEqual(self.shots("📎 `ACME-12.png`\n"), [])
+        self.assertTrue(self.shots("📎 `ACME-13.png`\n"))
+
+    def test_an_image_named_without_the_marker_is_the_product_s_not_ours(self):
+        self.assertEqual(self.shots("the page requests logo.png and gets a 404\n"), [])
+
+    def test_a_placeholder_in_a_template_is_quiet(self):
+        self.assertEqual(self.shots("*Tech.: …, 📎 <ID>.png*\n"), [])
+
+
 # --- the driver ---------------------------------------------------------------------------------
 
 

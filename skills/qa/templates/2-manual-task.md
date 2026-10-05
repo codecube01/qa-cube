@@ -32,6 +32,6 @@
 ## Deliverable
 
 - Write to: `3-manual-result.md` (incrementally, after each scenario)
-- Mandatory: a trace id for every failure (if the project defines one — with `logs: none` there is none), severity for bugs, exact request/response evidence (the autotest is written from it), case `<TMS case>` in the «Summary» (with `test-cases: none` there are no cases — write «cases are not maintained in this project» instead of an id), the «Product findings» and «Executor retro» sections
+- Mandatory: a trace id for every failure (if the project defines one — with `logs: none` there is none), severity for bugs, a screenshot in `screenshots/` for every candidate visible on screen (`📎` on its line), exact request/response evidence (the autotest is written from it), case `<TMS case>` in the «Summary» (with `test-cases: none` there are no cases — write «cases are not maintained in this project» instead of an id), the «Product findings» and «Executor retro» sections
 - With `test-cases: upfront` do not create cases. Do not edit the expected result of a case whose expectation source is `spec` — a mismatch is recorded as a defect; a case sourced from an `assumption` or the `KB` is refined against the facts. Steps and preconditions are always refined.
 - As separate lists in the result: **case corrections** (`case → was → now → why`) and **case candidates** (a scenario surfaced with no case behind it — do not create it yourself).

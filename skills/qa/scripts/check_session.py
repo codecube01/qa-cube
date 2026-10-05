@@ -5,7 +5,7 @@
     check_session.py <sessions>/2026-09-14_acme-412-coupon/          # the whole folder
     check_session.py --max-cell 850 --min-sections 3 <file> …
 
-Three rules the engine states in prose and, until now, asked an agent to honour by eye:
+Four rules the engine states in prose and, until now, asked an agent to honour by eye:
 
 - **no secret value goes into a session file.** The rule is repeated in four instructions because an
   instruction is the only thing that ever enforced it — and session folders are committed into the
@@ -16,6 +16,10 @@ Three rules the engine states in prose and, until now, asked an agent to honour 
   damage is invisible in a rendered preview — the row simply reads as if the author wrote it that way.
 - **a finding's cell stays under ~850 characters.** Past the limit the tracker's reader stops reading
   and the customer sends the report back to be shortened.
+- **a `📎 <file>` marker names a file that exists in the folder's `screenshots/`.** The executor saves
+  a screenshot under the candidate's name and the manager renames it to the finding's id when the
+  report assigns one; a marker left pointing at the old name sends whoever files the bug looking for
+  an attachment that is not there.
 
 Exit code 0 when nothing was found, 1 when something was. Every problem is printed as
 `file:line: what`, so the output pastes straight into a result file.
@@ -174,6 +178,26 @@ def scan_tables(lines: list[str], max_cell: int) -> list[tuple[int, str]]:
     return out
 
 
+# --- screenshots ---------------------------------------------------------------------------------
+
+# A bare file name after the paperclip: the marker is language-neutral, and a plain «logo.png» in a
+# finding about a broken image is the product's asset, not ours — so only the marker is resolved.
+SCREENSHOT = re.compile(r"📎\s*`?([\w.-]+\.(?:png|jpe?g|webp))`?", re.I)
+
+
+def scan_screenshots(lines: list[str], folder: Path) -> list[tuple[int, str]]:
+    out: list[tuple[int, str]] = []
+    for n, line in enumerate(lines, 1):
+        for match in SCREENSHOT.finditer(line):
+            name = match.group(1)
+            if not (folder / "screenshots" / name).is_file():
+                out.append(
+                    (n, f"`📎 {name}` has no file in `screenshots/` — a candidate's screenshot is renamed "
+                        f"to the finding's id when the id is assigned; rename it, or fix the marker")
+                )
+    return out
+
+
 # --- structure -----------------------------------------------------------------------------------
 
 
@@ -209,7 +233,8 @@ def check_file(path: Path, max_cell: int, min_sections: int) -> list[str]:
     # `*-manual-result*.md`, `*-automator-result*.md` — which is English by construction and does
     # not depend on the session's language.
     sections_needed = min_sections if "result" in path.stem.lower() else 0
-    problems = scan_secrets(lines) + scan_tables(lines, max_cell) + scan_structure(lines, sections_needed)
+    problems = (scan_secrets(lines) + scan_tables(lines, max_cell) + scan_structure(lines, sections_needed)
+                + scan_screenshots(lines, path.parent))
     return [f"{path}:{n}: {message}" for n, message in sorted(problems)]
 
 
