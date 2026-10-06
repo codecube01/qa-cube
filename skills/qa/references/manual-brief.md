@@ -17,7 +17,7 @@ entry, so a family is read whole or not at all.
 - a config edit made in the same session does not reach the executor's context — restate the value in the brief
 - an adjacent system with short-lived access — hand over its entity IDs, not only their state (a «Recon facts» row)
 - the name you gave an environment may never reach the executor's listing — the address is a PROBE, not a name
-- entering the environment needs a human — test the access with the session's FIRST call, before reading anything
+- entering the environment needs a human — test the access with the session's FIRST call, before reading anything; a «dead» verdict is taken from a fresh tab only
 - each entry spends a one-time artifact — choose the role and probe the existing session first; a scripted and a browser session are independent carriers
 - preflight opens the round's target screen, not just the session — a self-explained observation is a candidate finding
 - the manager's recon verifies the address, never the answer — and hands over the VALUES the probe returned, as «Recon facts» rows
@@ -50,7 +50,7 @@ entry, so a family is read whole or not at all.
 
 - **What you have not checked yourself is handed over as a question** — the template's «Open hypotheses» table · a claim about the environment · a doubt about an instrument · a seeding route · a link between two records joined by time, not by id · a hypothesis about the shape of the fix · the fixer's correction to your previous round's description · a hypothesis nothing outside the product can settle · a list of expected outcomes
 
-- **A sanctioned mutating probe: what the permission must also say** — the template's «Sanctioned probe» block · may the hostile values be combined · an unanticipated refusal and the control call · capping the overshoot · a reverse already known to be missing · the budget's unit is the property, not the round · a background process the accepted probe starts
+- **A sanctioned mutating probe: what the permission must also say** — the template's «Sanctioned probe» block · who presses an irreversible step · may the hostile values be combined · an unanticipated refusal and the control call · capping the overshoot · a reverse already known to be missing · the budget's unit is the property, not the round · a background process the accepted probe starts
 
 - **What a recon fact may claim** — a row of the template's «Recon facts» table · a value, not a retelling · an endpoint verified by one probe, or marked unverified · dated, with the boundary of the sample — state, counts, a mechanism dated by the build, a negative · contract values are fact, composition is a hypothesis · a field-name oracle · a minified excerpt and its lower bound · an identifier scheme · a client query document: names only
 
@@ -148,6 +148,8 @@ entry, so a family is read whole or not at all.
 - **The probe sweep has a cost of its own: an executor that sweeps can pin a verdict on the WRONG environment — so when the user can re-enter quickly, pin ONE environment for the task and make failure a stop, not a search.** A sweep answers «where is the live session» well only while exactly one candidate holds it; with several environments each holding a different state, the executor that lands in the wrong one after a silent tool switch reads that environment's refusal as the truth about the session and writes «dead everywhere» — in one round a live session was declared dead and a scenario closed as uncovered for exactly that reason. The inversion is the user's to choose and cheap to adopt: name one environment by its id at the start of the task, forbid probing the others, and on any refusal there the executor stops and asks for a re-entry through the pause protocol. What the brief must then carry: the chosen id as its first line, «if the tool moves you elsewhere, select this id back», and no fallback list. Precedent: after the misdiagnosed dead session, the user set exactly this rule for every following round; no round after it lost a scenario to the environment.
 
 - **Where entering the environment needs a HUMAN, test the access with the session's very first call — before reading the task, the spec or the knowledge base.** The natural order puts preflight after the reading, because preflight is a step of the pipeline and reading comes first in it. That order is right when access is yours to fix and wrong when it is not: a login only the user can perform costs their attention and their latency, and everything you would have read anyway can be read while they do it. One call at the top of the session — the liveness oracle the profile names — converts a dead session from a full stop in the middle of the round into a request the user is already working on while you build the plan. The cost is one call in the case where access is fine; the cost of the other order is the whole reading pass spent before the wait even starts. Precedent: a round read the task, the parent spec, the comment thread and the knowledge base, wrote the plan, and only then found the environment's session dead — the user's manual re-login was the round's longest pause, and it could have overlapped every one of those reads.
+
+  *And a «dead» answer is believed only from a FRESH navigation in a new tab — never from a tab left over from an earlier round.* A leftover tab outlives the things that made it a valid probe: the browser extension reconnects, the tab group is rebuilt, the page keeps a state from before a re-login, and the identity call from it can answer `401` while the profile's session is alive. A false «dead» costs the user a re-login they did not need, or a round held waiting. So the oracle that would ask for a human is run as «new tab → navigate to the app → identity call», and a refusal from an old tab is first repeated that way. Precedent: a round-2 oracle fired from the round-1 tab answered `401` twice in two minutes, the user was asked to log in and replied that the session was alive — a new tab in the same profile answered `200` at once.
 
 - **Where each entry spends a one-time artifact (a login link, a code), the identity is chosen and the existing session probed BEFORE the artifact is spent.** Two cheap reads precede every entry: which role the round's operations actually need — permissions differ between roles that log in identically, and entering under the wrong one costs the artifact — and whether the session already on hand still answers the identity oracle. **A scripted session (a cookie jar, a token file) and a browser session are independent carriers**: either can die while the other lives, so one's liveness proves nothing about the other, and preflight hands over the identity per carrier. Where the scripted carrier dies noticeably faster, re-entering right before a script run is cheaper than diagnosing its `401`. Precedent: a round re-entered a scripted session three times while the browser session of the same contour lived for over three hours; another spent a login artifact entering under a role the operation refused.
 
@@ -453,9 +455,18 @@ wording per shape; this section keeps what each shape cost.
 ### A sanctioned mutating probe: what the permission must also say
 
 **A probe is authorised as one call, and the template's «Sanctioned probe» block answers in advance everything the executor would
-otherwise decide alone, mid-probe, with the mutation already half-performed.** Six questions recur; each costs a line to fill in and an
+otherwise decide alone, mid-probe, with the mutation already half-performed.** Seven questions recur; each costs a line to fill in and an
 unbudgeted artifact — or the round's sharpest measurement — to omit. The block states the rule per question; this section keeps what
 each one cost.
+
+- **WHO PRESSES an irreversible step?** A step the user sanctioned in chat that cannot be undone — a permanent record, a non-deletable
+  artifact — is decided at slicing as the user's click or the manager's own call, never left to the executor. The sanction exists only as
+  the manager's words in the brief, and an executor weighing an irreversible act against a permission it cannot see the user give stops at
+  the button and hands it back through the pause protocol — on its own judgment, with no classifier refusing anything — so each such step
+  costs a relay round trip the plan never priced. Say who presses in the sanction question itself («you will press it, N times» — or «I
+  will make the call») and prepare the pause from the start. Precedent: a round sanctioned two permanent records by the user's answer in
+  chat; the executor filled the form, stopped at the button and asked for the user's click, and the second record was dropped mid-pause
+  once it proved to add nothing to the verdict.
 
 - **May the hostile values be COMBINED?** Escaping, encoding and injection checks come as a matrix, and one artifact usually carries all of
   them — four mutations become one and the restore shrinks to a single call. Precedent: four hostile characters were folded into a single
@@ -769,7 +780,7 @@ leaves the same trace as a handler that never fires.
 What the brief must require, and what acceptance must check:
 
 - **drive the flow to its terminal confirming control** and name that control in the evidence
-  («menu → item → modal → its button»); a screenshot after **each** click, not only at the end;
+  («menu → item → modal → its button»), each click recorded in the result by what it opened (the DOM read, not a saved screenshot);
 - an empty log is admissible only **together** with proof that the last control was reached;
 - **the same rule governs an empty LIST**, which is where it is hardest to remember: a tab, a filter or a search that renders no rows
   invites controls on the *data* — the API returns the records, a neighbouring tab renders its own, a search finds the row — and every one

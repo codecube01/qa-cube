@@ -383,7 +383,7 @@ mismatch with the requirements that genuinely blocks a section) → `Major` (mis
 `session.py max-id <sessions> --prefix <prefix>`, run BEFORE the draft (after it, it finds your own fresh numbers), never taken from memory —
 it counts assignments across every report, the month archives included, not mentions. The prefixes and conventions come from the profile. **The screenshot follows the id:** in the same pass, a candidate that becomes a
 finding has its `screenshots/c<N>….png` renamed to `<ID>….png` (the round suffix stays) and its `📎` in the executor's result follows;
-the cell's *Tech.* part ends with `📎 <ID>.png` (with that suffix, `📎 <ID>-2.png`) — the bare file name, the one thing a person filing the
+a frontend finding's *Tech.* part ends with `📎 <ID>.png` (with that suffix, `📎 <ID>-2.png`; a backend finding has no screenshot and no marker) — the bare file name, the one thing a person filing the
 bug needs to pick the attachment; the checker below confirms every marker resolves to a file.
 
 **A finding's cell — the order is mandatory**, 3–5 lines and **no more than ~850 characters** (the limit is the same for a Critical and a
@@ -529,10 +529,11 @@ Retro edits:
 ``` Commit only if asked.
 
 **The last thing the session prints is the action block: `⚠️` for «I cannot close this without you», `💡` for «worth doing, safe to
-ignore».** Every line states **an action, not a problem** — «Paste the comment into <task>: the profile's tracker token is read-only», never
-«no write permission in the tracker». **`⚠️` is rare by rule — zero or one line is a normal round, two is already many** — and it is allowed
-for three things only: a deliverable only the user can land (the tracker comment where writing is not permitted), a verdict blocked on
-somebody else's decision (an analyst's call where the spec is silent), and access that must be fixed before the round can be closed.
+ignore».** Every line states **an action, not a problem** — «Ask the analyst whether <rule> applies to <finding>: the spec is silent», never
+«the spec is silent». **`⚠️` is rare by rule — zero or one line is a normal round, two is already many** — and it is allowed
+for two things only: a verdict blocked on somebody else's decision (an analyst's call where the spec is silent), and access that must be
+fixed before the round can be closed. **Routine the user performs after every round gets no line at all** — pasting the tracker comment
+where writing is not permitted, committing the engine clone: the user knows it, and a line repeated every round trains them to skip the block.
 Everything else is `💡`: the engine being behind upstream, a profile behind the contract, environment leftovers, a case candidate for the
 next round, a fixture worth creating on the environment. If everything is urgent then nothing is, and a `⚠️` that turns out to have been
 optional costs the reader's trust in every red line after it. The block appears **here and nowhere else** — with one exception that is the

@@ -64,6 +64,7 @@ The wording that keeps a row a question:
 ## Sanctioned probe (a mutation the user authorised — one block per probe; delete the section otherwise)
 
 - Probe: <the call, the object, the hostile value(s), what the permission said>
+- Who presses: <the executor — a reversible step | the user, through the pause protocol | the manager, in its own session — an IRREVERSIBLE step is never the executor's; the sanction question already said who>
 - Combining hostile values: <allowed into one artifact if each stays identifiable in the output; one failing the operation → unwind into separate probes | not allowed>
 - Unanticipated refusal: <names the cause literally → the response proves the mechanism, no control; generic → one control call with <a value known to resolve> is authorised, leaving <residue>>
 - Overshoot cap: <exceed the available amount by the smallest amount that still proves the guard is gone>
@@ -116,6 +117,6 @@ payload, a delivery log), and write the limit of confidence («confirmed in aggr
 ## Deliverable
 
 - Write to: `3-manual-result.md` (incrementally, after each scenario)
-- Mandatory: a trace id for every failure (if the project defines one — with `logs: none` there is none), severity for bugs, a screenshot in `screenshots/` for every candidate visible on screen (`📎` on its line), exact request/response evidence (the autotest is written from it), case `<TMS case>` in the «Summary» (with `test-cases: none` there are no cases — write «cases are not maintained in this project» instead of an id), the «Product findings» and «Executor retro» sections
+- Mandatory: a trace id for every failure (if the project defines one — with `logs: none` there is none), severity for bugs, one screenshot in `screenshots/` per frontend candidate and none for anything else (`📎` on its line), exact request/response evidence (the autotest is written from it), case `<TMS case>` in the «Summary» (with `test-cases: none` there are no cases — write «cases are not maintained in this project» instead of an id), the «Product findings» and «Executor retro» sections
 - With `test-cases: upfront` do not create cases. Do not edit the expected result of a case whose expectation source is `spec` — a mismatch is recorded as a defect; a case sourced from an `assumption` or the `KB` is refined against the facts. Steps and preconditions are always refined.
 - As separate lists in the result: **case corrections** (`case → was → now → why`) and **case candidates** (a scenario surfaced with no case behind it — do not create it yourself).

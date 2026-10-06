@@ -15,6 +15,8 @@ section gathers everything since the previous one.
 
 - **A wallet signature request is a human click too, free typed-data signatures included**: `manual-brief.md`
   («Your own harness refuses a call») — a page script records or refuses wallet calls, never originates them.
+- **An irreversible step the user sanctioned in chat is the user's click or the manager's call, never the executor's**:
+  `manual-brief.md` («A sanctioned mutating probe») and a «Who presses» slot in the brief's «Sanctioned probe» block.
 - **A size budget for every catalogue and agent instruction** (`check_engine_edits.py`): each is read whole, so an
   edit past its budget makes room — folds a family, merges a precedent — instead of growing; `engine-edits.md` says so.
 - **The form of a rule is chosen by what failed** (`engine-edits.md`, «Before writing»): a rule broken under pressure,
@@ -26,6 +28,14 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **Issue files are made on request only** (`report.md`): with a read-only tracker the session no longer writes
+  `issue-<ID>.md` by default nor offers them; the user asks after reading the report.
+- **The action block skips routine** (`SKILL.md`, step 8): no line for pasting the tracker comment or committing the clone; `⚠️` is
+  left for a blocked verdict and broken access.
+- **A «dead session» verdict comes from a fresh tab only** (`manual-brief.md`, preflight): an identity call from a tab left over
+  from an earlier round can answer `401` while the session is alive.
+- **One screenshot per frontend candidate, nothing else saved** (`qa-manual`, the brief template, `manual-brief.md`); a backend
+  finding's cell carries no `📎` marker (`SKILL.md`, step 6).
 - **The pause protocol is a section of the brief template**, not a catalogue entry: `templates/2-manual-task.md` carries the
   request line's fields and what the executor does after the pause; the `manual-brief.md` entry keeps the manager's half and
   the precedents.
