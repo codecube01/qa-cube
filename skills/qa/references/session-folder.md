@@ -22,6 +22,7 @@ a way the folder has already been broken once, and the precedent that closes it 
 - date the round's trigger before anything else
 - a round whose trigger is the requirements arriving, not a fix — and which therefore launches nobody
 - renaming brings the whole name to the convention, not just the date
+- every file of the round is named by the script, one call per file
 - what the executor's brief carries over is the line-by-line verdict, not the gist
 - re-launch the analyst only when the input changed
 - the previous session is a single file in the root
@@ -71,6 +72,15 @@ search that every round's step 2 starts with: a grep for the task id across fold
 acquired a spec task two months in; round 2 renamed the folder by date alone, and the customer caught the missing id.
 
 Read all the previous files before planning the round — plan, results, report, retro — and apply their lessons immediately.
+
+### Every file of the round is named by the script, one call per file
+
+Each file the round creates gets its name from `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/session.py" next-file <folder>
+<role> <round>`, run at the moment that file is created — not once for the round, and not by reading the scheme's example. The
+script takes the next free number from the folder as it stands, so three calls in a row give three numbers; one call reused gives
+one number three times. `check_session.py` over the folder refuses two files on one number. Precedent: a second round wrote its
+plan, its brief and its result as `8-plan-2.md`, `8-manual-task-2.md`, `8-manual-result-2.md` — the script was installed and named
+in the skill, and was never called.
 
 ### A round whose trigger is the REQUIREMENTS arriving, not a fix — and which therefore launches nobody
 

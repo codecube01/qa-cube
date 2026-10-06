@@ -226,7 +226,7 @@ class ScreenshotTest(unittest.TestCase):
         self.assertEqual(self.shots("📎 c1.jpg\n"), [])
 
     def test_a_small_zoom_is_quiet(self):
-        """A `zoom` is a PNG at one pixel per CSS pixel — narrow, and readable."""
+        """A `zoom` is a lossless PNG of a region — narrow, and readable."""
         self.put("c1.png", self.png(314))
         self.assertEqual(self.shots("📎 c1.png\n"), [])
 
@@ -283,6 +283,36 @@ class DriverTest(unittest.TestCase):
         result = self.write("3-manual-result.md", "# Result\n\n## Scenarios\n")
         self.assertTrue(check_session.check_file(result, 850, 3))
         self.assertEqual(check_session.check_file(result, 850, 0), [])
+
+
+class FolderNumberingTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self._tmp.name)
+        self.addCleanup(self._tmp.cleanup)
+        for name in ("0-session.md", "1-plan.md", "2-manual-task.md", "3-manual-result.md", "7-retro.md", "99-report.md"):
+            (self.dir / name).write_text("# x\n", encoding="utf-8")
+
+    def test_a_round_that_counted_by_hand_is_caught(self):
+        for name in ("8-plan-2.md", "8-manual-task-2.md", "8-manual-result-2.md"):
+            (self.dir / name).write_text("# x\n", encoding="utf-8")
+        found = check_session.scan_folder(self.dir)
+        self.assertEqual(len(found), 1)
+        self.assertIn("share the number 8", found[0])
+        self.assertIn("next-file", found[0])
+
+    def test_a_round_numbered_by_the_script_is_quiet(self):
+        for name in ("8-plan-2.md", "9-manual-task-2.md", "10-manual-result-2.md"):
+            (self.dir / name).write_text("# x\n", encoding="utf-8")
+        self.assertEqual(check_session.scan_folder(self.dir), [])
+
+    def test_the_meta_file_and_the_report_sit_outside_the_numbering(self):
+        self.assertEqual(check_session.scan_folder(self.dir), [])
+
+    def test_screenshots_and_issue_files_are_not_numbered_files(self):
+        (self.dir / "screenshots").mkdir()
+        (self.dir / "issue-B12.md").write_text("# x\n", encoding="utf-8")
+        self.assertEqual(check_session.scan_folder(self.dir), [])
 
 
 class EngineFilesTest(unittest.TestCase):

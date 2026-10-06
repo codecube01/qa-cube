@@ -26,6 +26,11 @@ section gathers everything since the previous one.
   every report, `sweep` archives past months' folders, rewrites their links and checks every session path resolves
   (`links` on its own); SKILL.md step 2 and the ID numbering call it instead of counting by hand.
 
+- **Two files of a session folder on one number** are refused by `check_session.py` over the folder; round-2+ names come from
+  `session.py next-file`, one call per file (`SKILL.md` step 2, `session-folder.md` «Continuing a session»).
+- **The read channel for a sanctioned probe's effect is a question of the sanction** (`manual-brief.md`, «A sanctioned mutating
+  probe», now eight questions; a «Read channel» slot in the brief template).
+
 ### Changed
 
 - **Issue files are made on request only** (`report.md`): with a read-only tracker the session no longer writes

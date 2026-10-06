@@ -177,7 +177,8 @@ Then check whether a session for this task (and for the related ones) already ex
 
 - **A session existed** → this is a new round in **the same folder**: the folder is renamed to the current date (out of a month archive it
   returns to the root of `<sessions>/`), the round's new files **continue the folder's running numbering** with a round-number suffix
-  (`8-manual-task-2.md`, `9-manual-result-2.md`, …), the report is not created anew — the same `99-report.md` is updated with a mandatory
+  (`8-manual-task-2.md`, `9-manual-result-2.md`, … — **each name from `session.py next-file <folder> <role> <round>`, called once per
+  file at the moment of its creation**, never counted by hand: a round that counted named three files `8-…`), the report is not created anew — the same `99-report.md` is updated with a mandatory
   comparison against the previous round — and task comments that appeared since the last round are appended to the «Raw source» section of
   `0-session.md`. **Read `references/session-folder.md`, section «Continuing a session», before the round's first move**: dating the round's
   trigger, what the rename must bring to the convention besides the date, what the executor's brief carries over from the previous round,

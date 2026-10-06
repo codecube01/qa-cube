@@ -64,6 +64,7 @@ The wording that keeps a row a question:
 ## Sanctioned probe (a mutation the user authorised — one block per probe; delete the section otherwise)
 
 - Probe: <the call, the object, the hostile value(s), what the permission said>
+- Read channel for the effect: <alive, proven by <a read the manager took at planning> — a probe whose oracle recon already showed dead is not sanctioned; it is deferred with its carrier recorded>
 - Who presses: <the executor — a reversible step | the user, through the pause protocol | the manager, in its own session — an IRREVERSIBLE step is never the executor's; the sanction question already said who>
 - Combining hostile values: <allowed into one artifact if each stays identifiable in the output; one failing the operation → unwind into separate probes | not allowed>
 - Unanticipated refusal: <names the cause literally → the response proves the mechanism, no control; generic → one control call with <a value known to resolve> is authorised, leaving <residue>>

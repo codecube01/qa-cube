@@ -50,7 +50,7 @@ entry, so a family is read whole or not at all.
 
 - **What you have not checked yourself is handed over as a question** — the template's «Open hypotheses» table · a claim about the environment · a doubt about an instrument · a seeding route · a link between two records joined by time, not by id · a hypothesis about the shape of the fix · the fixer's correction to your previous round's description · a hypothesis nothing outside the product can settle · a list of expected outcomes
 
-- **A sanctioned mutating probe: what the permission must also say** — the template's «Sanctioned probe» block · who presses an irreversible step · may the hostile values be combined · an unanticipated refusal and the control call · capping the overshoot · a reverse already known to be missing · the budget's unit is the property, not the round · a background process the accepted probe starts
+- **A sanctioned mutating probe: what the permission must also say** — the template's «Sanctioned probe» block · is the read channel for the effect alive · who presses an irreversible step · may the hostile values be combined · an unanticipated refusal and the control call · capping the overshoot · a reverse already known to be missing · the budget's unit is the property, not the round · a background process the accepted probe starts
 
 - **What a recon fact may claim** — a row of the template's «Recon facts» table · a value, not a retelling · an endpoint verified by one probe, or marked unverified · dated, with the boundary of the sample — state, counts, a mechanism dated by the build, a negative · contract values are fact, composition is a hypothesis · a field-name oracle · a minified excerpt and its lower bound · an identifier scheme · a client query document: names only
 
@@ -455,9 +455,16 @@ wording per shape; this section keeps what each shape cost.
 ### A sanctioned mutating probe: what the permission must also say
 
 **A probe is authorised as one call, and the template's «Sanctioned probe» block answers in advance everything the executor would
-otherwise decide alone, mid-probe, with the mutation already half-performed.** Seven questions recur; each costs a line to fill in and an
+otherwise decide alone, mid-probe, with the mutation already half-performed.** Eight questions recur; each costs a line to fill in and an
 unbudgeted artifact — or the round's sharpest measurement — to omit. The block states the rule per question; this section keeps what
 each one cost.
+
+- **Is the READ channel for the effect alive — before the sanction is asked for?** The rule itself lives under «The observation
+  channel» (a dead READ channel plus an irreversible action — preserve the carrier); the block's slot is where it is decided, because a
+  sanction is requested at planning, and an irreversible expendable asked for under a scenario whose oracle recon has already shown dead
+  is spent on nothing. Precedent: a round asked the user for two irreversible records, one of them for a positive «added → visible in the
+  card» whose read channel the recon and a developer's comment had already shown to be missing; the probe was cancelled mid-pause, after
+  the user had been asked.
 
 - **WHO PRESSES an irreversible step?** A step the user sanctioned in chat that cannot be undone — a permanent record, a non-deletable
   artifact — is decided at slicing as the user's click or the manager's own call, never left to the executor. The sanction exists only as

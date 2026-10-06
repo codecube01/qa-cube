@@ -5,7 +5,7 @@
     check_session.py <sessions>/2026-09-14_acme-412-coupon/          # the whole folder
     check_session.py --max-cell 850 --min-sections 3 <file> …
 
-Four rules the engine states in prose and, until now, asked an agent to honour by eye:
+Five rules the engine states in prose and, until now, asked an agent to honour by eye:
 
 - **no secret value goes into a session file.** The rule is repeated in four instructions because an
   instruction is the only thing that ever enforced it — and session folders are committed into the
@@ -23,6 +23,10 @@ Four rules the engine states in prose and, until now, asked an agent to honour b
   plain screenshot as a JPEG shrunk to its image budget, and with a `scale` below 1 the captions in it
   are a few pixels tall — a JPEG under `MIN_SHOT_WIDTH` is that, and an extension that lies about the
   format is caught on the way.
+- **no two files of a session folder share a number.** The numbering runs across the folder and is
+  never reset, and round 2+ takes its names from `session.py next-file`; a round that counted by
+  hand named three files `8-…` once, and the folder's order of work was gone with it. Checked only
+  when the target is a folder; `0-session.md` and `99-report.md` sit outside the numbering.
 
 Exit code 0 when nothing was found, 1 when something was. Every problem is printed as
 `file:line: what`, so the output pastes straight into a result file.
@@ -188,8 +192,8 @@ def scan_tables(lines: list[str], max_cell: int) -> list[tuple[int, str]]:
 SCREENSHOT = re.compile(r"📎\s*`?([\w.-]+\.(?:png|jpe?g|webp))`?", re.I)
 
 # A plain screenshot at `scale` 1 of a desktop viewport comes back 1200+ px wide; the ones taken at
-# 0.5–0.7 came back 600–870, and their captions could not be read. A `zoom` is a PNG at one pixel per
-# CSS pixel and is readable at any size, so only a JPEG is held to the width. Precedent: a round that
+# 0.5–0.7 came back 600–870, and their captions could not be read. A `zoom` is a lossless PNG at the
+# display's pixel ratio (one or more pixels per CSS pixel) and is readable at any size, so only a JPEG is held to the width. Precedent: a round that
 # switched to `scale` 0.5 against a tiled render kept it for every saved screenshot.
 MIN_SHOT_WIDTH = 1000
 
@@ -248,7 +252,7 @@ def scan_screenshots(lines: list[str], folder: Path) -> list[tuple[int, str]]:
             if fmt == "jpeg" and 0 < width < MIN_SHOT_WIDTH:
                 out.append(
                     (n, f"`{name}` is a JPEG {width} px wide — a screenshot shrunk past reading (a `scale` "
-                        f"below 1); retake it as a `zoom` of the region with `save_to_disk` (a PNG, 1:1)")
+                        f"below 1); retake it as a `zoom` of the region with `save_to_disk` (a lossless PNG)")
                 )
     return out
 
@@ -293,6 +297,22 @@ def check_file(path: Path, max_cell: int, min_sections: int) -> list[str]:
     return [f"{path}:{n}: {message}" for n, message in sorted(problems)]
 
 
+NUMBERED = re.compile(r"^(\d+)-.+\.md$")
+OUTSIDE_NUMBERING = {0, 99}
+
+
+def scan_folder(folder: Path) -> list[str]:
+    """Two files of one session folder carrying the same number."""
+    by_number: dict[int, list[str]] = {}
+    for p in sorted(folder.iterdir()):
+        m = NUMBERED.match(p.name)
+        if m and p.is_file() and int(m.group(1)) not in OUTSIDE_NUMBERING:
+            by_number.setdefault(int(m.group(1)), []).append(p.name)
+    return [f"{folder}: files {', '.join(names)} share the number {n} — the numbering runs across the "
+            f"folder; name round-2+ files with `session.py next-file`, one call per file"
+            for n, names in sorted(by_number.items()) if len(names) > 1]
+
+
 def collect(targets: list[str]) -> list[Path]:
     out: list[Path] = []
     for target in targets:
@@ -320,6 +340,9 @@ def main() -> int:
         return 0
 
     problems: list[str] = []
+    for target in args.targets:
+        if Path(target).expanduser().is_dir():
+            problems.extend(scan_folder(Path(target).expanduser()))
     for path in files:
         problems.extend(check_file(path, args.max_cell, 0 if args.no_structure else args.min_sections))
 
