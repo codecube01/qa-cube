@@ -26,9 +26,9 @@ entry, so a family is read whole or not at all.
 - preflight finds the environment in the WRONG state — is that state itself one of the scenarios?
 - the scenarios are about an entity's states — is there an instance of each state on the environment
 - the order of the scenarios is the order of what dies with the access — the «Session-bound» column: the batch capture first, the reading list split the same way; a bulk source dumped once
-- the waits in the brief exceed an hour — say whether isolated environments may run in parallel
-- a hypothesis about flakiness or survivability — a control instance and the budget of expendables
-- a round about appearance in the user's own environment — settle the window and the focus at preflight
+- the waits in the brief exceed an hour — say whether isolated environments may run in parallel (the «Waits over an hour» slot)
+- a hypothesis about flakiness or survivability — the «Control instance» and «Expendables» slots, each clause of the slot paid for once
+- a round about appearance in the user's own environment — the «Window and focus» slot, settled at preflight
 - the launch comes after a WAIT on the environment — re-read the task's thread in the same breath as the launch
 
 **What goes into the brief**
@@ -41,8 +41,8 @@ entry, so a family is read whole or not at all.
 - a profile rule the executor breaks before it reaches the paragraph that states it
 - a scenario whose expectation is a RESPONSE CODE — ask for what actually happened as well
 - after negative permission probes — read the journal and check whether the refusals were recorded as events; print each refusal's text whole
-- the scenario may run into a neighboring contour with a different entry
-- the scenario needs reference values — cryptographic constants, test vectors, test addresses
+- the scenario may run into a neighbouring contour with a different entry — the «Neighbouring contour» slot
+- the scenario needs reference values — cryptographic constants, test vectors, test addresses (the «Reference values» slot)
 - a negative that needs someone else's entity — name the identifier, and verify it exists
 - a step performed «under another role» — identify the session before the target call, not after
 - a compound requirement («and») — require a third verdict, partial, with the breakdown
@@ -259,38 +259,32 @@ is what preflight does, and learns, before the brief is written.
   derivatives and full ids written to disk; a brief ordering the raw dump onto disk orders a download the executor will not make. The
   parsing filters are built one condition at a time: an `A and B or C` returned every event through operator precedence.
 
-- **if the waits in the brief exceed an hour** — decide and state explicitly whether observations may be spread across isolated environments
-  (browser profiles, contours) and run in parallel: «one session at a time» forbids logging in over a live session but does not forbid two
-  isolated environments, and without explicit permission the executor will choose the sequential route. Precedent: ~85 minutes of nearly
-  pure waiting where two observations could have run in parallel;
+- **if the waits in the brief exceed an hour** — the «Waits over an hour» slot says whether observations may be spread across isolated
+  environments and run in parallel: «one session at a time» forbids logging in over a live session but not two isolated environments, and
+  without explicit permission the executor chooses the sequential route. Precedent: ~85 minutes of nearly pure waiting where two
+  observations could have run in parallel;
 
-- **a hypothesis about survivability, flakiness or «it breaks sometimes» requires a control instance** — prescribe it in the brief: one
-  instance (a session, an application, an account) is set up as the control and only polled rarely, and every experiment is run on a
-  **separate** instance. Otherwise the experiment spoils its own baseline and «it broke» cannot be told from the norm. In the same place,
-  **name the budget of expendables** («one instance per hypothesis, N will do») — otherwise the executor either economizes at the expense of
-  cleanliness or spends blindly. **Sanity-check the unit of the budget:** «no more than 8 activations» is meaningless if an activation is
-  precisely what does not produce an expendable operation. Precedent: activation did not create a screening — which turned out to be the
-  round's main finding, and the budget had to be recomputed on the fly. Count in what is actually spent, and allow the executor to recompute
-  against the facts. Precedent: a non-deterministic session loss could only be described after the executor assembled a long-lived control
-  session on the fly — ~15 minutes and three burned instances. **Compute the budget as «the minimum per scenario + 1 for the control of an outcome the plan did not foresee + 1 for an environment
-  transient»**: in one session a budget of «2 + 1 spare» came out at exactly zero, and had the last expendable burned on a browser-extension
-  transient, the last scenario would have gone uncovered. Precedent for the middle term: a challenge budget of five was spent exactly as planned, the one outcome nobody had foreseen then needed a control, and the executor took it as a sixth, over budget. **Count the RESTORATION as a mutation too** — a probe that leaves the fixture in a
-  junk state is followed by a call that puts it back, and that call spends the same budget; a brief that counts only the probes runs out one
-  short of the round. Precedent: a budget of six risk-level changes closed at exactly six only because the last negative probe happened to
-  return the fixture to a sensible value on its way;
+- **a hypothesis about survivability, flakiness or «it breaks sometimes» requires a control instance, and every expendable has a number —
+  the «Control instance» and «Expendables» slots.** Without a control polled rarely, the experiment spoils its own baseline and «it broke»
+  cannot be told from the norm: a non-deterministic session loss could only be described after the executor assembled a long-lived control
+  session on the fly — ~15 minutes and three burned instances. Without a number the executor either economises at the expense of
+  cleanliness or spends blindly, and each clause of the slot was paid for once: the unit — «no more than 8 activations» was meaningless
+  because activation did not create a screening, which turned out to be the round's main finding; the control term — a challenge budget of
+  five was spent exactly as planned, the one outcome nobody had foreseen then needed a control, and the executor took it as a sixth, over
+  budget; the transient term — a budget of «2 + 1 spare» came out at exactly zero, and had the last expendable burned on a browser-extension
+  transient, the last scenario would have gone uncovered; the restoration — a budget of six risk-level changes closed at exactly six only
+  because the last negative probe happened to return the fixture to a sensible value on its way;
 
-- **On a round about APPEARANCE, «may the executor resize the window and take the focus» is a load-bearing condition of the whole round —
-  settle it with the user at preflight, before the scenarios are sliced.** The shape: the user shares the environment the round observes
-  through (their own working browser, desktop, terminal), and the scenarios that measure layout are built on changing its geometry. Ask it
-  early and the round is sliced correctly; ask it late — or never — and the restriction arrives as a scope correction **after** the action has
-  been performed, which is the expensive order: the measurements are already taken, the time is already spent, and the scenario they served
-  is struck out. Two riders on the phrasing. The request to the user is not «keep the window in front» but **«do not work in this environment
-  for the duration of the round»** — otherwise the executor and the user fight over the focus, and every observation the executor takes while
-  losing that fight is void. And the ban on **taking** the focus programmatically belongs in the brief from the start, with what to do
-  instead (record the degraded channel, switch to the non-interactive part, re-check later, escalate) — an executor who discovers a working
-  way to raise the window will use it, and it is the user's attention that pays. Precedent: both corrections («stop resizing», «do not force
-  the focus») arrived mid-round after the corresponding action; the round's whole width-threshold scenario was struck out with its
-  measurements already spent, while the parts the executor could have closed instead stayed uncovered.
+- **On a round about APPEARANCE, «may the executor resize the window and take the focus» is a load-bearing condition of the whole round
+  — the «Window and focus» slot, settled with the user at preflight, before the scenarios are sliced.** The user shares the environment the
+  round observes through, and the scenarios that measure layout are built on changing its geometry; asked late, the restriction arrives as a
+  scope correction AFTER the action, with the measurements already taken and the scenario struck out. The request to the user is «do not
+  work in this environment for the duration of the round», not «keep the window in front» — otherwise the executor and the user fight over
+  the focus and every observation taken while losing that fight is void; and the ban on taking the focus programmatically goes into the
+  brief from the start, with what to do instead, because an executor who discovers a working way to raise the window will use it, and the
+  user's attention pays. Precedent: both corrections («stop resizing», «do not force the focus») arrived mid-round after the corresponding
+  action; the whole width-threshold scenario was struck out with its measurements spent, while the parts the executor could have closed
+  instead stayed uncovered.
 
 - **When the launch comes after a WAIT on the environment, the task's comment thread is re-read in the same breath as the launch** —
   the «Requirements read as of» slot carries the timestamp that makes the gap visible. The team fixes the environment and writes about it
@@ -369,17 +363,17 @@ is what preflight does, and learns, before the brief is written.
   because servers enumerate the roles they would have accepted: one refusal proved that the holder of an unrecognised role had fewer
   rights than a guest, which the schema could not have shown.
 
-- **If a scenario may run into a neighboring contour with a different entry** (another environment, another account, entry by the user's own
-  hand, a closed network) — **write in the brief in advance what to do**: request access through the manager (and what exactly to ask for,
-  in one phrase) or record an open question and move on. Without that line the executor decides for themselves and usually leaves the
-  finding unproven in silence, so as not to spend the user's round. Precedent: a key finding (the admin panel shows a third of the
-  organization's funds) ran into one request to a neighboring environment behind basic auth and stayed hedged — while one entry agreed in
-  advance would have closed it in the same round;
+- **If a scenario may run into a neighbouring contour with a different entry** (another environment, another account, entry by the user's
+  own hand, a closed network) — the «Neighbouring contour» slot says in advance what to do: ask through the manager, and what exactly, in
+  one phrase, or record an open question and move on. Without it the executor decides alone and usually leaves the finding unproven in
+  silence, so as not to spend the user's round. Precedent: a key finding (the admin panel shows a third of the organisation's funds) ran
+  into one request to a neighbouring environment behind basic auth and stayed hedged — one entry agreed in advance would have closed it
+  in the same round;
 
-- **if a scenario needs reference values (cryptographic constants, test vectors, test addresses), explicitly allow taking them from public
-  sources with a note on where from** — otherwise the executor spends time on the doubt «doesn't this count as inventing evidence» and may
-  give no values at all, devaluing the retest protocol. The phrasing «take them from public sources per <standard> and cite the source» is
-  unambiguous; «if you can write them out» is not;
+- **if a scenario needs reference values (cryptographic constants, test vectors, test addresses)** — the «Reference values» slot allows
+  taking them from public sources with the source cited; otherwise the executor spends time on the doubt «doesn't this count as inventing
+  evidence» and may give no values at all, devaluing the retest protocol. «Take them from public sources per <standard> and cite the
+  source» is unambiguous; «if you can write them out» is not;
 
 - **A negative that needs an entity belonging to someone else carries a concrete identifier in the «Fixture» column — found and
   verified by you, not «take one from the knowledge base».** Refusals of the kind «this address / account / document already belongs to
@@ -869,21 +863,14 @@ withdrawn, its id burned, and every derived artifact had to be edited.
 
 ## When the brief caps an amount, state the platform's fee next to the cap
 
-A cap agreed with the customer («small amounts only, 1–10 of the unit») can be arithmetically
-unreachable on the platform the round runs on: if the assigned fee exceeds the cap, every
-attempt dies on «fees exceed amount» and the scenario is unrunnable. The executor discovers
-this only after measuring, and the instruction handed to the human has to be rewritten with a
-different number.
+The «Amount cap» slot carries the fee, or the minimum viable amount, beside the cap — the two checked against each other while planning —
+because a cap agreed with the customer («small amounts only, 1–10 of the unit») can be arithmetically unreachable on the platform the round runs on: if the fee exceeds the cap, every
+attempt dies on «fees exceed amount», the executor discovers it only after measuring, and the instruction handed to the human has to be
+rewritten with a different number. The same holds for any precondition expressed as a limit — a balance, a quota, a remaining allowance.
 
-So: name the fee (or the minimum viable amount) beside the cap in the brief, and check the two
-against each other while planning. Same for any other precondition expressed as a limit —
-balance, quota, remaining allowance.
-
-And where the operation costs something irreversible **before** the platform refuses it — a
-signature, gas, a consumed one-time token — the refusal arrives after the cost is paid, so an
-unreachable cap is not merely an unrunnable scenario but a wasted irreversible act. There the
-brief stops naming a figure at all and prescribes the measurement: «measure the fee across a few
-amounts, take the smallest one that leaves a positive result, and record it». Precedent: a brief
-named the minimum unit as the amount to sign; at that amount the fee exceeded the sum, so the
-signature and the gas would have been spent and only then refused — the executor measured five
-points, found the real minimum and signed once, correctly.
+And where the operation costs something irreversible **before** the platform refuses it — a signature, gas, a consumed one-time token —
+the refusal arrives after the cost is paid, so an unreachable cap is a wasted irreversible act, not merely an unrunnable scenario. There
+the slot names no figure and prescribes the measurement: «measure the fee across a few amounts, take the smallest one that leaves a
+positive result, and record it». Precedent: a brief named the minimum unit as the amount to sign; at that amount the fee exceeded the sum,
+so the signature and the gas would have been spent and only then refused — the executor measured five points, found the real minimum
+and signed once, correctly.

@@ -50,6 +50,10 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **The round's budgets and limits are a section of the brief template**: expendables by the formula, the control instance, parallel
+  waits, the amount cap with the fee beside it, the neighbouring contour, reference values, window and focus; five `manual-brief.md`
+  entries and the cap section are rewritten around the slots.
+
 - **The scenario table of the brief template has its columns and its mandatory rows**: expected effect with its channel, fixture as a
   selection criterion, acting identity, session-bound, closable alone, disarm after; scenario 0 is the refuting check, the last row reads
   the journal after the negatives; ten `manual-brief.md` entries are rewritten around them into nine (the unstable-access entry

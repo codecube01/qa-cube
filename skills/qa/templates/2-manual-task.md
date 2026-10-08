@@ -122,6 +122,26 @@ The wording that keeps a row a question:
 - Budget unit: <one pair of mutations per PROPERTY to be shown, on the same object, each reversed before the next; restorations count>
 - A process the probe starts: <not terminated by you — record its id, state and attempt count at the end of the round; the report hands the decision to the team>
 
+## Budget & limits (delete a line that does not apply)
+
+- Expendables (the instances the round burns — sessions, accounts, one-time artifacts; a sanctioned probe's mutation budget is its
+  «Budget unit» line above): <N = the minimum per scenario + 1 for the control of an outcome the plan did not foresee + 1 for an environment transient;
+  the unit is what is actually spent (not «activations» if an activation spends nothing); a restoration spends the same budget; recompute
+  against the facts and say so in the result>
+- Control instance: <the one session / application / account set up as the control and only polled rarely — every experiment runs on a
+  separate instance>
+- Waits over an hour: <observations may run in parallel on isolated environments (profiles, contours): yes / no — «one session at a time»
+  forbids a login over a live session, not two isolated environments>
+- Amount cap: <the cap, with the platform's fee or the minimum viable amount beside it; where the cost is paid BEFORE the refusal (a
+  signature, gas, a one-time token) — no figure: «measure the fee across a few amounts, take the smallest that leaves a positive result,
+  record it»>
+- Neighbouring contour (another environment, account, closed network): <ask through the manager for <one phrase> | record an open question
+  and move on>
+- Reference values (cryptographic constants, test vectors, test addresses): <take them from public sources per <standard>, cite the source>
+- Window and focus (an appearance round, the user's own environment): <resizing allowed: yes / no; the focus is never taken
+  programmatically — record the degraded channel, switch to the non-interactive part, re-check later, escalate; the user does not work in this
+  environment until the round ends>
+
 ## What to read (targeted, not everything)
 
 - <profile subfiles this task needs: e.g. `.claude/qa-profile/auth-and-api.md` §1, §3>
