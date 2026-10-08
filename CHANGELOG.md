@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **A mock-up board is read through its structure** (`browser-techniques.md`, «Design mock-ups»): frame captions sit in
+  neighbouring title frames and are matched by coordinates; text layers' names are their text, so no code-generation call is needed.
 - **An automation price includes the host class's fixed cost**: `SKILL.md` step 5 — provisioning, per-test hooks and
   stabilising reads, read off a neighbouring test's run log.
 - **A launch after a wait on the environment re-reads the comment thread first**: `manual-brief.md` («Preflight and
