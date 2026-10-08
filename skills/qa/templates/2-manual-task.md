@@ -14,6 +14,23 @@
 - Documentation: <paths in the project knowledge base relevant to the task>
 - QA findings: <paths to findings from past sessions, if the section has any>
 
+## Entry state (as of <HH:MM, date> — a dated hypothesis, not a fact: work from the actual state, with a note in the result)
+
+- Instance / profile id: <the id of the browser profile, instance or device — never its caption, never a tab id; «if the tool moves you
+  elsewhere, select this id back»>
+- Identity oracle: <the call that answers who is logged in>; a «dead» verdict is believed only from a FRESH tab — new tab → navigate → the call
+- Who is logged in: <account · organisation / tenant · role> — your first move is to open your own tab and check WHOSE session this is, not
+  whether one is alive: a live session under someone else's role turns its refusals into «the result of a permissions check»
+- Role for this round's operations: <the role the operations need — permissions differ between roles that log in identically, and the wrong
+  one costs the one-time artifact>
+- Carriers: <browser session: who, as of when · scripted session (cookie jar / token file): who, as of when — independent: one's liveness
+  proves nothing about the other; where the scripted one dies faster, re-enter it right before a script run>
+- On a refusal: <ONE environment pinned — stop and the pause protocol, no probing elsewhere | sweep the candidates with the identity oracle,
+  most-recently-connected first, the interactive handshake last>
+- Values the round depends on: <the accounts, the path, the flag — pasted here, not «in the file»; a claim about a file's or a config's
+  contents is made after reading it, never from the copy already in context>
+- Requirements read as of: <the timestamp of the last comment read — a launch that comes after a wait on the environment re-reads the thread first>
+
 ## Retest (round 2+ — delete the section on a first round)
 
 - Build fingerprint: <how it is read — the bundle hash, the deploy ref, the image version; taken FIRST, repeated as the LAST action, and again

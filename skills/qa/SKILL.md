@@ -272,8 +272,8 @@ round, the executor mid-run, accepting the result), each with the line that cost
 an executor is briefed once, and a situation you did not foresee cannot be added to the brief afterwards.
 - **the preflight check** — if the scenarios involve the browser (frontend tasks, UI verification): **before** launching the executor,
   verify the access yourself against the profile's checklist (Browser section). Something does not work — **tell the user right away** and
-  do not launch the executor until the access is fixed. What preflight must hand over about the state it created — its owner, the time it
-  was true, the identity for the executor to check before anything else — is in `references/manual-brief.md`;
+  do not launch the executor until the access is fixed. What preflight hands over about the state it created — the instance, the identity, the carriers, the values
+  the round depends on, each dated — is the template's «Entry state» section; what each of its lines cost is in `references/manual-brief.md`;
 - `2-manual-task.md`: the context in one paragraph, the environment, in round 2+ the template's «Retest» section filled in (the
   fingerprint, the fix's scope, the previous round's verdicts line by line), the scenarios with their expected effects, where to write the
   result, and **the targeted reading list**: which profile subfiles and knowledge-base files (and, where needed, which of their sections) are

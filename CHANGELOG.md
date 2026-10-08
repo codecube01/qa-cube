@@ -50,6 +50,10 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **The entry into the environment is an «Entry state» section of the brief template** — the instance id, the identity oracle, whose
+  session, the role, the carriers, what to do on a refusal, the values the round depends on, when the requirements were last read; seven
+  preflight entries of `manual-brief.md` are rewritten around it, `qa-manual.md` and `SKILL.md` step 4 point at it.
+
 - **A round-2 rename rewrites the links to the old folder name** (`session-folder.md`, «Renaming brings the whole name
   to the convention»): grep the repository for the old name, a sibling session's files included, then `session.py links`.
 

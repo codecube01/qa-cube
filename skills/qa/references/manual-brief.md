@@ -13,10 +13,10 @@ entry, so a family is read whole or not at all.
 **Preflight and access**
 
 - an access the project issues from inside the product — the manager issues it themselves
-- what preflight must hand over about the state it created: the owner, the time, the identity to check
-- a config edit made in the same session does not reach the executor's context — restate the value in the brief
+- what preflight must hand over about the state it created: the owner, the time, the identity to check — the «Entry state» section
+- a config edit made in the same session does not reach the executor's context — the value goes into «Values the round depends on»
 - an adjacent system with short-lived access — hand over its entity IDs, not only their state (a «Recon facts» row)
-- the name you gave an environment may never reach the executor's listing — the address is a PROBE, not a name
+- the name you gave an environment may never reach the executor's listing — the address is an id, or a PROBE; where the user can re-enter quickly, pin ONE environment instead of sweeping
 - entering the environment needs a human — test the access with the session's FIRST call, before reading anything; a «dead» verdict is taken from a fresh tab only
 - each entry spends a one-time artifact — choose the role and probe the existing session first; a scripted and a browser session are independent carriers
 - preflight opens the round's target screen, not just the session — a self-explained observation is a candidate finding
@@ -99,6 +99,10 @@ entry, so a family is read whole or not at all.
 
 ## Preflight and access
 
+**What preflight establishes about the entry — the instance, the identity, the carriers, the values the round depends on — goes into the
+brief as the template's «Entry state» section, dated; the entries below keep what each of its lines cost.** Everything else in this section
+is what preflight does, and learns, before the brief is written.
+
 - **access that is issued from inside the product, the manager obtains themselves during preflight.** An API key, a service token, a test
   tenant are often created by a regular operation of the product itself (a «create key» mutation, an admin panel) — and «we have no keys»
   turns out not to be a blocker but an unperformed step. Before declaring a contour unverifiable, ask the user how the key is issued and
@@ -106,35 +110,24 @@ entry, so a family is read whole or not at all.
   executor gets **a contour that does not depend on a short session** (in one session the REST part of the run would have survived any
   disconnect, and five findings were proven by the single fact that an operation was missing, without a single mutating call);
 
-- **Describe a blank created by preflight together with its owner, not just with its state** — «a payment in the right status» without
-  «whose it is» gets taken on faith by the executor, who discovers the substitution only by accident. Precedent: one of the two blanks
-  belonged to a different client organisation and could not produce the observable effect — caught only because the executor printed the composite key
-  in full. A state declared by preflight is, for the executor, **a timestamped hypothesis, not a fact**: write it as «as of HH:MM it was …»,
-  and explicitly allow them to work from the actual state, with a note in the result, if it has diverged. A shared environment lives its own
-  life: in one retest round the browser profile that the manager declared to be a live session of the required account was holding a stray
-  session of another company — the executor caught that with an identity check and recreated the session themselves. Record the state
-  created by preflight in `2-manual-task.md` as **the entry fact and the state of the environment** (who is logged in, what confirms the
-  session is alive, at what time), and **not as a tab/window id**: the executor has their own isolated tab group and cannot reach someone
-  else's identifier — only the browser profile's session is ever shared. Instruct the executor explicitly to open their own tab and check,
-  first thing, **not whether the session is alive but whose identity it is**: which account and which organization they landed in. A live
-  session under someone else's role looks like a working one and silently turns its refusals into «the result of a permissions check».
-  Precedent: a new tab opened in a different browser profile under a stray account, and its «Access denied» nearly went into the report as
-  confirmation of the access matrix. If the browser profile has a device/profile id — name it in the brief **as the only address, and say
-  explicitly that the display name is not one**: profile labels are user-editable and get reshuffled, so a
-  brief (or a project profile) that identifies the allowed environment by its caption eventually points at the
-  wrong one. Precedent: the label of a known-good profile migrated onto the profile the environment blocks —
-  a brief naming ids caught it, a brief naming captions would have sent the executor straight into the block;
+- **A state created by preflight is described with its OWNER and its time, and the executor's first move is to check WHOSE session they
+  are in — not whether one is alive.** «A payment in the right status» without «whose» is taken on faith, and a shared environment lives
+  its own life: one of two blanks belonged to a different client organisation and could not produce the observable effect — caught only
+  because the executor printed the composite key in full; a browser profile declared to hold the required account was holding a stray
+  session of another company, caught by the executor's identity check. The entry is written as «as of HH:MM it was …» and the executor
+  is allowed to work from the actual state, with a note. A live session under someone else's role looks like a working one and turns its
+  refusals into «the result of a permissions check» — a new tab under a stray account nearly put its «Access denied» into the report as
+  confirmation of the access matrix. The address is the profile's id, never a tab or window id (the executor's tab group is its own) and
+  never a caption: labels are user-editable and get reshuffled, and the label of a known-good profile once migrated onto the profile the
+  environment blocks — a brief naming ids caught it, a brief naming captions would have sent the executor straight into the block.
 
-- **An edit you make to a project config file in the same session does not reliably reach the executor's context — restate the value in the
-  brief itself.** The manager fixes the blocker before launching (adds the round's fixture identities to the file the environment's
-  allow-list lives in, corrects a path, flips a setting) and treats it as done, because the file on disk is right. The executor, however, is
-  handed its own snapshot of that file at launch, and a snapshot taken from the session's cache can predate an edit made minutes earlier —
-  so it reads the old copy, concludes the precondition is missing and escalates a blocker that no longer exists. Nothing in the result looks
-  wrong; the round simply stops. Two lines close it, and the second one belongs in every brief: paste the values the round depends on into
-  the brief (the accounts, the path, the flag), and require that **any claim about a file's or a config's contents be made after reading it,
-  never from the copy already in context**. The same rule protects the manager, whose own context is equally stale. Precedent: three fixture
-  identities were added to the project's allow-list before the launch; the executor's copy predated the edit, it reported «none of these
-  accounts are permitted», and half a round was spent idle before one `grep` settled it.
+- **An edit you make to a project config file in the same session does not reliably reach the executor's context — the values go
+  into the brief («Values the round depends on»).** The executor is handed its own snapshot of the file at launch, and a snapshot from the
+  session's cache can predate an edit made minutes earlier: it reads the old copy, concludes the precondition is missing and escalates a
+  blocker that no longer exists, with nothing in the result looking wrong. The second line of the slot protects the manager as well: any
+  claim about a file's contents is made after reading it, never from the copy already in context. Precedent: three fixture identities were
+  added to the project's allow-list before the launch; the executor's copy predated the edit, it reported «none of these accounts are
+  permitted», and half a round was spent idle before one `grep` settled it.
 
 - **Where a scenario reaches into an ADJACENT system whose access is short-lived, preflight hands over that system's entity IDs, not
   only their state** — a row of the «Recon facts» table, kind «ids of a short-lived contour». State is what the plan reasons about, an id
@@ -144,15 +137,43 @@ entry, so a family is read whole or not at all.
   before the executor reached that step, the machine contour answered `405` to the listing and had no name-based lookup, and the executor's
   retro asked for exactly this line.
 
-- **The name you gave an environment may never reach the executor's own listing — so the brief's address is a PROBE, not a name.** The rule one entry above says to identify a shared environment (a browser profile, an instance, a device) by its id rather than its caption, because captions are user-editable. There is a harsher case underneath it: the tooling can expose **neither** — the manager selects the environment interactively, the user names it during that handshake, and the executor's listing still comes back with nothing but generic placeholders. A brief that names the environment then points at nothing at all, and an executor forbidden to ask the user is left with two bad options: guess, or stop and wait out an interactive handshake that costs the user minutes of attention. Neither is necessary, because identity is cheap to *measure*: give the brief the liveness/identity oracle the round already uses and say to sweep the candidates with it — most-recently-connected first — creating the executor's own workspace in each and reading who answers. The right one usually answers on the first or second try, and a candidate that answers wrong leaves nothing behind. Keep the interactive handshake as the fallback for «none of them answered», not as the first move. Precedent: a manager selected the environment interactively and wrote its name into the brief as the address; the executor's listing held three indistinguishable placeholders, the probe found the right one on the first attempt, and the executor's retro proposed exactly this inversion of the fallback order.
+- **The name you gave an environment may never reach the executor's own listing — the address is an id, and where the tooling exposes
+  no id either, a PROBE.** The manager selects the environment interactively, the user names it during that handshake, and the executor's
+  listing comes back with generic placeholders; a brief naming the environment then points at nothing, and an executor forbidden to ask is
+  left to guess or to wait out a handshake that costs the user minutes. Identity is cheap to measure: the «On a refusal» slot names the
+  sweep — the identity oracle over the candidates, most-recently-connected first, the executor's own workspace created in each, so a
+  candidate that answers wrong leaves nothing behind — with the interactive handshake as the fallback for «none answered», never the
+  first move. Precedent: the executor's listing held three
+  indistinguishable placeholders; the probe found the right one on the first attempt, and the executor's retro proposed exactly this
+  inversion of the fallback order.
 
-- **The probe sweep has a cost of its own: an executor that sweeps can pin a verdict on the WRONG environment — so when the user can re-enter quickly, pin ONE environment for the task and make failure a stop, not a search.** A sweep answers «where is the live session» well only while exactly one candidate holds it; with several environments each holding a different state, the executor that lands in the wrong one after a silent tool switch reads that environment's refusal as the truth about the session and writes «dead everywhere» — in one round a live session was declared dead and a scenario closed as uncovered for exactly that reason. The inversion is the user's to choose and cheap to adopt: name one environment by its id at the start of the task, forbid probing the others, and on any refusal there the executor stops and asks for a re-entry through the pause protocol. What the brief must then carry: the chosen id as its first line, «if the tool moves you elsewhere, select this id back», and no fallback list. Precedent: after the misdiagnosed dead session, the user set exactly this rule for every following round; no round after it lost a scenario to the environment.
+- **The probe sweep has a cost of its own: an executor that sweeps can pin a verdict on the WRONG environment — so when the user can
+  re-enter quickly, the «On a refusal» slot pins ONE environment and makes failure a stop, not a search.** A sweep answers «where is the
+  live session» only while exactly one candidate holds it; with several environments in different states, an executor that lands in the
+  wrong one after a silent tool switch reads that environment's refusal as the truth and writes «dead everywhere». The choice is the
+  user's: one id as the brief's first line, «if the tool moves you elsewhere, select this id back», no fallback list, and on any refusal the
+  pause protocol. Precedent: a live session was declared dead and a scenario closed as uncovered for exactly that reason; the user set this
+  rule for every following round, and no round after it lost a scenario to the environment.
 
-- **Where entering the environment needs a HUMAN, test the access with the session's very first call — before reading the task, the spec or the knowledge base.** The natural order puts preflight after the reading, because preflight is a step of the pipeline and reading comes first in it. That order is right when access is yours to fix and wrong when it is not: a login only the user can perform costs their attention and their latency, and everything you would have read anyway can be read while they do it. One call at the top of the session — the liveness oracle the profile names — converts a dead session from a full stop in the middle of the round into a request the user is already working on while you build the plan. The cost is one call in the case where access is fine; the cost of the other order is the whole reading pass spent before the wait even starts. Precedent: a round read the task, the parent spec, the comment thread and the knowledge base, wrote the plan, and only then found the environment's session dead — the user's manual re-login was the round's longest pause, and it could have overlapped every one of those reads.
+- **Where entering the environment needs a HUMAN, test the access with the session's very first call — before reading the task, the
+  spec or the knowledge base.** A login only the user can perform costs their attention and their latency, and everything you would have
+  read anyway can be read while they do it: one call at the top of the session — the liveness oracle the profile names — turns a dead
+  session from a full stop mid-round into a request the user is already working on while you build the plan. Precedent: a round read the task, the parent spec, the comment thread
+  and the knowledge base, wrote the plan, and only then found the session dead — the manual re-login was the round's longest pause, and
+  it could have overlapped every one of those reads.
 
-  *And a «dead» answer is believed only from a FRESH navigation in a new tab — never from a tab left over from an earlier round.* A leftover tab outlives the things that made it a valid probe: the browser extension reconnects, the tab group is rebuilt, the page keeps a state from before a re-login, and the identity call from it can answer `401` while the profile's session is alive. A false «dead» costs the user a re-login they did not need, or a round held waiting. So the oracle that would ask for a human is run as «new tab → navigate to the app → identity call», and a refusal from an old tab is first repeated that way. Precedent: a round-2 oracle fired from the round-1 tab answered `401` twice in two minutes, the user was asked to log in and replied that the session was alive — a new tab in the same profile answered `200` at once.
+  *And a «dead» answer is believed only from a FRESH navigation in a new tab* (the «Identity oracle» slot says so): a leftover tab
+  outlives what made it a valid probe — the extension reconnects, the tab group is rebuilt, the page keeps a state from before a re-login
+  — and its identity call answers `401` while the profile's session is alive; a false «dead» costs the user a re-login they did not need.
+  Precedent: a round-2 oracle fired from the round-1 tab answered `401` twice in two minutes, the user was asked to log in and replied
+  that the session was alive — a new tab in the same profile answered `200` at once.
 
-- **Where each entry spends a one-time artifact (a login link, a code), the identity is chosen and the existing session probed BEFORE the artifact is spent.** Two cheap reads precede every entry: which role the round's operations actually need — permissions differ between roles that log in identically, and entering under the wrong one costs the artifact — and whether the session already on hand still answers the identity oracle. **A scripted session (a cookie jar, a token file) and a browser session are independent carriers**: either can die while the other lives, so one's liveness proves nothing about the other, and preflight hands over the identity per carrier. Where the scripted carrier dies noticeably faster, re-entering right before a script run is cheaper than diagnosing its `401`. Precedent: a round re-entered a scripted session three times while the browser session of the same contour lived for over three hours; another spent a login artifact entering under a role the operation refused.
+- **Where each entry spends a one-time artifact (a login link, a code), the identity is chosen and the existing session probed BEFORE
+  the artifact is spent** — the «Role» and «Carriers» slots. Permissions differ between roles that log in identically, and entering under
+  the wrong one costs the artifact; a scripted session (a cookie jar, a token file) and a browser session are independent carriers, so
+  one's liveness proves nothing about the other, and the identity is handed over per carrier. Precedent: a round re-entered a scripted
+  session three times while the browser session of the same contour lived for over three hours; another spent a login artifact entering
+  under a role the operation refused.
 
 - **Preflight opens the round's TARGET screen, not just the session — and an observation you explained to yourself on the spot is a
   candidate finding, not noise.** Checking that the credentials work («the identity query answers 200 under the right account») proves the
@@ -284,7 +305,14 @@ entry, so a family is read whole or not at all.
   the focus») arrived mid-round after the corresponding action; the round's whole width-threshold scenario was struck out with its
   measurements already spent, while the parts the executor could have closed instead stayed uncovered.
 
-- **When the launch comes after a WAIT on the environment, the task's comment thread is re-read in the same breath as the launch — not trusted from the reading at step 1.** The shape: preflight finds the environment unready (a fixture missing, the wrong build deployed), the round waits on the team to fix it, and the team fixes the environment and writes about it in one motion — the developer who deploys the build also posts the contract it implements, the defaults, the route the plan guessed wrong. The manager, released by the environment's own signal (a poll that sees the build, a fixture appearing), goes straight to the brief, because the requirements were read an hour earlier and nothing about the build says they moved. One read of the comments posted since that reading costs a call; missing it costs a brief built on the superseded text, and a correction sent to an executor already mid-run, where it competes with the scenarios it rewrites. Precedent: a round waited about an hour on a redeploy; the developer posted the implementation contract — the payment's only creation route, the verdict operation, a replaced requirement, a new negative — a minute before the deploy job finished, the executor was launched on the old brief, and the user had to point at the comment; the correction reached the executor before its first scenario only by luck of timing.
+- **When the launch comes after a WAIT on the environment, the task's comment thread is re-read in the same breath as the launch** —
+  the «Requirements read as of» slot carries the timestamp that makes the gap visible. The team fixes the environment and writes about it
+  in one motion: the developer who deploys the build also posts the contract it implements, the defaults, the route the plan guessed
+  wrong, while the manager, released by the environment's own signal, goes straight to the brief on text read an hour earlier. One read of
+  the comments posted since costs a call; missing it costs a brief built on superseded text and a correction competing with the scenarios
+  it rewrites. Precedent: the developer posted the implementation contract — the only creation route, the verdict operation, a replaced
+  requirement, a new negative — a minute before the deploy job finished; the executor was launched on the old brief, the user had to point
+  at the comment, and the correction reached the executor before its first scenario only by luck of timing.
 
 ## What goes into the brief
 
