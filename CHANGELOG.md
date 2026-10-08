@@ -50,6 +50,11 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **The scenario table of the brief template has its columns and its mandatory rows**: expected effect with its channel, fixture as a
+  selection criterion, acting identity, session-bound, closable alone, disarm after; scenario 0 is the refuting check, the last row reads
+  the journal after the negatives; ten `manual-brief.md` entries are rewritten around them into nine (the unstable-access entry
+  merged into the order entry).
+
 - **The entry into the environment is an «Entry state» section of the brief template** — the instance id, the identity oracle, whose
   session, the role, the carriers, what to do on a refusal, the values the round depends on, when the requirements were last read; seven
   preflight entries of `manual-brief.md` are rewritten around it, `qa-manual.md` and `SKILL.md` step 4 point at it.

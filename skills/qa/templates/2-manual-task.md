@@ -131,7 +131,7 @@ The wording that keeps a row a question:
 - <a round with API requests: `<absolute path>/skills/qa/references/api-techniques.md` — the first screen + §<the sections, «GraphQL» only for a GraphQL API>>
 - The remaining profile subfiles — only when stuck.
 - <a session that may die in minutes: split this list into «Before the session-bound steps» (only what those steps cannot be run safely
-  without) and «After them» — `manual-brief.md`, «The rule below is about the ORDER of what dies with the access»>
+  without) and «After them» — `manual-brief.md`, «The order of the scenarios is the order of what DIES WITH THE ACCESS»>
 
 ## Pause protocol (a step needs the user's own hands, or the round logs in through the browser — delete the section otherwise)
 
@@ -163,7 +163,18 @@ payload, a delivery log), and write the limit of confidence («confirmed in aggr
 
 ## Scenarios
 
-<the table from 1-plan.md with expected business effects>
+Order ≠ priority: the plan's scenarios (`1-plan.md`) in execution order — steps 0–1 first, then the non-mutating reads, then the
+mutations, on the round's own fixture only. Where the access is unstable, the «Session-bound» column overrides that: the whole
+session-bound block, its mutations included, as a batch while the session lives, the independent contour after it, the identity oracle
+before each block; and where the session may die in minutes, the reading list above is split the same way — before the session-bound
+block only what it cannot run safely without, the rest right after it.
+
+| # | Scenario | Expected effect + channel | Fixture | Acting identity | Session-bound | Closable alone | Disarm after |
+|---|---|---|---|---|---|---|---|
+| 0 | The refuting check: <the source of truth that would invalidate the round's central hypothesis — the contract file, the schema, the declared route table — read for <the fact>> | <confirmed → go on; refuted → stop, the plan is rebuilt> | — | <who, or — for a file read locally> | <yes / no> | yes | — |
+| 1 | The batch snapshot into the result file: <the contract, the population, reference numbers per filter value, samples, anchor ids; a bulk source is dumped ONCE and queried locally> | <the file holds …> | — | <who> | yes | yes | — |
+| N | <scenario> | <never a code alone: what changes and where it is seen — the record, the journal, the receiver, the log line> | <a selection criterion on the OBSERVED object, a value only as an illustration; a foreign entity: <id, verified <date>, or where to collect it in the other contour's snapshot pass>> | <role + exact account handle; «who am I» against the API under test before the target call> | yes / no | yes / depends on <the executor's own limit> | <the shared fixture — a rule, a price, a flag — disarmed the moment the decision it steers has been taken; re-armed explicitly where a later scenario needs it> |
+| N+1 | After the negatives: the journal / audit log for the run's window — <what each refusal was recorded as; each refusal's text, whole> | <nothing recorded as performed; the texts quoted> | — | <who> | <yes/no> | yes | — |
 
 ## Deliverable
 

@@ -53,21 +53,22 @@ fails (the step, the error text) and tell the manager in your final summary, bec
 
 ## 1. The check
 
-Walk the brief's scenarios top to bottom — they are sorted by priority.
+Walk the brief's scenarios top to bottom — the order is the execution order, not the priority.
 
-**The brief's sections are not all of one kind, and the heading says which.** «Entry state» is a dated hypothesis about the entry: your
-first move is to open your own tab and run its identity oracle — WHOSE session this is, not whether one is alive — and to work from the
-actual state with a note where it diverged; a «dead» verdict comes only from a fresh tab; the values pasted there are the brief's, and a
-claim about a file's contents is made after reading the file. «Recon facts» are the manager's measurements — each row
-carries its kind, its source, its date and the boundary it was taken within, and a row of kind *composition*, *field-name oracle*,
-*identifier scheme*, *bundle excerpt* or *client artifact: names only* is a hypothesis to confirm by looking, while a *state* row older than the build is re-measured
-before anything rests on it. «Open hypotheses» are what the manager did NOT verify: questions with a stake, never facts — a row marked
-«not from outside» gets no calls at all, only its observable consequence. «Sanctioned probe» is the user's permission with its conditions,
-and the one authorisation to mutate outside the round's own objects. «Pause protocol» is the shape of your request when a step needs the
-user's hands — every field of it is filled in, and the answer you expect is one word. «Retest» (round 2+) holds the previous round's
-verdicts line by line — the «Was» column is how you tell a regression from a long-standing defect — and the fix's scope verbatim: the
-retest verdict is passed on that scope, anything beyond it is a new candidate; its fingerprint line is taken right after the identity check and again as your last action, and again after any anomaly. A section missing from the brief means that
-situation was not foreseen — not that it is forbidden: hand it over as a question in your final summary.
+**The brief's sections are not all of one kind, and the heading says which.** «Entry state» is a dated hypothesis about the entry:
+your first move is to open your own tab and run its identity oracle — WHOSE session this is, not whether one is alive — and to work from
+the actual state with a note where it diverged; a «dead» verdict comes only from a fresh tab. «Recon facts» are the manager's
+measurements, each row with its kind, source, date and boundary: a row of kind *composition*, *field-name oracle*, *identifier scheme*,
+*bundle excerpt* or *client artifact: names only* is a hypothesis to confirm by looking, a *state* row older than the build is re-measured
+first. «Open hypotheses» are what the manager did NOT verify — questions with a stake, never facts; a row marked «not from outside»
+gets no calls, only its observable consequence. «Sanctioned probe» is the user's permission with its conditions, the one authorisation to
+mutate outside the round's own objects. «Pause protocol» is the shape of your request when a step needs the user's hands. «Retest»
+(round 2+) holds the previous round's verdicts line by line — the «Was» column tells a regression from a long-standing defect — and the
+fix's scope verbatim, the boundary of the retest verdict; its fingerprint is taken right after the identity check, after any anomaly and
+as your last action. The scenario table's columns are instructions: «Session-bound» and «Closable alone» set your order, «Acting
+identity» is confirmed by «who am I» against the API under test before the target call, «Disarm after» is a step of that scenario, and
+scenario 0 — the refuting check — stops the round if it refutes. A section missing from the brief means that situation was not
+foreseen, not that it is forbidden: hand it over as a question in your final summary.
 
 **Before the scenarios — a sanity check of the environment** per the profile (Environments section) and the snapshot
 `<sessions>/environment-state.md` the brief names (a fact dated before the last deploy is re-checked, not trusted): on shared environments other people's

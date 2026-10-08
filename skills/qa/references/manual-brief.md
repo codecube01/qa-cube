@@ -25,7 +25,7 @@ entry, so a family is read whole or not at all.
 - a browser-native auth dialog is invisible to the extension — four symptoms, each sufficient: ask for the entry at once
 - preflight finds the environment in the WRONG state — is that state itself one of the scenarios?
 - the scenarios are about an entity's states — is there an instance of each state on the environment
-- access to the environment is unstable — batch the evidence first, interact afterwards; where one contour outlives the session, partition by what dies with it — the reading list included
+- the order of the scenarios is the order of what dies with the access — the «Session-bound» column: the batch capture first, the reading list split the same way; a bulk source dumped once
 - the waits in the brief exceed an hour — say whether isolated environments may run in parallel
 - a hypothesis about flakiness or survivability — a control instance and the budget of expendables
 - a round about appearance in the user's own environment — settle the window and the focus at preflight
@@ -33,11 +33,11 @@ entry, so a family is read whole or not at all.
 
 **What goes into the brief**
 
-- a scenario parameter that depends on the environment's data — a selection criterion, never a value
-- a fixture that changes shared behaviour — disarmed right after its scenario, not in the final cleanup
-- which scenarios the executor can close alone, and which depend on their own limits — order them by that
+- a scenario parameter that depends on the environment's data — a selection criterion, never a value (the «Fixture» column)
+- a fixture that changes shared behaviour — disarmed right after its scenario, not in the final cleanup (the «Disarm after» column)
+- which scenarios the executor can close alone, and which depend on their own limits — the «Closable alone» column, closable first
 - `test-cases: upfront` — which parts of a case the manual tester may edit and which are untouchable
-- a check able to REFUTE the round's central hypothesis — the brief's first step, never the tail of the reading list
+- a check able to REFUTE the round's central hypothesis — scenario 0, never the tail of the reading list
 - a profile rule the executor breaks before it reaches the paragraph that states it
 - a scenario whose expectation is a RESPONSE CODE — ask for what actually happened as well
 - after negative permission probes — read the journal and check whether the refusals were recorded as events; print each refusal's text whole
@@ -235,42 +235,29 @@ is what preflight does, and learns, before the brief is written.
   were `active`, while the scenarios checked the card of a blocked and a deactivated one — the executor worked that out themselves and
   rebuilt the plan (it worked, but at their expense);
 
-- **The rule below is about the ORDER of what dies with the access, not about the KIND of work — and those are
-  different volumes.** «First the batch capture, then the interactive part» is a good proxy only while the
-  unstable access gates the whole round; where one contour depends on the fragile session and another does not
-  (an API with its own credentials, a queue read anonymously, a public artifact), the honest partition is «what
-  dies with the access» against «what can be done at any time», and it usually cuts across the capture/interact
-  line: the session-bound contour's *interactive* scenarios outrank the independent contour's *snapshots*. Say
-  the partition in the brief, marking each scenario by which side it falls on, or a conscientious executor
-  follows the letter and spends the fragile resource last. Precedent: a brief ordered the batch capture first
-  and the independent API's negatives immediately after; the executor deliberately departed from it, ran the
-  whole session-bound contour first and recorded why — the credentials-based contour could be caught up at any
-  time, the session could not.
+- **The order of the scenarios is the order of what DIES WITH THE ACCESS, not of the kind of work — the «Session-bound» column.**
+  Where access is unstable (a short session, entry only by the user's hand, a flapping environment) the round opens with a batch capture
+  of all the evidence into the result file — the contract, reference numbers for every filter value, samples of live records, anchor ids —
+  within the first few calls, the interactive part after it under a periodic access check, so that a loss of access costs part of the
+  scenarios rather than the whole round: one approach burned down entirely on a dead session,
+  the second survived only thanks to this order. But «capture first, interact after» is a proxy, right only while the fragile access
+  gates the whole round; where one contour depends on the session and another does not (an API with its own credentials, a queue read
+  anonymously, a public artifact), the session-bound contour's *interactive* scenarios outrank the independent contour's *snapshots*, and a
+  conscientious executor who follows the letter spends the fragile resource last. Precedent: a brief ordered the batch capture first and
+  the independent API's negatives immediately after; the executor deliberately departed from it, ran the whole session-bound contour
+  first and recorded why. The same partition splits the reading list (the template says so): on a session that dies in minutes, «read
+  the whole list first» and «session-bound steps first» cannot both be kept — a retest brief listed a dozen files «read whole before
+  anything» next to «the session might die in minutes», and the executor read two, ran the block, read the rest after, and asked for
+  exactly this split. The first half is what the block cannot run safely without — the access and browser pitfalls, the contract
+  snapshot to compare against, and the shell pitfalls whenever the block may touch the shell at all, because the executor's own
+  instruction reads them before its first shell command.
 
-  *And the brief's reading list obeys the same partition.* The executor's standing rule is to read the whole list before
-  the first request, and on a session that dies in minutes that rule and «session-bound steps first» cannot both be
-  kept — the executor breaks one of them, silently or by its own judgment, and reports the conflict in its retro. Split
-  the list in the brief: the few files the session-bound steps cannot be run safely without (the access and
-  browser pitfalls, the contract snapshot to compare against, the engine's shell pitfalls whenever that block may
-  touch the shell at all) are read before them, and everything else — the spec in full, the knowledge sections,
-  the reporting conventions — right after, before the first independent-contour step. The shell pitfalls are named
-  because the executor's own instruction reads them before its first shell command, and a brief that defers them
-  overrides that instruction.
-  Precedent: a retest brief listed a dozen files «read whole before anything» and in the same breath told the executor
-  the session might die in minutes; the executor read two, ran the session-bound block, read the rest afterwards, and
-  asked in its retro for exactly this split.
-
-- **if access to the environment is unstable** (a short session, entry only by hand from the user, a flapping environment) — prescribe the
-  order «**first a batch capture of all the evidence, then the interactive part**» in the brief: the contract/schemas, reference numbers for
-  every filter value, samples of live records, anchor ids — into the result file within the first few calls, and only then the UI scenarios
-  with a periodic access check. Then a loss of access costs you part of the scenarios rather than the whole round. Precedent: one approach
-  burned down entirely on a dead session, and the second survived only thanks to this order. **The same holds for a bulk source even when
-  it is stable** (an execution history, a log index): the raw dump is taken ONCE into a file and every later question is a local computation
-  over it — going back to the network for the same history costs minutes and shifts the sample's boundaries between answers. Where the
-  source answers only inside a page session (the cookies never leave the page), «the file» is the page's own memory — `window.__…` or
-  `localStorage`, chosen by whether a navigation lies in between (`browser-techniques.md`, «The page-scripting sandbox and its limits») —
-  with only the derivatives and full ids written to disk; a brief ordering the raw dump onto disk orders a download the executor will not
-  make. And the parsing filters are built one condition at a time, since an `A and B or C` returned every event through operator precedence;
+  *And a bulk source is dumped ONCE even when it is stable* (an execution history, a log index): every later question is a local
+  computation over the file — going back to the network for the same history costs minutes and shifts the sample's boundaries between
+  answers. Where the source answers only inside a page session, «the file» is the page's own memory — `window.__…` or `localStorage`,
+  chosen by whether a navigation lies in between (`browser-techniques.md`, «The page-scripting sandbox and its limits») — with only the
+  derivatives and full ids written to disk; a brief ordering the raw dump onto disk orders a download the executor will not make. The
+  parsing filters are built one condition at a time: an `A and B or C` returned every event through operator precedence.
 
 - **if the waits in the brief exceed an hour** — decide and state explicitly whether observations may be spread across isolated environments
   (browser profiles, contours) and run in parallel: «one session at a time» forbids logging in over a live session but does not forbid two
@@ -316,24 +303,30 @@ is what preflight does, and learns, before the brief is written.
 
 ## What goes into the brief
 
-- **Scenario parameters that depend on the environment's data are given as a selection criterion, not as a value.** The method type, the
-  currency, a specific entity — «a method the entity actually has», with the concrete value offered only as an illustration: a fixed value
-  copied from the docs may not exist on the instance the executor picks. Precedent: a source value taken from a documentation example turned
-  out to be an empty slice for every account on the environment. **And the criterion is anchored on the object the scenario OBSERVES,
-  never on its owner or container.** A criterion phrased as «a live account», «a recent tenant», «an active project» answers whether the
-  carrier exists and says nothing about whether it holds anything to look at — and on an environment reseeded by automation the freshest
-  carrier is routinely the emptiest one, because carriers are created in batches and only some of them accumulate activity. The executor
-  then opens a listing with zero rows and can conclude nothing at all about the field, the column or the behaviour under test. Invert the
-  order in the brief: find an instance of the object first (query the listing of the objects themselves), take its owner from that record,
-  and only then check that the owner is alive. The same query pays a second time by naming a DISCRIMINATING fixture — the owner whose
-  records hold a value different from the majority — which is what keeps a comparison from being degenerate. Precedent: a brief told the
-  executor to pick the carrier by recency; the freshest one on the environment had zero operations, and the executor rebuilt the selection
-  from the objects themselves — the same pass turned up the one owner whose records carried a non-default value, without which the round's
-  cross-consumer comparison would have proved nothing;
+- **The «Fixture» column is a selection criterion, never a value, and the criterion is anchored on the object the scenario OBSERVES —
+  not on its owner or container.** A fixed value copied from the docs may not exist on the instance the executor picks: a source value
+  taken from a documentation example was an empty slice for every account on the environment. And «a live account», «a recent tenant»
+  answers whether the carrier exists, not whether it holds anything to look at — on an environment reseeded by automation the freshest
+  carrier is routinely the emptiest, and the executor opens a listing with zero rows. Invert the order: find an instance of the object
+  first, take its owner from that record, then check the owner is alive; the same query names the DISCRIMINATING fixture — the owner
+  whose records hold a value different from the majority — which keeps a comparison from being degenerate. Precedent: a brief told the
+  executor to pick the carrier by recency; the freshest one had zero operations, and the executor's rebuilt selection turned up the one
+  owner with a non-default value, without which the round's cross-consumer comparison would have proved nothing.
 
-- **A fixture that changes SHARED behaviour (an active routing rule, a price, a flag other runs read) is disarmed the moment its scenario is done, not in the final cleanup step — say so in the brief next to the scenario.** The cleanup block at the end of a round is written for the round that finishes; rounds also stop in the middle — a lost connection, a user's pause, a killed executor — and a disarm scheduled last does not run then. Disarming early costs nothing when the scenario is really over, and a later scenario that needs the fixture re-arms it explicitly. «Done» means the decision the fixture steers has been taken, not that the triggering call has returned: under a propagation lag, a disarm timed by the trigger reaches that decision first (`planning.md`, the restore rider under «FLIPS A SETTING»). Precedent: an executor disarmed its routing fixture as soon as the fixture proved unusable rather than at the scheduled end; minutes later the user paused the round for a network outage, and the shared environment's nightly preparation passed untouched.
+- **A fixture that changes SHARED behaviour (an active routing rule, a price, a flag other runs read) is disarmed the moment its
+  scenario is done — the «Disarm after» column, not the final cleanup step.** The cleanup block is written for the round that finishes;
+  rounds also stop in the middle — a lost connection, a user's pause, a killed executor — and a disarm scheduled last does not run then.
+  «Done» means the decision the fixture steers has been taken, not that the triggering call has returned: under a propagation lag a
+  disarm timed by the trigger reaches that decision first (`planning.md`, the restore rider under «FLIPS A SETTING»). Precedent: an
+  executor disarmed its routing fixture as soon as it proved unusable rather than at the scheduled end; minutes later the user paused
+  the round for a network outage, and the shared environment's nightly preparation passed untouched.
 
-- **Mark, for each scenario in the brief, whether the executor can close it alone or whether it depends on their own limits — and put the closable ones first.** An executor's boundaries are not visible from the plan: some calls they refuse by their own rules (financial identifiers, an operation that could succeed in transferring value), and the refusal arrives only when they try. Order the scenarios so that the round's evidence is collected before it can hit a wall, and say per scenario which side of the boundary you expect it to fall on — the executor will correct you from the environment, and that correction is itself useful. Precedent: a brief put the decisive measurement first, it turned out to be exactly the call the executor cannot make, and three calls went into an attempt doomed from the start — while the scenario the brief had labelled «the main open risk» and placed second was the one that carried the whole round.
+- **The «Closable alone» column says whether the scenario depends on the executor's own limits, and the closable ones go first.** An
+  executor's boundaries are not visible from the plan — some calls they refuse by their own rules (financial identifiers, an operation
+  that could succeed in transferring value) — and the refusal arrives only when they try; the executor corrects the column from the
+  environment, and the correction is itself useful. Precedent: a brief put the decisive measurement first, it turned out to be exactly
+  the call the executor cannot make, and three calls went into a doomed attempt — while the scenario labelled «the main open risk» and
+  placed second was the one that carried the whole round.
 
 - **with `test-cases: upfront`, the brief carries the analyst's case ids and the verdict on the requirements**. The right to edit is decided
   by the case's own line, not by the session as a whole: an expected result whose source is `spec` is untouchable — a mismatch with it is a
@@ -342,16 +335,14 @@ is what preflight does, and learns, before the brief is written.
   both modes** — those are technique (the UI path, the endpoint name, the way to create an entity), not requirement, and forbidding it would
   simply stall the run on «the case says press a button that isn't here»;
 
-- **A check able to REFUTE the round's central hypothesis goes in as the brief's first step, never at the tail of the reading list.** The
-  tell is what it reads: the rest of the round reads *behavior*, while this one reads the *source of truth* — the machine-readable contract,
-  the schema, the spec, the declared route table. Such a check is cheap (seconds) and asymmetric: confirming it changes nothing, refuting it
-  invalidates every scenario built on the hypothesis, so its position in the brief decides whether the round is rebuilt at the start or
-  discovered wrong at the end. Two failure modes, both from the same misplacement: written into the reading list as a minor aside («from
-  that file only the fact of X is interesting — grep it, do not read it»), it gets done late or not at all; and once the scenarios are
-  already sliced around the hypothesis, an executor who does refute it has to redesign mid-run on their own budget. Precedent: a round's
-  whole hypothesis table rested on «this operation does not exist on the environment», measured by trying paths by hand; the contract file
-  sat in the brief's reading list as the last line of the «not needed this round» block, the executor grepped it anyway, and it named the
-  operation's real prefix in five seconds — every hypothesis of the plan had been formed from paths that were never the contract's.
+- **A check able to REFUTE the round's central hypothesis is scenario 0 of the table, never the tail of the reading list.** The tell
+  is what it reads: the rest of the round reads *behaviour*, this one reads the *source of truth* — the contract, the schema, the
+  declared route table. It is cheap and asymmetric: confirming it changes nothing, refuting it invalidates every scenario built on the
+  hypothesis, so its position decides whether the round is rebuilt at the start or discovered wrong at the end — written into the reading
+  list as an aside («grep it, do not read it»), it is done late or not at all, and an executor who does refute it mid-run redesigns on
+  their own budget. Precedent: a round's whole hypothesis table rested on «this operation does not exist on the environment»; the
+  contract file sat as the last line of the «not needed this round» block, the executor grepped it anyway, and it named the operation's
+  real prefix in five seconds.
 
 - **A profile rule that the executor breaks before they get around to finishing the profile must be duplicated straight into the brief — as
   the first line of the reading list.** This concerns rules about reading itself and about the order of work (what to open files with, what
@@ -360,27 +351,23 @@ is what preflight does, and learns, before the brief is written.
   profile's header for three runs and was broken all three times — the executor's first action is a `cat`, and the paragraph forbidding it
   is read after;
 
-- **A scenario whose expectation is written as a RESPONSE CODE gets a second half — «and establish what actually happened» — or it is closed
-  on the code alone.** «It must not answer 5xx», «expect a 200», «check it is not rejected» are convenient to write and easy to verify, and
-  that is the trap: the code says the call was accepted, never that the operation did anything. An endpoint whose whole job is to trigger a
-  side effect can answer perfectly while doing nothing at all, and a status-only expectation licenses the executor to stop before the
-  interesting part. Pair every code-shaped expectation with the observable effect and the channel that shows it — the journal, the log line,
-  the receiver, the changed record — even when the scenario's requirement is genuinely only about the code. The cost is one extra read; the
-  cost of omitting it is that a wide executor closes the gap on their own initiative (and you were lucky) while a narrow one does not (and
-  nobody notices). Precedent: a scenario briefed as «the resend endpoint must not answer 5xx» came back `200 OK` — the executor went to the
-  logs and the receiver unprompted and found the call to be a silent no-op that an administrator cannot distinguish from a real resend, which
-  was the round's most interesting observation and had no place in the brief that produced it;
+- **The «Expected effect» column is never a response code alone — «and establish what actually happened», with the channel that
+  shows it.** The code says the call was accepted, never that the operation did anything: an endpoint whose whole job is a side effect
+  answers perfectly while doing nothing, and a status-only expectation licenses the executor to stop before the interesting part — even
+  where the requirement itself is genuinely only about the code. A wide
+  executor closes the gap on their own initiative (and you were lucky), a narrow one does not (and nobody notices). Precedent: «the
+  resend endpoint must not answer 5xx» came back `200 OK`; the executor went to the logs and the receiver unprompted and found a silent
+  no-op an administrator cannot distinguish from a real resend — the round's most interesting observation, with no place in the brief
+  that produced it.
 
-- **After negative permission probes, require an explicit step: read the journal/audit log for the run's window and check what the
-  refusals were recorded as.** A rejected call is supposed to leave either nothing or a refusal event; systems routinely record it as a
-  performed action instead, and that defect is invisible from the call's own response — the executor sees a clean `access denied` and moves
-  on. The step costs one read, it is the only moment in the round when you know exactly which calls were refused, and it doubles as a check
-  that the negatives really changed nothing. Precedent: two Major findings (rejected calls written to the journal as completed operations by
-  roles forbidden to perform them, and an actor's role field carrying the SSO group instead of the system role) surfaced only because the
-  brief happened to ask for every action in the window to be listed — nobody had planned to look. **And a refusal is recorded as its
-  TEXT, whole, not as the fact of refusal:** servers often enumerate the roles they would have accepted, so one call under a foreign role
-  hands over a slice of the permission matrix that neither the schema nor the bundle carries. Precedent: the text of one refusal proved that
-  the holder of an unrecognised role had fewer rights than a guest — the schema could not have shown it.
+- **After the negative permission probes, the table's last row reads the journal for the run's window — what the refusals were
+  recorded as, each refusal's text whole.** A rejected call is supposed to leave nothing or a refusal event; systems routinely record it
+  as a performed action, invisible from the call's own clean `access denied`. It is the one moment in the round when you know exactly
+  which calls were refused, and it doubles as the check that the negatives changed nothing. Precedent: two Major findings — rejected
+  calls journaled as completed operations by roles forbidden to perform them, and an actor's role field carrying the SSO group instead
+  of the system role — surfaced only because the brief happened to ask for every action in the window to be listed. The text matters
+  because servers enumerate the roles they would have accepted: one refusal proved that the holder of an unrecognised role had fewer
+  rights than a guest, which the schema could not have shown.
 
 - **If a scenario may run into a neighboring contour with a different entry** (another environment, another account, entry by the user's own
   hand, a closed network) — **write in the brief in advance what to do**: request access through the manager (and what exactly to ask for,
@@ -394,16 +381,25 @@ is what preflight does, and learns, before the brief is written.
   give no values at all, devaluing the retest protocol. The phrasing «take them from public sources per <standard> and cite the source» is
   unambiguous; «if you can write them out» is not;
 
-- **a negative that needs an entity belonging to someone else gets a concrete identifier in the brief — found and verified by you, not a
-  pointer to «take one from the knowledge base».** Refusals of the kind «this address / account / document already belongs to another party»
-  cannot be provoked with a value the executor invents: it has to be a real foreign entity, and it usually lives in a contour the executor is
-  not logged into at that moment. A pointer instead of a value costs either a wasted search or an extra role switch, and the switch is what
-  hurts — mid-run it can cost a whole login cycle. Check the identifier exists at recon time and paste it into the brief; if you genuinely
-  cannot get one, say where to look **and** say to collect it during the snapshot pass in the other contour, before the run leaves it.
-  Precedent: the brief said «take an address of another company from the knowledge base», it was not there, and the executor was saved only
-  by having happened to take the snapshot under the other role first;
+- **A negative that needs an entity belonging to someone else carries a concrete identifier in the «Fixture» column — found and
+  verified by you, not «take one from the knowledge base».** Refusals of the kind «this address / account / document already belongs to
+  another party» cannot be provoked with an invented value, and the real one usually lives in a contour the executor is not logged into
+  at that moment; a pointer costs a wasted search or a role switch, and mid-run a switch can cost a whole login cycle. Where you cannot
+  get one, say where to look AND say to collect it during the snapshot pass in the other contour, before the run leaves it. Precedent:
+  «take an address of another company from the knowledge base» — it was not there, and the executor was saved only by having taken the
+  snapshot under the other role first.
 
-- **A step whose whole point is «the same action under a different role» begins with identifying the session, not with the action.** Switching identity is a side effect of tooling — a cookie jar, a header, a client instance — and tooling substitutes a default silently: the call goes out under the previous, usually more privileged, identity and answers exactly as the scenario hoped it would not. Nothing in the response says whose it was. Require the order explicitly: after switching, call the «who am I» endpoint and print the account and its permissions into the result, and only then make the target call. On a mutating scenario this is also a budget guard — the misfire is spent from the expendables and, where the operation has no rollback, it cannot be taken back. Precedent: the decisive permissions probe went out under the superadmin because a helper received one argument too many; it was caught afterwards, from the author id in the journal, and cost one unbudgeted irreversible mutation plus a re-run. **Where the product has several contours with their own APIs, «who am I» is asked of the API under test** — a session of the neighbouring contour lives on in the same tab, its API keeps answering, and an identity check against it certifies the wrong one. Precedent: a request from the admin contour's tab to the other contour's API came back under the operator, not the admin. **And the brief names the acting identity by ROLE plus the exact account handle**, never by a word for the organization it belongs to: «under the company's account» is ambiguous wherever one organization holds several accounts with different roles, and only one of them may perform the operation. Precedent: «do it under the client's account» pointed at the administrator, who is refused that operation — the round survived only because the profile repeated the warning;
+- **The «Acting identity» column is a ROLE plus the exact account handle, and a step under another role begins with «who am I» to
+  the API under test, not with the action.** Switching identity is a side effect of tooling — a cookie jar, a header, a client instance
+  — and tooling substitutes a default silently: the call goes out under the previous, more privileged identity and answers exactly as
+  the scenario hoped it would not, with nothing in the response saying whose it was — so the account and its permissions are printed
+  into the result before the target call; on a mutating scenario the misfire is spent from the expendables and cannot be taken back. Precedent: the decisive permissions probe went out under the superadmin because a helper
+  received one argument too many — caught afterwards from the author id in the journal, at the price of one unbudgeted irreversible
+  mutation plus a re-run. «Who am I» is asked of the API under test: a session of the neighbouring contour lives on in the same tab and
+  its API keeps answering — a request from the admin contour's tab to the other contour's API came back under the operator. And «under
+  the company's account» is ambiguous wherever one organisation holds several accounts with different roles: «do it under the client's
+  account» pointed at the administrator, who is refused that operation, and the round survived only because the profile repeated the
+  warning.
 
 - **a compound requirement gets a compound verdict.** Half the requirements of a typical spec are «and»: «the status changes **and** the
   officer sees it», «up to five attempts **and** then it is recorded as FAILED». A binary pass/fail on such an item lies in both directions:
