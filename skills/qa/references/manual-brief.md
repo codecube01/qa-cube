@@ -29,6 +29,7 @@ entry, so a family is read whole or not at all.
 - the waits in the brief exceed an hour — say whether isolated environments may run in parallel
 - a hypothesis about flakiness or survivability — a control instance and the budget of expendables
 - a round about appearance in the user's own environment — settle the window and the focus at preflight
+- the launch comes after a WAIT on the environment — re-read the task's thread in the same breath as the launch
 
 **What goes into the brief**
 
@@ -75,7 +76,7 @@ entry, so a family is read whole or not at all.
 - the tooling fails, not the product — «N attempts at an interval, then escalate»
 - the blocker can only be removed by the user acting in their own environment
 
-- **Your own harness refuses a call** — an external instrument, opened at preflight · moving value or foreign data: what a permission lifts · a wallet signature a script never originates · a harmless call refused for its wording — and a mutation is never reworded · the classifier is sticky · planning around the refusals that remain
+- **Your own harness refuses a call** — an external instrument, opened at preflight · moving value or foreign data: what a permission lifts · a wallet signature a script never originates · a harmless call refused for its wording — and a mutation is never reworded · the classifier is sticky · a login that passed five times is refused on the sixth · planning around the refusals that remain
 
 - **The executor stopped** — an infrastructure error · killed by the user · killed by you, with the environment already touched · waiting on a background run
 
@@ -283,6 +284,8 @@ entry, so a family is read whole or not at all.
   the focus») arrived mid-round after the corresponding action; the round's whole width-threshold scenario was struck out with its
   measurements already spent, while the parts the executor could have closed instead stayed uncovered.
 
+- **When the launch comes after a WAIT on the environment, the task's comment thread is re-read in the same breath as the launch — not trusted from the reading at step 1.** The shape: preflight finds the environment unready (a fixture missing, the wrong build deployed), the round waits on the team to fix it, and the team fixes the environment and writes about it in one motion — the developer who deploys the build also posts the contract it implements, the defaults, the route the plan guessed wrong. The manager, released by the environment's own signal (a poll that sees the build, a fixture appearing), goes straight to the brief, because the requirements were read an hour earlier and nothing about the build says they moved. One read of the comments posted since that reading costs a call; missing it costs a brief built on the superseded text, and a correction sent to an executor already mid-run, where it competes with the scenarios it rewrites. Precedent: a round waited about an hour on a redeploy; the developer posted the implementation contract — the payment's only creation route, the verdict operation, a replaced requirement, a new negative — a minute before the deploy job finished, the executor was launched on the old brief, and the user had to point at the comment; the correction reached the executor before its first scenario only by luck of timing.
+
 ## What goes into the brief
 
 - **Scenario parameters that depend on the environment's data are given as a selection criterion, not as a value.** The method type, the
@@ -380,8 +383,9 @@ entry, so a family is read whole or not at all.
   explicit breakdown of which half passed and which did not** (in one session there turned out to be 14 such items out of 89 — more than the
   clean fails);
 
-- **if a scenario requires actions from the user mid-run** (the profile limits the executor — clicks that move funds, say), the brief
-  carries the template's «Pause protocol» section, filled in. The section exists because an executor adds none of its lines on its own
+- **if a scenario requires actions from the user mid-run** (the profile limits the executor — clicks that move funds, say), **or the round
+  logs in through the browser** (its «Identity fallback» line — «Your own harness refuses a call»), the brief carries the template's «Pause
+  protocol» section, filled in. The section exists because an executor adds none of its lines on its own
   initiative, and every one of them was once dictated by the manager mid-run, after the damage: the environment id — the user asked for it
   in as many words («always say which browser profile»); the exact account to type — a form pre-filled with a neighbouring account turned
   one confirming click into a session under the wrong identity; the network on which confirming is allowed — an executor's request said
@@ -675,6 +679,7 @@ of the contract values beside it. The shapes below are the kinds; the table's le
 
 - **The classifier reads the TEXT of a script, so a HARMLESS call can be refused for its wording — and only a harmless call is reworded.** A READ-ONLY script that names actions in its selectors or search strings («Confirm order») is refused as a write: find elements by role, class or index and compare the text in the answer. Placeholder UUIDs of zeros read as an attack on a real id: use neutral ones (`aaaaaaaa-bbbb-…`). Several DIFFERENT mutations packed into one call read as a batch attack and get the whole call refused, so different operations go one per call; a series of the SAME non-destructive mutation with varying payloads — a burst, an alias batch — passes. **A refused MUTATION is never reworded to get it through** — not assembled from variables, not split, not disguised — it is sorted by the entry above: moving value is a human click, a write into foreign data waits for the user's permission. Rewording a mutation until the classifier stops recognising it removes the one check that stands between the round and somebody else's data. A refusal that names an allow-list is checked against the allow-list re-read from the file, not from memory. Precedent: an executor escalated «the account is not on the allow-list» for half a round; the blocker did not exist — the same call, reworded, went through, so the refusal had been about the wording, not the account.
 - **The classifier is sticky: after a refusal it refuses harmless reads in the same context for several calls.** Switch the tool (the page-text tool instead of a page script) and pause, rather than retrying the same read; budget for it — one round spent about fifteen calls this way.
+- **An identity switch that passed several times is not cleared for the next one — so the brief names the human fallback for every switch, and an irreversible step waits until the switch it depends on has succeeded.** A login that goes through a local redirect, a callback page or a one-time link can be refused on any attempt, and the one refused is the one in front of the decisive step. The template's «Pause protocol» carries both as its «Identity fallback» slot: «the user logs in as <account> in <environment>» as a ready request, and an irreversible step that has to be observed under that identity is not performed until the identity is in place, so a refused login does not spend the fixture. Precedent: the sixth browser login of a round, through the same local redirect as the first five, was refused; the executor held back the irreversible role revocation it was about to observe, the user logged in by hand, and the scenario ran without another grant of the role.
 - **Around the refusals that remain, the brief plans rather than retries.** Never combine a potentially refused action (installing a substitution, a click that looks like a payment) with collecting facts in one call, or the refusal takes both — the one exception is the packed expendable attempt («The observation channel»), under its own condition. **A message that the tool could not reach a verdict** («Could not verify this site's safety category») is not a refusal: nothing went out, and the call is repeated (`browser-techniques.md`); a message naming a blocked category IS one, and is sorted here. Give every browser-dependent step a plan on an independent channel (the shell to the orchestrator's history, a public explorer, a plain request). A refused `navigate` may pass as a `location.reload()` from a page script, or the other way round — try the other once. When the browser layer is refused entirely, the user can remove your interceptors by reloading the page, the state of live operations is read from the orchestrator, and the report is written from what is collected rather than waited for. Precedent: in one round the browser refused eleven calls and the result still stood, because the key measurements had been taken outside it.
 
 ### The executor stopped

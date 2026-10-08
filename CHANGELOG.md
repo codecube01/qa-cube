@@ -13,6 +13,22 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **An automation price includes the host class's fixed cost**: `SKILL.md` step 5 — provisioning, per-test hooks and
+  stabilising reads, read off a neighbouring test's run log.
+- **A launch after a wait on the environment re-reads the comment thread first**: `manual-brief.md` («Preflight and
+  access») — the team that fixes the environment often posts the contract in the same motion.
+- **When and how wide a round runs is a start question** (`planning.md`, «What the plan rests on», pointed to from step 1
+  of `SKILL.md`, since the answer decides the folder): a task in testing
+  whose other layer is still in development, or a parent with several siblings in testing, is put to the user before planning.
+  A layer word the user ties to an instrument («the frontend, in profile X») names where to observe it, not a narrowing.
+- **An identity switch that passed before is not cleared for the next one** (`manual-brief.md`, «Your own harness refuses
+  a call»; a slot in the brief template's «Pause protocol»): the brief names the user's own login as the fallback, and an
+  irreversible step waits for the switch it depends on.
+- **Two new shapes of «The tracker is searched at step 1»** (`planning.md`): a task's contract may sit in a SIBLING's
+  comment thread, searched by the task's own operation and field names before the requirements are rated; and a description
+  REPLACED by a sibling's text is recovered from its edit history before «no requirements of its own» is written anywhere.
+- **Two output-reading riders** (`browser-techniques.md`, «Output censorship»): a form's state is read as its whole visible
+  text, not through a whitelist of expected words; a link that may not be printed is checked inside the tab it opens (status, sha256).
 - **A wallet signature request is a human click too, free typed-data signatures included**: `manual-brief.md`
   («Your own harness refuses a call») — a page script records or refuses wallet calls, never originates them.
 - **An irreversible step the user sanctioned in chat is the user's click or the manager's call, never the executor's**:
@@ -52,9 +68,13 @@ section gathers everything since the previous one.
 
 ### Fixed
 
-- **A candidate's screenshot is a `zoom`, readable**: `qa-manual.md` saves a lossless PNG of the region instead of a plain
-  screenshot, which came back shrunk and, with `scale` below 1, unreadable; `check_session.py` flags a JPEG under 1000 px
-  wide and an extension that does not match the file's format.
+- **Long typed strings are not exact, and a drawer can resize the screenshot frame** (`browser-techniques.md`): a length
+  boundary is reached by a fill plus typed tail with `value.length` read back; the fresh screenshot is taken after a drawer opens.
+- **A page-script call is sized for ~30 s** (`browser-techniques.md`): the ~45 s budget is not reached in practice — a ~36 s
+  call was already cut off.
+- **A candidate's screenshot is a `zoom`, readable**: `qa-manual.md` saves a lossless PNG of the region, at the display's pixel
+  ratio, instead of a plain screenshot, which came back shrunk and, with `scale` below 1, unreadable; `check_session.py` flags a
+  JPEG under 1000 px wide and an extension that does not match the file's format.
 
 ## [0.17.56] — 2026-10-05
 

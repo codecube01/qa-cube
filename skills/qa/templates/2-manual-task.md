@@ -84,7 +84,7 @@ The wording that keeps a row a question:
 - <a session that may die in minutes: split this list into «Before the session-bound steps» (only what those steps cannot be run safely
   without) and «After them» — `manual-brief.md`, «The rule below is about the ORDER of what dies with the access»>
 
-## Pause protocol (a step needs the user's own hands — delete the section otherwise)
+## Pause protocol (a step needs the user's own hands, or the round logs in through the browser — delete the section otherwise)
 
 The executor prepares everything up to the step (forms, interceptors, **a recorder of the state the pause is about, armed BEFORE the
 request goes out**, every entry written to storage that survives a navigation), appends to the result, and ends its turn with a request
@@ -100,6 +100,7 @@ message opening with `CLICK NEEDED:` (the marker the manager greps the result fo
 - Expected answer: one word («done» / «clicked») — the executor re-reads the state itself; ask for at most 1–2 concrete VALUES
 - Wrong click (confirmed where cancel was asked): <recorded as a fact; the scenario is replayed only if the stand was affected>
 - A second window (signature → send) cannot be merged into one request: announce it in advance, the user stays at the keyboard
+- Identity fallback (a round that logs in through the browser): <«the user logs in as <account> in <environment>», ready for every switch however many passed before; an irreversible step observed under that identity waits until it is in place>
 
 After the pause the executor re-reads the actual state and the tab list (ids die), checks WHOSE session came back, compares the page's
 load time with the recorder's last entry and re-arms it; the state wins over the answer, with a note in the result. The environment may be

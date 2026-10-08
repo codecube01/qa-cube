@@ -185,7 +185,7 @@ The automator will write the test from your result without re-checking by hand. 
 - **a FRONTEND candidate — its symptom is on the screen — gets ONE screenshot ON DISK, taken the moment you confirm it, as a `zoom`;
   nothing else is saved: not the steps, not the forms along the way, not a backend candidate (its evidence is the request and the response).** Take
   `zoom` with `save_to_disk: true` over the region that holds the symptom (in the screenshot's coordinates, up to ~1200 px wide): it
-  returns a lossless PNG at one pixel per CSS pixel. A plain screenshot is a JPEG shrunk to the tool's image budget, and with a `scale`
+  returns a lossless PNG at the display's pixel ratio (one or more pixels per CSS pixel). A plain screenshot is a JPEG shrunk to the tool's image budget, and with a `scale`
   below 1 its captions cannot be read — a `scale` that cured a tiled render is never carried over to these. Copy the file the tool returns
   into `screenshots/` of the session folder (create it with the first one) under the candidate's name, keeping its extension — `c<N>.png`,
   `<N>` being its line in the candidates list at the bottom of the file, with the round's suffix from round 2 on (`c<N>-2.png`) — and end

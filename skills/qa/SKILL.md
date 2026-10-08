@@ -99,7 +99,9 @@ The executors ask no questions — not one of them.
 from the profile (Tracker section): the description and **the comments, mandatorily** — that is where the requirements, the status and the
 related changes live. Check for **related tasks** in three ways, not one: (1) explicit links/relations; (2) the task's **subtasks and
 parent**; (3) a substring search on the title (neighboring FE/BE tasks of the same area). Empty relations do not mean «there are none». If a
-frontend task has a related backend task in a suitable status on the same environment, we test them in **one session** (and vice versa).
+frontend task has a related backend task in a suitable status on the same environment, we test them in **one session** (and vice versa)
+— proposed to the user, not decided alone: when and how wide the round runs is a start question, asked now, before step 2 makes the
+folder (the entry is in `references/planning.md`, «What the plan rests on», which is read only at step 3).
 Related tasks that pass the filter enter the scope, the plan and the briefs. **Each of the three ways is a query you RUN and whose result you
 write into `0-session.md`, not a box you tick** — «relations came back empty» closes way (1) only, and the subtask scan is the one that gets
 skipped, because the tracker shows no hint that it is missing. Where the tracker's API makes subtasks awkward to list (a timeout on the
@@ -316,6 +318,10 @@ count the operations the steps will wait on (each one through its asynchronous p
 the durations the round measured, and add every propagation lag a step must sit out; a figure put to the user from intuition under-prices
 exactly the waits, and the choice was made at a price that does not exist. Precedent: a merge into an existing test was offered at «about
 50 s» and chosen; it cost 131 s — two operations of ~50 s each plus a setting lag, all three durations printed in the manual result.
+*And a test NEW to its host class pays that class's fixed cost too* — its provisioning, its per-test hooks, its stabilising reads —
+which no manual timing contains: read it off a recent run log of a neighbouring test in the same class and add it. Precedent: a new
+test priced at ~3 min from the manual timings ran 9–10 min, two thirds of it the class's account provisioning, per-test waits and
+state snapshots.
 **The size of the feature is an independent ground, alongside the cost of the
 run.** A cheap merge into an existing test can still be work nobody wants: a feature the size of one query parameter (a filter, a flag) may
 deserve no test at all, whatever the run costs. So the question to the user before launching the automator is not only «this run is
