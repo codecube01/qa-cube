@@ -22,8 +22,9 @@ section gathers everything since the previous one.
   whose other layer is still in development, or a parent with several siblings in testing, is put to the user before planning.
   A layer word the user ties to an instrument («the frontend, in profile X») names where to observe it, not a narrowing.
 - **An identity switch that passed before is not cleared for the next one** (`manual-brief.md`, «Your own harness refuses
-  a call»; a slot in the brief template's «Pause protocol»): the brief names the user's own login as the fallback, and an
-  irreversible step waits for the switch it depends on.
+  a call»; a slot in the brief template's «Pause protocol»): the brief names the fallback for every switch, and an
+  irreversible step waits for the switch it depends on. The first fallback is the manager's own session — the executor
+  asks with «LOGIN NEEDED: <account>» — and the user logs in by hand only when that attempt is refused too.
 - **Two new shapes of «The tracker is searched at step 1»** (`planning.md`): a task's contract may sit in a SIBLING's
   comment thread, searched by the task's own operation and field names before the requirements are rated; and a description
   REPLACED by a sibling's text is recovered from its edit history before «no requirements of its own» is written anywhere.
@@ -48,6 +49,9 @@ section gathers everything since the previous one.
   probe», now eight questions; a «Read channel» slot in the brief template).
 
 ### Changed
+
+- **A round-2 rename rewrites the links to the old folder name** (`session-folder.md`, «Renaming brings the whole name
+  to the convention»): grep the repository for the old name, a sibling session's files included, then `session.py links`.
 
 - **A retest brief has a «Retest» section in the template**: the fingerprint, the fix's scope verbatim, the previous round's verdicts
   line by line, what remains, what is already filed, what is forbidden during a check; `manual-brief.md` «A retest round» is rewritten

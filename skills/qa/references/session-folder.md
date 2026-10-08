@@ -21,7 +21,7 @@ a way the folder has already been broken once, and the precedent that closes it 
 
 - date the round's trigger before anything else
 - a round whose trigger is the requirements arriving, not a fix — and which therefore launches nobody
-- renaming brings the whole name to the convention, not just the date
+- renaming brings the whole name to the convention, not just the date — and the links to the old name are rewritten
 - every file of the round is named by the script, one call per file
 - what the executor's brief carries over is the line-by-line verdict, not the gist
 - re-launch the analyst only when the input changed
@@ -70,6 +70,13 @@ created** — it began as an initiative run, or the task was filed later — the
 motion. A long-lived session otherwise stays outside the naming convention forever and, worse, stops being findable by the
 search that every round's step 2 starts with: a grep for the task id across folder names. Precedent: an initiative RBAC review
 acquired a spec task two months in; round 2 renamed the folder by date alone, and the customer caught the missing id.
+
+*And the rename breaks every link to the old name, exactly as a month move does, while no script rewrites them for it.* The
+links live where the sweep would look — the cases, the registries, the knowledge base — and in one place it would not expect:
+another live session that cites this one, a sibling task's brief or raw source written while this round was running. Right after
+the `mv`, grep the repository for the old folder name, rewrite each hit in its own style, and run `session.py links <sessions>`.
+Precedent: a round-2 rename left the case file and three files of a parallel sibling session — its plan's source list and both
+briefs — pointing at the folder's previous date; a grep for the old name found all four at once.
 
 Read all the previous files before planning the round — plan, results, report, retro — and apply their lessons immediately.
 

@@ -120,7 +120,7 @@ The wording that keeps a row a question:
 
 The executor prepares everything up to the step (forms, interceptors, **a recorder of the state the pause is about, armed BEFORE the
 request goes out**, every entry written to storage that survives a navigation), appends to the result, and ends its turn with a request
-message opening with `CLICK NEEDED:` (the marker the manager greps the result for); the manager relays it and returns the user's answer by a direct message to the same agent. The request line carries, every time:
+message opening with `CLICK NEEDED:` (the marker the manager greps the result for, with `LOGIN NEEDED:` from the last line below); the manager relays it and returns the user's answer by a direct message to the same agent. The request line carries, every time:
 
 - Environment: <browser profile / instance id — the id, never its label — then the tab and the button; a tab id alone means nothing outside the executor's own group>
 - Account to type: <the exact handle — a pre-filled login form may hold a neighbour's>
@@ -132,7 +132,7 @@ message opening with `CLICK NEEDED:` (the marker the manager greps the result fo
 - Expected answer: one word («done» / «clicked») — the executor re-reads the state itself; ask for at most 1–2 concrete VALUES
 - Wrong click (confirmed where cancel was asked): <recorded as a fact; the scenario is replayed only if the stand was affected>
 - A second window (signature → send) cannot be merged into one request: announce it in advance, the user stays at the keyboard
-- Identity fallback (a round that logs in through the browser): <«the user logs in as <account> in <environment>», ready for every switch however many passed before; an irreversible step observed under that identity waits until it is in place>
+- Identity fallback (a round that logs in through the browser): <first the manager — the executor ends its turn with «LOGIN NEEDED: <account>», the manager logs in from its own session and confirms the identity; only if that is refused too — «the user logs in as <account> in <environment>»; ready for every switch however many passed before; an irreversible step observed under that identity waits until it is in place>
 
 After the pause the executor re-reads the actual state and the tab list (ids die), checks WHOSE session came back, compares the page's
 load time with the recorder's last entry and re-arms it; the state wins over the answer, with a note in the result. The environment may be
