@@ -238,11 +238,19 @@ the comparison must be against the requirement, not the code). Reading the chang
 the requirements are ambiguous and there is nowhere else to clarify them; what you read out of the code does not go into the plan or the
 briefs — those carry only the expected behavior from the requirements.
 
-**Before writing the plan, read `references/planning.md`** — the catalogue of scenario shapes with the way to plan each and the precedent
-that paid for it: refactoring tasks, batch windows, already-elapsed states, unknown oracles, branching expectations, non-determinism, guard
-requirements, cost and reversibility gates, degradation requirements. A shape planned by intuition instead of by its entry costs a pass of
-the round at best and a false verdict at worst. Read it whole, once per session — the value of the list is in the shapes you did not think
-of, so grepping it for the one already on your mind defeats the point.
+**Before writing the plan, read the «Contents» of `references/planning.md` whole — it is the rules**: one line per shape of scenario,
+the trigger and what the plan does about it, families with their shapes. **Read the Contents and nothing else**: `grep -n '^## '` on the
+file gives the line of the first body heading (the second match — the first is «Contents» itself), and `Read` with `limit` set just below it returns the index alone — a `Read` with no
+limit returns the index plus a third of the body, which is the reading this step exists to avoid (measured: 24k tokens against 7k).
+Plan from that list; where a line fired and the rule needs its mechanism or its precedent, open THAT entry — `grep -n` for its first
+words, `Read` with `offset` there and a `limit` of ~25 lines — never a block of the body around it. **Once `1-plan.md` is written, launch a reviewer: `Agent` with `subagent_type:
+"general-purpose"`, with no context from the session.** Its brief is five lines: the absolute path of `references/planning.md` (next to
+this skill); the paths of `0-session.md` and `1-plan.md`; «read planning.md whole — the bodies, not only the Contents — then the plan;
+return the entries whose shape this task has and the plan does not cover: for each, the entry's title, the scenario or line of the plan it
+would change, and what to add; nothing else — no praise, no restatement of the plan». Apply what it returns to `1-plan.md` and say in the
+plan, in one line, what the review added. Why a reviewer and not your own reading: the value of the catalogue is in the shapes you did
+not think of, and an author who reads the whole catalogue for them pays for every entry in every later step of the session — about half
+the manager's context at the end of planning, measured; a reader with no stake reads it once, answers, and leaves.
 
 **3.5. Test design** (only with `test-cases: upfront`; with `inline` and `none` the step is skipped entirely). The plan's scenarios are
 turned into cases by the `qa-analyst` subagent — **before** the manual run and without seeing the environment, so that a case describes a

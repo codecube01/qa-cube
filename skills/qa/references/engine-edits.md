@@ -37,6 +37,12 @@ line. The steps below are that review, moved to the place where the edit is made
   executor reaches late, and the executors kept narrating in the engine's language until it became a slot — the first line of every prompt, a field of the brief;
   and three report checks (the column count, the cell length, a secret value) went out wrong at least once each while they were rules
   to keep in mind, until they became `check_session.py`.
+- **Where a catalogue's «Contents» says its lines are the rules** (`planning.md`), the index line IS the rule and the body is its
+  mechanism and precedent — so a lesson there is written twice, and the line comes first: a trigger, an arrow, what the plan does about
+  it, in one sentence; the body then carries the «why» and the precedent, and never a second version of the rule. A new shape of a
+  family is one more `· trigger → rule` item on the family's line. The validator refuses an index line without an arrow. Precedent: the
+  manager read the whole catalogue because its index named the shapes without saying what to do about them, and the reading cost about
+  half of the manager's context at the end of planning.
 - A family, the third-patch rule and the engine/profile split are in step 7 of `../SKILL.md` and hold here unchanged.
 
 ## Writing
@@ -63,7 +69,7 @@ line. The steps below are that review, moved to the place where the edit is made
    `git -C <engine-clone> diff -U0 | python3 <engine-clone>/.github/scripts/check_identifiers.py --diff`.
    The validator also ratchets the edit against the last commit: an engine change with no bump, a bump with no CHANGELOG line, a section
    that gained an entry while its index group stayed the same, a count that no longer matches its list. It also holds every catalogue
-   and agent instruction to a size budget, because each is read whole and every entry is paid for in every session: over it, the same
+   and agent instruction to a size budget, because each is read whole — by the manager, or by the reviewer that reads it for them — and every entry is paid for in every session: over it, the same
    edit makes room — entries sharing a mechanism folded into one family, a second precedent merged into the first — and the number in
    `check_engine_edits.py` is not the retro's to raise. Reading the repository (`git diff`,
    `git show`) is not a «git operation» in step 7's sense; adding, committing, stashing or switching branches is. A failure is fixed and

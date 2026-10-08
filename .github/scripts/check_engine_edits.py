@@ -44,7 +44,7 @@ AGENTS = "agents/*.md"
 # Lower a number when its file shrinks, so the room does not come back. SKILL.md has its own budget in
 # validate-plugin.py.
 BUDGETS = {
-    "skills/qa/references/planning.md": 204_000,
+    "skills/qa/references/planning.md": 215_000,  # its index carries the rules (~21k) since 0.18.19
     "skills/qa/references/manual-brief.md": 154_000,
     "skills/qa/references/report.md": 84_000,
     "skills/qa/references/browser-techniques.md": 42_000,
@@ -112,6 +112,23 @@ def count_problems(text: str, rel: str) -> list[str]:
                     break
             if n != NUMBERS[m.group(1)]:
                 out.append(f"{rel}:{lineno}: «all {m.group(1)} still» — the list above has {n} item(s)")
+    return out
+
+
+RULES_INDEX = "Every line below is the rule"
+
+
+def index_rule_problems(text: str, rel: str) -> list[str]:
+    """In a catalogue whose «Contents» says its lines are the rules, every index line carries an arrow: a trigger, then what to do.
+    A line without one is a shape named without its rule — the reading the rules index exists to make unnecessary."""
+    m = re.search(r"^## Contents\n(.*?)^## ", text, re.S | re.M)
+    if not m or RULES_INDEX not in m.group(1):
+        return []
+    out = []
+    start = text[: m.start(1)].count("\n") + 1
+    for i, line in enumerate(m.group(1).splitlines(), start):
+        if line.startswith("- ") and "→" not in line:
+            out.append(f"{rel}:{i}: an index line without «→» — the Contents of this catalogue are the rules: trigger → what the plan does")
     return out
 
 
@@ -207,6 +224,8 @@ def problems(root: Path) -> list[str]:
         out += count_problems(path.read_text(), str(path.relative_to(root)))
     for path in sorted([*root.glob(CATALOGUES), *root.glob(AGENTS)]):
         out += budget_problems(path.read_text(), str(path.relative_to(root)))
+    for path in sorted(root.glob(CATALOGUES)):
+        out += index_rule_problems(path.read_text(), str(path.relative_to(root)))
 
     if _git(root, "rev-parse", "--verify", "-q", "HEAD") is None:
         return out  # no git, or no commit yet — nothing to ratchet against

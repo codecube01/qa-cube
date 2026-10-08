@@ -131,6 +131,23 @@ class Version(unittest.TestCase):
         self.assertEqual(ce.version_problems([], "0.1.1", "0.1.1", False), [])
 
 
+class RulesIndex(unittest.TestCase):
+    HEAD = "# C\n\n## Contents\n\n**Every line below is the rule.**\n\n**Group**\n\n"
+    def test_a_line_without_an_arrow_is_caught(self):
+        text = self.HEAD + "- a shape named, no rule\n- a shape → what to do\n\n## Group\n\n**Entry.**\n"
+        found = ce.index_rule_problems(text, "c.md")
+        self.assertEqual(len(found), 1)
+        self.assertIn(":9:", found[0])
+
+    def test_lines_with_arrows_are_quiet(self):
+        text = self.HEAD + "- a shape → what to do\n- **Family** — head → rule: shape → rule · shape → rule\n\n## Group\n\n**Entry.**\n"
+        self.assertEqual(ce.index_rule_problems(text, "c.md"), [])
+
+    def test_a_catalogue_without_the_marker_is_not_checked(self):
+        text = "# C\n\n## Contents\n\n- a shape named, no rule\n\n## Group\n\n**Entry.**\n"
+        self.assertEqual(ce.index_rule_problems(text, "c.md"), [])
+
+
 class Budgets(unittest.TestCase):
     def test_a_listed_file_over_its_budget_is_caught(self):
         rel = "skills/qa/references/planning.md"
@@ -157,6 +174,12 @@ class Corpus(unittest.TestCase):
         found = []
         for path in sorted(REPO.glob(ce.CATALOGUES)):
             found += ce.count_problems(path.read_text(), str(path.relative_to(REPO)))
+        self.assertEqual(found, [])
+
+    def test_rules_indexes_as_they_stand_carry_arrows(self):
+        found = []
+        for path in sorted(REPO.glob(ce.CATALOGUES)):
+            found += ce.index_rule_problems(path.read_text(), str(path.relative_to(REPO)))
         self.assertEqual(found, [])
 
     def test_catalogues_and_agents_as_they_stand_fit_their_budgets(self):

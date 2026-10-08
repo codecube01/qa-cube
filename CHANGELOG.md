@@ -13,8 +13,6 @@ section gathers everything since the previous one.
 
 ### Added
 
-- **A mock-up board is read through its structure** (`browser-techniques.md`, «Design mock-ups»): frame captions sit in
-  neighbouring title frames and are matched by coordinates; text layers' names are their text, so no code-generation call is needed.
 - **An automation price includes the host class's fixed cost**: `SKILL.md` step 5 — provisioning, per-test hooks and
   stabilising reads, read off a neighbouring test's run log.
 - **A launch after a wait on the environment re-reads the comment thread first**: `manual-brief.md` («Preflight and
@@ -50,7 +48,14 @@ section gathers everything since the previous one.
 - **The read channel for a sanctioned probe's effect is a question of the sanction** (`manual-brief.md`, «A sanctioned mutating
   probe», now eight questions; a «Read channel» slot in the brief template).
 
+- **A mock-up board is read through its structure** (`browser-techniques.md`, «Design mock-ups»): frame captions sit in
+  neighbouring title frames and are matched by coordinates; text layers' names are their text, so no code-generation call is needed.
+
 ### Changed
+
+- **The «Contents» of `planning.md` are the rules, and the manager plans from them** — one line per shape, a trigger and what the plan
+  does about it; the bodies are opened per line that fired, and a reviewer subagent reads them whole against the plan once it is written
+  (`SKILL.md` step 3). `engine-edits.md` says how such an index is edited; the validator refuses an index line without an arrow.
 
 - **The round's budgets and limits are a section of the brief template**: expendables by the formula, the control instance, parallel
   waits, the amount cap with the fee beside it, the neighbouring contour, reference values, window and focus; five `manual-brief.md`
