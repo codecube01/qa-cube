@@ -56,6 +56,10 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **The «Contents» of `manual-brief.md` and `report.md` are the rules too** — the manager reads the index with a `limit` at steps 4 and
+  6, opens one entry per fired line, and a context-free reviewer reads the bodies against the brief (before the executor is launched)
+  and against the report (before delivery). The same scheme as `planning.md` at step 3; `report.md`'s budget raised to 95000.
+
 - **The «Contents» of `planning.md` are the rules, and the manager plans from them** — one line per shape, a trigger and what the plan
   does about it; the bodies are opened per line that fired, and a reviewer subagent reads them whole against the plan once it is written
   (`SKILL.md` step 3). `engine-edits.md` says how such an index is edited; the validator refuses an index line without an arrow.

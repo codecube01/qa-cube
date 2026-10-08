@@ -239,18 +239,13 @@ the requirements are ambiguous and there is nowhere else to clarify them; what y
 briefs — those carry only the expected behavior from the requirements.
 
 **Before writing the plan, read the «Contents» of `references/planning.md` whole — it is the rules**: one line per shape of scenario,
-the trigger and what the plan does about it, families with their shapes. **Read the Contents and nothing else**: `grep -n '^## '` on the
-file gives the line of the first body heading (the second match — the first is «Contents» itself), and `Read` with `limit` set just below it returns the index alone — a `Read` with no
-limit returns the index plus a third of the body, which is the reading this step exists to avoid (measured: 24k tokens against 7k).
-Plan from that list; where a line fired and the rule needs its mechanism or its precedent, open THAT entry — `grep -n` for its first
-words, `Read` with `offset` there and a `limit` of ~25 lines — never a block of the body around it. **Once `1-plan.md` is written, launch a reviewer: `Agent` with `subagent_type:
-"general-purpose"`, with no context from the session.** Its brief: the absolute path of `references/planning.md` (next to
-this skill); the paths of `0-session.md` and `1-plan.md`; «read planning.md whole — the bodies, not only the Contents — then the plan;
-return the entries whose shape this task has and the plan does not cover: for each, the entry's title, the scenario or line of the plan it
-would change, and what to add; nothing else — no praise, no restatement of the plan». Apply what it returns to `1-plan.md` and say in the
-plan, in one line, what the review added. Why a reviewer and not your own reading: the value of the catalogue is in the shapes you did
-not think of, and an author who reads the whole catalogue for them pays for every entry in every later step of the session — about half
-the manager's context at the end of planning, measured; a reader with no stake reads it once, answers, and leaves.
+the trigger and what the plan does. **Read the Contents and nothing else**: `grep -n '^## '` gives the first body heading, `Read` with `limit` just below it returns the index alone; a `Read` with no limit returns a third of the body too. Plan from that list and open one entry per fired line, as the catalogue's header says. **Once `1-plan.md` is written, launch the catalogue reviewer: `Agent` with `subagent_type: "general-purpose"`, with no context
+from the session.** Its brief: the absolute path of the catalogue (`references/planning.md`, next to this skill); the paths of the
+session files it judges (`0-session.md`, `1-plan.md`); «read the catalogue whole, bodies included, then the files;
+return the entries whose situation this round is in and the file does not honour: for each, the entry's title, the line it would change,
+and what to add — at most eight items, those that would change a verdict, a budget or an irreversible step; nothing else». Apply what it returns by targeted edits — the file is in your context, do not re-read it — and say in it, in one line, what the
+review added. Why a reviewer and not your own reading: the value of a catalogue is in the shapes you did not think of, and an author
+who reads the whole catalogue for them pays for every entry in every later step; a reader with no stake reads it once and leaves. Steps 4 and 6 reuse it.
 
 **3.5. Test design** (only with `test-cases: upfront`; with `inline` and `none` the step is skipped entirely). The plan's scenarios are
 turned into cases by the `qa-analyst` subagent — **before** the manual run and without seeing the environment, so that a case describes a
@@ -275,9 +270,13 @@ the same manner as any other requirements gap. The step works in automation-only
 needs a case for the link — the analyst writes it from the requirements just the same.
 
 **4. The manual check** (skipped in automation-only mode). Four moves — preflight, the brief, the launch, acceptance. **Before writing the
-brief, read `references/manual-brief.md`**: the situations a round lands in (preflight and access, what the brief must carry, a retest
-round, the executor mid-run, accepting the result), each with the line that costs nothing to write and a whole pass to omit. Read it whole —
-an executor is briefed once, and a situation you did not foresee cannot be added to the brief afterwards.
+brief, read the «Contents» of `references/manual-brief.md` whole — it is the rules**: one line per situation a round lands in (preflight
+and access, what the brief carries, a retest round, the executor mid-run, accepting the result), the trigger and what the brief carries
+or the manager does. Read it as step 3 reads `planning.md`'s, open one entry per fired line, and write the brief from that list and the
+template's slots. **Once `2-manual-task.md` is written, the catalogue reviewer of step 3 reads `references/manual-brief.md` against `0-session.md`,
+`1-plan.md` and the brief — and also returns every template slot left as a placeholder.** Apply what it returns and launch the executor
+only after that: an executor is briefed once, and the situation you did not foresee cannot be added to the brief afterwards. The «Accepting the result» and «the control does
+nothing» groups of the same Contents are read again when the result comes back.
 - **the preflight check** — if the scenarios involve the browser (frontend tasks, UI verification): **before** launching the executor,
   verify the access yourself against the profile's checklist (Browser section). Something does not work — **tell the user right away** and
   do not launch the executor until the access is fixed. What preflight hands over about the state it created — the instance, the identity, the carriers, the values
@@ -374,9 +373,13 @@ the template** (the template is a skeleton for projects without a format of thei
 three customer objections in one session — a superfluous column, fixed rows, internal links inside cells — all from rendering the template
 while the profile described its own format.
 
-**Before writing the report, read `references/report.md`** — the catalogue of situations a finding lands in: whether it is a finding at
-all, how the business sentence is worded so that shortening it does not make it false, and the table's own mechanics. Read it whole, once
-per session, after the project's format and before the first cell: a finding withdrawn after delivery burns its id and forces edits to the
+**Before writing the report, read the «Contents» of `references/report.md` whole — it is the rules**: one line per situation a finding
+lands in (is it a finding at all, the priority, the first bold sentence, what «not covered» may claim, the table's mechanics), the trigger
+and what the report does about it. Read it as step 3 reads `planning.md`'s, after the project's format and before the first cell, and open one
+entry per fired line. **Once `99-report.md` is
+written and checked, and before the delivery at 6.5, the catalogue reviewer of step 3 reads `references/report.md` against the round's
+result file(s) and the report, returning every finding, verdict row or «not covered» row an entry says may not stand as written.** Apply
+what it returns before delivering: a finding withdrawn after delivery burns its id and forces edits to the
 report, the registries and the knowledge base, and every entry in that file was paid for exactly once that way.
 
 **With `test-cases: upfront` the report's sections are assembled from the cases, not from prose.** «What is confirmed against the

@@ -165,7 +165,7 @@ if qa_skill.exists():
 
 # --- subagent_type values must match real agents -----------------------------
 if qa_skill.exists():
-    declared = {p.stem for p in agent_files}
+    declared = {p.stem for p in agent_files} | {"general-purpose"}  # the harness's own reviewer type, not a plugin agent
     for used in sorted(set(re.findall(r'subagent_type: "([\w\-]+)"', qa_skill.read_text()))):
         if used not in declared:
             fail(f"skills/qa/SKILL.md launches subagent_type `{used}`, but agents/{used}.md does not exist")

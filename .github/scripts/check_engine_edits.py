@@ -45,8 +45,8 @@ AGENTS = "agents/*.md"
 # validate-plugin.py.
 BUDGETS = {
     "skills/qa/references/planning.md": 215_000,  # its index carries the rules (~21k) since 0.18.19
-    "skills/qa/references/manual-brief.md": 154_000,
-    "skills/qa/references/report.md": 84_000,
+    "skills/qa/references/manual-brief.md": 154_000,  # its index carries the rules since 0.18.23
+    "skills/qa/references/report.md": 95_000,  # its index carries the rules since 0.18.23
     "skills/qa/references/browser-techniques.md": 42_000,
     "agents/qa-manual.md": 29_000,
 }

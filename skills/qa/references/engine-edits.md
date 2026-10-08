@@ -37,7 +37,7 @@ line. The steps below are that review, moved to the place where the edit is made
   executor reaches late, and the executors kept narrating in the engine's language until it became a slot — the first line of every prompt, a field of the brief;
   and three report checks (the column count, the cell length, a secret value) went out wrong at least once each while they were rules
   to keep in mind, until they became `check_session.py`.
-- **Where a catalogue's «Contents» says its lines are the rules** (`planning.md`), the index line IS the rule and the body is its
+- **Where a catalogue's «Contents» says its lines are the rules** (`planning.md`, `manual-brief.md`, `report.md`), the index line IS the rule and the body is its
   mechanism and precedent — so a lesson there is written twice, and the line comes first: a trigger, an arrow, what the plan does about
   it, in one sentence; the body then carries the «why» and the precedent, and never a second version of the rule. A new shape of a
   family is one more `· trigger → rule` item on the family's line. The validator refuses an index line without an arrow. Precedent: the

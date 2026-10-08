@@ -1,58 +1,69 @@
 # Writing the findings and the report
 
-Read at step 6 of `../SKILL.md`, before writing `99-report.md`; the wording entries are read again whenever a finding is being
-shortened for the tracker. Each entry is a situation a finding lands in and the line that decides whether it survives contact
-with the customer; the precedent that closes an entry is what paid for the rule. **Read the file whole** — a finding withdrawn
-after delivery burns its id and forces edits to the report, the registries and the knowledge base, and the entry that would
-have prevented it is never the one you were looking for.
+Read at step 6 of `../SKILL.md`, before writing `99-report.md`; the wording lines are read again whenever a finding is being shortened
+for the tracker. Each entry is a situation a finding lands in and the line that decides whether it survives contact with the customer;
+the precedent that closes an entry is what paid for the rule. **The «Contents» below is read whole, and it is the rules** — one line per
+entry, the trigger and what the report does about it; the report is written from that list, and an entry's body is opened for its
+mechanism and its precedent only when its line fired — that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines from
+there, never the file without a `limit`. After the report is written, a reviewer with no context from the session reads the bodies against
+it (`../SKILL.md`, step 6): a finding withdrawn after delivery burns its id and forces edits to the report, the registries and the knowledge
+base, and the entry that would have prevented it is never the one you were looking for.
 
 ## Contents
 
+**Every line below is the rule: a trigger, then what the report does about it.** Single entries first, then the **families** — one
+mechanism with its shapes under it; a shape is only readable through its head.
+
+**When the customer files the finding by hand**
+
+- a read-only tracker → ready-to-paste issue files are made ON REQUEST after the user has read the report, never by default and never offered; when asked: one file per defect carrying the trail the cell drops (steps, identifiers, expected/actual, cause), the tracker's own convention, the finding's id INSIDE the body, no QA-repository paths; once filed, the finding leaves the table for a line below it with the task link, its id consumed
+
 **Is this a finding at all**
 
-- a candidate enters the findings table only with the violated requirement QUOTED — a gap, a blocker or a latent defect goes to the second table, a wish to side findings
-- a requirement whose SURFACE is missing — one order: a live carrier task, another layer with no carrier, this task's own scope
-- a known defect blocked the target scenario — it stops being background and enters the findings; one caused by the environment, not the task, goes to side findings
-- the task's goal (its user story) gets a verdict of its own — «tried and failed» is not «not covered», an incomplete «full matrix» is a fail
-- a `pass` that holds only because today's data hides a mechanism already known to be wrong — a latent finding, filed now
-- a `fail` on an attribute of a requirement — check the neighbouring tab, column or block first
-- «the capability is missing» — not a defect until a requirement for exactly this carrier is found
-- «the data is gone» on a test environment — first a question about a cleanup, then a finding
-- a consequence the task's own text predicts — scoped by the contour it lands in, not by the mention
-- development decided an item in a comment — not a finding: «Closed by a development decision», its premise measured; a scope a comment left open «Awaiting the analyst's decision» (a gap in the TEXT stays in the second table)
-- the same statement in its IMPLICIT form — the one that gets missed; and it holds only for findings that reached the tracker
-- a compound finding over several FRs — reconciled against each FR separately, and quoted from the spec
-- reconciling covers your own past rounds too — an artifact on the environment that PROVES your finding is the signal; a closure a neighbouring session declared covers only the halves it measured
-- a guard you could not satisfy — not a defect until the legitimate caller fails it too
-- «there is no requirement for this» expires when a new source of requirements turns up — re-open the burned ids
-- a CAUSE read off one sample of client-side state — checked against the library's code in the served artifact before publication
-- a `pass` of the form «the other side changed state» — rests on a signal from that side, not on the client's own state
-- «no check was found» is the phrasing of a finding that was never probed — and «the consumer cannot see this», settled by the response already in hand; «accepts what it should check» waits for whoever checks LATER
-- a plausible explanation that leads to the right conclusion — its CAUSE is still verified, because the cause is what the team acts on
-- what belongs to the task's report and what to the side-findings registry
+- a candidate → enters the findings table only with the violated requirement QUOTED; no quote but still the task's business → the second table, «Findings without a violated clause» (a requirements gap, a known defect that blocked verification, a latent defect); «not required, but…» → side findings; leaning on another task → that task named in words, a closed one as «its DoD does not cover this»
+- a requirement whose SURFACE is missing → one order, stop at the first yes: a live task carries the missing part → a line under the table, no id; another layer with no task → the second table, a gap for the analyst; this task's own scope → a FAIL in the findings table; the requirement's verdict row stays `partial`/`fail` in all three, and what the carrier task would NOT fix keeps its own id whatever the answer
+- a known defect blocked the target scenario → it enters the second table as «blocks the verification of X», its priority the manager's call; one CAUSED by the environment (a client, a device mode, a third party) → side findings, the row «not covered — cause: <proven>», the goal «not confirmed»
+- the task's goal (its user story) → a verdict of its own before the requirements table: «tried and failed» is not «not covered», an incomplete «full matrix» is a fail, an obstacle outside the product does not cancel the goal verdict
+- a `pass` that holds only because today's data hides a mechanism already known to be wrong → look for the breaking condition in the data now; absent, the row is `partial` and a latent finding is filed in the second table at the priority of the damage to come
+- a `fail` on an attribute of a requirement → check the neighbouring tab, column or block first; «needs an analyst's decision on what counts as X» → choose the interpretation first, and only «not met» yields a finding with an id
+- «the capability is missing» → not a defect until a requirement for exactly this carrier is found (its own tracker, and a control on the old build); both «no» → side findings as a question for the product
+- «the data is gone» on a test environment → first a question about a cleanup, then a finding; what «disappeared» being exactly what was considered obsolete makes the question mandatory
+- a consequence the task's own text predicts → still scoped by the contour it lands in: expected is not in scope; side findings with a line in the report
+- development decided an item in a comment («we do it differently», «left as is») → not a finding: a section «Closed by a development decision» (requirement · the decision quoted with its date · what the round measured, which answers whether the decision's PREMISE holds); the verdict row stays `partial`/`fail`, an earlier id is burned, the counts exclude the item, and the author's own word for the implementation («placeholder», «draft») is quoted; a comment that leaves deferred / dropped / owed open → «Awaiting the analyst's decision»; a gap in the TEXT stays in the second table; a comment goes stale claim by claim, re-read every round on the task AND its parent
+- the same statement in its IMPLICIT form («fixing 25, 26, 27» against six filed) → the unnamed ones are out of the fix: count the named items against the filed list at step 1, write the complement as a scope question; and it holds only for findings the developer could SEE in the tracker — an unpublished one stays in the table and the delivery says so
+- a compound finding over several FRs → reconciled against each FR separately, and quoted from the spec, not from the previous finding's wording
+- an artifact on the environment that PROVES your finding (a forbidden file, an impossible value) → somebody put it there: reconcile against your own past rounds' registries before publishing, and write «recorded on <date>, never filed, still reproduces, here is what is new»; a block a neighbouring session closed → filled by transfer with its mark, never copied; a closure declared in passing → covers only the halves that session measured, the unmeasured half stays open, narrowed, under its own id
+- a guard you could not satisfy → not a defect until the LEGITIMATE caller fails it too: find one real execution; where it exists, the finding is the round's own blocker addressed to whoever owns the credential or the contract
+- «there is no requirement for this» → true only of the requirements you have READ: when a new source turns up, re-open the burned ids and the analyst questions and re-rate them against it
+- a CAUSE read off one sample of client-side state (a key, a cookie) → checked against the library's code in the served bundle before publication; contradicted, the finding is withdrawn and the effect stays as «observed once, cause not established»; the reproduction recipe is a claim too
+- a `pass` of the form «the other side changed state» → rests on a signal from that side (an event it emitted, a request it answered), or it is written as «the client believes X»
+- «no check was found» → the phrasing of a finding never probed: run the bypassing probe or write «not measured»; «the endpoint ACCEPTS what it should check» → not a finding until you know who checks it and when; «the consumer cannot SEE this» → settled by re-reading the consumer's own response already in the log, dated after the change
+- a plausible explanation that leads to the right conclusion → its CAUSE is still verified, because the cause is what the team acts on
+- what belongs to the task's report → the letter of the requirements decides, not the topic: a defect outside the text goes to the side-findings registry with a one-line pointer in the report; one already filed in the tracker → an «outside the table» line, the id consumed; a related one (same cause, new trigger) stays in the table naming what to add to the existing task's DoD
 
 **Setting the priority**
 
-- «will the user see it today» — and two calibrations colliding on one finding
-- a security finding: severity against the standard, and the bypass proven by a symmetric before/after set
+- «will the user see it today» → a defect observable only through the API with no screen and no live task is a `Minor` with the deferred risk named; where it collides with «data and audit quality — `Major`», irreversibility (a write-once journal) and «is it a requirements gap» decide, and the reasoning goes into the cell
+- a security finding → severity reconciled with the standard or the widespread practice before it is written (what must the attacker already hold); «access was gained» → proven by a FULL and SYMMETRIC before/after set over several operations, the «after» set containing the «before» set
 
 **Wording a finding**
 
-- a finding about appearance names the conditions of observation — width, zoom, locale, theme; a device-class branch reached by spoofing detection proves the branch, not what that device shows
-- «the wrong HTTP code arrived» — filed only with proof that the right code does reach the client
-- a finding read off a NUMERIC CODE — name the dictionary, and prove the mapping by behaviour
-- the title line is the dedup key, so it carries the where and the when
-- **The first bold sentence** — compression may not make it false · the plain verdict before the cause · the requirement's terms, not the surface's · a spec word and a quantifier both smuggle claims in
+- a finding about appearance → names the conditions of observation (width, zoom, locale, theme) and the threshold at which the defect appears, measured at a typical and a narrow width; a device-class branch reached by spoofing detection → proves the branch exists, not what that device shows: check the screen at that device's width first, else the requirement is at most partial and the missing layout is a scope question
+- «the wrong HTTP code arrived» → filed only with proof that the right code does reach the client on the same host; and check whether the code is visible in the logs at all
+- a finding read off a NUMERIC CODE → name the dictionary, and prove it is the product's own by behaviour (the same field under another actor or state); it is usually a cancellation of a published fact, re-verified yourself; dissolved, say so to every artifact that carried the old reading
+- the title line → `Area \ what happens, under what condition`, ~90 characters, the observable behaviour (not the cause, never «X does not work»), one defect per title, the tracker's own convention where it has one — it is the dedup key
+- **The first bold sentence** — one question answered in the requirement's own words, every noun visible or in the evidence: compression → may not make the finding literally false («missing» only if the element does not exist at all) · the plain verdict first → was the thing done or not, the cause second and marked as explanation; the broken MECHANISM named in business words, the consequence after it, and the verdict block and the tracker comment keep the same order · the requirement's terms, not the surface's → the first sentence answers the task's question, the screen is the technical line · a spec word and a quantifier → both smuggle claims in: a term the screens never use goes to the technical line attributed, and «all five» is checked against the evidence
 
 **What «not covered» is allowed to claim**
 
-- «no access to X» is a claim about a fact — verified by trying, not inherited; a browser `403` is not proof, and a surrogate oracle carries the line naming what it cannot show
-- «X is broken», concluded from an unsuccessful search — a protocol of the attempt, and it may not enter the profile or the knowledge base as a property
-- «the design has no such screen» — true only of the canvas you opened; and a frontend round with no design comparison says so
+- «no access to X» → a claim about a fact, verified by trying, never inherited from the profile or a past report; a browser `403` is not proof where a cookie for the parent domain may answer; a surrogate oracle carries the line naming what it cannot show; and «the channel does not exist» is asked of EVERY contour, since an empty list is a fact about the identity that asked, and where the contours disagree the disagreement is the finding
+- «X is broken», concluded from an unsuccessful search → a protocol of the attempt («not reproduced under these conditions, here is what was tried»), never a property of X, and never into the profile or the knowledge base in the second form; a verdict of impossibility needs proof of impossibility, and the user is offered the one action that separates «we could not» from «it cannot»
+- a requirement addressed to a component that does not exist → a FAIL of the requirement, not «unobservable by construction», usually carrying its family of requirements down with it; say what works instead, and whether the absence was ever descoped
+- «the design has no such screen» → true only of the canvas you opened (read the saved metadata file, canvases may be unlistable); the UI is compared with all three sources — the requirements, the attribute tables, the design — and a disagreement is recorded with every variant for the analyst to choose; a frontend round with no design comparison says so under «not covered»
 
 **The table's own mechanics**
 
-- **The table is written to be copied out whole** — a stray `|` breaks the row · HTML dies in the tracker · what stays out of the cells · the split by layer comes before the ids, and one defect or two decides the number of ids · an inherited row may have acquired a task · text on screen needs a screenshot or the bundle's own string
+- **The table is written to be copied out whole** — into a tracker, for a developer with neither the session nor the files: a stray `|` → breaks the row silently, enumerate with commas or `·`, the checker counts the bars and the cell length · HTML (`<br>` included) → dies in the tracker, a second tier goes below the table · what stays out of the cells → anything fixed, QA-repository paths (except a screenshot's bare file name after `📎`), ids from other runs, round numbers · the split by layer → comes before the ids are assigned, one id or two decided by what each half IS; a machine-readable error the client ignores is the frontend's · an inherited row → asked «is this already filed» every round, and moved out with its link when a task turns up · «filed in the tracker» → claimed only when the finding's OWN id or text appears in a task, found by an export searched with a word boundary; a topical match is «related» · a finding whose status changed → MOVES between sections, never re-labelled in place; a regression returns under its own id as «regression R<n>»; the verdict rows that cite it are re-verdicted and the totals recounted · a retest → every verdict row transcribed from the EXECUTOR's own table, the totals reconciled against its count · requirement labels invented inside the round → published with their mapping, or dropped for the source's words · text the user sees → a screenshot or the string from the served bundle; a disagreement between the two is re-measured, not picked from
 
 ## When the customer files the finding by hand
 
