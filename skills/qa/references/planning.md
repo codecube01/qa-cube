@@ -10,9 +10,8 @@ finds them.
 
 ## Contents
 
-**Every line below is the rule: a trigger, then what the plan does about it.** The plan is written from this list; an entry's body is
-opened for its mechanism and its precedent when the line fired and the rule needs its «why». Single entries first, then the **families** —
-one mechanism with its shapes under it; a shape is only readable through its head.
+**Every line below is the rule: a trigger, then what the plan does about it.** Single entries first, then the **families** — one
+mechanism with its shapes under it; a shape is only readable through its head.
 
 **What the plan rests on**
 

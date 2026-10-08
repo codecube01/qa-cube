@@ -7,6 +7,13 @@ project's tooling stays in its profile.
 - **Open markdown with the Read tool, never `cat` through the shell.** The profile's subfiles and knowledge files are large, a large output
   spills into a persisted-output file, and the file has to be read again anyway. The shell is for commands, not for reading.
 - **macOS has no `timeout`** — bound time inside the script itself.
+- **A process is stopped by its own PID, never by a pattern — and a hung foreground call is not killed at all.** The shell runs on the
+  user's own machine, next to their browser, their editors and the session's own servers, so `pkill -f <word>` or `killall` matches
+  far more than the command it was aimed at: every process whose command line carries the word anywhere — an application path, a
+  config directory. Stop what you started by the PID you recorded when you started it, or by the harness's own task stop; a
+  foreground call that hangs is left to time out and re-run another way (in the background, judged by its file). Precedent: an
+  executor cleared a hung call with a pattern kill on a three-letter word and terminated the user's browser — the round's own
+  instrument — together with a container runtime, a VPN service and the session's tool servers.
 - **A background shell task reports «completed» even when its command never started** — judge it by its artifact (the file exists, is
   non-empty, grows), never by its status. `nohup … &` inside a background task dies with its wrapper: make the script itself the background
   command.

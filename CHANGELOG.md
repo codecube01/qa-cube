@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **Processes are stopped by PID, never by a pattern**: `shell-pitfalls.md` — `pkill -f`/`killall` on the user's machine
+  matches their own applications; a hung foreground call is left to time out.
 - **An automation price includes the host class's fixed cost**: `SKILL.md` step 5 — provisioning, per-test hooks and
   stabilising reads, read off a neighbouring test's run log.
 - **A launch after a wait on the environment re-reads the comment thread first**: `manual-brief.md` («Preflight and
@@ -48,8 +50,9 @@ section gathers everything since the previous one.
 - **The read channel for a sanctioned probe's effect is a question of the sanction** (`manual-brief.md`, «A sanctioned mutating
   probe», now eight questions; a «Read channel» slot in the brief template).
 
-- **A mock-up board is read through its structure** (`browser-techniques.md`, «Design mock-ups»): frame captions sit in
-  neighbouring title frames and are matched by coordinates; text layers' names are their text, so no code-generation call is needed.
+- **A mock-up board is read through its structure** (`browser-techniques.md`, «Design mock-ups»): one structure-listing call, read
+  from the file the tool saves; frame captions often sit in neighbouring title frames and are matched by coordinates; text layers'
+  names are their text, so no code-generation call is needed.
 
 ### Changed
 

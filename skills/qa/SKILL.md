@@ -244,7 +244,7 @@ file gives the line of the first body heading (the second match — the first is
 limit returns the index plus a third of the body, which is the reading this step exists to avoid (measured: 24k tokens against 7k).
 Plan from that list; where a line fired and the rule needs its mechanism or its precedent, open THAT entry — `grep -n` for its first
 words, `Read` with `offset` there and a `limit` of ~25 lines — never a block of the body around it. **Once `1-plan.md` is written, launch a reviewer: `Agent` with `subagent_type:
-"general-purpose"`, with no context from the session.** Its brief is five lines: the absolute path of `references/planning.md` (next to
+"general-purpose"`, with no context from the session.** Its brief: the absolute path of `references/planning.md` (next to
 this skill); the paths of `0-session.md` and `1-plan.md`; «read planning.md whole — the bodies, not only the Contents — then the plan;
 return the entries whose shape this task has and the plan does not cover: for each, the entry's title, the scenario or line of the plan it
 would change, and what to add; nothing else — no praise, no restatement of the plan». Apply what it returns to `1-plan.md` and say in the

@@ -53,8 +53,9 @@ line. The steps below are that review, moved to the place where the edit is made
   mechanism of its own is not a second precedent — it gets a paragraph of its own (`*And where …*`) with its own precedent. Precedent: a
   refused-mutation entry ended up with the new precedent in its middle and the old one at its end, the old one readable against the new
   rule.
-- **The index and the counts move with the entry**: the line in the catalogue's «Contents» (or one more `·` item in a family's line), and
-  any count written in words — «read eight ways», «the eight entries below», «all four still pay».
+- **The index and the counts move with the entry**: the line in the catalogue's «Contents» (or one more `·` item in a family's line;
+  in a rules index, a `trigger → rule` line, as in «Before writing»), and any count written in words — «read eight ways», «the eight
+  entries below», «all four still pay».
 - **Anonymisation covers the description, not only the names.** Step 7's rule, plus: a precedent that stacks the domain's own nouns until
   they describe one kind of product is reworded down to the generic class — the mechanics survive it, the product's portrait does not.
 
