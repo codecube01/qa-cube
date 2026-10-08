@@ -55,7 +55,7 @@ entry, so a family is read whole or not at all.
 
 - **What a recon fact may claim** — a row of the template's «Recon facts» table · a value, not a retelling · an endpoint verified by one probe, or marked unverified · dated, with the boundary of the sample — state, counts, a mechanism dated by the build, a negative · contract values are fact, composition is a hypothesis · a field-name oracle · a minified excerpt and its lower bound · an identifier scheme · a client query document: names only
 
-**A retest round**
+**A retest round** — the template's «Retest» section, filled in
 
 - **the build's fingerprint** — an item of the brief, taken first, last and after any anomaly; and «nothing has changed» is a claim it cannot establish
 - a round resuming after a calendar wait — read the object and its last-modified, not the process
@@ -567,62 +567,89 @@ of the contract values beside it. The shapes below are the kinds; the table's le
 
 ## A retest round
 
-- **The build's fingerprint is an item of the brief — taken FIRST, repeated as the last action, and again immediately after any anomaly.** Taken only at the end it is taken after the fact, and a deploy landing mid-round goes unnoticed with half the measurements describing one build and half another; taken at both ends, the pair also answers «did the environment change under us». The third reading is triggered by an event, not by a position in the sequence: an anomaly (data vanishing, sessions dropping, 5xx on a healthy endpoint) is exactly when the answer matters most, because it decides whether the earlier evidence describes the same build as the later. Require an answer even a negative one — build versions are usually opaque hashes and tying them to a commit without repository access is impossible, so «development must confirm the fix is in the build» is a full result, while silence lets the reader take as verified something never checked. Acceptance then requires the version the run actually exercised (the bundle hash, the deploy ref, the image version), or the verdict cannot be tied to a build and the next retest starts with archaeology. Precedent: a round took the fingerprint at both ends as instructed, and the redeploy that had wiped the environment mid-round surfaced only because the executor happened to re-read the deploy jobs after re-seeding; in another session a retest had to reconstruct indirectly that the round before it had run on the previous bundle, meaning part of its conclusions applied to a different build than assumed. How the same reading dates a retest's trigger and decides the environment is in `planning.md`, «Dating the build».
+**A retest brief carries the template's «Retest» section, filled in — the fingerprint, the fix's scope, the previous round's verdicts
+line by line, what remains, what is already filed, what is forbidden for the duration of a check.** Each line is a way a retest has
+been wrong about the one question it exists to answer, «what is different now»: the entries below keep what each one cost, the
+section states the rule.
 
-- **«Nothing has changed since the last round» is a claim about a fact, and the fingerprint does not establish it — one behavioural probe does.** Every cheap signal agrees: no status movement, no new comments, the fingerprint matching digit for digit. The conclusion is wrong because the fingerprint answers a narrower question than it appears to — usually «was the client rebuilt», never «did the server change»: a service can be redeployed without touching the version it reports, and behaviour a whole round rested on moves with it. So before proposing that a round is pointless — and before writing «the environment is unchanged» anywhere — spend the one call that probes the previous round's sharpest finding directly: request the blocked page, call the failing operation, read the field that was wrong. Say the general form in the brief, because it governs every verdict the executor is about to write: **matching versions are not grounds for inheriting a single one of the previous round's measurements.** Precedent: a round whose every external signal said «nothing moved» was running on a server redeployed in between, and the previous round's Blocker had been fixed — «do not run the round at all» had already been put to the customer as a legitimate option, and the probe that refuted it was one call.
+- **The build's fingerprint is an item of the brief — taken FIRST, repeated as the last action, and again after any anomaly.** Taken
+  only at the end it is taken after the fact; at both ends the pair answers «did the environment change under us», and the third
+  reading is triggered by the event that makes the answer matter. A negative is a full result — build versions are opaque hashes, and
+  «development must confirm the fix is in the build» beats silence, which lets the reader take as verified something never checked.
+  Acceptance then requires the version the run actually exercised, or the verdict cannot be tied to a build and the next retest starts
+  with archaeology. Precedent: a round took the fingerprint at both ends as instructed, and the redeploy that had wiped the environment mid-round surfaced
+  only because the executor happened to re-read the deploy jobs after re-seeding; another retest had to reconstruct that the round
+  before it had run on the previous bundle. How the same reading dates a retest's trigger is in `planning.md`, «Dating the build».
 
-- **A round that resumes after a CALENDAR WAIT starts by reading the OBJECT and when it was last touched — never by reading the process that was supposed to act on it.** The shape is specific to experiments that cannot be compressed: a fixture is created, the round ends, and days later another round comes back to read the outcome. The brief writes itself around the mechanism under test — the timer, the job, the expiry — so the executor opens its execution history first, finds exactly the event the previous round predicted, and starts writing verdicts. Meanwhile the *object* may have been destroyed days earlier by something else entirely: a shared environment has other actors, a restarted worker replays old input, a neighbouring run sweeps state. The two facts coexist happily — the mechanism fired correctly **and** the row it was supposed to act on had already been overwritten — so nothing about the history announces the problem, and the verdicts built on it are sound about the mechanism and wrong about everything else. Two clauses fix it, and both are cheap. Make the first step of the brief «read the object: its current state and its last-modified timestamp» — a last-modified that predates the expected event is the whole detector, and it costs one read. And require a sweep of **the entire waiting interval**, not just the window around the expected event: whatever else touched this object in those days is what explains the discrepancy, and asking for it only after one appears costs the diagnosis. Precedent: a three-day expiry experiment came back with a textbook timer event and a clean terminal result, while the request itself had been failed two days earlier by a restarted watcher replaying old blocks — the executor found it only on reaching the registry, half an hour of verdicts later, and their retro asked for exactly this inversion.
+- **«Nothing has changed since the last round» is a claim about a fact, and the fingerprint does not establish it — one behavioural
+  probe does.** The fingerprint answers «was the client rebuilt», never «did the server change»: a service is redeployed without
+  touching the version it reports, and behaviour a whole round rested on moves with it. Before proposing that a round is pointless,
+  and before writing «the environment is unchanged» anywhere, spend the one call that probes the previous round's sharpest finding;
+  the brief says the general form, because it governs every verdict the executor writes: **matching versions are not grounds for
+  inheriting a single measurement.** Precedent: a round whose every external signal said «nothing moved» was running on a server
+  redeployed in between, and the previous round's Blocker had been fixed — «do not run the round at all» had already been put to the
+  customer as a legitimate option, and the probe that refuted it was one call.
 
-- **on a retest, first check that the observation path itself is still alive, and rest the verdict on the final artifact rather than on an
-  intermediate UI state.** A «symptom of the defect» goes stale together with the build: in one session the symptom was «zero checkboxes
-  ticked while storage is non-empty», and on the fixed build the dialog started closing by itself — a DOM snapshot taken during the closing
-  animation looked exactly the same. The executor nearly recorded a false reproduction and was saved by a control file. Rule: a retest
-  verdict is settled by the result (the file, the record, the callback); an intermediate state is only a hint;
+- **A round that resumes after a CALENDAR WAIT starts by reading the OBJECT and when it was last touched — never the process that was
+  supposed to act on it.** The brief writes itself around the mechanism under test, so the executor opens its execution history, finds
+  exactly the event the previous round predicted, and starts writing verdicts — while the object may have been destroyed days earlier
+  by another actor, a restarted worker, a neighbouring run. Both facts coexist: the mechanism fired correctly AND the row it acted on
+  was already overwritten. A last-modified that predates the expected event is the whole detector, and the sweep of the entire waiting
+  interval is what explains the discrepancy. Precedent: a three-day expiry experiment came back with a textbook timer event and a clean
+  terminal result, while the request itself had been failed two days earlier by a restarted watcher replaying old blocks — found half an
+  hour of verdicts later, and the executor's retro asked for exactly this inversion.
 
-- **Set the retest of a finding on substituted responses rather than on an expendable instance when what is being checked is the client's
-  reaction.** If the finding is about how the system responds to a refusal (logout, retry, rollback), the reaction is reproduced by
-  intercepting on the client side: no expendable is spent, no one else's state is spoiled, and the run is repeatable. Leave the real refusal
-  for a single control run; substituting under a client cache has its own order (`browser-techniques.md`, «Intercepting, replaying and
-  substituting network»). Precedent: during the retest the expendables ran out and a stray live session turned up in the environment —
-  emulation delivered a full verdict on two requirements where the real path was already unavailable.
+- **On a retest, first check that the observation path itself is still alive, and rest the verdict on the final artifact rather than on
+  an intermediate UI state.** A «symptom of the defect» goes stale together with the build: the symptom was «zero checkboxes ticked
+  while storage is non-empty», and on the fixed build the dialog started closing by itself — a DOM snapshot taken during the closing
+  animation looked exactly the same. The executor nearly recorded a false reproduction and was saved by a control file.
 
-- **A retest verdict is passed on the scope of the FIX, not on the original wording of the finding — and a defect found beyond that scope
-  is a new finding, not a live one.** Findings are usually written broadly («this role can be granted at all»), while what the team accepted
-  is narrow («remove it from the form»). Verify both, but report them apart: the narrow task is closed on its own merits, and whatever the
-  round found outside it — the same outcome reachable by another route, a neighbouring layer, an API path around the UI — is filed as its own
-  finding with its own id and its own place, usually the side-findings registry. Merging the two reads as «the fix did not work», which is
-  false and costs the developer a pointless round; splitting them keeps both facts and lets the customer decide the priority of the new one.
-  The place to settle this is the brief: state the fix's scope verbatim and require a separate verdict on it. Precedent: a round reported
-  «the fix is cosmetic, the defect is alive on the server», and the customer's answer was that the task had been to change the form — done —
-  while the server-side route was a separate defect for the side registry.
+- **Set the retest of a finding on substituted responses rather than on an expendable instance when what is being checked is the
+  client's reaction.** A reaction to a refusal (logout, retry, rollback) is reproduced by intercepting on the client side: no expendable
+  is spent, no one else's state is spoiled, the run is repeatable; the real refusal is left for a single control run (substituting under
+  a client cache has its own order — `browser-techniques.md`, «Intercepting, replaying and substituting network»). Precedent: the
+  expendables ran out and a stray live session turned up in the environment — emulation delivered a full verdict on two requirements
+  where the real path was already unavailable.
 
-- **When you quote a previous round's finding into a retest brief, say whether each value is a RAW ENUM or a caption the user sees.** Findings are written from evidence, so they mix the two freely — the technical line names the enum, the business line names the label — and the compression into a retest brief usually keeps whichever was shorter. The executor then meets a screen whose captions do not match your quoted list and has to decide, mid-run, whether the product changed or the brief is loose; on a retest where the round's whole question is «what is different now», that doubt is expensive precisely when it is least affordable. Mark each value at the point of quoting («the filter sends `NEW`/`UNDER_REVIEW`, the dropdown shows «New»/«Under review»»), and where you only have one of the two, say which one it is. Precedent: an executor lost half a minute deciding whether a dictionary had changed under them, and was rescued only by remembering that the bundle hash was unchanged and the captions had nowhere to change from.
+- **A retest verdict is passed on the scope of the FIX, not on the original wording of the finding — and a defect found beyond that
+  scope is a new finding, not a live one.** Findings are written broadly («this role can be granted at all»), what the team accepted is
+  narrow («remove it from the form»); merging the two reads as «the fix did not work», which is false and costs the developer a
+  pointless round, while splitting them lets the customer set the priority of the new one. Precedent: a round reported «the fix is
+  cosmetic, the defect is alive on the server», and the customer's answer was that the task had been to change the form — done — while
+  the server-side route was a separate defect for the side registry.
+
+- **A previous finding quoted into the brief says whether each value is a RAW ENUM or a caption the user sees.** Findings mix the two
+  freely, and the compression into a brief keeps whichever was shorter; the executor then meets a screen whose captions do not match the
+  quoted list and must decide, mid-run, whether the product changed or the brief is loose — on a retest, the one doubt that is least
+  affordable. Precedent: an executor lost half a minute deciding whether a dictionary had changed under them, rescued only by remembering
+  that the bundle hash was unchanged and the captions had nowhere to change from.
 
 - **A discrepancy found PASSIVELY on a retest proves that it exists, not that the defect reproduces on the current build.** Before the
-  verdict «still broken», either date it — did it arise after the fix (for on-chain data, the explorer's own timestamps) — or reproduce it by a
-  controlled fresh action with a baseline before and the value after. The verdict is built in that order: «the discrepancy exists» → «when it
-  arose» → «reproduces / fixed». Precedent: a mismatch inherited from before the fix was nearly reported as the defect living on. The fresh
-  action is the TARGET operation alone: operations that re-synchronise the same state through another path (a neighbouring write that
-  refreshes the whole record) mask the trigger under test, so the brief names them as forbidden for the duration of the check.
+  verdict «still broken», either date it — did it arise after the fix (for on-chain data, the explorer's own timestamps) — or reproduce
+  it by a controlled fresh action with a baseline before and the value after: «the discrepancy exists» → «when it arose» → «reproduces /
+  fixed». Precedent: a mismatch inherited from before the fix was nearly reported as the defect living on. The fresh action is the TARGET
+  operation alone; operations that re-synchronise the same state through another path mask the trigger under test, and the brief names
+  them as forbidden for the duration of the check.
 
-  *And where the defect lives in a value WRITTEN AT THE MOMENT OF AN EVENT — a failure message, a snapshot, a rendered text stored with
-  the record — the old record can neither confirm the fix nor show the defect alive, so the retest starts by securing a fresh carrier.*
-  A fix to how such a value is produced changes only the records produced after it; the record the finding was filed on keeps its old
-  text for good, and re-reading it after the deploy yields the same evidence as before — which reads as «not fixed» and is only «not
-  re-written». One read of the old record at planning shows which case you are in, and the plan then budgets the event itself: a fresh
-  instance of the failure, reached by whatever route the environment still allows (a route the previous round used may have lost its
-  lever — an operation removed from the contract, a fixture consumed). The old record does not leave the report: whichever consumer
-  prints the stored value verbatim still shows the defect on history, and that is a residue for the team to decide on — a migration or
-  nothing — not a regression and not a part of the fix's verdict. Precedent: a retest of a leaked internal error in a stored failure
-  text found the original row unchanged after the deploy; the fix held on the first failure produced after it, and the row stayed
-  visible, raw, in the one console that prints the stored text as it is.
+  *And where the defect lives in a value WRITTEN AT THE MOMENT OF AN EVENT — a failure message, a snapshot, a rendered text stored
+  with the record — the old record can neither confirm the fix nor show the defect alive, so the retest starts by securing a fresh
+  carrier.* A fix changes only the records produced after it; re-reading the old one after the deploy yields the same evidence as
+  before, which reads as «not fixed» and is only «not re-written». One read of the old record at planning shows which case you are in,
+  and the plan budgets the event itself — by whatever route the environment still allows, since the previous round's lever may be gone.
+  The old record stays in the report as a residue for the team (a migration or nothing), not as a regression. Precedent: a retest of a
+  leaked internal error in a stored failure text found the original row unchanged after the deploy; the fix held on the first failure
+  produced after it, and the row stayed visible, raw, in the one console that prints the stored text as it is.
 
-- **In a retest brief, write out not only «what recon says is fixed» but also «what remains».** Recon of a distribution usually shows both;
-  a remainder named in advance gets checked by the executor in the same motion and comes back as a separate finding rather than as a doubt.
-  Precedent: «the refusal branch is inverted, but the retry limit is still there» — both halves were confirmed, and the remainder became a
-  Minor finding with no extra pass.
+- **The brief writes out not only «what recon says is fixed» but also «what remains».** A remainder named in advance gets checked in
+  the same motion and comes back as a separate finding rather than as a doubt. Precedent: «the refusal branch is inverted, but the retry
+  limit is still there» — both halves were confirmed, and the remainder became a Minor finding with no extra pass.
 
-- **Name, in the brief, the findings ALREADY FILED against the surfaces the round will look at — this task's and the neighbours' — with their ids.** A retest brief carries the task's own findings and nothing else, while the screen under test is shared: a header component, a common formatter, a text passed through from another contour all carry defects filed by other sessions. The executor meets them, cannot tell a known defect from a new one, and either spends calls establishing the novelty or files a duplicate candidate that acceptance then has to unpick. One grep of the session reports and the side-findings registry for the screen's name produces the list; it costs a line per id. Precedent: an executor reached the end of a round before discovering, in the project's reporting file, that two of its observations (an untranslated back button and a raw driver error in a failure message) had been filed by neighbouring sessions — its retro asked for exactly this line.
+- **The findings ALREADY FILED against the surfaces the round will look at — this task's and the neighbours' — are named with their
+  ids.** The screen under test is shared: a header, a common formatter, a text passed through from another contour all carry defects
+  filed by other sessions, and an executor who meets them either spends calls establishing novelty or files a duplicate that acceptance
+  has to unpick. One grep of the session reports and the side-findings registry for the screen's name produces the list. Precedent: an
+  executor reached the end of a round before discovering that two of its observations (an untranslated back button and a raw driver
+  error in a failure message) had been filed by neighbouring sessions — its retro asked for exactly this line.
 
 ## While the executor is running
 

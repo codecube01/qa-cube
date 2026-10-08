@@ -274,8 +274,9 @@ an executor is briefed once, and a situation you did not foresee cannot be added
   verify the access yourself against the profile's checklist (Browser section). Something does not work — **tell the user right away** and
   do not launch the executor until the access is fixed. What preflight must hand over about the state it created — its owner, the time it
   was true, the identity for the executor to check before anything else — is in `references/manual-brief.md`;
-- `2-manual-task.md`: the context in one paragraph, the environment, the scenarios with their expected effects, where to write the result,
-  and **the targeted reading list**: which profile subfiles and knowledge-base files (and, where needed, which of their sections) are
+- `2-manual-task.md`: the context in one paragraph, the environment, in round 2+ the template's «Retest» section filled in (the
+  fingerprint, the fix's scope, the previous round's verdicts line by line), the scenarios with their expected effects, where to write the
+  result, and **the targeted reading list**: which profile subfiles and knowledge-base files (and, where needed, which of their sections) are
   relevant to exactly this task — you built the plan and know that better than the executor (a BE task needs no browser techniques; a task
   about fees needs the wallets domain). The executor reads what is listed — a file, or the sections named after it — whole, plus the
   profile map; the rest — only when stuck. **Plus the engine's references, by ABSOLUTE path** (the executor's cwd is the project):

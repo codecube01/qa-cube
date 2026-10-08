@@ -49,6 +49,10 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **A retest brief has a «Retest» section in the template**: the fingerprint, the fix's scope verbatim, the previous round's verdicts
+  line by line, what remains, what is already filed, what is forbidden during a check; `manual-brief.md` «A retest round» is rewritten
+  around it, `session-folder.md` and `qa-manual.md` point at it.
+
 - **Issue files are made on request only** (`report.md`): with a read-only tracker the session no longer writes
   `issue-<ID>.md` by default nor offers them; the user asks after reading the report.
 - **The action block skips routine** (`SKILL.md`, step 8): no line for pasting the tracker comment or committing the clone; `⚠️` is

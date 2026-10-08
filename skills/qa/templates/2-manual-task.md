@@ -14,6 +14,38 @@
 - Documentation: <paths in the project knowledge base relevant to the task>
 - QA findings: <paths to findings from past sessions, if the section has any>
 
+## Retest (round 2+ — delete the section on a first round)
+
+- Build fingerprint: <how it is read — the bundle hash, the deploy ref, the image version; taken FIRST, repeated as the LAST action, and again
+  right after any anomaly (data vanishing, sessions dropping, 5xx on a healthy endpoint) and before a UI finding is written down; «development must confirm the fix is in the build» is
+  a full answer, silence is not>
+- Matching versions prove nothing: <the one behavioural probe of the previous round's sharpest finding — the blocked page, the failing
+  operation, the wrong field — before a single measurement is inherited; a server can be redeployed under the same reported version>
+- Fix scope, verbatim: <what the team accepted — the retest verdict is passed on THIS; verify both, report them apart: the same outcome by
+  another route or layer is a NEW finding with its own id, usually side findings, never «the fix did not work»>
+- Previous round's verdicts, line by line (not the gist — without «was: pass» a regression cannot be told from a long-standing defect):
+
+  | Requirement | Was | Finding | Value as quoted | Now, per recon |
+  |---|---|---|---|---|
+  | <FR-3> | pass / fail / partial / not covered | <id or —> | <`RAW_ENUM` sends / «Caption» shows — say which one you hold> | <fixed / remains / unknown> |
+
+- What remains: <what recon shows still unfixed — named here it comes back as a separate finding, unnamed it comes back as a doubt>
+- Already filed on these surfaces: <finding ids from the session reports and the side-findings registry — this task's and the neighbours' —
+  on the header, the shared formatter, the pass-through text the round will meet>
+- Forbidden for the duration of a check: <operations that re-synchronise the same state through another path (a neighbouring write that
+  refreshes the whole record) — the fresh action is the TARGET operation alone>
+- After a calendar wait: <first read the OBJECT — its state and its last-modified — never the process's history first; sweep the whole
+  waiting interval for whatever else touched it>
+- Fresh carrier: <where the defect lives in a value WRITTEN AT THE MOMENT OF AN EVENT (a failure text, a snapshot), the old record confirms
+  nothing either way — the route to a fresh instance of the failure on this build, and what the old record still shows is a residue for the
+  team, not a verdict>
+- Stale evidence: <the previous result file opens with «⚠️ the contract changed on <date>: <was> → <now>, the current one is <file>» — or
+  «none, the contract holds»>
+- Verdict artifact: <the file, the record, the callback the verdict rests on — never an intermediate UI state; the observation path itself is
+  checked alive first, a symptom goes stale with the build>
+- Substituted responses: <where the finding is about the client's REACTION to a refusal (logout, retry, rollback) — the response to substitute
+  on the client side, the real refusal once as the control — or «n/a»>
+
 ## Recon facts (what the manager measured — one row per fact, the value itself, never a retelling)
 
 | Fact (the value) | Kind | Source | Taken on | Boundary: what was examined, through which channel | Refuted by |

@@ -61,7 +61,9 @@ carries its kind, its source, its date and the boundary it was taken within, and
 before anything rests on it. «Open hypotheses» are what the manager did NOT verify: questions with a stake, never facts — a row marked
 «not from outside» gets no calls at all, only its observable consequence. «Sanctioned probe» is the user's permission with its conditions,
 and the one authorisation to mutate outside the round's own objects. «Pause protocol» is the shape of your request when a step needs the
-user's hands — every field of it is filled in, and the answer you expect is one word. A section missing from the brief means that
+user's hands — every field of it is filled in, and the answer you expect is one word. «Retest» (round 2+) holds the previous round's
+verdicts line by line — the «Was» column is how you tell a regression from a long-standing defect — and the fix's scope verbatim: the
+retest verdict is passed on that scope, anything beyond it is a new candidate; its fingerprint line is your first and your last action, and again after any anomaly. A section missing from the brief means that
 situation was not foreseen — not that it is forbidden: hand it over as a question in your final summary.
 
 **Before the scenarios — a sanity check of the environment** per the profile (Environments section) and the snapshot

@@ -107,9 +107,9 @@ without a single executor.
 
 ### What the executor's brief carries over is the line-by-line verdict, not the gist
 
-Not the «gist of the findings» from the previous round but their verdict per AC/FR (`pass` / `fail` / not covered). Without a
-«was: pass» the executor cannot tell a regression from a long-standing defect — and regressions are usually the most valuable
-findings of a retest.
+Not the «gist of the findings» from the previous round but their verdict per AC/FR (`pass` / `fail` / `partial` / not covered) — the table of
+the brief template's «Retest» section, one row per requirement. Without a «was: pass» the executor cannot tell a regression from a
+long-standing defect — and regressions are usually the most valuable findings of a retest.
 
 ### Re-launch the analyst only when the input changed
 
@@ -127,7 +127,8 @@ renaming. It becomes the archive of round 1, and a `grep` on the task keeps find
 The previous result was written against a contract that has changed since (fields renamed, an endpoint path moved) — append as
 the first line of that file «⚠️ the contract changed on <date>: <was> → <now>, the current one is <file>». The round-2 executor
 reads evidence as a ready-made recipe; having the rename recorded only in `0-session.md` means betting that they will read both
-files, and in the right order. Precedent: assertions nearly went out against dead field names.
+files, and in the right order — so the brief's «Retest» section names the warning too («Stale evidence»). Precedent: assertions nearly
+went out against dead field names.
 
 ## Folders from the old scheme
 
