@@ -25,7 +25,7 @@ line. The steps below are that review, moved to the place where the edit is made
 
   | What failed | The form that holds | Where it lives |
   |---|---|---|
-  | knew the rule and broke it under pressure — the user waiting, a competing incentive | a flat rule plus the thought that comes just before the break («I'll just check it myself, it's faster») | the entry |
+  | knew the rule and broke it under pressure — the user waiting, a competing incentive | a flat rule plus the thought that comes just before the break («I'll just check it myself, it's faster») | the entry; a rule of `SKILL.md`'s procedure — its thought becomes a row of that file's «Red flags» |
   | did the work, but the output came out the wrong shape — a bloated brief, a buried verdict | a recipe: what the output IS, its parts in order; never a list of «don't» | the step or the template that produces it |
   | left out one element of something it produces anyway — a field of the brief, a line of the report | a slot in the template it fills in | `templates/`, not prose beside the template |
   | mechanical: countable or matchable, the same every time | a check in a script, with its test | `scripts/check_session.py` for session files, `scripts/session.py` for the folder's housekeeping; the entry shrinks to a pointer |

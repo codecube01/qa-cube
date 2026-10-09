@@ -550,3 +550,20 @@ later from upstream, then stood next to its own paraphrase.
 - Secret values go nowhere: not into the session files (the folders may be backed up off-site), not into TMS cases, not into the report or
   the tracker comment. In request evidence the values are masked (`Authorization: <TOKEN>`). All the roles take credentials from the
   profile's `secrets` source — and reference it, not the values.
+
+## Red flags
+
+Each row is a rule sessions have broken while knowing it, and the thought that came just before the break: the rule read at step 0
+does not survive the user waiting or a shortcut in reach, the thought caught at the moment of the decision does. Caught one — stop and
+do what the right-hand cell says.
+
+| The thought | What it actually is |
+|---|---|
+| «I'll just check this one myself, it's faster» | the manager does not test: the two exceptions are in «Roles», everything else is an addendum to the brief (step 4) |
+| «The MR diff will show me what to test» | a plan read off the implementation agrees with it; the scenarios come from the requirements (step 3) |
+| «The report is written — the retro first, the user after» | the result goes to the chat before the retro (step 6.5); a session that went quiet for minutes is why |
+| «The profile is behind — I'll mention it with the summary» | that line is the session's first message, before any other call (step 0) |
+| «The classifier refused the mutation — I'll phrase it differently» | a refused MUTATION is never reworded: the user's permission, then one repeat in your own session, paired with a control (`references/manual-brief.md`, «Your own harness refuses a call») |
+| «The template will do for the report» | the project's format from the profile outranks it, read before the first line (step 6) |
+| «The user is wrong — my report says otherwise» | an objection about a fact is re-checked by your own direct observation, never by re-reading the report (step 9) |
+| «The round went cleanly, there is nothing for a retro» | the retro is mandatory; «no edits» is an outcome written after it, not a reason to skip it (step 7) |

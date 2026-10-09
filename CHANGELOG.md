@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **A «Red flags» table at the end of `SKILL.md`**: eight thoughts that come just before a known rule is broken, each with
+  what it actually is and the step that holds the rule; `engine-edits.md` sends such a lesson there.
 - **Processes are stopped by PID, never by a pattern**: `shell-pitfalls.md` — `pkill -f`/`killall` on the user's machine
   matches their own applications; a hung foreground call is left to time out.
 - **An automation price includes the host class's fixed cost**: `SKILL.md` step 5 — provisioning, per-test hooks and
