@@ -56,6 +56,11 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **`qa-manual.md` holds the executor's procedure again** (29k → ~23k characters): the run's situational lessons — the per-field matrix,
+  the retry of a refused operation, single-use artifacts, TTL bisection, a computed reference value, the control experiment, the human in
+  the loop, a guard checked on someone else's entity, rendered text — move to a new rules-index catalogue `references/executor.md`, on the
+  brief's reading list beside `shell-pitfalls.md`.
+
 - **`SKILL.md` holds the procedure again** (70k → 60k characters): the step-5 lessons move to a new rules-index catalogue
   `references/automation.md`; the container task, the compound and draft verdicts, the parent's scope and «cheap reads first» move to
   `planning.md`; twins of `report.md`, `manual-brief.md` and `engine-edits.md` become pointers; precedents shrink to a clause.

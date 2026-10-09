@@ -252,7 +252,7 @@ nothing» groups of the same Contents are read again when the result comes back.
   relevant to exactly this task — you built the plan and know that better than the executor (a BE task needs no browser techniques; a task
   about fees needs the wallets domain). The executor reads what is listed — a file, or the sections named after it — whole, plus the
   profile map; the rest — only when stuck. **Plus the engine's references, by ABSOLUTE path** (the executor's cwd is the project):
-  `shell-pitfalls.md` always; `api-techniques.md` on any round that sends requests to the API (its «GraphQL» section only where the
+  `shell-pitfalls.md` and `executor.md` always; `api-techniques.md` on any round that sends requests to the API (its «GraphQL» section only where the
   product's API is GraphQL); `browser-techniques.md` on a browser round — a round is one by its INSTRUMENT, not its subject: an API round
   driven from the page console trips the same tool limits (a timeout on a polling loop, truncated output), so it gets both. The sections of
   each — picked from its contents. Do not retell the project's knowledge — the executor will take it from
@@ -419,8 +419,9 @@ pass**. There are four addresses for fixes:
   exactly one layer.
 
 **Inside the engine a lesson has an address, and the address is not this file.** A rule keyed to a situation goes into the matching
-`references/` catalogue — `planning.md` for the shape of a scenario, `manual-brief.md` for briefing and the run, `report.md` for a finding,
-`automation.md` for the automation decision — as a line of its rules index plus a body; SKILL.md holds only the procedure: what a step
+`references/` catalogue — `planning.md` for the shape of a scenario, `manual-brief.md` for briefing and the run, `executor.md` for a
+situation the executor itself meets mid-run, `report.md` for a finding, `automation.md` for the automation decision — as a line of its
+rules index plus a body; SKILL.md holds only the procedure: what a step
 produces, which subagent it launches, what acceptance requires — situational lessons written here once grew two steps to half the file, paid
 for in every session. A lesson with no obvious catalogue is the signal that the procedure changed, and only then does it belong here. Inside
 a catalogue the entry stands alone or joins a FAMILY whose head has already paid for the «why» (an entry that restates it from scratch is
