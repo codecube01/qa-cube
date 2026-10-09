@@ -27,9 +27,8 @@ alone.
 **The executors are held to the same rule, and it reaches them only through the prompt: make `Output language: <language>` the first line
 of every executor's prompt** (the analyst, the manual tester, the automator — the brief file repeats it, the prompt carries it). A subagent
 starts working, and narrating what it does, before it has opened the profile, and that narration — its reasoning, its progress notes, its
-final summary — is shown to the user in the same console as your own. Precedent: the executors' files came out in the project's language
-while the whole round read as English in the console, because the language lived in a profile the executor reached late instead of in the
-prompt it started from.
+final summary — is shown to the user in the same console as your own; a round whose language lived only in the profile read as English
+in the console while its files came out right.
 
 No profile → do not start the session: suggest the user run `/qa-setup`. A capability declared `none` **or a key missing from the profile**
 → apply the degradation from the table at the end of this file; the profile does not invent degradations of its own. The single exception is
@@ -42,8 +41,7 @@ block** the session: tell the user in one line that the profile is behind (what 
 closes the gap, then carry on with degradations for the missing keys. **That line is the session's first message to the user, sent the
 moment the comparison is made — before the tracker is read or any other tool is called, and never folded into a later status update or
 left for the finale's action block.** Tool output is collapsed in the user's console, so a gap noticed «in passing» while reading the
-profile is a gap the user never sees. Precedent: a session compared the versions, found the profile one behind, said nothing and went on
-reading the task; the user had to ask twice — «did you read the profile?», then «why didn't you say the contract is behind?».
+profile is a gap the user never sees — one session noticed it in passing and the user had to ask twice.
 
 **Then the project's layer of engine rules — `.claude/qa-cube-feedback.md`, next to the profile.** Read its open rows right after the
 profile (the «Closed» block is skipped: the engine already carries those). Each row is a rule about the process that a retro in this project
@@ -65,9 +63,8 @@ file holds what would hold in anyone's. Step 7 decides which is which.
 The `<sessions>` path below is the value of `sessions` from the profile (e.g. `docs/test-sessions/`).
 
 **The manager runs the shell too** — the sweep, preflight, on-chain and bundle recon — so `references/shell-pitfalls.md` is read whole
-before the session's first shell command beyond reading the profile. Precedent: a manager inspected a secrets file through a mask keyed on
-field names and printed every private key into the transcript — the exact pitfall that file already names, read by the executors and never
-by the manager.
+before the session's first shell command beyond reading the profile: a manager once printed every private key of a secrets file into the
+transcript through a pitfall that file already named.
 
 ## Roles
 
@@ -108,24 +105,9 @@ skipped, because the tracker shows no hint that it is missing. Where the tracker
 child-of filter, a parent field that is not searchable), the project's tracker skill names the working route; run it. And **every related
 task that enters the scope is read the same way the main one is — description AND comments in full**, never by its title in a listing.
 
-For a **parent** task, the acceptance scope is set by **the labels of the subtasks currently in a testing status**: accepting the FE subtask
-means a verdict on the frontend, while requirements that cannot be met without the backend are addressed to the backend task; **if no such
-task exists in the tracker at all, that is a finding for the analyst**, not the executor's fault. Precedent: the parent had only an FE
-subtask, and no BE task existed for half of the requirements.
-
-**A task whose own description is written in the USER's voice and that carries no labels is a container — the engineering spec is in a
-subtask, and testing the container instead costs the round its scope.** The tell is in the text itself: user stories, «I as an officer want
-…», numbered FR/AC phrased as outcomes rather than as interfaces, and no label saying which layer is being accepted. A spec written for
-implementers looks different — tables of columns and types, endpoint signatures with response codes, configuration keys, a status mapping —
-and it lives one level down, under a label. Both texts are real requirements and they do not contradict each other; they answer different
-questions, and the acceptance verdict belongs to the lower one. Reading only the container yields verdicts that are not wrong but are
-addressed to nobody: the defects land against a task that implements nothing, and the criteria the implementers actually committed to are
-never checked. The check is one query at step 1 and it is cheap; the correction after delivery is not — it re-frames every finding.
-Precedent: two full rounds were accepted against a parent's user-story spec; the backend subtask, found only when the customer asked, held
-its own acceptance criteria, an explicit signature scheme «over the raw body, without re-serialisation», a required status field on the
-neighbouring entity and a background reconciler with a default interval — four of the round's findings turned out to be verbatim violations
-of a spec the round had never read, and several «requirements gaps for the analyst» turned out to be answered there.
-A parent whose only subtask is an empty layer label is not a container — its spec is the reference (`references/planning.md`).
+For a **parent** task the acceptance scope is set by the labels of the subtasks in a testing status, and a user-voiced parent with no
+labels is a container whose engineering spec sits in a labelled subtask — both shapes, what each costs and the one exception (a parent whose
+only subtask is an empty layer label is not a container) are in `references/planning.md`, «What the plan rests on».
 
 **Start preconditions** — not met → tell the user and do not begin:
 - **the mode is determined**: the status of the task (and of the related ones in scope) determines the session's mode — **full cycle**
@@ -139,30 +121,17 @@ A parent whose only subtask is an empty layer label is not a container — its s
   task description: solid prose does not become spec-grade by being long, the expected result has to be extracted from it, and extraction is
   guesswork; requirements scattered across a comment thread and a task like «fix the filter behavior» are always draft. Write the verdict
   with a one-phrase rationale as a line in `0-session.md` and carry it into the analyst's prompt and the manual tester's brief: it decides
-  whether an executor may edit a case's expected result. **A verdict can be compound — split it across the parts of the task instead of
-  issuing one for everything.** In a typical refactoring or follow-up change the contract is described verbatim (field tables, response
-  codes, permission matrices) — that is spec-grade, whereas the requirement «everything else works as before» cannot be: there the
-  expectation equals the observable behavior of the previous build. The phrasing «spec-grade on the contract, draft on „nothing broke“»
-  saves a round: the executor will not write off a mismatch with a verbatim item as «well, it's a minor thing», and will not file a defect
-  where the expectation would have had to be guessed. Precedent: without that split, a `400` instead of the declared `403` would have been
-  dismissed as «they're both 4xx anyway». **A «draft» verdict lowers the strictness of the expectations; it does not excuse you from a
-  line-by-line verdict.** On an analysis or decision task sitting in a testing status, the thing being accepted IS its proposal — however
-  tentatively it is worded. Any enumerable block of the task (a proposal, a rollout plan, a list of changes, «what was already done») is
-  unfolded into a table «item → pass / partial / not covered → what closes it», and «not covered, because <channel>» is a full result while
-  silence is not. Where an item cannot be verified at all, there is still one thing QA can say about it on the merits: **does it conflict
-  with the observable state?** Precedent: three of a proposal's four items needed a console QA has no access to, so the block was marked
-  draft and its items were folded into the general «not covered» list — the customer had to ask for the per-item verdict; and the one item
-  that looked purely unverifiable turned out to clash with the live contract, which was the most useful sentence in the section.
+  whether an executor may edit a case's expected result. A verdict can be compound («spec-grade on the contract, draft on „nothing broke“»),
+and a «draft» verdict lowers the strictness, not the duty of a line-by-line verdict — both in `references/planning.md`, «What the plan
+rests on».
 
 Then the product knowledge (the path and the reading rules — the profile, Knowledge section): read the sections the task touches and the
 findings of past sessions on them.
 
-**A link or a reference to a document outside the tracker is part of the requirements, and it is chased BEFORE the verdict on them.** First
-try to open it yourself — the session's own connectors often reach a spreadsheet, a doc or a design file, and the attempt costs one call.
-Only what you genuinely cannot reach (an MR/PR description, a dashboard, an internal system) becomes the start question to the user, asked
-once, before slicing the plan; black-box against the spec is a valid fallback only after a refusal, and the report says so. Either way the
-contents are a list of **what was done or what is required**, never permission to read code. The shapes both cases take, and what skipping
-them cost, are in `references/planning.md`.
+**A link or a reference to a document outside the tracker is part of the requirements, chased BEFORE the verdict on them**: open it
+yourself first (one call); only what you cannot reach becomes the start question, asked once — black-box against the spec is a fallback
+only after a refusal, and the report says so; either way its contents are what was done or required, never permission to read code
+(`references/planning.md`).
 
 If there is a critical ambiguity (which environment? which direction?) — one question to the user now, and no questions after that.
 
@@ -215,22 +184,18 @@ moment of creation, and the round is marked with a digit suffix. A second round 
 `9-manual-result-2.md`, `10-retro-2.md`; if a plan reappears too, it goes under its own number in the same sequence (`8-plan-2.md`, which
 makes the manual brief the 9th). In round 2+ the name comes from `session.py next-file <folder> <role> <round>`, not from counting.
 
-**Two files sit outside the numbering — they are not duplicated but updated in place: `0-session.md` (the session's entry point) and
-`99-report.md` (the report).** The number 99 keeps the report last in the folder listing no matter how many rounds there are, and removes
-the question «which report is the current one»: there is always exactly one. Round 2+ does not create `*-report-2.md` — it edits
-`99-report.md`: the «What is confirmed», «Findings», «Not covered», «Automation», «Environment leftovers» and «Tracker comment» sections are
-brought to their **current state** (a fixed finding leaves the table for the «Fixed» block below it, a live one keeps its row with a date in
-the cell, new ones are appended, a fixed one that breaks again returns under its own id as «regression R<n>» — `references/report.md`),
-while the round's delta goes as a block at the top of «Round history». Nothing
-from past rounds is erased silently: a fact that stopped being true moves to where its new status says, it does not vanish.
+**Two files sit outside the numbering — they are not duplicated but updated in place: `0-session.md` and `99-report.md`.** The number 99
+keeps the report last in the listing and makes it the one current report: round 2+ brings its sections to their current state and puts the
+round's delta at the top of «Round history» (how a finding moves between sections: `references/report.md`). Nothing from past rounds is
+erased silently — a fact that stopped being true moves to where its new status says.
+
 **3. The plan.** Fixtures, access and what is flaky come from `<sessions>/environment-state.md`; a fact older than the build is
 re-measured first. Scenarios by priority: first the business-critical ones and whatever the task fixed/changed, then the negative ones, then
 the regression around them. Each scenario carries an expected business effect (what must change), not «get a 200». **Execution order ≠
 priority order:** negatives that do not mutate the environment under expected behavior are run before mutating positives — a clean state is
 worth more; but keep in mind that on a buggy server a «safe» negative may mutate the environment after all (account for that in the artifact
-estimate). **A scenario that closes a requirement with a couple of cheap reads goes before scenarios with fragile preconditions, not after**
-— otherwise the answer to «is the requirement met» is hostage to someone else's cause: in one session the check «the field is served to both
-consumers» (two GETs) sat after a scenario with fragile preconditions and would have gone unverified had the executor not raised it on their own.
+estimate). A scenario that closes a requirement with a couple of cheap reads goes before scenarios with fragile preconditions
+(`references/planning.md`).
 
 The source of the scenarios is **the task's requirements and the product's behavior, not the implementation**. We test as a black box: do
 not pull MR/PR diffs by default — it clutters the context and skews the optics («I read how it was done and decided it was right» — whereas
@@ -302,64 +267,32 @@ nothing» groups of the same Contents are read again when the result comes back.
   decide, and the decision is one of two: take the candidate into the next round's plan, or hand it back to the analyst together with a
   widened scope. Mention the result's list of case corrections in the report in one line: it shows where a case drifted from the
   requirement). Gaps → an addendum to the brief and a second pass, not a manual redo. **Before reading the result yourself, run the checker over it**: `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/check_session.py" <the result file>` — leaked secret values, shifted table columns and oversized cells, none of which survive being noticed later. It judges nothing about the content: that part is yours;
-- **before locking findings into the report — reconcile their class against the tracker** (with `tracker` ≠ none): by searching for the
-  defect's keyword, not only within your own task and not only in its comments; the search may go beyond the project's boundaries — the same
-  defect is sometimes filed in a neighboring one. A finding already filed is presented as «confirmation of a known issue: reproduces on the
-  environment as of <date>, no new action required»; a related one as «a new trigger for task N, to be added to its DoD». Otherwise the
-  report breeds duplicates and loses trust. **Search among closed tasks too:** before writing «this does not exist and there is no task for
-  it», check whether a Done task with exactly this scope exists — then the framing changes from «this needs to be filed» to «the work was
-  closed as done, but it is not in the product», and that is a different conversation with the team. Precedent: the backend task for the
-  list's filters and sorting had been closed six months earlier, while not a single filter had appeared in the contract.
+- **before locking findings into the report — reconcile their class against the tracker** (with `tracker` ≠ none), closed tasks included:
+  already filed → «confirmation of a known issue»; related → «a new trigger for task N»; closed as done but absent from the product → a
+  different conversation with the team. The search itself — by the operation's name and the requirement's subject, beyond your own task and
+  project — is `references/manual-brief.md`, «Accepting the result»; the closed-task shapes are `references/planning.md`, «The tracker is
+  searched at step 1»; where each result lands in the report is `references/report.md`, «Is this a finding at all».
 
 **5. Automation** (when `autotests` ≠ none). Based on the manual round's results, decide what to automate (usually the 1–2 main scenarios;
 if the feature is broken, automation may be postponed until the fix, with that recorded in the report). Not everything deserves an autotest
 — the local rules on «what we do not automate» are in the profile, Autotests section. Before writing the brief, check the existing coverage
 (grep the tests: endpoint, tags, «also covers») — the preference is always: an existing test already covers it → write nothing; a test for
 the same area exists → **add a step to it**; and only then a separate test. A small feature or a follow-up on existing behavior is always a
-step in an existing test (reusing the setup is the main win); a separate test is justified only for a large standalone feature. **The cost
-of a run is as much an input to the decision as the value of the coverage.** A scenario that needs dozens of operations to reach its
-conclusion (a series for a distribution, long waits for workers) costs minutes in every nightly run — estimate that price and, if it is
-noticeable, put the decision to the user **before** launching the automator, not after. Precedent: two tests (30 payments and 20 payouts
-with a wait for the cascade) were written and then stopped by the user on the very first run with the words «that run is too expensive» —
-the price was visible from the manual result in advance. **The estimate is computed from the manual result's own timings, not guessed:**
-count the operations the steps will wait on (each one through its asynchronous pipeline — create to callback to final read), multiply by
-the durations the round measured, and add every propagation lag a step must sit out; a figure put to the user from intuition under-prices
-exactly the waits, and the choice was made at a price that does not exist. Precedent: a merge into an existing test was offered at «about
-50 s» and chosen; it cost 131 s — two operations of ~50 s each plus a setting lag, all three durations printed in the manual result.
-*And a test NEW to its host class pays that class's fixed cost too* — its provisioning, its per-test hooks, its stabilising reads —
-which no manual timing contains: read it off a recent run log of a neighbouring test in the same class and add it. Precedent: a new
-test priced at ~3 min from the manual timings ran 9–10 min, two thirds of it the class's account provisioning, per-test waits and
-state snapshots.
-**The size of the feature is an independent ground, alongside the cost of the
-run.** A cheap merge into an existing test can still be work nobody wants: a feature the size of one query parameter (a filter, a flag) may
-deserve no test at all, whatever the run costs. So the question to the user before launching the automator is not only «this run is
-expensive?» but also «is this feature worth a test at all?» — and it is asked **before**, not after the automator has edited the code.
-Precedent: the manager sliced the automation as steps merged into three existing tests (the cheapest possible form) and launched the
-automator; the user's answer was «we only automate bigger features, this is just a filter», and the edits had to be reverted mid-run.
-**That question travels with the round's result**: it comes before the delivery at 6.5, so the user has not yet seen what the manual round
-found — put three lines above the options (what the change is and whether it is merged, the round's verdict with its counts, what the test
-would assert), or the user dismisses the choice and asks for exactly those lines first. Precedent: a bare automation dialog was dismissed
-with «first explain what you did, what automation needs, and what that merge request is». **An answer to that question that is
-itself a question — «isn't a test required by our rules?» — is a question, not the choice**: answer it on the merits, then put the choice
-again; acting on it starts work nobody ordered. Precedent: a reply of that shape was read as «write it», and the user stopped the first tool
-call of the automator's brief with «that was a question, not a request». **And
-translate a statistical criterion into a stable assertion yourself**: the manual run's acceptance threshold («each variant ≥20 %») flakes in
-a test; what should be asserted is the degenerate outcome («each variant occurred at least once»). In doubt — record «no automation was
-done» in the report with a reason; that is a valid outcome:
+step in an existing test (reusing the setup is the main win); a separate test is justified only for a large standalone feature. **The choice
+is put to the user before the automator is
+launched, and before that read the «Contents» of `references/automation.md`, as step 3 reads `planning.md`'s**: the price of a run computed
+from the round's own timings, the size of the feature as a ground of its own, the three lines the question carries, an answer that is a
+question, a statistical criterion made into a stable assertion. In doubt — record «no automation was done» in the report with a reason;
+that is a valid outcome:
 - `4-automator-task.md`: the scenarios, a reference to `3-manual-result.md` as the evidence, the candidate per the profile's code map, the
   case id (with `test-cases: upfront` — from the analyst, the manual tester merely confirms it; with `inline` — from the manual tester),
-  **the targeted reading list** (as in the manual tester's brief, the engine's references included); the names of any
-  helpers/methods you mention — and the concrete values of their parameters, if you quote them in the brief — must be verified by grepping
-  the code rather than from memory (an inexact name or number = an extra iteration for the automator). **A rule of the project's own profile
-  is checked against the specific helper before it goes into the brief as an instruction** — «these helpers assert 200 internally, so add a
-  raw variant» is true of the profile's general case and may be false of the two helpers this round touches; a brief that carries it
-  unchecked orders work that is not needed. In automation-only mode there is no
+  **the targeted reading list** (as in the manual tester's brief, the engine's references included); helper names and parameter values
+  you quote are verified by grepping the code, and a profile rule goes in only after a check against the specific helpers
+  (`references/automation.md`, «The brief»). In automation-only mode there is no
   evidence — write exactly that, and the automator will do a minimal run itself; in that mode a case exists with `upfront` (the analyst
   wrote it) and is absent with `inline` — then the automator creates it itself;
 - launch `Agent` with `subagent_type: "qa-automator"`; in the prompt — `Output language: <language>` as the first line, then the path to the
   session folder and to the brief file;
-- **asking for the price of the coverage, say what measures it:** run logs often lack timestamps on step lines, so a step's duration is
-  unreadable from the log — then measure by a run on reverted code, repeated when the run-to-run spread rivals the delta;
 - accepting `5-automator-result.md` (the checker first, as in step 4 — test code carries credentials more often than prose does): the test was actually run (the run log is cited), the case exists in the TMS, and the test-to-case link
   in the code matches the case, and a partly covered case names its manual steps (with `test-cases: none` there is no case — then what gets
   checked is the link to the tracker task per the profile's convention).
@@ -369,9 +302,8 @@ covered and why, what was automated, the links (task, case, test), the open ques
 and it always lives under the number 99:** round 2+ does not create a new file but updates this one — bringing the sections to their current
 state and appending the delta («what got fixed, what did not, what newly broke») as a block at the top of «Round history». The skeleton is
 `templates/99-report.md`; **the project's format from the profile outranks the template — read it BEFORE writing and render by it, not by
-the template** (the template is a skeleton for projects without a format of their own; its columns and sections are not dogma). Precedent:
-three customer objections in one session — a superfluous column, fixed rows, internal links inside cells — all from rendering the template
-while the profile described its own format.
+the template** (the template is a skeleton for projects without a format of their own) — three customer objections in one session came
+from rendering the template over the profile's own format.
 
 **Before writing the report, read the «Contents» of `references/report.md` whole — it is the rules**: one line per situation a finding
 lands in (is it a finding at all, the priority, the first bold sentence, what «not covered» may claim, the table's mechanics), the trigger
@@ -388,9 +320,10 @@ the «Uncovered requirements» section from `0-session.md`, brought to its curre
 closed a row with a fact from the environment or, conversely, added a reason). Cases whose expectation the analyst marked `assumption` under
 a «spec-grade» verdict are presented as requirements gaps with an explicit «needs an analyst's decision», in the report's second table.
 
-**What counts as a finding.** Only what reproduces and has been confirmed: anything «presumed» from automated runs is first confirmed by
-hand. Environment leftovers (test data, traces of a run) are not filed as bugs. Before assigning a priority — reconcile against the
-**verbatim** text of the requirement: behavior explicitly stated in the spec is not a bug, at most a UX observation.
+**What counts as a finding.** Only what reproduces and has been confirmed — anything «presumed» from automated runs is first confirmed by
+hand; environment leftovers (test data, traces of a run) are not bugs; and the class is set against the **verbatim** requirement: behavior
+the spec states is not a bug, at most a UX observation. The edge cases — a candidate without a quotable clause, a missing surface, a known
+defect in the way — are the group «Is this a finding at all» of `references/report.md`.
 
 A finding's tracker shape (title, layer split, cells, side findings) and its priority calibration — `references/report.md`.
 
@@ -436,8 +369,7 @@ buries the two rows that needed reading. **Icons never enter a file**: `99-repor
 fares exactly as the HTML in a cell does (`references/report.md`), and a line must read correctly without its icon — a terminal may not
 render it and a reader may not separate red from green. In round 2+ a changed verdict carries its transition: «🟢 FR-5 — was 🔴, fixed».
 
-Precedent: the user asked for exactly this ordering after a session announced «the report is written,
-now updating the knowledge base and the retro» and went quiet for several minutes of edits.
+The user asked for exactly this ordering after a session announced «the report is written, now the retro» and went quiet for minutes.
 
 **7. The retro — a mandatory step, not an «if I feel like it».** The inputs are the **«Executor retro»** sections in `*manual-result*.md`
 and `*automator-result*.md` (the executors are obliged to write them), **the analyst's retro from its final summary** (it has no file —
@@ -486,24 +418,15 @@ pass**. There are four addresses for fixes:
   to the engine's layer, and only their application here («on this environment that means X») to the profile — every rule lives in
   exactly one layer.
 
-**Inside the engine, a lesson has two addresses and they are not interchangeable.** A rule keyed to a situation — this shape of scenario,
-this state of the environment, this kind of executor failure — goes into the matching `references/` catalogue as one more entry
-(`planning.md` for the shape of a scenario, `manual-brief.md` for briefing and for the run, `report.md` for the shape of a finding and
-its wording). SKILL.md holds only the procedure: what the
-step produces, which subagent it launches, what acceptance requires. Writing a situational lesson into SKILL.md is what made the step-3 and
-step-4 sections grow to half the file, and the manager then paid for all of them in every session, including the ones where not one applied.
-If a new entry has no obvious catalogue, that is a signal the procedure changed — and then it does belong in SKILL.md.
-
-**Inside a catalogue the address is finer still: a new entry either stands alone or joins a FAMILY.** The catalogues carry families —
-a head entry stating one mechanism, with its shapes under it (`### The order of the server-side checks`, `### The observation channel`,
-`### Before a requirement is planned as «not covered»`). Before adding an entry, ask which mechanism it is a shape of: where a family
-already states it, the entry goes inside as one more shape and says only what is particular to it, because the family's head has already
-paid for the «why». A new entry that repeats a family's reasoning from scratch is how the catalogue doubled in size once — the same thought
-met three times per session under three wordings, each read in full.
-
-A lesson without an address is not a lesson. A hygiene rule: if a patch to an instruction repeats for the third time, fold it into the main
-text instead of adding yet another phrasing — and if a third entry in one catalogue turns out to share a mechanism, that is a family, not
-three entries.
+**Inside the engine a lesson has an address, and the address is not this file.** A rule keyed to a situation goes into the matching
+`references/` catalogue — `planning.md` for the shape of a scenario, `manual-brief.md` for briefing and the run, `report.md` for a finding,
+`automation.md` for the automation decision — as a line of its rules index plus a body; SKILL.md holds only the procedure: what a step
+produces, which subagent it launches, what acceptance requires — situational lessons written here once grew two steps to half the file, paid
+for in every session. A lesson with no obvious catalogue is the signal that the procedure changed, and only then does it belong here. Inside
+a catalogue the entry stands alone or joins a FAMILY whose head has already paid for the «why» (an entry that restates it from scratch is
+how a catalogue doubled once); a patch repeated for the third time is folded into the main text, and a third entry sharing one mechanism is
+a family. The full rubric — the twin search, the form by what failed, the index, the counts — is `references/engine-edits.md`, and a row of
+`.claude/qa-cube-feedback.md` is written to the same rubric.
 
 **8. The finale.** Update `0-session.md` (the status, a row in the round log) and **the session registry `<sessions>/README.md`** — the
 session's row, per `templates/registry.md`: a table and nothing else, the verdict one phrase, the details in the report (no file — create
@@ -525,13 +448,9 @@ digest of it.** The order of the finale is fixed and it is this one: **Test resu
 🟡 partial · 🔴 fail · ⚪ not covered, greens collapsed by the same rule), the verdict per task, the findings with their priorities, the
 answer to the question the session was brought with, what stayed uncovered and why, the tracker comment — plus the two things step 6.5 could
 not yet say: what was automated and the path to the session folder. Then the retro edits, then the action block. **Repeat the text, do not
-compress it**: a digest sends the reader back up the scroll for the line it dropped, which is the whole problem this solves. The repetition
-is deliberate, because between the delivery at 6.5 and here lies the whole retro — minutes of edits across the engine, the profile and the
-knowledge base — and whoever steps away while the session works comes back to a screen of housekeeping. The last screen is the one that gets
-read, and what the session was brought for is the result, not the bookkeeping of its own lessons. The detail stays in `99-report.md`, which
-the repeat does not replace: it is the delivery again, not a second report. **Icons here too are chat-only** — the rule from 6.5 holds
-unchanged, nothing with an emoji enters a file. Precedent: the user pointed out that whoever comes back after the session has finished sees
-only the retro's outcome and has to scroll for the test results.
+compress it**: between 6.5 and here lies the whole retro, and whoever steps away comes back to a screen of housekeeping — the last screen
+is the one that gets read, and a digest sends them back up the scroll for the line it dropped. The detail stays in `99-report.md`; icons
+here too are chat-only.
 
 **As the last block in the chat — a summary of the retro's edits: one line per address, saying what exactly changed.** The addresses are the
 same four: **the knowledge base**, **the engine** (mandatorily with the plugin's version jump, `0.6.1 → 0.6.2`), **the profile** (which
@@ -600,9 +519,8 @@ session sends nothing from it and asks nothing of the user. Rows are never delet
 «Closed» block at the bottom with the version it arrived in — the only place the user sees their observation land — and is no longer read,
 because the engine now carries it. Reconciling the file, and offering the open rows upstream, is `/qa-setup`'s work.
 
-Precedent: under the earlier rule the retro rephrased whatever universal lesson it could into the profile, so that it would apply from the
-next session; those lessons never reached the reconciliation, which reads only this file, and sat in one project's profile as rules nobody
-else would ever get — while the same lesson, arriving later from upstream, stood next to its own paraphrase.
+Under the earlier rule universal lessons were rephrased into the profile and never reached the reconciliation; the same lesson, arriving
+later from upstream, then stood next to its own paraphrase.
 
 ## Capability degradations
 

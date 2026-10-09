@@ -56,6 +56,10 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **`SKILL.md` holds the procedure again** (70k → 60k characters): the step-5 lessons move to a new rules-index catalogue
+  `references/automation.md`; the container task, the compound and draft verdicts, the parent's scope and «cheap reads first» move to
+  `planning.md`; twins of `report.md`, `manual-brief.md` and `engine-edits.md` become pointers; precedents shrink to a clause.
+
 - **The «Contents» of `manual-brief.md` and `report.md` are the rules too** — the manager reads the index with a `limit` at steps 4 and
   6, opens one entry per fired line, and a context-free reviewer reads the bodies against the brief (before the executor is launched)
   and against the report (before delivery). The same scheme as `planning.md` at step 3; `report.md`'s budget raised to 95000.
