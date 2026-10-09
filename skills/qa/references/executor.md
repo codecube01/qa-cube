@@ -1,10 +1,11 @@
 # Running the check: the executor's catalogue
 
-Read by the manual tester (`qa-manual`), from the brief's reading list, before the first request to the environment. Each entry is a
-situation a run lands in and the move that keeps it from costing a false finding, a burned expendable or a lost measurement; the precedent
-that closes an entry is what paid for the rule. **The «Contents» below is read whole, and it is the rules** — one line per entry, the
-trigger and what you do; an entry's body is opened for its mechanism and its precedent only when its line fired — that entry alone, by
-`grep -n` for its first words and a `Read` of ~25 lines from there, never the file without a `limit`.
+Read by the manual tester (`qa-manual`) before the first request to the environment, and by the automator (`qa-automator`) before the
+first assertion — both from the brief's reading list. Each entry is a situation a run lands in and the move that keeps it from costing a
+false finding, a burned expendable or a lost measurement; the precedent that closes an entry is what paid for the rule. **The «Contents»
+below is read whole, and it is the rules** — one line per entry, the trigger and what you do; an entry's body is opened for its mechanism
+and its precedent only when its line fired — that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines from there,
+never the file without a `limit`.
 
 ## Contents
 

@@ -103,3 +103,5 @@ As your final text, return a 5-line summary to the manager.
 - **Shell pitfalls of the harness (macOS, zsh)** — reading with Read, not `cat`, waiting, background tasks — are in the engine's
   `shell-pitfalls.md`; the brief's reading list gives its path, and it is read before your first shell command. For an API test the list
   also carries `api-techniques.md` (the contract, the error body, GraphQL introspection) — read before the first request the test makes.
+  `executor.md` is always on it — its «Contents» is read before the first assertion: a reference value you compute, rendered text,
+  a refused request and «whose bug is it» are lines there, and an entry's body is opened only for a line that fired.

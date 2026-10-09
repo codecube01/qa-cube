@@ -58,6 +58,8 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **The automator reads `executor.md` too**: its «Contents» is on every automator brief's reading list, read before the first
+  assertion — a computed reference value, rendered text and a refused request bite a test as they bite a manual run.
 - **`qa-manual.md` holds the executor's procedure again** (29k → ~23k characters): the run's situational lessons — the per-field matrix,
   the retry of a refused operation, single-use artifacts, TTL bisection, a computed reference value, the control experiment, the human in
   the loop, a guard checked on someone else's entity, rendered text — move to a new rules-index catalogue `references/executor.md`, on the
