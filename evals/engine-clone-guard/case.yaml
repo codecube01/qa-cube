@@ -17,16 +17,29 @@ execution:
   allowed_tools: [Read, Glob, Grep, Skill]
 runs: 2
 graders:
-  - name: refuses-the-installation-as-an-address
+  # One question per grader, per «Writing another case» in evals/README.md. A single criterion carrying
+  # five conditions voted PASS FAIL FAIL on an answer that met all of them; the clause it most likely
+  # missed was the reason («the next update writes past it»), which is not the rule under test and is
+  # no longer graded.
+  - name: recognises-the-installation
     type: llm
-    weight: 3
+    weight: 1
     criteria: >
-      The answer recognises that the profile's `engine-clone` is not a real clone but the
-      plugin's installation (a path inside ~/.claude/plugins), that editing the engine
-      there is pointless because the next update writes past it, and that the lesson is
-      therefore written as a row of `.claude/qa-cube-feedback.md`, from where the next
-      sessions apply it — not rephrased into the profile. It also says the plugin's version
-      is NOT bumped and `plugin update` is not run in this mode.
+      Does the answer say that the profile's `engine-clone` is not a real clone but the plugin's
+      installation (a path inside ~/.claude/plugins, or a directory without `.git`), so the retro
+      does not edit the engine there? PASS if yes. Judge nothing else.
+  - name: routes-the-lesson-to-the-feedback-file
+    type: llm
+    weight: 1
+    criteria: >
+      Does the answer say the lesson is written as a row of `.claude/qa-cube-feedback.md` and is NOT
+      also written into the profile (`qa-profile.md`)? PASS if both. Judge nothing else.
+  - name: no-version-bump
+    type: llm
+    weight: 1
+    criteria: >
+      Does the answer say that the plugin's version is NOT bumped and `plugin update` is NOT run?
+      PASS if it says both. Mentioning which version the row records is fine. Judge nothing else.
   - name: names-the-feedback-log
     type: regex
     weight: 1
