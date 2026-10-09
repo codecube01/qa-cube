@@ -31,13 +31,19 @@ graders:
       has no clone to edit here) and lesson (2) to the project's profile or a project skill,
       and does NOT put lesson (1) into the profile as well. Judge only the routing, not the
       wording.
-  - name: applies-open-skips-closed
-    type: llm
-    weight: 2
-    criteria: >
-      The answer says the next session applies the OPEN row (a retest of a state bug starts
-      from a freshly created object) and does not apply the row under «Closed», because the
-      engine already carries it. Judge only this, not the rest of the answer.
+  # Regexes, not a judge: a one-question criterion on this voted FAIL FAIL PASS on an answer that said
+  # «Open row: it applies … Closed row: it doesn't apply, it's already in the engine». A check that comes
+  # down to a word is a regex («Writing another case» in evals/README.md).
+  - name: applies-the-open-row
+    type: regex
+    weight: 1
+    pattern: "fresh(ly)?[- ]created|fresh object|cart"
+    flags: i
+  - name: skips-the-closed-row
+    type: regex
+    weight: 1
+    pattern: "closed[^\\n]{0,120}?(\\bnot\\b|n't|never|skip|ignored)"
+    flags: i
   - name: names-the-feedback-file
     type: regex
     weight: 1
