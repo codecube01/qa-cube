@@ -13,6 +13,9 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **`transcripts.py` — the retro's numbers from the transcripts on disk**: per manager and executor, time, context peak,
+  tool errors, refusals, retries after a failure, compactions. Step 7 runs it, keeps the table in `7-retro.md` (transcripts
+  expire) and answers every note: a lesson or a «normal, because».
 - **`check_session.py` matches the brief's scenarios against the result's headings**: a scenario id from the brief's `#` column
   that no heading names is reported; the lines that ask a question are listed for the manager. `qa-manual.md`: headings carry the ids.
 - **`session.py shot`**: a candidate's screenshot takes the finding's id, its `📎` markers in the folder follow.

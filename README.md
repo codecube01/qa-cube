@@ -183,6 +183,8 @@ skills/qa/              the test-session engine: SKILL.md — the pipeline's pro
                         browser, API and shell recipes the executors read,
                         templates/ — the session file skeletons,
                         scripts/check_session.py — secrets and table checks over a session's files
+                        scripts/session.py — file numbers, finding ids, screenshots, the monthly sweep
+                        scripts/transcripts.py — the retro's numbers from the session's transcripts
 skills/qa-setup/        wiring a project in and updating its profile: interview → profile
 skills/qa-day/          the digest of a day's (or a week's) sessions across projects: SKILL.md +
                         scripts/qa_day.py — a stdlib-only walk over the session folders

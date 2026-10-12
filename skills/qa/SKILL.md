@@ -375,6 +375,12 @@ The user asked for exactly this ordering after a session announced «the report 
 and `*automator-result*.md` (the executors are obliged to write them), **the analyst's retro from its final summary** (it has no file —
 carry it into `7-retro.md` from your own context; the analyst most often complains about the plan and the profile rather than the
 environment) plus your own view: where you got bogged down, what you violated, what information was missing, what the manager planned badly.
+**Then the numbers, which nobody's memory holds**: `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/transcripts.py" <folder>` — per
+manager and executor transcript: time, context peak, tool errors, refusals, retries after a failure, compactions. Its table goes into
+`7-retro.md` as printed (Claude Code deletes transcripts after 30 days). **Every note it prints is answered**: either it becomes a row
+of the observation table with an address, or it gets one line under «Numbers» saying why it is normal («navigate ×6 — waiting for the
+deploy, per the brief»); a note passed over in silence leaves the numbers on the page and no lesson drawn from them.
+Precedent: over one week of sessions it showed managers at 400–750k tokens and one compacted mid-session — invisible from inside.
 The output is `7-retro.md` in the format of a table «observation → rule → landed in», and **the fixes are made immediately, in the same
 pass**. There are four addresses for fixes:
 - **the engine** (the process: roles, acceptance, formats, degradations, this SKILL.md, the lesson catalogues in `references/`, the agent
