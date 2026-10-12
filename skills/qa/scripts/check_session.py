@@ -5,7 +5,7 @@
     check_session.py <sessions>/2026-09-14_acme-412-coupon/          # the whole folder
     check_session.py --max-cell 850 --min-sections 3 <file> …
 
-Five rules the engine states in prose and, until now, asked an agent to honour by eye:
+Six rules the engine states in prose and, until now, asked an agent to honour by eye:
 
 - **no secret value goes into a session file.** The rule is repeated in four instructions because an
   instruction is the only thing that ever enforced it — and session folders are committed into the
@@ -27,6 +27,16 @@ Five rules the engine states in prose and, until now, asked an agent to honour b
   never reset, and round 2+ takes its names from `session.py next-file`; a round that counted by
   hand named three files `8-…` once, and the folder's order of work was gone with it. Checked only
   when the target is a folder; `0-session.md` and `99-report.md` sit outside the numbering.
+- **every scenario of the brief has a heading in the manual result.** The brief's scenario table is
+  keyed by ids in its `#` column, and the executor's sections carry them (`## S3 — …`, `## S2b + S6 — …`).
+  A result's closing tables are written last, from the executor's context, and cite every step even
+  when the file lost the sections — a scripted insertion once cut five of nine and the file still
+  read as well-formed. Matched against the brief of the same round (`*-manual-task<suffix>.md`).
+
+And one list that is not a verdict: the lines of a manual result that ask a question. An executor
+raises questions next to the observation that prompted them, and the closing «open questions» is
+usually assembled from the brief — so a self-raised one stays behind mid-file, unanswered. The
+manager reads the list against the closing section; the script cannot tell an answered one.
 
 Exit code 0 when nothing was found, 1 when something was. Every problem is printed as
 `file:line: what`, so the output pastes straight into a result file.
@@ -237,7 +247,7 @@ def scan_screenshots(lines: list[str], folder: Path) -> list[tuple[int, str]]:
             if not path.is_file():
                 out.append(
                     (n, f"`📎 {name}` has no file in `screenshots/` — a candidate's screenshot is renamed "
-                        f"to the finding's id when the id is assigned; rename it, or fix the marker")
+                        f"to the finding's id when the id is assigned; `session.py shot` renames it and its markers together")
                 )
                 continue
             info = image_info(path)
@@ -254,6 +264,106 @@ def scan_screenshots(lines: list[str], folder: Path) -> list[tuple[int, str]]:
                     (n, f"`{name}` is a JPEG {width} px wide — a screenshot shrunk past reading (a `scale` "
                         f"below 1); retake it as a `zoom` of the region with `save_to_disk` (a lossless PNG)")
                 )
+    return out
+
+
+# --- scenarios against the brief ----------------------------------------------------------------
+
+# An id in the brief's `#` column: a short prefix in any script, a number, an optional letter — S3, B12,
+# 7, S2b. The template's placeholders (`N`, `N+1`) are not ids and are skipped.
+SCENARIO_ID = re.compile(r"[^\W\d_]{0,3}\d+[^\W\d_]?")
+RANGE = re.compile(r"([^\W\d_]{0,3})(\d+)\s*[–-]\s*([^\W\d_]{0,3})(\d+)")
+MANUAL_RESULT = re.compile(r"^\d+-manual-result(.*)\.md$")
+# Executors stamp their headings with the time and the date; `(11:02–11:05)` read as a range would
+# vouch for scenarios 2 to 11, so both are cut out before the words are taken.
+CLOCK = re.compile(r"\d{4}-\d{2}-\d{2}(?:T[\d:.]+Z?)?|\d{1,2}:\d{2}(?::\d{2})?(?:\.\d+)?Z?")
+
+
+def brief_scenario_ids(lines: list[str]) -> list[str]:
+    """Ids of the brief's LAST table keyed by `#` with four columns or more. The template puts the
+    scenarios last; a retest table of the previous round's verdicts and a hypotheses table come before
+    it and are narrower in older briefs, which is how their ids are kept out."""
+    tables: list[list[str]] = []
+    current: list[str] | None = None
+    for line in lines:
+        s = line.strip()
+        if s.startswith("|") and current is None and not SEPARATOR.match(s):
+            cells = split_cells(s)
+            if cells and cells[0].strip() == "#" and len(cells) >= 4:
+                current = []
+                tables.append(current)
+            continue
+        if current is not None and s.startswith("|"):
+            if not SEPARATOR.match(s):
+                cell = split_cells(s)[0].strip() if split_cells(s) else ""
+                if SCENARIO_ID.fullmatch(cell):
+                    current.append(cell)
+            continue
+        current = None
+    return tables[-1] if tables else []
+
+
+def heading_tokens(lines: list[str]) -> set[str]:
+    """Every word of every heading, lowercased, with `S1–S4` unfolded — an id is found anywhere in the
+    heading, because executors write it first (`## S3 — …`), after a word (`## Scenario 3`) or in
+    brackets with the others run in the same pass."""
+    tokens: set[str] = set()
+    fenced = False
+    for line in lines:
+        if line.strip().startswith("```"):
+            fenced = not fenced
+            continue
+        if fenced or not re.match(r"^#{2,4} ", line):
+            continue
+        line = CLOCK.sub(" ", line)
+        tokens.update(w.lower() for w in re.findall(r"[^\W_]+", line))
+        for pa, a, pb, b in RANGE.findall(line):
+            if (not pb or pa.lower() == pb.lower()) and 0 < int(b) - int(a) <= 50:
+                tokens.update(f"{pa}{k}".lower() for k in range(int(a), int(b) + 1))
+    return tokens
+
+
+def scan_scenarios(lines: list[str], path: Path) -> list[tuple[int, str]]:
+    m = MANUAL_RESULT.match(path.name)
+    if not m:
+        return []
+    briefs = sorted(path.parent.glob(f"*-manual-task{m.group(1)}.md"),
+                    key=lambda b: int(b.name.split("-", 1)[0]) if b.name.split("-", 1)[0].isdigit() else 0)
+    if not briefs:
+        return []
+    brief = briefs[-1]
+    ids = brief_scenario_ids(brief.read_text(encoding="utf-8", errors="replace").splitlines())
+    tokens = heading_tokens(lines)
+    out: list[tuple[int, str]] = []
+    for sid in ids:
+        low = sid.lower()
+        # S7 is also found as S7a / S7b: a scenario split into parts keeps its id with a letter
+        if low in tokens or any(re.fullmatch(re.escape(low) + r"[^\W\d_]", t) for t in tokens):
+            continue
+        out.append(
+            (1, f"scenario {sid} of {brief.name} has no heading — the section is missing (send it back while the "
+                f"executor's context is alive) or it ran inside another (that heading names every id it ran)")
+        )
+    return out
+
+
+# --- questions raised mid-file -------------------------------------------------------------------
+
+
+def scan_questions(lines: list[str]) -> list[tuple[int, str]]:
+    """Lines that ask something, outside code and URLs — a list for the manager, not a verdict."""
+    out: list[tuple[int, str]] = []
+    fenced = False
+    for n, line in enumerate(lines, 1):
+        if line.strip().startswith("```"):
+            fenced = not fenced
+            continue
+        if fenced:
+            continue
+        prose = re.sub(r"https?://\S+", "", re.sub(r"`[^`]*`", "", line))
+        if "?" in prose:
+            text = " ".join(line.split())
+            out.append((n, text if len(text) <= 120 else text[:117] + "…"))
     return out
 
 
@@ -293,8 +403,15 @@ def check_file(path: Path, max_cell: int, min_sections: int) -> list[str]:
     # not depend on the session's language.
     sections_needed = min_sections if "result" in path.stem.lower() else 0
     problems = (scan_secrets(lines) + scan_tables(lines, max_cell) + scan_structure(lines, sections_needed)
-                + scan_screenshots(lines, path.parent))
+                + scan_screenshots(lines, path.parent) + scan_scenarios(lines, path))
     return [f"{path}:{n}: {message}" for n, message in sorted(problems)]
+
+
+def question_notes(path: Path) -> list[str]:
+    if not MANUAL_RESULT.match(path.name):
+        return []
+    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    return [f"{path}:{n}: {text}" for n, text in scan_questions(lines)]
 
 
 NUMBERED = re.compile(r"^(\d+)-.+\.md$")
@@ -340,12 +457,19 @@ def main() -> int:
         return 0
 
     problems: list[str] = []
+    notes: list[str] = []
     for target in args.targets:
         if Path(target).expanduser().is_dir():
             problems.extend(scan_folder(Path(target).expanduser()))
     for path in files:
         problems.extend(check_file(path, args.max_cell, 0 if args.no_structure else args.min_sections))
+        notes.extend(question_notes(path))
 
+    if notes:
+        print("Questions raised in the file — each one answered, or carried into the closing open questions?\n")
+        for note in notes:
+            print(f"  ? {note}")
+        print()
     if not problems:
         print(f"ok: {len(files)} file(s) checked, nothing found")
         return 0

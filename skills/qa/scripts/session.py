@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""The mechanical half of a session folder's housekeeping: file numbers, finding ids, the monthly sweep.
+"""The mechanical half of a session folder's housekeeping: file numbers, finding ids, screenshots, the monthly sweep.
 
     session.py next-file <session folder> <role> <round>       # 8-manual-task-2.md
     session.py max-id <sessions> --prefix ABC-                   # the highest id assigned, and the next one
     session.py sweep <sessions> [--dry-run] [--today YYYY-MM-DD]
     session.py links <sessions>                                 # every path to a session folder resolves
+    session.py shot <session folder> c3-2 ABC-15                # screenshots/c3-2.png → ABC-15-2.png, markers too
 
 Each of these was a paragraph of SKILL.md that the manager executed by hand, and each went wrong by hand
 at least once: an id taken «from memory» that collided with one already assigned, a number counted after
@@ -54,6 +55,41 @@ def next_number(names: list[str]) -> int:
 
 def next_file(names: list[str], role: str, round_: int) -> str:
     return f"{next_number(names)}-{role}-{round_}.md"
+
+
+# --- shot -------------------------------------------------------------------------------------------
+
+CANDIDATE = re.compile(r"^c\d+")
+SHOT_EXT = (".png", ".jpg", ".jpeg", ".webp")
+
+
+def rename_shot(folder: Path, candidate: str, finding: str) -> tuple[int, list[str]]:
+    """A candidate that became a finding takes the finding's id: `c3-2.png` → `ABC-15-2.png`, the round's
+    suffix kept, and every `📎 c3-2.png` in the folder's files follows. Two moves that were done by hand
+    at step 6, where the second is the one that gets forgotten and `check_session.py` then reports a
+    marker with no file."""
+    m = CANDIDATE.match(candidate)
+    if not m or not re.fullmatch(r"[\w.-]+", finding):
+        return 2, [f"expected a candidate like c3 or c3-2 and an id like ABC-15, got {candidate!r} {finding!r}"]
+    shots = folder / "screenshots"
+    found = [p for p in sorted(shots.glob(f"{candidate}.*")) if p.suffix.lower() in SHOT_EXT] if shots.is_dir() else []
+    if len(found) != 1:
+        return 1, [f"{len(found)} file(s) named {candidate}.<png|jpg|webp> in {shots} — expected exactly one"]
+    old = found[0]
+    new = old.with_name(finding + candidate[m.end():] + old.suffix)
+    if new.exists():
+        return 1, [f"{new.name} already exists — two candidates for one finding? pick one and remove the other"]
+    old.rename(new)
+    out = [f"screenshots/{old.name} → screenshots/{new.name}"]
+    marker = re.compile(r"(📎\s*`?)" + re.escape(old.name) + r"(?![\w.-])")
+    for md in sorted(folder.glob("*.md")):
+        text = md.read_text(encoding="utf-8")
+        fixed, n = marker.subn(lambda x: x.group(1) + new.name, text)
+        if n:
+            md.write_text(fixed, encoding="utf-8")
+            out.append(f"{md.name}: {n} marker(s) rewritten")
+    out.append(f"the finding's Tech. part ends with: 📎 {new.name}")
+    return 0, out
 
 
 # --- max-id -----------------------------------------------------------------------------------------
@@ -241,6 +277,10 @@ def main(argv: list[str] | None = None) -> int:
     sw.add_argument("--today", type=dt.date.fromisoformat, default=dt.date.today())
     li = sub.add_parser("links", help="every path that names a session folder resolves")
     li.add_argument("sessions", type=Path)
+    sh = sub.add_parser("shot", help="a candidate's screenshot takes the finding's id, its markers follow")
+    sh.add_argument("folder", type=Path)
+    sh.add_argument("candidate", help="the file's name without the extension: c3, or c3-2 from round 2 on")
+    sh.add_argument("finding", help="the id the report assigned, e.g. ABC-15")
     a = ap.parse_args(argv)
 
     if a.cmd == "next-file":
@@ -252,6 +292,14 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         print(next_file([p.name for p in a.folder.iterdir()], a.role, a.round))
         return 0
+    if a.cmd == "shot":
+        if not a.folder.is_dir():
+            print(f"no such folder: {a.folder}", file=sys.stderr)
+            return 2
+        code, lines = rename_shot(a.folder, a.candidate, a.finding)
+        for line in lines:
+            print(line, file=sys.stderr if code else sys.stdout)
+        return code
     if not a.sessions.is_dir():
         print(f"no such folder: {a.sessions}", file=sys.stderr)
         return 2

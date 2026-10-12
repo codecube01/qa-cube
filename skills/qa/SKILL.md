@@ -266,7 +266,7 @@ nothing» groups of the same Contents are read again when the result comes back.
   the **case candidates**: a scenario uncovered during the run with no case behind it the manual tester does not create but names — you
   decide, and the decision is one of two: take the candidate into the next round's plan, or hand it back to the analyst together with a
   widened scope. Mention the result's list of case corrections in the report in one line: it shows where a case drifted from the
-  requirement). Gaps → an addendum to the brief and a second pass, not a manual redo. **Before reading the result yourself, run the checker over it**: `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/check_session.py" <the result file>` — leaked secret values, shifted table columns and oversized cells, none of which survive being noticed later. It judges nothing about the content: that part is yours;
+  requirement). Gaps → an addendum to the brief and a second pass, not a manual redo. **Before reading the result yourself, run the checker over it**: `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/check_session.py" <the result file>` — leaked secret values, shifted table columns, oversized cells and a brief's scenario no heading names, none of which survive being noticed later; it also lists the lines that ask a question, to read against the closing open questions. It judges nothing about the content: that part is yours;
 - **before locking findings into the report — reconcile their class against the tracker** (with `tracker` ≠ none), closed tasks included:
   already filed → «confirmation of a known issue»; related → «a new trigger for task N»; closed as done but absent from the product → a
   different conversation with the team. The search itself — by the operation's name and the requirement's subject, beyond your own task and
@@ -334,7 +334,7 @@ mismatch with the requirements that genuinely blocks a section) → `Major` (mis
 **ID numbering:** running across the project, numbers are not reused, gaps are normal; the next number is
 `session.py max-id <sessions> --prefix <prefix>`, run BEFORE the draft (after it, it finds your own fresh numbers), never taken from memory —
 it counts assignments across every report, the month archives included, not mentions. The prefixes and conventions come from the profile. **The screenshot follows the id:** in the same pass, a candidate that becomes a
-finding has its `screenshots/c<N>….png` renamed to `<ID>….png` (the round suffix stays) and its `📎` in the executor's result follows;
+finding is renamed by `session.py shot <folder> c<N>[-<round>] <ID>` — the file to `<ID>….png` (the round suffix stays), every `📎` in the folder with it;
 a frontend finding's *Tech.* part ends with `📎 <ID>.png` (with that suffix, `📎 <ID>-2.png`; a backend finding has no screenshot and no marker) — the bare file name, the one thing a person filing the
 bug needs to pick the attachment; the checker below confirms every marker resolves to a file.
 

@@ -169,5 +169,46 @@ class Sweep(unittest.TestCase):
         self.assertIn("nothing to sweep", out)
 
 
+class Shot(unittest.TestCase):
+    """The rename and the markers are one move: the marker left behind is the half that was forgotten."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self._tmp.name)
+        self.addCleanup(self._tmp.cleanup)
+        (self.dir / "screenshots").mkdir()
+        (self.dir / "screenshots" / "c3-2.png").write_bytes(b"png")
+        (self.dir / "screenshots" / "c13-2.png").write_bytes(b"png")
+        (self.dir / "9-manual-result-2.md").write_text(
+            "- the total doubles 📎 c3-2.png\n- another 📎 `c3-2.png`\n- unrelated 📎 c13-2.png\n", encoding="utf-8")
+
+    def test_the_file_takes_the_id_and_keeps_the_round_suffix(self):
+        code, out = session.rename_shot(self.dir, "c3-2", "ABC-15")
+        self.assertEqual(code, 0, out)
+        self.assertTrue((self.dir / "screenshots" / "ABC-15-2.png").is_file())
+        self.assertFalse((self.dir / "screenshots" / "c3-2.png").exists())
+        self.assertIn("📎 ABC-15-2.png", out[-1])
+
+    def test_every_marker_follows_and_a_longer_name_is_left_alone(self):
+        session.rename_shot(self.dir, "c3-2", "ABC-15")
+        text = (self.dir / "9-manual-result-2.md").read_text(encoding="utf-8")
+        self.assertEqual(text.count("ABC-15-2.png"), 2)
+        self.assertIn("📎 c13-2.png", text)
+
+    def test_a_missing_candidate_changes_nothing(self):
+        code, _ = session.rename_shot(self.dir, "c4-2", "ABC-15")
+        self.assertEqual(code, 1)
+        self.assertIn("c3-2.png", (self.dir / "9-manual-result-2.md").read_text(encoding="utf-8"))
+
+    def test_an_id_already_taken_by_a_file_is_refused(self):
+        (self.dir / "screenshots" / "ABC-15-2.png").write_bytes(b"png")
+        code, _ = session.rename_shot(self.dir, "c3-2", "ABC-15")
+        self.assertEqual(code, 1)
+        self.assertTrue((self.dir / "screenshots" / "c3-2.png").is_file())
+
+    def test_not_a_candidate_name_is_a_usage_error(self):
+        self.assertEqual(session.rename_shot(self.dir, "shot-1", "ABC-15")[0], 2)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -13,6 +13,9 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **`check_session.py` matches the brief's scenarios against the result's headings**: a scenario id from the brief's `#` column
+  that no heading names is reported; the lines that ask a question are listed for the manager. `qa-manual.md`: headings carry the ids.
+- **`session.py shot`**: a candidate's screenshot takes the finding's id, its `📎` markers in the folder follow.
 - **A «Red flags» table at the end of `SKILL.md`**: eight thoughts that come just before a known rule is broken, each with
   what it actually is and the step that holds the rule; `engine-edits.md` sends such a lesson there.
 - **Processes are stopped by PID, never by a pattern**: `shell-pitfalls.md` — `pkill -f`/`killall` on the user's machine

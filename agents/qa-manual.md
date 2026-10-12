@@ -132,6 +132,9 @@ The automator will write the test from your result without re-checking by hand. 
   its first call, the status, the body, the response time and the delta from the previous call** — free in advance and unrecoverable
   afterwards: a session found dead cannot be re-measured — durations once logged only from the third session on left the first two
   deaths unclassifiable.
+- **a scenario's section heading carries its id from the brief's `#` column** (`## S3 — …`); scenarios run in one pass name every id in
+  that heading (`## S2 + S4 — …`), and a scenario split into parts keeps its id with a letter (`S5a`, `S5b`). `check_session.py`
+  matches the brief's ids against your headings, and a scenario no heading names reads as a lost section;
 - text the user sees is quoted as RENDERED, never with the template's markup (`executor.md`);
 - **a FRONTEND candidate — its symptom is on the screen — gets ONE screenshot ON DISK, taken the moment you confirm it, as a `zoom`;
   nothing else is saved: not the steps, not the forms along the way, not a backend candidate (its evidence is the request and the response).** Take
