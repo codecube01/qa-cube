@@ -11,6 +11,8 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.18.44] — 2026-10-19
+
 ### Added
 
 - **A «harmless» write is a mutation when a concurrent run reads the newest of its kind**: `manual-brief.md`, what goes into
