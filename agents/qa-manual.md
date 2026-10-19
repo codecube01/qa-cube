@@ -20,7 +20,8 @@ Read, in this order:
   (you search by the feature, the trap sits in the API conventions). Where the brief splits the list into «before the session-bound steps»
   and «after», that split sets the moment instead: the first part before those steps, the rest right after them. Write the rules that
   apply to this round out as todo items while reading: a rule read passively gets broken in the same run. The list always carries the
-  engine's `shell-pitfalls.md` — read it before your first shell command.
+  engine's `shell-pitfalls.md` — read it before your first shell command — and the engine's `executor.md`: your own catalogue of run
+  situations, read as its header says (the Contents whole, one entry per fired line) before the first request.
 
 Do not read the remaining profile subfiles in full — go there only when stuck (auth broke → the auth section, and so on); a subfile's first
 screen is the quick flow, the pitfalls come below. The brief has no «What to read» section — fallback: the profile's
@@ -49,11 +50,26 @@ request-level recipes — the contract, the replay, reading the answer, GraphQL 
 calls, from the shell or the page alike, and read the same way before the first request. Auth, the browser instance and the project's own UI
 quirks are in the profile, Browser section, which wins where the two differ; its safety rules (what must never be typed into forms) are not
 negotiable. The browser does not work — do not invent a detour: record in the result exactly what
-fails (the step, the error, a screenshot) and tell the manager in your final summary, because access is theirs to fix.
+fails (the step, the error text) and tell the manager in your final summary, because access is theirs to fix.
 
 ## 1. The check
 
-Walk the brief's scenarios top to bottom — they are sorted by priority.
+Walk the brief's scenarios top to bottom — the order is the execution order, not the priority.
+
+**The brief's sections are not all of one kind, and the heading says which.** «Entry state» is a dated hypothesis about the entry:
+your first move is to open your own tab and run its identity oracle — WHOSE session this is, not whether one is alive — and to work from
+the actual state with a note where it diverged; a «dead» verdict comes only from a fresh tab. «Recon facts» are the manager's
+measurements, each row with its kind, source, date and boundary: a row of kind *composition*, *field-name oracle*, *identifier scheme*,
+*bundle excerpt* or *client artifact: names only* is a hypothesis to confirm by looking, a *state* row older than the build is re-measured
+first. «Open hypotheses» are what the manager did NOT verify — questions with a stake, never facts; a row marked «not from outside»
+gets no calls, only its observable consequence. «Sanctioned probe» is the user's permission with its conditions, the one authorisation to
+mutate outside the round's own objects. «Pause protocol» is the shape of your request when a step needs the user's hands. «Retest»
+(round 2+) holds the previous round's verdicts line by line — the «Was» column tells a regression from a long-standing defect — and the
+fix's scope verbatim, the boundary of the retest verdict; its fingerprint is taken right after the identity check, after any anomaly and
+as your last action. The scenario table's columns are instructions: «Session-bound» and «Closable alone» set your order, «Acting
+identity» is confirmed by «who am I» against the API under test before the target call, «Disarm after» is a step of that scenario, and
+scenario 0 — the refuting check — stops the round if it refutes. A section missing from the brief means that situation was not
+foreseen, not that it is forbidden: hand it over as a question in your final summary.
 
 **Before the scenarios — a sanity check of the environment** per the profile (Environments section) and the snapshot
 `<sessions>/environment-state.md` the brief names (a fact dated before the last deploy is re-checked, not trusted): on shared environments other people's
@@ -77,77 +93,25 @@ For each scenario:
   state — or no object at all, a `null` under the create's `success` — and reads as «refused» or «not written», and one right after the status flip may still show the correct value that is overwritten a few seconds
   later. First establish WHO validates or applies it and WHEN (synchronously, a worker, the external system), then read immediately AND
   after that window — a disagreement between the two reads is a signal in its own right, never noise; cascades onto related objects are
-  looked for after the confirmation, not after the call. Precedent: a registry value checked the instant a request was confirmed matched,
-  and nearly closed a live defect as «not reproducible» — the wrong value arrived seconds after the status change;
+  looked for after the confirmation, not after the call — a value checked the instant a request was confirmed once matched, and the wrong
+  one arrived seconds after the status change;
 - **before the FIRST write probe, snapshot every scalar field of the entity** (the full read, not only the fields you plan to touch).
   A «harmless» probe that clears or rewrites a neighbouring field leaves nothing to restore it from — the snapshot costs one call, a lost
   original is lost for good;
-- **a VALID mutation refused unexpectedly → a per-field matrix in one pass, not hypotheses one at a time.** One probe per input field
-  (paced) sorts the fields into «written» / «silent no-op» / «always refused» in a single round; guessing (the format? a field pair? an
-  enum?) burns a call per guess. Every probe is a write that may land, so the matrix goes only on the round's own entity, within the
-  brief's mutation budget, and after the snapshot above;
-- **before REPEATING an operation the server refused on the theory «maybe it was stale / cached», find out where the validating side reads
-  its data.** If that source does not change between attempts, the retry cannot give a different answer and only spends the expendable it
-  consumes — often a user's signature or click. One read of the contract (does the API even expose the list the check runs against?) is
-  cheaper than the second attempt. Precedent: a removal refused with «X is not a member» was retried and burned a second user signature;
-  introspection would have shown the member list lives only on the backend's side;
+- a valid mutation refused unexpectedly, an operation you are about to retry as «maybe stale», a single-use artifact, an unknown TTL — each
+  has its move in `executor.md`, «Probing and measuring»;
 - write the result to `*manual-result*.md` **immediately**, before moving to the next scenario. No buffering;
 - **a change in the MIDDLE of the result file (a row into an earlier table, a correction above the last section) goes through the Edit
   tool, never through a script that slices the text** — a slice whose tail term is forgotten (`s[:j] + new` instead of
   `s[:j] + new + s[j:]`) silently drops everything after the insertion point, the next append lands on the stump, and the harness reports
-  only «the file changed». After any scripted write, re-list the headings (`grep -n '^## '`) against what the file held before. Precedent:
-  one forgotten tail term erased five of a round's nine steps from the result, noticed only at acceptance; they were rebuilt from the
-  scratch logs;
-- **single-use artifacts (an invite link, a one-time token, the only application in the queue) are consumed by any touch, including a trial
-  one** — work out the semantics on a deliberately expendable instance and take your measurement on a clean one: one touch per control
-  point. «Let me first check whether the object is still alive» is already a consumption. **A channel that hands artifacts back as «the
-  latest one per key» (a mailbox relay, a message sink) can return a stale or a neighbour's artifact silently**: compare its own timestamp
-  with the clock before using it, save each one under its instance's name the moment it is fetched, and prove all of a batch distinct in one
-  command (`sort -u` over the ids) before measuring on them — mixed-up instances void a whole series;
-- **measure an unknown time boundary (TTL, window, deadline) by bisection from below**, not with «long» probes: 1 min → 2 → 5 → 10 → onward.
-  The estimate in the brief can be off by an order of magnitude; a series of long probes returns the same refusal every time and burns
-  expendable instances for nothing. **Many points of one TTL are measured by a batch of untouched instances**: issue N in a row (taking each
-  one right after it is issued), leave them untouched, and touch them from a background scheduler keyed to **absolute epoch times**, not
-  offsets from its own start — one timer then covers every point to the second, and the rest of the round runs under it in parallel.
+  only «the file changed». After any scripted write, re-list the headings (`grep -n '^## '`) against what the file held before — one
+  forgotten tail term once erased five of a round's nine steps.
 
-### When you compute a reference value yourself
+### When an outcome looks like a defect, or a value is your own
 
-A hash, a signature, a checksum, an aggregate: **first self-check the primitives, then show the decomposition of the input, and only then
-compare.** Primitives are verified with a known vector (the reference hash of an empty string, an address encoder against an address from
-the same data) — two minutes remove a whole class of «my parser lies». The field-by-field decomposition of the input is printed BEFORE the
-comparison: a «does not match» verdict passed before the structure was taken apart is useless and more often points at your parsing than at
-the product. Precedent: a «MISMATCH» on a transaction hash turned out to be a wrongly posed question — the field held a 12-field form while
-the hash covers nine — and cost twenty minutes.
-
-### When an outcome looks like a defect
-
-**An unexpected transition or refusal is not a finding until a control experiment on a deliberately clean object has been run.** You saw
-something odd on an object that went through the feature under test — repeat the same action on an object that never went through it: the
-same result means the behavior is normal and unrelated to the feature, a different one means it is now a finding. Costs a minute, saves you
-from a false bug in the report. Precedent: a status moved to a failed terminal state on its own and looked like a regression from a «stale
-value», yet it reproduced with an empty field too. **Before writing «the system rejects a valid input», diff your input against a
-recent SUCCESSFUL call of the same type** — decode what the product itself sent and compare element by element: a refusal of a
-home-made request more often means the request is not the one the product sends. Precedent: a «valid» set of signatures was refused as
-short by one; the last successful operation of that type carried an extra service signature first, which the hand-built set lacked.
-**A conclusion drawn from one passive observation is driven to an action before it is written down** — «the interface does not flag
-X», «the component is locked»: press the control, call the method that would refute it. Precedent: twice in one round a conclusion already
-in the file was refuted by one click (the gate was there) and by one read-only call (the component answered at once).
-
-### When a human is in the observation loop
-
-**Side experiments that produce observable noise are deferred to the end of the loop — not cancelled, not squeezed in halfway.** When the
-scenario's result is visible only to the user (a chat message, an email, a screen), any extra call of yours that spawns the same kind of
-observable event spoils their main check: keep such experiments in a list and run them once the observation loop is closed. An experiment
-did have to be dropped — write in the result which control experiment was not run and what therefore stays an observation rather than a
-contract. Precedent: re-checking a neighboring field would have generated a seventh alert and blurred the observation of the merge.
-
-### When your own precondition cannot be built
-
-**A guard requirement («the action is unavailable while …») may be checked on someone else's entity on the environment — the expected
-outcome here is a refusal, and a refusal changes nothing.** When another defect blocks you from building your own precondition (the path
-loops back on itself), take an existing entity in the required state and perform the forbidden action: record `updated_at` (or its analogue)
-before and after — unchanged means the environment was untouched. The technique closes a requirement that would otherwise land in «not
-covered». Precedent: two guard requirements were unreachable because of a defect in the onboarding that creates the precondition.
+A reference value you compute yourself, an unexpected transition or refusal, «the system rejects a valid input», a conclusion from one
+passive observation, a human in the observation loop, a precondition you cannot build — each is an entry of `executor.md`, and its line
+fired the moment you recognised the shape: open it before the conclusion goes into the file.
 
 ## 2. Recording — this is the evidence for the autotest
 
@@ -164,22 +128,26 @@ The automator will write the test from your result without re-checking by hand. 
 - **every time you write down is read off the output of the call it dates** — print `new Date().toISOString()` (or the shell's `date -u`)
   in the same call as the measurement, never estimate it from how long the run «feels». A section header stamped «~12:30» while the clock
   said 11:20 misdates every observation under it, and on a shared environment the times are what ties an observation to a build or to
-  somebody else's action. Precedent: an executor stamped four sections by estimate and found the real clock an hour behind only at the
-  final fingerprint — the stamps had to be rewritten before delivery. **A probe helper logs, from its first call, the status, the body, the
-  response time and the delta from the previous call** — free in advance and unrecoverable afterwards: a session found dead cannot be
-  re-measured. Precedent: durations were logged only from the third session on, and the first two deaths could no longer be classified.
-- **text the user sees is quoted as RENDERED, never with the template's markup.** A caption read from the bundle arrives as
-  `<b>{email}</b> …`, and pasting the rendered string back in that form makes the one question a text finding exists to answer —
-  «is the markup visible on screen?» — unanswerable from your file. Quote `textContent` (or the screenshot), and mark emphasis in your own
-  notation (`**…**`); where the raw markup does reach the screen, say so in words, because that is itself a defect. Precedent: a result
-  quoted a dialog title as «…<b>address</b>?», and the manager had to reopen the dialog to learn the tags were rendered as bold.
-- **a candidate whose symptom is visible on the screen gets a screenshot ON DISK, taken the moment you confirm it.** Screenshot the failing
-  state with `save_to_disk: true`, copy the file the tool returns into `screenshots/` of the session folder (create it with the first one)
-  under the candidate's name — `c<N>.png`, `<N>` being its line in the candidates list at the bottom of the file, with the round's suffix
-  from round 2 on (`c<N>-2.png`) — and end the candidate's line with `📎 c<N>.png`. Not a finding id: ids are assigned in the report, and
-  the manager renames the file there. A screenshot the tool only showed you dies with your context, while the manager needs it — a finding
-  about text on screen is published only with a screenshot or the bundle's string, and whoever files the bug attaches it. The save is
-  refused (`browser-techniques.md`) — describe on the candidate's line what you saw, in words and with no marker; the round goes on.
+  somebody else's action — four sections stamped by estimate once had to be re-dated at the final fingerprint. **A probe helper logs, from
+  its first call, the status, the body, the response time and the delta from the previous call** — free in advance and unrecoverable
+  afterwards: a session found dead cannot be re-measured — durations once logged only from the third session on left the first two
+  deaths unclassifiable.
+- **a scenario's section heading carries its id from the brief's `#` column** (`## S3 — …`); scenarios run in one pass name every id in
+  that heading (`## S2 + S4 — …`), and a scenario split into parts keeps its id with a letter (`S5a`, `S5b`). `check_session.py`
+  matches the brief's ids against your headings, and a scenario no heading names reads as a lost section;
+- text the user sees is quoted as RENDERED, never with the template's markup (`executor.md`);
+- **a FRONTEND candidate — its symptom is on the screen — gets ONE screenshot ON DISK, taken the moment you confirm it, as a `zoom`;
+  nothing else is saved: not the steps, not the forms along the way, not a backend candidate (its evidence is the request and the response).** Take
+  `zoom` with `save_to_disk: true` over the region that holds the symptom (in the screenshot's coordinates, up to ~1200 px wide): it
+  returns a lossless PNG at the display's pixel ratio (one or more pixels per CSS pixel). A plain screenshot is a JPEG shrunk to the tool's image budget, and with a `scale`
+  below 1 its captions cannot be read — a `scale` that cured a tiled render is never carried over to these. Copy the file the tool returns
+  into `screenshots/` of the session folder (create it with the first one) under the candidate's name, keeping its extension — `c<N>.png`,
+  `<N>` being its line in the candidates list at the bottom of the file, with the round's suffix from round 2 on (`c<N>-2.png`) — and end
+  the candidate's line with `📎 c<N>.png`. Not a finding id: ids are assigned in the report, and the manager renames the file there. A
+  screenshot the tool only showed you dies with your context, while the manager needs it — a finding about text on screen is published
+  only with a screenshot or the bundle's string, and whoever files the bug attaches it. `check_session.py` flags a narrow JPEG and a wrong
+  extension. The save is refused (`browser-techniques.md`) — describe on the candidate's line what you saw, in words
+  and with no marker; the round goes on.
 
 ## 3. The case
 
@@ -252,8 +220,8 @@ what was left on the environment deliberately and what covers that.
 
 **«Product findings».** Everything you learned about the system's behavior that the project knowledge base does not have — the manager will
 move it over. **An empirical regularity not confirmed by the spec (selection order, timings, «it always arrives first») is marked «observed
-in N/N runs» rather than phrased as a contract.** Precedent: «the cascade picks X first», drawn from three lucky runs, went into the
-knowledge base and into the code's doc comment as a fact and cost the next executor a red iteration.
+in N/N runs» rather than phrased as a contract** — «the cascade picks X first», from three lucky runs, once went into the knowledge base
+as a fact and cost the next executor a red iteration.
 
 **«Executor retro».** What got in your way: what was missing in the brief, where an instruction, the profile or a skill lied or stayed
 silent, what wasted your time, what you would change. Honestly and concretely — «skill X has no example for Y, cost me 20 minutes» is

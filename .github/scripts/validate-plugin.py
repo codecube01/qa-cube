@@ -157,15 +157,15 @@ if qa_skill.exists():
     # The budget is in characters, not lines: line count moves when the file is
     # rewrapped, while what the manager actually pays for is the token count.
     size = len(text)
-    if size > 70_000:
+    if size > 65_000:  # lowered after the 0.18.24 audit (59k), so the room does not come back
         fail(
-            f"skills/qa/SKILL.md: {size} characters (budget 70000, ~17.5k tokens) — move "
+            f"skills/qa/SKILL.md: {size} characters (budget 65000, ~17.5k tokens) — move "
             f"situational lessons into skills/qa/references/ and leave the procedure here"
         )
 
 # --- subagent_type values must match real agents -----------------------------
 if qa_skill.exists():
-    declared = {p.stem for p in agent_files}
+    declared = {p.stem for p in agent_files} | {"general-purpose"}  # the harness's own reviewer type, not a plugin agent
     for used in sorted(set(re.findall(r'subagent_type: "([\w\-]+)"', qa_skill.read_text()))):
         if used not in declared:
             fail(f"skills/qa/SKILL.md launches subagent_type `{used}`, but agents/{used}.md does not exist")

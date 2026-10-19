@@ -5,7 +5,7 @@
     check_session.py <sessions>/2026-09-14_acme-412-coupon/          # the whole folder
     check_session.py --max-cell 850 --min-sections 3 <file> …
 
-Four rules the engine states in prose and, until now, asked an agent to honour by eye:
+Six rules the engine states in prose and, until now, asked an agent to honour by eye:
 
 - **no secret value goes into a session file.** The rule is repeated in four instructions because an
   instruction is the only thing that ever enforced it — and session folders are committed into the
@@ -16,10 +16,27 @@ Four rules the engine states in prose and, until now, asked an agent to honour b
   damage is invisible in a rendered preview — the row simply reads as if the author wrote it that way.
 - **a finding's cell stays under ~850 characters.** Past the limit the tracker's reader stops reading
   and the customer sends the report back to be shortened.
-- **a `📎 <file>` marker names a file that exists in the folder's `screenshots/`.** The executor saves
-  a screenshot under the candidate's name and the manager renames it to the finding's id when the
-  report assigns one; a marker left pointing at the old name sends whoever files the bug looking for
-  an attachment that is not there.
+- **a `📎 <file>` marker names a readable file that exists in the folder's `screenshots/`.** The
+  executor saves a screenshot under the candidate's name and the manager renames it to the finding's
+  id when the report assigns one; a marker left pointing at the old name sends whoever files the bug
+  looking for an attachment that is not there. The file itself is read too: the browser tool returns a
+  plain screenshot as a JPEG shrunk to its image budget, and with a `scale` below 1 the captions in it
+  are a few pixels tall — a JPEG under `MIN_SHOT_WIDTH` is that, and an extension that lies about the
+  format is caught on the way.
+- **no two files of a session folder share a number.** The numbering runs across the folder and is
+  never reset, and round 2+ takes its names from `session.py next-file`; a round that counted by
+  hand named three files `8-…` once, and the folder's order of work was gone with it. Checked only
+  when the target is a folder; `0-session.md` and `99-report.md` sit outside the numbering.
+- **every scenario of the brief has a heading in the manual result.** The brief's scenario table is
+  keyed by ids in its `#` column, and the executor's sections carry them (`## S3 — …`, `## S2b + S6 — …`).
+  A result's closing tables are written last, from the executor's context, and cite every step even
+  when the file lost the sections — a scripted insertion once cut five of nine and the file still
+  read as well-formed. Matched against the brief of the same round (`*-manual-task<suffix>.md`).
+
+And one list that is not a verdict: the lines of a manual result that ask a question. An executor
+raises questions next to the observation that prompted them, and the closing «open questions» is
+usually assembled from the brief — so a self-raised one stays behind mid-file, unanswered. The
+manager reads the list against the closing section; the script cannot tell an answered one.
 
 Exit code 0 when nothing was found, 1 when something was. Every problem is printed as
 `file:line: what`, so the output pastes straight into a result file.
@@ -184,17 +201,171 @@ def scan_tables(lines: list[str], max_cell: int) -> list[tuple[int, str]]:
 # finding about a broken image is the product's asset, not ours — so only the marker is resolved.
 SCREENSHOT = re.compile(r"📎\s*`?([\w.-]+\.(?:png|jpe?g|webp))`?", re.I)
 
+# A plain screenshot at `scale` 1 of a desktop viewport comes back 1200+ px wide; the ones taken at
+# 0.5–0.7 came back 600–870, and their captions could not be read. A `zoom` is a lossless PNG at the
+# display's pixel ratio (one or more pixels per CSS pixel) and is readable at any size, so only a JPEG is held to the width. Precedent: a round that
+# switched to `scale` 0.5 against a tiled render kept it for every saved screenshot.
+MIN_SHOT_WIDTH = 1000
+
+EXTENSIONS = {"png": ("png",), "jpeg": ("jpg", "jpeg"), "webp": ("webp",)}
+
+
+def image_info(path: Path) -> tuple[str, int] | None:
+    """(format, width) from the file's own header — stdlib only, no PIL on a stock macOS."""
+    try:
+        data = path.read_bytes()
+    except OSError:
+        return None
+    if data[:8] == b"\x89PNG\r\n\x1a\n" and len(data) >= 24:
+        return "png", int.from_bytes(data[16:20], "big")
+    if data[:4] == b"RIFF" and data[8:12] == b"WEBP":
+        return "webp", 0  # width varies by sub-format; the format is what is checked
+    if data[:2] == b"\xff\xd8":
+        i = 2
+        while i + 9 < len(data):
+            if data[i] != 0xFF:
+                i += 1
+                continue
+            marker = data[i + 1]
+            # SOF0–SOF15 carry the frame size; C4 (DHT), C8 (JPG) and CC (DAC) share the range and do not
+            if 0xC0 <= marker <= 0xCF and marker not in (0xC4, 0xC8, 0xCC):
+                return "jpeg", int.from_bytes(data[i + 7:i + 9], "big")
+            if marker in (0x01, 0xFF) or 0xD0 <= marker <= 0xD9:
+                i += 2 if marker != 0xFF else 1
+                continue
+            i += 2 + int.from_bytes(data[i + 2:i + 4], "big")
+        return "jpeg", 0
+    return None
+
 
 def scan_screenshots(lines: list[str], folder: Path) -> list[tuple[int, str]]:
     out: list[tuple[int, str]] = []
     for n, line in enumerate(lines, 1):
         for match in SCREENSHOT.finditer(line):
             name = match.group(1)
-            if not (folder / "screenshots" / name).is_file():
+            path = folder / "screenshots" / name
+            if not path.is_file():
                 out.append(
                     (n, f"`📎 {name}` has no file in `screenshots/` — a candidate's screenshot is renamed "
-                        f"to the finding's id when the id is assigned; rename it, or fix the marker")
+                        f"to the finding's id when the id is assigned; `session.py shot` renames it and its markers together")
                 )
+                continue
+            info = image_info(path)
+            if info is None:
+                continue  # an empty or unknown file: nothing to measure, and the marker itself resolves
+            fmt, width = info
+            if name.rsplit(".", 1)[-1].lower() not in EXTENSIONS[fmt]:
+                out.append(
+                    (n, f"`{name}` is a {fmt.upper()} under another extension — keep the extension the "
+                        f"tool's file came with, and fix the marker")
+                )
+            if fmt == "jpeg" and 0 < width < MIN_SHOT_WIDTH:
+                out.append(
+                    (n, f"`{name}` is a JPEG {width} px wide — a screenshot shrunk past reading (a `scale` "
+                        f"below 1); retake it as a `zoom` of the region with `save_to_disk` (a lossless PNG)")
+                )
+    return out
+
+
+# --- scenarios against the brief ----------------------------------------------------------------
+
+# An id in the brief's `#` column: a short prefix in any script, a number, an optional letter — S3, B12,
+# 7, S2b. The template's placeholders (`N`, `N+1`) are not ids and are skipped.
+SCENARIO_ID = re.compile(r"[^\W\d_]{0,3}\d+[^\W\d_]?")
+RANGE = re.compile(r"([^\W\d_]{0,3})(\d+)\s*[–-]\s*([^\W\d_]{0,3})(\d+)")
+MANUAL_RESULT = re.compile(r"^\d+-manual-result(.*)\.md$")
+# Executors stamp their headings with the time and the date; `(11:02–11:05)` read as a range would
+# vouch for scenarios 2 to 11, so both are cut out before the words are taken.
+CLOCK = re.compile(r"\d{4}-\d{2}-\d{2}(?:T[\d:.]+Z?)?|\d{1,2}:\d{2}(?::\d{2})?(?:\.\d+)?Z?")
+
+
+def brief_scenario_ids(lines: list[str]) -> list[str]:
+    """Ids of the brief's LAST table keyed by `#` with four columns or more. The template puts the
+    scenarios last; a retest table of the previous round's verdicts and a hypotheses table come before
+    it and are narrower in older briefs, which is how their ids are kept out."""
+    tables: list[list[str]] = []
+    current: list[str] | None = None
+    for line in lines:
+        s = line.strip()
+        if s.startswith("|") and current is None and not SEPARATOR.match(s):
+            cells = split_cells(s)
+            if cells and cells[0].strip() == "#" and len(cells) >= 4:
+                current = []
+                tables.append(current)
+            continue
+        if current is not None and s.startswith("|"):
+            if not SEPARATOR.match(s):
+                cell = split_cells(s)[0].strip() if split_cells(s) else ""
+                if SCENARIO_ID.fullmatch(cell):
+                    current.append(cell)
+            continue
+        current = None
+    return tables[-1] if tables else []
+
+
+def heading_tokens(lines: list[str]) -> set[str]:
+    """Every word of every heading, lowercased, with `S1–S4` unfolded — an id is found anywhere in the
+    heading, because executors write it first (`## S3 — …`), after a word (`## Scenario 3`) or in
+    brackets with the others run in the same pass."""
+    tokens: set[str] = set()
+    fenced = False
+    for line in lines:
+        if line.strip().startswith("```"):
+            fenced = not fenced
+            continue
+        if fenced or not re.match(r"^#{2,4} ", line):
+            continue
+        line = CLOCK.sub(" ", line)
+        tokens.update(w.lower() for w in re.findall(r"[^\W_]+", line))
+        for pa, a, pb, b in RANGE.findall(line):
+            if (not pb or pa.lower() == pb.lower()) and 0 < int(b) - int(a) <= 50:
+                tokens.update(f"{pa}{k}".lower() for k in range(int(a), int(b) + 1))
+    return tokens
+
+
+def scan_scenarios(lines: list[str], path: Path) -> list[tuple[int, str]]:
+    m = MANUAL_RESULT.match(path.name)
+    if not m:
+        return []
+    briefs = sorted(path.parent.glob(f"*-manual-task{m.group(1)}.md"),
+                    key=lambda b: int(b.name.split("-", 1)[0]) if b.name.split("-", 1)[0].isdigit() else 0)
+    if not briefs:
+        return []
+    brief = briefs[-1]
+    ids = brief_scenario_ids(brief.read_text(encoding="utf-8", errors="replace").splitlines())
+    tokens = heading_tokens(lines)
+    out: list[tuple[int, str]] = []
+    for sid in ids:
+        low = sid.lower()
+        # S7 is also found as S7a / S7b: a scenario split into parts keeps its id with a letter; a brief that
+        # numbers its rows bare (`| 3 |`, `| 0a |`, in any script) is answered by `## S3 — …` / `## S0a — …` just as well
+        names = {low, f"s{low}"} if re.fullmatch(r"\d+[^\W\d_]?", low) else {low}
+        if names & tokens or any(re.fullmatch(re.escape(n) + r"[^\W\d_]", t) for n in names for t in tokens):
+            continue
+        out.append(
+            (1, f"scenario {sid} of {brief.name} has no heading — the section is missing (send it back while the "
+                f"executor's context is alive) or it ran inside another (that heading names every id it ran)")
+        )
+    return out
+
+
+# --- questions raised mid-file -------------------------------------------------------------------
+
+
+def scan_questions(lines: list[str]) -> list[tuple[int, str]]:
+    """Lines that ask something, outside code and URLs — a list for the manager, not a verdict."""
+    out: list[tuple[int, str]] = []
+    fenced = False
+    for n, line in enumerate(lines, 1):
+        if line.strip().startswith("```"):
+            fenced = not fenced
+            continue
+        if fenced:
+            continue
+        prose = re.sub(r"https?://\S+", "", re.sub(r"`[^`]*`", "", line))
+        if "?" in prose:
+            text = " ".join(line.split())
+            out.append((n, text if len(text) <= 120 else text[:117] + "…"))
     return out
 
 
@@ -234,8 +405,31 @@ def check_file(path: Path, max_cell: int, min_sections: int) -> list[str]:
     # not depend on the session's language.
     sections_needed = min_sections if "result" in path.stem.lower() else 0
     problems = (scan_secrets(lines) + scan_tables(lines, max_cell) + scan_structure(lines, sections_needed)
-                + scan_screenshots(lines, path.parent))
+                + scan_screenshots(lines, path.parent) + scan_scenarios(lines, path))
     return [f"{path}:{n}: {message}" for n, message in sorted(problems)]
+
+
+def question_notes(path: Path) -> list[str]:
+    if not MANUAL_RESULT.match(path.name):
+        return []
+    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    return [f"{path}:{n}: {text}" for n, text in scan_questions(lines)]
+
+
+NUMBERED = re.compile(r"^(\d+)-.+\.md$")
+OUTSIDE_NUMBERING = {0, 99}
+
+
+def scan_folder(folder: Path) -> list[str]:
+    """Two files of one session folder carrying the same number."""
+    by_number: dict[int, list[str]] = {}
+    for p in sorted(folder.iterdir()):
+        m = NUMBERED.match(p.name)
+        if m and p.is_file() and int(m.group(1)) not in OUTSIDE_NUMBERING:
+            by_number.setdefault(int(m.group(1)), []).append(p.name)
+    return [f"{folder}: files {', '.join(names)} share the number {n} — the numbering runs across the "
+            f"folder; name round-2+ files with `session.py next-file`, one call per file"
+            for n, names in sorted(by_number.items()) if len(names) > 1]
 
 
 def collect(targets: list[str]) -> list[Path]:
@@ -265,9 +459,19 @@ def main() -> int:
         return 0
 
     problems: list[str] = []
+    notes: list[str] = []
+    for target in args.targets:
+        if Path(target).expanduser().is_dir():
+            problems.extend(scan_folder(Path(target).expanduser()))
     for path in files:
         problems.extend(check_file(path, args.max_cell, 0 if args.no_structure else args.min_sections))
+        notes.extend(question_notes(path))
 
+    if notes:
+        print("Questions raised in the file — each one answered, or carried into the closing open questions?\n")
+        for note in notes:
+            print(f"  ? {note}")
+        print()
     if not problems:
         print(f"ok: {len(files)} file(s) checked, nothing found")
         return 0

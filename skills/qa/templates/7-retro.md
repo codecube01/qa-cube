@@ -8,3 +8,9 @@
 
 | Finding | Section file |
 |---|---|
+
+## Numbers
+
+<the table of `transcripts.py <folder>` as printed, and its notes; «no transcripts found» if it found none>
+
+<per note not taken into the table above: «#N <note> — normal: <why>»>

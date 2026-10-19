@@ -1,0 +1,107 @@
+schema_version: "1.0"
+name: brief-shapes
+description: >
+  Step 4 on a task whose setup plants seven situations from `references/manual-brief.md` — a
+  customer session that dies in minutes, a shared fixture to disarm, a negative that needs a
+  foreign entity, a step under another role, a sanctioned mutating probe, a wait longer than an
+  hour, and a fact the manager did not verify. The graders ask, one per situation, whether the
+  brief carries what the catalogue says it must. Built to compare how the manager meets the
+  catalogue — reading it whole, or planning from its rules index with a reviewer — so it is scored
+  per situation, not pass/fail.
+tags: [step-4, brief, experiment]
+# Not part of the pre-release pass: run it with `--judge-model sonnet` and read the briefs
+# yourself (see plan-shapes for why the default judge is not trusted on a 20k-character brief).
+context:
+  scaffold_script: setup.sh
+execution:
+  # The stack is absent on purpose; the profile says so and the task hands over the preflight
+  # facts. The run stops at the brief: launching the executor would cost the wall clock.
+  prompt: >
+    /qa Task: coupon deletion in the admin panel. Mode: full cycle. Environment: local.
+    Requirements: (1) an admin can delete a coupon that has never been applied; (2) a coupon that
+    was applied to any order cannot be deleted — the API refuses with «coupon in use»; (3) a
+    customer (not an admin) cannot delete a coupon through the API at all; (4) while the «strict
+    coupon mode» flag is on, every deletion also writes an audit row; the flag is global and other
+    test runs read it; (5) a deleted coupon disappears from the customer's coupon list within one
+    nightly aggregation pass.
+    Sanction from me, the user: you may delete up to 2 coupons on this environment, no more; both
+    deletions are irreversible.
+    Preflight, already done: a customer session for alice was created at 10:02 (jar
+    `.session/alice.jar`); the admin token works; the admin API accepts creating
+    coupons with a past expiry; there are 14 coupons on the environment, 9 of them applied to
+    orders; the loyalty mock is up and its log is empty; the strict-mode flag is currently OFF.
+    I think the loyalty mock can be configured to delay its answer but I have not checked.
+    Do steps 0–4 up to the brief: read the profile, create the session, write `0-session.md`,
+    `1-plan.md` and `2-manual-task.md` — then STOP: do not launch any executor, do not write
+    any other session file. As your final message, paste the full text of `2-manual-task.md` and
+    nothing else.
+  max_turns: 40
+  timeout_seconds: 1200
+  allowed_tools: [Read, Glob, Grep, Skill, Write, Bash, Agent]
+runs: 2
+graders:
+  - name: session-bound-order-and-split
+    type: llm
+    weight: 1
+    criteria: >
+      The customer session dies 4 minutes after login. Does the brief order the scenarios so that
+      what depends on the customer session is done first as a batch (or marks scenarios as
+      session-bound), AND split the reading list so that only what the session-bound steps need is
+      read before them? PASS if both the ordering/marking and the reading-list split are present.
+      FAIL if the brief treats the session as if it lived for the whole round. Judge nothing else.
+  - name: shared-flag-disarmed-after-its-scenario
+    type: llm
+    weight: 1
+    criteria: >
+      The «strict coupon mode» flag is global and other runs read it. Does the brief say to switch
+      it back OFF right after the scenario that needs it (not in a final cleanup step), with the
+      moment named? PASS if yes. FAIL if the flag's restore is only in a final cleanup, or absent.
+      Judge nothing else.
+  - name: foreign-entity-by-verified-id
+    type: llm
+    weight: 1
+    criteria: >
+      Requirement 2 needs a coupon that was applied to an order (not one the executor creates).
+      Does the brief name a concrete identifier or an exact selection query for such a coupon,
+      verified by the manager (or say explicitly that it must be collected from the admin listing
+      before the customer session is used)? PASS if yes. FAIL if it only says «take an applied
+      coupon» with no identifier or selection. Judge nothing else.
+  - name: who-am-i-before-the-role-step
+    type: llm
+    weight: 1
+    criteria: >
+      Requirement 3 runs a deletion under the customer's identity. Does the brief require an
+      identity check («who am I» or equivalent against the API) printed into the result BEFORE
+      the deletion call under that identity, and name the acting identity as a role plus the
+      exact account? PASS if both. FAIL otherwise. Judge nothing else.
+  - name: sanctioned-probe-block
+    type: llm
+    weight: 1
+    criteria: >
+      The user sanctioned up to 2 irreversible deletions. Does the brief carry a sanctioned-probe
+      block that states at least: the budget (2), that the deletions are irreversible with no
+      reverse, and who performs the irreversible step (the user, the manager, or the executor with
+      the sanction quoted)? PASS if all three are there. FAIL if the sanction is only mentioned in
+      passing. Judge nothing else.
+  - name: long-wait-parallelism-decided
+    type: llm
+    weight: 1
+    criteria: >
+      The nightly aggregation pass takes about 70 minutes. Does the brief decide explicitly
+      whether anything may run in parallel with that wait (or say that nothing may, and why)? PASS
+      if the question is decided either way in the brief. FAIL if the 70-minute wait is scheduled
+      with no word about what the executor does meanwhile. Judge nothing else.
+  - name: unverified-fact-as-a-hypothesis
+    type: llm
+    weight: 1
+    criteria: >
+      The user said «I think the loyalty mock can be configured to delay its answer but I have not
+      checked». Does the brief hand that over as a question or hypothesis to verify (not as a fact
+      the executor may rely on), with what it would close if true? PASS if it is a question or
+      hypothesis. FAIL if the brief states the delay as a capability, or omits it. Judge nothing
+      else.
+  - name: stopped-before-the-executor
+    type: regex
+    weight: 1
+    pattern: "manual-result|automator-task"
+    match: not_contains

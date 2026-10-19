@@ -3,7 +3,7 @@
 Read at step 2 of `../SKILL.md` — but **unlike the other catalogues, not once per session: only when its situation actually
 occurs.** Step 2 names the three triggers, and each one owns a section here:
 
-- the sweep found folders from previous months → **Sweeping into the month archives**;
+- the sweep (`session.py sweep`) printed an unresolved link or a folder it could not move → **Sweeping into the month archives**;
 - a session for this task already exists → **Continuing a session: round 2+**;
 - the folder holds files under the old naming scheme → **Folders from the old scheme**.
 
@@ -14,14 +14,15 @@ a way the folder has already been broken once, and the precedent that closes it 
 
 **Sweeping into the month archives**
 
-- moved it — fix the links in the same pass, `mv` breaks them silently
-- an empty grep is not proof: verify that every rewritten path exists
+- what the script does, and what it leaves to you
+- an unresolved link is fixed by where its target went, not by its prefix
 
 **Continuing a session: round 2+**
 
 - date the round's trigger before anything else
 - a round whose trigger is the requirements arriving, not a fix — and which therefore launches nobody
-- renaming brings the whole name to the convention, not just the date
+- renaming brings the whole name to the convention, not just the date — and the links to the old name are rewritten
+- every file of the round is named by the script, one call per file
 - what the executor's brief carries over is the line-by-line verdict, not the gist
 - re-launch the analyst only when the input changed
 - the previous session is a single file in the root
@@ -36,20 +37,22 @@ a way the folder has already been broken once, and the precedent that closes it 
 
 ## Sweeping into the month archives
 
-### Moved it — fix the links in the same pass
+### What the script does, and what it leaves to you
 
-Run a replacement of the paths with the archived ones across the whole repository and check for leftovers with grep. Navigation
-from the project map, the profile, the knowledge base, the cases and the registries all rests on session-folder paths, and `mv`
-breaks every one of them silently. Precedent: 8 folders moved in a second, 20+ links across six files took two passes to fix.
+`session.py sweep <sessions>` moves the folders, rewrites every link to them in the repository's markdown — each in its own style,
+relative to its file or to the root — and then checks that every path naming a session folder resolves, the ones it did not touch
+included. Navigation from the project map, the profile, the knowledge base, the cases and the registries all rests on those paths,
+and `mv` breaks every one of them silently. Precedent: 8 folders moved in a second, 20+ links across six files took two passes to
+fix by hand. What it prints is what is left: a folder whose archive place is already taken stays where it is, and a link that
+resolves nowhere is listed as `file:line: path`.
 
-### An empty grep is not proof the links work — verify that every rewritten path EXISTS
+### An unresolved link is fixed by where its target WENT, not by its prefix
 
-Loop the list through a directory test. A mechanical prefix fix silently keeps pointing at folders that were also renamed, or at
-ones that were never migrated in the first place, and the reader discovers it only when they open the link. Run the same
-existence check over the links you did not touch, once per sweep. Precedent: a sweep left ~30 dead paths across the cases, the
-registry, the profile and the knowledge base — including the profile's own pointer to the sample report, whose folder had been
-renamed as well as moved, and a pointer to a session that had never been migrated at all; the prefix rewrite fixed neither, and
-the grep came back clean.
+Find the folder by its name across `<sessions>/` and the month archives, and point the link at that. A prefix fix keeps pointing at
+folders that were renamed as well as moved, or never migrated at all, and the reader finds out only on opening the link. Then run
+`session.py links <sessions>` until it prints nothing. Precedent: a sweep left ~30 dead paths across the cases, the registry, the
+profile and the knowledge base — including the profile's own pointer to the sample report, whose folder had been renamed as well as
+moved, and a pointer to a session never migrated at all; the prefix rewrite fixed neither, and the grep came back clean.
 
 ## Continuing a session: round 2+
 
@@ -68,7 +71,23 @@ motion. A long-lived session otherwise stays outside the naming convention forev
 search that every round's step 2 starts with: a grep for the task id across folder names. Precedent: an initiative RBAC review
 acquired a spec task two months in; round 2 renamed the folder by date alone, and the customer caught the missing id.
 
+*And the rename breaks every link to the old name, exactly as a month move does, while no script rewrites them for it.* The
+links live where the sweep would look — the cases, the registries, the knowledge base — and in one place it would not expect:
+another live session that cites this one, a sibling task's brief or raw source written while this round was running. Right after
+the `mv`, grep the repository for the old folder name, rewrite each hit in its own style, and run `session.py links <sessions>`.
+Precedent: a round-2 rename left the case file and three files of a parallel sibling session — its plan's source list and both
+briefs — pointing at the folder's previous date; a grep for the old name found all four at once.
+
 Read all the previous files before planning the round — plan, results, report, retro — and apply their lessons immediately.
+
+### Every file of the round is named by the script, one call per file
+
+Each file the round creates gets its name from `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/session.py" next-file <folder>
+<role> <round>`, run at the moment that file is created — not once for the round, and not by reading the scheme's example. The
+script takes the next free number from the folder as it stands, so three calls in a row give three numbers; one call reused gives
+one number three times. `check_session.py` over the folder refuses two files on one number. Precedent: a second round wrote its
+plan, its brief and its result as `8-plan-2.md`, `8-manual-task-2.md`, `8-manual-result-2.md` — the script was installed and named
+in the skill, and was never called.
 
 ### A round whose trigger is the REQUIREMENTS arriving, not a fix — and which therefore launches nobody
 
@@ -95,9 +114,9 @@ without a single executor.
 
 ### What the executor's brief carries over is the line-by-line verdict, not the gist
 
-Not the «gist of the findings» from the previous round but their verdict per AC/FR (`pass` / `fail` / not covered). Without a
-«was: pass» the executor cannot tell a regression from a long-standing defect — and regressions are usually the most valuable
-findings of a retest.
+Not the «gist of the findings» from the previous round but their verdict per AC/FR (`pass` / `fail` / `partial` / not covered) — the table of
+the brief template's «Retest» section, one row per requirement. Without a «was: pass» the executor cannot tell a regression from a
+long-standing defect — and regressions are usually the most valuable findings of a retest.
 
 ### Re-launch the analyst only when the input changed
 
@@ -115,7 +134,8 @@ renaming. It becomes the archive of round 1, and a `grep` on the task keeps find
 The previous result was written against a contract that has changed since (fields renamed, an endpoint path moved) — append as
 the first line of that file «⚠️ the contract changed on <date>: <was> → <now>, the current one is <file>». The round-2 executor
 reads evidence as a ready-made recipe; having the rename recorded only in `0-session.md` means betting that they will read both
-files, and in the right order. Precedent: assertions nearly went out against dead field names.
+files, and in the right order — so the brief's «Retest» section names the warning too («Stale evidence»). Precedent: assertions nearly
+went out against dead field names.
 
 ## Folders from the old scheme
 
@@ -123,7 +143,7 @@ files, and in the right order. Precedent: assertions nearly went out against dea
 
 Sessions from old runs (`session.md`, `task-manual.md`, `lessons.md`, `*-r2.md`, …) are left alone; the round's new files are
 created per the current scheme, continuing the numbering from the highest number in the folder (no numbers at all — the new
-round starts at 8).
+round starts at 8); `session.py next-file` applies this rule — run it after the two renames below.
 
 The exception is the report and the meta file. The report sits under a former name (`6-report.md`, `report.md`,
 `*-report-2.md`) → first thing, `mv` the latest (freshest) one to `99-report.md` and update that from then on. Same for the meta

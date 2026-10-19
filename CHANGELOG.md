@@ -11,6 +11,167 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.18.44] — 2026-10-19
+
+### Added
+
+- **A «harmless» write is a mutation when a concurrent run reads the newest of its kind**: `manual-brief.md`, what goes into
+  the brief — report requests or exports go behind the same «run finished» gate as the other mutations, or carry a discriminator.
+- **Capturing the page's request bodies from outside the page**: `browser-techniques.md`, intercepting network — where a page-script
+  hook runs in an isolated world and sees nothing, a debugger-protocol listener on the tab captures bodies and trace ids.
+- **A neighbouring build is «without the task» only when proven**: `planning.md`, the reference environment — dated before the task or
+  excluded by a merge base; a task with no merge request is never excluded, and nothing stronger is built on the comparison.
+- **An operation the brief misread**: `executor.md`, the round's limits — when the schema shows a write is not what the brief took it
+  for, the executor stops that probe instead of inventing a «safer» body under a role the guard admits.
+- **An empty list is not junk, and a schema-only operation is placed by its domain doc**: `planning.md`, the order of the
+  server-side checks — `[]` may make a handler create defaults; an operation found by introspection enters a sweep by its docs, not its name.
+- **A fix that moves a boundary**: `planning.md`, the bug-task checklist — the new boundary (an inclusive end, a new cut-off)
+  is a neighbour of its own, probed at the store's precision by closing a window at an existing record's whole unit.
+- **A reverse that answers success where a refusal was expected**: `planning.md`, the gate before an irreversible step — such a
+  gate is phrased by its effect (the object read back unchanged), and dry-called on the round's own object before a shared fixture.
+- **Every entry point of a frontend feature**: `planning.md`, recon — presence is checked by the feature's UI strings across the
+  served bundle, and every screen they land on gets a scenario of its own.
+- **A helper handed to the executor prints the trace id**: the brief's «Carriers» slot — body to stdout, status code and trace id
+  to stderr.
+- **A run that resumes after a gap reconstructs it first**: `executor.md` — what finished and whether anyone acted is read from the
+  object (state, last-modified), then the system's history, before any action, the gap is recorded, and a background logger's
+  ceiling is the operation's end plus an hour.
+- **A click timed against a running multi-step operation**: the brief's pause protocol gets a «Window in time» line — anchored at
+  the previous step's observed start plus the shortest («during») or longest («after») observed duration, never the mean.
+- **Four shell pitfalls**: `shell-pitfalls.md` — a buffering stage after `grep --line-buffered` silences a monitor; `"$tx:e…"`
+  is a zsh history modifier; a credential header never rides curl's argv; a helper resolves its path arguments before its `cd`.
+- **The fail-closed wrapper is removed right after its last guarded click**: `browser-techniques.md` — a tab that leaves the tool's
+  group otherwise keeps blocking, the user's own actions included.
+- **`automation.md` — a change that removes or renames a contract element**: the automator's brief lists every existing test it
+  breaks, from a scheduled run on the build with the change plus a search of all test classes, not only the test the manual result named.
+- **`transcripts.py` — the retro's numbers from the transcripts on disk**: per manager and executor, time, context peak,
+  tool errors, refusals, retries after a failure, compactions. Step 7 runs it, keeps the table in `7-retro.md` (transcripts
+  expire) and answers every note: a lesson or a «normal, because».
+- **`check_session.py` matches the brief's scenarios against the result's headings**: a scenario id from the brief's `#` column
+  that no heading names is reported; the lines that ask a question are listed for the manager. `qa-manual.md`: headings carry the ids.
+  A brief that numbers its scenarios bare (`| 3 |`, `| 0a |` with a letter in any script) is answered by `S3` / `S0a` headings.
+- **`session.py shot`**: a candidate's screenshot takes the finding's id, its `📎` markers in the folder follow — a marker that
+  ends a sentence (`📎 c1.png.`) included.
+- **A «Red flags» table at the end of `SKILL.md`**: nine thoughts that come just before a known rule is broken, each with
+  what it actually is and the step that holds the rule; `engine-edits.md` sends such a lesson there.
+- **Processes are stopped by PID, never by a pattern**: `shell-pitfalls.md` — `pkill -f`/`killall` on the user's machine
+  matches their own applications; a hung foreground call is left to time out.
+- **An automation price includes the host class's fixed cost**: `SKILL.md` step 5 — provisioning, per-test hooks and
+  stabilising reads, read off a neighbouring test's run log.
+- **A launch after a wait on the environment re-reads the comment thread first**: `manual-brief.md` («Preflight and
+  access») — the team that fixes the environment often posts the contract in the same motion.
+- **When and how wide a round runs is a start question** (`planning.md`, «What the plan rests on», pointed to from step 1
+  of `SKILL.md`, since the answer decides the folder): a task in testing
+  whose other layer is still in development, or a parent with several siblings in testing, is put to the user before planning.
+  A layer word the user ties to an instrument («the frontend, in profile X») names where to observe it, not a narrowing.
+- **An identity switch that passed before is not cleared for the next one** (`manual-brief.md`, «Your own harness refuses
+  a call»; a slot in the brief template's «Pause protocol»): the brief names the fallback for every switch, and an
+  irreversible step waits for the switch it depends on. The first fallback is the manager's own session — the executor
+  asks with «LOGIN NEEDED: <account>» — and the user logs in by hand only when that attempt is refused too.
+- **Two new shapes of «The tracker is searched at step 1»** (`planning.md`): a task's contract may sit in a SIBLING's
+  comment thread, searched by the task's own operation and field names before the requirements are rated; and a description
+  REPLACED by a sibling's text is recovered from its edit history before «no requirements of its own» is written anywhere.
+- **Two output-reading riders** (`browser-techniques.md`, «Output censorship»): a form's state is read as its whole visible
+  text, not through a whitelist of expected words; a link that may not be printed is checked inside the tab it opens (status, sha256).
+- **A wallet signature request is a human click too, free typed-data signatures included**: `manual-brief.md`
+  («Your own harness refuses a call») — a page script records or refuses wallet calls, never originates them.
+- **An irreversible step the user sanctioned in chat is the user's click or the manager's call, never the executor's**:
+  `manual-brief.md` («A sanctioned mutating probe») and a «Who presses» slot in the brief's «Sanctioned probe» block.
+- **A size budget for every catalogue and agent instruction** (`check_engine_edits.py`): each is read whole, so an
+  edit past its budget makes room — folds a family, merges a precedent — instead of growing; `engine-edits.md` says so.
+- **The form of a rule is chosen by what failed** (`engine-edits.md`, «Before writing»): a rule broken under pressure,
+  an output of the wrong shape, an omitted element, a mechanical slip and a situational case each get their own form —
+  an entry, a recipe, a template slot, a script check, a condition.
+- **`scripts/session.py`**: `next-file` names a round-2+ file, `max-id` finds the highest finding id assigned across
+  every report, `sweep` archives past months' folders, rewrites their links and checks every session path resolves
+  (`links` on its own); SKILL.md step 2 and the ID numbering call it instead of counting by hand.
+
+- **Two files of a session folder on one number** are refused by `check_session.py` over the folder; round-2+ names come from
+  `session.py next-file`, one call per file (`SKILL.md` step 2, `session-folder.md` «Continuing a session»).
+- **The read channel for a sanctioned probe's effect is a question of the sanction** (`manual-brief.md`, «A sanctioned mutating
+  probe», now eight questions; a «Read channel» slot in the brief template).
+
+- **A mock-up board is read through its structure** (`browser-techniques.md`, «Design mock-ups»): one structure-listing call, read
+  from the file the tool saves; frame captions often sit in neighbouring title frames and are matched by coordinates; text layers'
+  names are their text, so no code-generation call is needed.
+
+### Changed
+
+- **A bounded poll also exits on an error response**: `shell-pitfalls.md` — a wait loop that only tests its condition spins to
+  the limit on a malformed request.
+- **The status list precedes the automation question**: `automation.md` and step 5 — before the automation dialog, the round's
+  🟢/🟡/🔴/⚪ status list goes to the chat as a message of its own; the dialog's three lines no longer stand in for it. A red flag row added.
+- **A fix with a condition of its own is a partial fix, not a new finding** (`manual-brief.md`, the brief template's «Fix scope»):
+  the inputs the fix leaves out keep the finding open under its id, narrowed; a new id is only for what it never covered.
+- **«Observable» in the automation decision means distinguishable from the build without the task** (`planning.md`): where only
+  the branch that behaves as before can be reached, the answer is «no automation» straight from recon — no round is offered to
+  look for an oracle.
+- **The automator reads `executor.md` too**: its «Contents» is on every automator brief's reading list, read before the first
+  assertion — a computed reference value, rendered text and a refused request bite a test as they bite a manual run.
+- **`qa-manual.md` holds the executor's procedure again** (29k → ~23k characters): the run's situational lessons — the per-field matrix,
+  the retry of a refused operation, single-use artifacts, TTL bisection, a computed reference value, the control experiment, the human in
+  the loop, a guard checked on someone else's entity, rendered text — move to a new rules-index catalogue `references/executor.md`, on the
+  brief's reading list beside `shell-pitfalls.md`.
+
+- **`SKILL.md` holds the procedure again** (70k → 60k characters): the step-5 lessons move to a new rules-index catalogue
+  `references/automation.md`; the container task, the compound and draft verdicts, the parent's scope and «cheap reads first» move to
+  `planning.md`; twins of `report.md`, `manual-brief.md` and `engine-edits.md` become pointers; precedents shrink to a clause.
+
+- **The «Contents» of `manual-brief.md` and `report.md` are the rules too** — the manager reads the index with a `limit` at steps 4 and
+  6, opens one entry per fired line, and a context-free reviewer reads the bodies against the brief (before the executor is launched)
+  and against the report (before delivery). The same scheme as `planning.md` at step 3; `report.md`'s budget raised to 95000.
+
+- **The «Contents» of `planning.md` are the rules, and the manager plans from them** — one line per shape, a trigger and what the plan
+  does about it; the bodies are opened per line that fired, and a reviewer subagent reads them whole against the plan once it is written
+  (`SKILL.md` step 3). `engine-edits.md` says how such an index is edited; the validator refuses an index line without an arrow.
+
+- **The round's budgets and limits are a section of the brief template**: expendables by the formula, the control instance, parallel
+  waits, the amount cap with the fee beside it, the neighbouring contour, reference values, window and focus; five `manual-brief.md`
+  entries and the cap section are rewritten around the slots.
+
+- **The scenario table of the brief template has its columns and its mandatory rows**: expected effect with its channel, fixture as a
+  selection criterion, acting identity, session-bound, closable alone, disarm after; scenario 0 is the refuting check, the last row reads
+  the journal after the negatives; ten `manual-brief.md` entries are rewritten around them into nine (the unstable-access entry
+  merged into the order entry).
+
+- **The entry into the environment is an «Entry state» section of the brief template** — the instance id, the identity oracle, whose
+  session, the role, the carriers, what to do on a refusal, the values the round depends on, when the requirements were last read; seven
+  preflight entries of `manual-brief.md` are rewritten around it, `qa-manual.md` and `SKILL.md` step 4 point at it.
+
+- **A round-2 rename rewrites the links to the old folder name** (`session-folder.md`, «Renaming brings the whole name
+  to the convention»): grep the repository for the old name, a sibling session's files included, then `session.py links`.
+
+- **A retest brief has a «Retest» section in the template**: the fingerprint, the fix's scope verbatim, the previous round's verdicts
+  line by line, what remains, what is already filed, what is forbidden during a check; `manual-brief.md` «A retest round» is rewritten
+  around it, `session-folder.md` and `qa-manual.md` point at it.
+
+- **Issue files are made on request only** (`report.md`): with a read-only tracker the session no longer writes
+  `issue-<ID>.md` by default nor offers them; the user asks after reading the report.
+- **The action block skips routine** (`SKILL.md`, step 8): no line for pasting the tracker comment or committing the clone; `⚠️` is
+  left for a blocked verdict and broken access.
+- **A «dead session» verdict comes from a fresh tab only** (`manual-brief.md`, preflight): an identity call from a tab left over
+  from an earlier round can answer `401` while the session is alive.
+- **One screenshot per frontend candidate, nothing else saved** (`qa-manual`, the brief template, `manual-brief.md`); a backend
+  finding's cell carries no `📎` marker (`SKILL.md`, step 6).
+- **The pause protocol is a section of the brief template**, not a catalogue entry: `templates/2-manual-task.md` carries the
+  request line's fields and what the executor does after the pause; the `manual-brief.md` entry keeps the manager's half and
+  the precedents.
+- **Recon facts are a table of the brief template** with a kind, a source, a date and a boundary per row; five
+  `manual-brief.md` entries on what recon may hand over become one family, «What a recon fact may claim».
+- **Open hypotheses and the sanctioned probe are sections of the brief template**: the eight shapes of «handed over as a
+  question» and the six questions of a sanctioned mutation are filled in, not remembered; their `manual-brief.md` families
+  keep the precedents.
+
+### Fixed
+
+- **Long typed strings are not exact, and a drawer can resize the screenshot frame** (`browser-techniques.md`): a length
+  boundary is reached by a fill plus typed tail with `value.length` read back; the fresh screenshot is taken after a drawer opens.
+- **A page-script call is sized for ~30 s** (`browser-techniques.md`): the ~45 s budget is not reached in practice — a ~36 s
+  call was already cut off.
+- **A candidate's screenshot is a `zoom`, readable**: `qa-manual.md` saves a lossless PNG of the region, at the display's pixel
+  ratio, instead of a plain screenshot, which came back shrunk and, with `scale` below 1, unreadable; `check_session.py` flags a
+  JPEG under 1000 px wide and an extension that does not match the file's format.
+
 ## [0.17.56] — 2026-10-05
 
 ### Added

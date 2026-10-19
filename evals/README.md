@@ -8,8 +8,16 @@ only regression net a corpus of instructions can have.
 ## Running it
 
 ```bash
-claude plugin eval . --scaffold --allow-tools Write Edit
+claude plugin eval . --scaffold --allow-tools Write Edit --model sonnet
 ```
+
+**Always pass `--model`.** Without it every run is a full session on your default model — on a subscription
+whose default is the largest model, one pass eats a day's limits. The cases check that a rule is legible and
+obeyed, not the model's ceiling, so a mid-size model catches a lost rule just as well; a small one fails cases
+for reasons of its own and turns red into noise.
+
+**A run without `--case` includes the experiments** (`tags: [..., experiment]` — `plan-shapes`, `brief-shapes`),
+the two most expensive cases and no gate. For the gate, run the six by name, one `--case` each.
 
 `--scaffold` is required: every case builds its fixture project with an author-supplied bash
 script (`setup.sh`), and the CLI refuses to run those unless you ask for it. `--allow-tools`
@@ -21,6 +29,7 @@ Useful flags while iterating:
 | Flag | Why |
 |---|---|
 | `--case <name>` | one case instead of all six |
+| `--model <model>` | the model of the runs (the judge has its own, `--judge-model`, default haiku) |
 | `--ablation none` | skip the no-plugin baseline arm — halves the cost, loses the «did the plugin cause this» signal |
 | `--runs 1` | one run per case instead of the declared two |
 | `--keep-temp` | keep each run's sandbox (`home/cwd` is the fixture project) for debugging |
@@ -33,11 +42,18 @@ Measured, not estimated. The full pass (six cases, `runs: 2`, with the baseline 
 and a baseline run $0.05–0.25. A run is a real session, so its cost follows how far the engine
 gets, not a flat per-call price.
 
+That measurement predates `--model` in the recipe, and which model it ran on was not recorded.
+
 So in practice:
 
-- **routine check** — `--runs 1 --ablation none`, about $1.50;
-- **before a release that matters** — the full pass, about $4, for the repeat runs (a judge is
-  not deterministic) and the «did the plugin cause this» delta.
+- **every push, for nothing** — `tests/test_rule_anchors.py`: every case's rule is still written, in a file
+  read at its step, and every «`file.md`, section «…»» pointer between engine files resolves. That is the
+  regression an audit or a move produces, and it needs no model;
+- **routine check** — `--model sonnet --runs 1 --ablation none`;
+- **before a release that matters** — `--model sonnet` with the declared runs and the baseline arm, for the
+  repeat runs (a judge is not deterministic) and the «did the plugin cause this» delta.
+
+A new case gets its anchors in `tests/test_rule_anchors.py` too — the test fails until it does.
 
 Set `--max-cost-usd` if you want a ceiling, but know what it does: it is checked *before* each run
 launches and does not stop runs already in flight, so a low ceiling will still spend whatever the
@@ -73,6 +89,7 @@ under pressure. When a rule matters enough to justify $1.50 a run, write the beh
 give it `timeout_seconds` and `Bash` (step 2 renames folders with `mv` — without Bash the engine
 cannot do what the case is grading).
 | `engine-clone-guard` | an `engine-clone` that points at the plugin's installation is refused, and the lesson goes to `.claude/qa-cube-feedback.md` |
+| `plan-shapes` | a step-3 experiment, not a gate: a task with seven planted scenario shapes, one grader per shape — for comparing two ways of meeting `planning.md`; judge with `--judge-model sonnet` and read the plans yourself (see the case's header) |
 | `feedback-layer` | two layers, no duplicates: a universal lesson goes to `.claude/qa-cube-feedback.md` and not into the profile, a project-only one to the profile; an open row applies in the next session, a closed one does not |
 
 ## Writing another case
@@ -104,6 +121,10 @@ Four things are easy to get wrong — each one cost a paid run to find:
   rest explicitly. And if the judge fails a plainly correct answer 3/3 after two rewordings, stop
   rewording: `degradations-declared` lost four paid passes that way on «the mode defaults to full
   cycle». A check that comes down to a word is a regex.
+- **A prompt that says «the engine's rules» sends the run to look for the engine — name the skill instead.**
+  `engine-clone-guard`'s fixture points `engine-clone` at the plugin cache, and a run told to use «the qa-cube engine's own
+  rules» followed that path out of the sandbox, was denied and answered «cannot read the rules»: 0.00, the judge with
+  nothing to judge. «Load the qa-cube `qa` skill, then…» costs nothing — in a real session the skill is already loaded.
 - **A fixture that triggers a second rule measures two things at once.** `session-continuation`
   originally dated its existing session in the previous month, which set off the monthly sweep;
   the run spent every turn archiving folders and fixing links and never reached the sentence the

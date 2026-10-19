@@ -199,6 +199,47 @@ class ScreenshotTest(unittest.TestCase):
     def test_a_placeholder_in_a_template_is_quiet(self):
         self.assertEqual(self.shots("*Tech.: …, 📎 <ID>.png*\n"), [])
 
+    # Headers only: the checker reads the size from them and never decodes the picture.
+    @staticmethod
+    def png(width: int) -> bytes:
+        return b"\x89PNG\r\n\x1a\n" + b"\x00\x00\x00\x0dIHDR" + width.to_bytes(4, "big") + (500).to_bytes(4, "big")
+
+    @staticmethod
+    def jpeg(width: int) -> bytes:
+        app0 = b"\xff\xe0\x00\x10JFIF\x00" + b"\x00" * 9  # a segment before the frame, as the tool writes it
+        sof0 = b"\xff\xc0\x00\x11\x08" + (500).to_bytes(2, "big") + width.to_bytes(2, "big") + b"\x03" + b"\x00" * 9
+        return b"\xff\xd8" + app0 + sof0 + b"\xff\xd9"
+
+    def put(self, name: str, data: bytes) -> None:
+        (self.dir / "screenshots" / name).write_bytes(data)
+
+    def test_a_jpeg_shrunk_by_scale_is_caught(self):
+        """The tool's plain screenshot at `scale` 0.6: 739 px wide, captions five pixels tall."""
+        self.put("c1.jpg", self.jpeg(739))
+        found = self.shots("📎 c1.jpg\n")
+        self.assertEqual(len(found), 1)
+        self.assertIn("739", found[0])
+        self.assertIn("zoom", found[0])
+
+    def test_a_jpeg_at_full_scale_is_quiet(self):
+        self.put("c1.jpg", self.jpeg(1232))
+        self.assertEqual(self.shots("📎 c1.jpg\n"), [])
+
+    def test_a_small_zoom_is_quiet(self):
+        """A `zoom` is a lossless PNG of a region — narrow, and readable."""
+        self.put("c1.png", self.png(314))
+        self.assertEqual(self.shots("📎 c1.png\n"), [])
+
+    def test_a_jpeg_named_png_is_caught(self):
+        self.put("c1.png", self.jpeg(1232))
+        found = self.shots("📎 c1.png\n")
+        self.assertEqual(len(found), 1)
+        self.assertIn("JPEG under another extension", found[0])
+
+    def test_jpg_and_jpeg_are_one_format(self):
+        self.put("c1.jpeg", self.jpeg(1232))
+        self.assertEqual(self.shots("📎 c1.jpeg\n"), [])
+
 
 # --- the driver ---------------------------------------------------------------------------------
 
@@ -242,6 +283,144 @@ class DriverTest(unittest.TestCase):
         result = self.write("3-manual-result.md", "# Result\n\n## Scenarios\n")
         self.assertTrue(check_session.check_file(result, 850, 3))
         self.assertEqual(check_session.check_file(result, 850, 0), [])
+
+
+class FolderNumberingTest(unittest.TestCase):
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self._tmp.name)
+        self.addCleanup(self._tmp.cleanup)
+        for name in ("0-session.md", "1-plan.md", "2-manual-task.md", "3-manual-result.md", "7-retro.md", "99-report.md"):
+            (self.dir / name).write_text("# x\n", encoding="utf-8")
+
+    def test_a_round_that_counted_by_hand_is_caught(self):
+        for name in ("8-plan-2.md", "8-manual-task-2.md", "8-manual-result-2.md"):
+            (self.dir / name).write_text("# x\n", encoding="utf-8")
+        found = check_session.scan_folder(self.dir)
+        self.assertEqual(len(found), 1)
+        self.assertIn("share the number 8", found[0])
+        self.assertIn("next-file", found[0])
+
+    def test_a_round_numbered_by_the_script_is_quiet(self):
+        for name in ("8-plan-2.md", "9-manual-task-2.md", "10-manual-result-2.md"):
+            (self.dir / name).write_text("# x\n", encoding="utf-8")
+        self.assertEqual(check_session.scan_folder(self.dir), [])
+
+    def test_the_meta_file_and_the_report_sit_outside_the_numbering(self):
+        self.assertEqual(check_session.scan_folder(self.dir), [])
+
+    def test_screenshots_and_issue_files_are_not_numbered_files(self):
+        (self.dir / "screenshots").mkdir()
+        (self.dir / "issue-B12.md").write_text("# x\n", encoding="utf-8")
+        self.assertEqual(check_session.scan_folder(self.dir), [])
+
+
+BRIEF = """# Brief
+
+## Retest
+
+| # | Requirement | Round 1 | What got in the way |
+|---|---|---|---|
+| R1 | the total is rounded | pass | — |
+
+## Scenarios
+
+| # | Scenario | Expected effect | Fixture | Identity |
+|---|---|---|---|---|
+| 0 | the refuting check | confirmed | — | qa-1 |
+| S1 | the coupon applies once | the total drops once | cart A | qa-1 |
+| S2 | a second apply is refused | 409, the total unchanged | cart A | qa-1 |
+| S3 | the coupon on an empty cart | refused | cart B | qa-1 |
+| N | <scenario> | <effect> | <fixture> | <who> |
+"""
+
+
+class ScenarioHeadingsTest(unittest.TestCase):
+    """Scenario ids are identifiers, so the match is language-neutral; the quiet cases are the ways
+    executors actually write headings."""
+
+    def setUp(self) -> None:
+        self._tmp = tempfile.TemporaryDirectory()
+        self.dir = Path(self._tmp.name)
+        self.addCleanup(self._tmp.cleanup)
+        (self.dir / "2-manual-task.md").write_text(BRIEF, encoding="utf-8")
+
+    def missing(self, result: str, name: str = "3-manual-result.md") -> list[str]:
+        path = self.dir / name
+        path.write_text(result, encoding="utf-8")
+        found = check_session.scan_scenarios(result.splitlines(), path)
+        return [m.split()[1] for _, m in found]
+
+    def test_the_brief_s_scenario_table_is_the_last_one_keyed_by_hash(self):
+        self.assertEqual(check_session.brief_scenario_ids(BRIEF.splitlines()), ["0", "S1", "S2", "S3"])
+
+    def test_a_result_cut_after_its_first_sections_is_caught(self):
+        result = "## 0. Fingerprint\n\n## S1 — applies once — pass\n\n## Summary\n"
+        self.assertEqual(self.missing(result), ["S2", "S3"])
+
+    def test_every_id_in_a_heading_of_its_own_is_quiet(self):
+        result = "## 0. Fingerprint\n## S1 — once\n## S2. twice\n## Сценарий S3 — пустая корзина\n"
+        self.assertEqual(self.missing(result), [])
+
+    def test_ids_run_together_in_one_heading_are_quiet(self):
+        result = "## 0 — fingerprint\n## S1 + S2 (one cart) — pass\n### S3 (inside the same pass)\n"
+        self.assertEqual(self.missing(result), [])
+
+    def test_a_range_in_a_heading_is_unfolded(self):
+        result = "## 0. Fingerprint (12:01–12:03)\n## S1–S3. The coupon\n"
+        self.assertEqual(self.missing(result), [])
+
+    def test_a_scenario_split_into_parts_keeps_its_id(self):
+        result = "## 0\n## S1\n## S2a — first apply\n## S2b — second apply\n## S3\n"
+        self.assertEqual(self.missing(result), [])
+
+    def test_a_number_inside_a_timestamp_is_not_an_id(self):
+        result = "## S1 (10:03:00)\n## S2\n## S3\n"
+        self.assertEqual(self.missing(result), ["0"])
+
+    def test_a_clock_range_in_a_heading_vouches_for_no_numbered_scenario(self):
+        brief = BRIEF.replace("| S1 |", "| 1 |").replace("| S2 |", "| 2 |").replace("| S3 |", "| 3 |")
+        (self.dir / "2-manual-task.md").write_text(brief, encoding="utf-8")
+        result = "## 0. Fingerprint (2026-10-08T11:01:00Z)\n## 1 — once (11:02–11:05 UTC)\n"
+        self.assertEqual(self.missing(result), ["2", "3"])
+
+    def test_a_bare_numbered_brief_is_answered_by_s_prefixed_headings(self):
+        brief = BRIEF.replace("| S1 |", "| 1 |").replace("| S2 |", "| 2 |").replace("| S3 |", "| 3 |")
+        (self.dir / "2-manual-task.md").write_text(brief, encoding="utf-8")
+        result = "## S0 — fingerprint\n## S1 — base\n## S2a — part\n"
+        self.assertEqual(self.missing(result), ["3"])
+
+    def test_a_bare_id_with_a_letter_in_any_script_is_answered_by_an_s_prefixed_heading(self):
+        brief = BRIEF.replace("| S1 |", "| 0а |")
+        (self.dir / "2-manual-task.md").write_text(brief, encoding="utf-8")
+        result = "## S0а — snapshot\n## S2\n## S3\n"
+        self.assertEqual(self.missing(result), [])
+
+    def test_a_round_two_result_is_matched_against_the_round_two_brief(self):
+        (self.dir / "8-manual-task-2.md").write_text(BRIEF.replace("| S3 |", "| S4 |"), encoding="utf-8")
+        result = "## 0\n## S1\n## S2\n## S3\n"
+        self.assertEqual(self.missing(result, "9-manual-result-2.md"), ["S4"])
+
+    def test_no_brief_or_no_scenario_table_is_quiet(self):
+        (self.dir / "2-manual-task.md").write_text("# Brief\n\n- scenario one\n", encoding="utf-8")
+        self.assertEqual(self.missing("## Summary\n"), [])
+        self.assertEqual(self.missing("## Summary\n", "5-automator-result.md"), [])
+
+
+class QuestionNotesTest(unittest.TestCase):
+    def test_a_question_in_prose_is_listed(self):
+        found = check_session.scan_questions(["## S2", "how did this cart get a second coupon?", "ok"])
+        self.assertEqual([n for n, _ in found], [2])
+
+    def test_code_and_urls_are_not_questions(self):
+        lines = ["`GET /cart?id=7`", "https://shop.example.com/cart?id=7", "```", "a ? b", "```"]
+        self.assertEqual(check_session.scan_questions(lines), [])
+
+    def test_notes_are_only_taken_from_a_manual_result(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            plan = Path(tmp) / "1-plan.md"
+            plan.write_text("why this order?\n", encoding="utf-8")
+            self.assertEqual(check_session.question_notes(plan), [])
 
 
 class EngineFilesTest(unittest.TestCase):

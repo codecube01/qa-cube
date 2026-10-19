@@ -8,9 +8,10 @@ CHANGELOG.md, an entry added to a catalogue with its «Contents» group left unt
 review is left with what only a reader sees — a duplicate, a wrong address, a second precedent patched onto an
 entry (the corpus holds dozens of legitimate riders with their own, so that one stays with the reviewer).
 
-Two kinds of check:
+Three kinds of check:
 
 * **counts** are read off the text as it stands, so they hold in CI on a clean tree too;
+* **budgets** are too: the size of every file an agent reads whole (see BUDGETS);
 * **ratchets** compare the working tree with HEAD — «this edit made it worse». The catalogues are not 1:1
   with their indexes (a family is one index line), so a check of the whole text would either fail on the
   corpus or say nothing; a ratchet says exactly «the edit you are making». On a clean tree (CI) they are
@@ -34,6 +35,22 @@ _NUM = "|".join(NUMBERS)
 # What an edit to these paths changes is what an installed copy runs, so it needs a patch bump.
 ENGINE_PATHS = ("skills/", "agents/", "hooks/", "PROFILE-CONTRACT.md")
 CATALOGUES = "skills/*/references/*.md"
+AGENTS = "agents/*.md"
+
+# Characters, not lines (rewrapping moves lines; tokens are what is paid, ~4 characters each). A catalogue is
+# read whole at its step and an agent's instruction at every launch, so every entry a retro adds is paid in
+# every session, including the ones where it never applies — and the corpus had only ever grown. Each budget
+# is the file's size when the budget was set plus ~10% room; past it, the edit makes room instead of growing.
+# Lower a number when its file shrinks, so the room does not come back. SKILL.md has its own budget in
+# validate-plugin.py.
+BUDGETS = {
+    "skills/qa/references/planning.md": 215_000,  # its index carries the rules (~21k) since 0.18.19
+    "skills/qa/references/manual-brief.md": 154_000,  # its index carries the rules since 0.18.23
+    "skills/qa/references/report.md": 95_000,  # its index carries the rules since 0.18.23
+    "skills/qa/references/browser-techniques.md": 42_000,
+    "agents/qa-manual.md": 25_000,  # lowered after the 0.18.25 audit (22.7k), so the room does not come back
+}
+DEFAULT_BUDGET = 15_000
 
 
 # --- the text as it stands --------------------------------------------------------------------------
@@ -96,6 +113,34 @@ def count_problems(text: str, rel: str) -> list[str]:
             if n != NUMBERS[m.group(1)]:
                 out.append(f"{rel}:{lineno}: «all {m.group(1)} still» — the list above has {n} item(s)")
     return out
+
+
+RULES_INDEX = "Every line below is the rule"
+
+
+def index_rule_problems(text: str, rel: str) -> list[str]:
+    """In a catalogue whose «Contents» says its lines are the rules, every index line carries an arrow: a trigger, then what to do.
+    A line without one is a shape named without its rule — the reading the rules index exists to make unnecessary."""
+    m = re.search(r"^## Contents\n(.*?)^## ", text, re.S | re.M)
+    if not m or RULES_INDEX not in m.group(1):
+        return []
+    out = []
+    start = text[: m.start(1)].count("\n") + 1
+    for i, line in enumerate(m.group(1).splitlines(), start):
+        if line.startswith("- ") and "→" not in line:
+            out.append(f"{rel}:{i}: an index line without «→» — the Contents of this catalogue are the rules: trigger → what the plan does")
+    return out
+
+
+def budget_problems(text: str, rel: str) -> list[str]:
+    """A catalogue or an agent instruction over its size budget."""
+    budget = BUDGETS.get(rel, DEFAULT_BUDGET)
+    if len(text) <= budget:
+        return []
+    return [f"{rel}: {len(text)} characters (budget {budget}, ~{budget // 4000}k tokens) — make room in the "
+            f"same edit: fold entries that share a mechanism into one family (step 7 of skills/qa/SKILL.md), "
+            f"merge a second precedent into the first; the budget moves only by a deliberate commit in the "
+            f"engine's repository, never by a retro"]
 
 
 # --- ratchets: the edit against HEAD ----------------------------------------------------------------
@@ -177,6 +222,10 @@ def problems(root: Path) -> list[str]:
     out: list[str] = []
     for path in sorted(root.glob(CATALOGUES)):
         out += count_problems(path.read_text(), str(path.relative_to(root)))
+    for path in sorted([*root.glob(CATALOGUES), *root.glob(AGENTS)]):
+        out += budget_problems(path.read_text(), str(path.relative_to(root)))
+    for path in sorted(root.glob(CATALOGUES)):
+        out += index_rule_problems(path.read_text(), str(path.relative_to(root)))
 
     if _git(root, "rev-parse", "--verify", "-q", "HEAD") is None:
         return out  # no git, or no commit yet — nothing to ratchet against
