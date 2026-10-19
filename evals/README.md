@@ -121,6 +121,10 @@ Four things are easy to get wrong — each one cost a paid run to find:
   rest explicitly. And if the judge fails a plainly correct answer 3/3 after two rewordings, stop
   rewording: `degradations-declared` lost four paid passes that way on «the mode defaults to full
   cycle». A check that comes down to a word is a regex.
+- **A prompt that says «the engine's rules» sends the run to look for the engine — name the skill instead.**
+  `engine-clone-guard`'s fixture points `engine-clone` at the plugin cache, and a run told to use «the qa-cube engine's own
+  rules» followed that path out of the sandbox, was denied and answered «cannot read the rules»: 0.00, the judge with
+  nothing to judge. «Load the qa-cube `qa` skill, then…» costs nothing — in a real session the skill is already loaded.
 - **A fixture that triggers a second rule measures two things at once.** `session-continuation`
   originally dated its existing session in the previous month, which set off the monthly sweep;
   the run spent every turn archiving folders and fixing links and never reached the sentence the

@@ -8,8 +8,11 @@ tags: [step-7, retro, degradation]
 context:
   scaffold_script: setup.sh
 execution:
+  # The prompt names the skill: a run told to use «the engine's own rules» followed the profile's
+  # `engine-clone` — the very trap under test, outside the sandbox — and answered «cannot read the rules».
+  # In a real retro SKILL.md is already in the manager's context; loading it is not what is graded.
   prompt: >
-    Using the qa-cube engine's own rules and this project's `.claude/qa-profile.md`,
+    Load the qa-cube `qa` skill, then, using its rules and this project's `.claude/qa-profile.md`,
     answer in one short paragraph, without changing any files: when a test session's
     retro produces a lesson about the engine's own process, where exactly does that
     lesson go in this project, and what happens to the plugin's version?
