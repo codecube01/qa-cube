@@ -30,6 +30,8 @@ never the file without a `limit`.
 
 - the scenario's result is visible only to the user (a chat message, an email, a screen) → side experiments that produce the same kind of observable event are deferred to the end of the observation loop, not cancelled, not squeezed in; a dropped control is named in the result as what stays an observation
 - your own precondition cannot be built (another defect blocks the path) and the requirement is a guard («the action is unavailable while …») → check it on someone else's entity already in the required state: the expected outcome is a refusal, `updated_at` before and after proves the environment untouched
+- the brief's prescribed body does not fit the operation as the schema shows it (the operation is not what the brief took it for) → do not design a «safer» body yourself on a write your role is admitted to: leave that probe, record what the schema says, flag it for the manager, go on with the rest
+- your run resumes after a gap (a usage limit, a crash, hours away) while an operation you started may still have been running → no action before the object itself (its state, its last-modified) and then the system's own history say what finished, when and how, and whether anyone else acted in the gap; the gap's interval goes into the result and what ended inside it is marked «observed after the fact»; then the brief's retry rules apply unchanged. A background logger meant to cover a long operation gets a ceiling of at least its expected end plus an hour
 
 ## Probing and measuring
 
@@ -102,3 +104,23 @@ back on itself), take an existing entity in the required state and perform the f
 before and after — unchanged means the environment was untouched. The technique closes a requirement that would otherwise land in «not
 covered» — by the refusal only: a borrowed entity that is NOT refused proves nothing about the guard's absence, since it differs from your
 fixture in more than the one attribute (`planning.md`, «Borrowing an object that already HAS the precondition»). Precedent: two guard requirements were unreachable because of a defect in the onboarding that creates the precondition.
+
+**When the operation turns out to be something other than the brief thought, the probe stops — it is not redesigned.** The brief's body
+for a write was chosen against the brief's idea of that operation; once introspection shows a different one (another entity, another step
+of a process), the body no longer carries the guarantee it was chosen for, and any body you invent instead is a new mutation nobody
+sanctioned. Where your role is ADMITTED to the write, nothing stands between your payload and the handler — an empty value is the payload
+then, and a handler may answer it by creating defaults (`planning.md`, «A junk payload changes nothing»). Probes under a role the guard
+refuses stay safe and run as planned. Precedent: a brief prescribed a duplicate identifier for what it took to be a registry write; the
+schema showed the tenant's own onboarding accounts, the executor sent an empty list under the one role admitted to it, and the server's
+default record locked the tenant's whole interface for three days.
+
+**A run that resumes after a gap first reconstructs the gap, and only then acts.** The run is not continuous: a usage limit, a crash or
+a pause of hours can cut you off while an operation you launched keeps going on the environment. Your memory then ends at the last thing you
+saw, and acting on it — retrying a step, asking for the next click — may duplicate a write or skip a result. Read the object first, its
+state and its last-modified, since a history shows only what its own process did; then the system's own history (the orchestrator's
+workflow list, the operation's status, the journal) for what finished, when and with what outcome, and for foreign actions inside the gap
+(the manager's side of the same rule: `manual-brief.md`, «A round that resumes after a CALENDAR WAIT»); record the interval and mark
+every outcome inside it as observed after the fact, not live; then go on by the brief's rules for that outcome — a partial result takes the retry the brief allows, nothing more. A background logger set up to watch a long operation is your
+only live witness in such a gap, so its ceiling is the operation's expected end plus at least an hour, not a round number. Precedent: an
+executor was cut off for sixteen hours mid-operation; its logger caught the terminal status but stopped soon after, and the environment went
+unwatched for the rest of the gap — the reconstruction from history held only because nothing else had touched it.

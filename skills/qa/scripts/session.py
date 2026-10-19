@@ -81,7 +81,8 @@ def rename_shot(folder: Path, candidate: str, finding: str) -> tuple[int, list[s
         return 1, [f"{new.name} already exists — two candidates for one finding? pick one and remove the other"]
     old.rename(new)
     out = [f"screenshots/{old.name} → screenshots/{new.name}"]
-    marker = re.compile(r"(📎\s*`?)" + re.escape(old.name) + r"(?![\w.-])")
+    # a period that ends the sentence still ends the marker; one followed by a word character continues the name
+    marker = re.compile(r"(📎\s*`?)" + re.escape(old.name) + r"(?![\w-]|\.\w)")
     for md in sorted(folder.glob("*.md")):
         text = md.read_text(encoding="utf-8")
         fixed, n = marker.subn(lambda x: x.group(1) + new.name, text)

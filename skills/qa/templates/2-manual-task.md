@@ -24,7 +24,8 @@
 - Role for this round's operations: <the role the operations need — permissions differ between roles that log in identically, and the wrong
   one costs the one-time artifact>
 - Carriers: <browser session: who, as of when · scripted session (cookie jar / token file): who, as of when — independent: one's liveness
-  proves nothing about the other; where the scripted one dies faster, re-enter it right before a script run>
+  proves nothing about the other; where the scripted one dies faster, re-enter it right before a script run; a helper you hand over prints
+  the body to stdout and the status code and trace id to stderr — one that prints the body alone sends the executor off to write a wrapper>
 - On a refusal: <ONE environment pinned — stop and the pause protocol, no probing elsewhere | sweep the candidates with the identity oracle,
   most-recently-connected first, the interactive handshake last>
 - Values the round depends on: <the accounts, the path, the flag — pasted here, not «in the file»; a claim about a file's or a config's
@@ -39,7 +40,8 @@
 - Matching versions prove nothing: <the one behavioural probe of the previous round's sharpest finding — the blocked page, the failing
   operation, the wrong field — before a single measurement is inherited; a server can be redeployed under the same reported version>
 - Fix scope, verbatim: <what the team accepted — the retest verdict is passed on THIS; verify both, report them apart: the same outcome by
-  another route or layer is a NEW finding with its own id, usually side findings, never «the fix did not work»>
+  another route or layer is a NEW finding with its own id, usually side findings, never «the fix did not work»; inputs the fix's own
+  condition leaves out (a type, a role, a state) are the SAME finding, partially fixed>
 - Previous round's verdicts, line by line (not the gist — without «was: pass» a regression cannot be told from a long-standing defect):
 
   | Requirement | Was | Finding | Value as quoted | Now, per recon |
@@ -166,6 +168,10 @@ message opening with `CLICK NEEDED:` (the marker the manager greps the result fo
 - Kind of window: <a free, reversible signature | an irreversible transaction, with its fee>
 - Network allowed: <the one network on which confirming is allowed; a window on any other — reject, whatever it would prove>
 - Boundary instead of a value: <«click at any value up to X, above that — do not click», when the on-screen value is computed live>
+- Window in time (a click timed against a running multi-step operation): <an absolute clock window, anchored at the observed start of the
+  step before it — plus the SHORTEST observed step duration for «during step k», the LONGEST for «after step k has finished»; never the
+  mean, whose spread puts the click a step early or late; the sizing rule — `planning.md`, «When the fixture the round needs IS a stuck
+  state», its rider on several observations in one window>
 - Do not reload the page; do not work in this environment until the round ends
 - Expected answer: one word («done» / «clicked») — the executor re-reads the state itself; ask for at most 1–2 concrete VALUES
 - Wrong click (confirmed where cancel was asked): <recorded as a fact; the scenario is replayed only if the stand was affected>

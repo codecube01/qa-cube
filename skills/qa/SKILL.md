@@ -281,8 +281,8 @@ the same area exists → **add a step to it**; and only then a separate test. A 
 step in an existing test (reusing the setup is the main win); a separate test is justified only for a large standalone feature. **The choice
 is put to the user before the automator is
 launched, and before that read the «Contents» of `references/automation.md`, as step 3 reads `planning.md`'s**: the price of a run computed
-from the round's own timings, the size of the feature as a ground of its own, the three lines the question carries, an answer that is a
-question, a statistical criterion made into a stable assertion. In doubt — record «no automation was done» in the report with a reason;
+from the round's own timings, the size of the feature as a ground of its own, the status list sent to the chat before the question
+and the three lines the question carries, an answer that is a question, a statistical criterion made into a stable assertion. In doubt — record «no automation was done» in the report with a reason;
 that is a valid outcome:
 - `4-automator-task.md`: the scenarios, a reference to `3-manual-result.md` as the evidence, the candidate per the profile's code map, the
   case id (with `test-cases: upfront` — from the analyst, the manual tester merely confirms it; with `inline` — from the manual tester),
@@ -570,6 +570,7 @@ do what the right-hand cell says.
 | «The report is written — the retro first, the user after» | the result goes to the chat before the retro (step 6.5); a session that went quiet for minutes is why |
 | «The profile is behind — I'll mention it with the summary» | that line is the session's first message, before any other call (step 0) |
 | «The classifier refused the mutation — I'll phrase it differently» | a refused MUTATION is never reworded: the user's permission, then one repeat in your own session, paired with a control (`references/manual-brief.md`, «Your own harness refuses a call») |
+| «The automation dialog carries the counts — the status list can wait for 6.5» | the status list goes to the chat as its own message before the automation question (step 5, `references/automation.md`) |
 | «The template will do for the report» | the project's format from the profile outranks it, read before the first line (step 6) |
 | «The user is wrong — my report says otherwise» | an objection about a fact is re-checked by your own direct observation, never by re-reading the report (step 9) |
 | «The round went cleanly, there is nothing for a retro» | the retro is mandatory; «no edits» is an outcome written after it, not a reason to skip it (step 7) |

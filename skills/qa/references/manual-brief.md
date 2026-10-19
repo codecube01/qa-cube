@@ -39,6 +39,7 @@ is in `templates/2-manual-task.md`.
 
 - a scenario parameter that depends on the environment's data → the «Fixture» column carries a selection criterion anchored on the OBSERVED object, never a value; the discriminating fixture (the owner whose records differ from the majority) is named by the same query
 - a fixture that changes shared behaviour → the «Disarm after» column: disarmed the moment the decision it steers has been taken, not in the final cleanup; re-armed explicitly where a later scenario needs it
+- a «harmless» write (a report request, an export, a log entry) on an environment where an automated run reads the newest record of that kind → a mutation of that run's input: behind the same «run finished» gate as the other mutations, or carrying a discriminator the run filters out
 - which scenarios the executor can close alone → the «Closable alone» column, and the closable ones go first
 - `test-cases: upfront` → the brief carries the case ids and the verdict on the requirements; an expected result sourced from `spec` is untouchable, one from an `assumption` or the `KB` is refined against the facts; steps and preconditions are always refined
 - a check able to REFUTE the round's central hypothesis (a contract file, a schema, a route table) → scenario 0 of the table, never the tail of the reading list
@@ -62,7 +63,7 @@ is in `templates/2-manual-task.md`.
 - a round resuming after a calendar wait → read the OBJECT and its last-modified first, never the process's history; sweep the whole waiting interval
 - a retest → check that the observation path itself is still alive, and rest the verdict on the final artifact, never an intermediate UI state
 - the finding is about the client's reaction → retest on substituted responses, the real refusal once as the control, not on expendables
-- the retest verdict → scoped to what the FIX was asked to do, quoted verbatim; a defect beyond that scope is a new finding with its own id
+- the retest verdict → scoped to what the FIX was asked to do, quoted verbatim; a defect beyond that scope is a new finding with its own id; a fix whose own CONDITION leaves out part of the inputs the finding named is partial — the finding stays open, narrowed, under its id
 - a previous finding quoted into the brief → say whether each value is a raw enum or a caption on screen
 - what recon says is fixed → write out «what remains» too; it comes back as a separate finding, not a doubt
 - the surfaces the round will look at → the findings already filed against them, this task's and the neighbours', named with their ids
@@ -321,6 +322,14 @@ is what preflight does, and learns, before the brief is written.
   disarm timed by the trigger reaches that decision first (`planning.md`, the restore rider under «FLIPS A SETTING»). Precedent: an
   executor disarmed its routing fixture as soon as it proved unusable rather than at the scheduled end; minutes later the user paused
   the round for a network outage, and the shared environment's nightly preparation passed untouched.
+
+- **A write the product counts as harmless — a report request, an export, a log entry — is still a mutation when an automated run on
+  the same environment reads «the newest record of that kind».** A suite that waits for «its» report by taking the top row of the list
+  filtered by type and time cannot tell the round's record from its own: the round silently feeds it a foreign file, or takes the single
+  worker the suite is waiting on. Before planning such writes, ask what the concurrent runs read, not only what they change; where one
+  reads the newest of the kind, the writes go behind the same gate as the round's other mutations — the run finished — or carry a
+  discriminator the run filters out. Precedent: a brief left report requests outside the «no writes while the run is live» gate as
+  read-only; a reviewer found the suite's helper reading the newest report of the type, and the whole write phase moved behind the gate.
 
 - **The «Closable alone» column says whether the scenario depends on the executor's own limits, and the closable ones go first.** An
   executor's boundaries are not visible from the plan — some calls they refuse by their own rules (financial identifiers, an operation
@@ -642,6 +651,14 @@ section states the rule.
   pointless round, while splitting them lets the customer set the priority of the new one. Precedent: a round reported «the fix is
   cosmetic, the defect is alive on the server», and the customer's answer was that the task had been to change the form — done — while
   the server-side route was a separate defect for the side registry.
+
+  *And where the fix carries a CONDITION of its own — the rule now holds for some types, roles or states and not others — the inputs it
+  leaves out are inside the fix's scope, not beyond it:* the finding named the field, the fix narrowed the guard, and what the narrowing
+  excludes is the same defect on the same route. That is a partial fix — the finding stays open under its id, its cell narrowed to what
+  still fails, and its verdict row `partial`; a new id is only for what the old finding never covered. «The same outcome by another
+  route» means another channel or layer, never another input class of the same control. Precedent: a «required field» fix applied only
+  to one type of record; the remainder for the other type went out under a new id, and the report reviewer pulled it back — the
+  original finding had been closed as fixed while its own field still saved empty.
 
 - **A previous finding quoted into the brief says whether each value is a RAW ENUM or a caption the user sees.** Findings mix the two
   freely, and the compression into a brief keeps whichever was shorter; the executor then meets a screen whose captions do not match the

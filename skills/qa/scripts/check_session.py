@@ -337,8 +337,10 @@ def scan_scenarios(lines: list[str], path: Path) -> list[tuple[int, str]]:
     out: list[tuple[int, str]] = []
     for sid in ids:
         low = sid.lower()
-        # S7 is also found as S7a / S7b: a scenario split into parts keeps its id with a letter
-        if low in tokens or any(re.fullmatch(re.escape(low) + r"[^\W\d_]", t) for t in tokens):
+        # S7 is also found as S7a / S7b: a scenario split into parts keeps its id with a letter; a brief that
+        # numbers its rows bare (`| 3 |`, `| 0a |`, in any script) is answered by `## S3 — …` / `## S0a — …` just as well
+        names = {low, f"s{low}"} if re.fullmatch(r"\d+[^\W\d_]?", low) else {low}
+        if names & tokens or any(re.fullmatch(re.escape(n) + r"[^\W\d_]", t) for n in names for t in tokens):
             continue
         out.append(
             (1, f"scenario {sid} of {brief.name} has no heading — the section is missing (send it back while the "

@@ -384,6 +384,18 @@ class ScenarioHeadingsTest(unittest.TestCase):
         result = "## 0. Fingerprint (2026-10-08T11:01:00Z)\n## 1 — once (11:02–11:05 UTC)\n"
         self.assertEqual(self.missing(result), ["2", "3"])
 
+    def test_a_bare_numbered_brief_is_answered_by_s_prefixed_headings(self):
+        brief = BRIEF.replace("| S1 |", "| 1 |").replace("| S2 |", "| 2 |").replace("| S3 |", "| 3 |")
+        (self.dir / "2-manual-task.md").write_text(brief, encoding="utf-8")
+        result = "## S0 — fingerprint\n## S1 — base\n## S2a — part\n"
+        self.assertEqual(self.missing(result), ["3"])
+
+    def test_a_bare_id_with_a_letter_in_any_script_is_answered_by_an_s_prefixed_heading(self):
+        brief = BRIEF.replace("| S1 |", "| 0а |")
+        (self.dir / "2-manual-task.md").write_text(brief, encoding="utf-8")
+        result = "## S0а — snapshot\n## S2\n## S3\n"
+        self.assertEqual(self.missing(result), [])
+
     def test_a_round_two_result_is_matched_against_the_round_two_brief(self):
         (self.dir / "8-manual-task-2.md").write_text(BRIEF.replace("| S3 |", "| S4 |"), encoding="utf-8")
         result = "## 0\n## S1\n## S2\n## S3\n"

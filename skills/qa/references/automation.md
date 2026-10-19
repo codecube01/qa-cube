@@ -16,7 +16,7 @@ that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines fro
 - the scenario needs dozens of operations or long waits to reach its conclusion → the price of a run is an input to the decision, computed from the manual result's own timings (operations × measured durations + every propagation lag), never from intuition; a noticeable price goes to the user BEFORE the automator is launched
 - the test is NEW to its host class → the class's fixed cost (provisioning, per-test hooks, stabilising reads) is read off a recent run log of a neighbouring test and added — no manual timing contains it
 - the feature is the size of one query parameter (a filter, a flag) → its size is a ground of its own, beside the price: «is this feature worth a test at all» is asked before the automator edits the code, whatever the run costs
-- the automation question is put to the user → it comes before the delivery at 6.5, so three lines go above the options: what the change is and whether it is merged, the round's verdict with its counts, what the test would assert
+- the automation question is put to the user → it comes before the delivery at 6.5, so the round's status list (step 6.5's format, one line per requirement) goes to the chat as its own message FIRST, and the question carries three lines above the options: what the change is and whether it is merged, the verdict with its counts, what the test would assert
 - the user's answer is itself a question («isn't a test required by our rules?») → it is a question, not the choice: answer it on the merits, then put the choice again; acting on it starts work nobody ordered
 - the manual run's acceptance criterion is statistical («each variant ≥ 20 %») → the test asserts the degenerate outcome («each variant occurred at least once»), translated by the manager, not the automator
 
@@ -24,6 +24,7 @@ that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines fro
 
 - a rule of the project's own profile is about to go into the brief as an instruction («these helpers assert 200 internally, add a raw variant») → it is checked against the specific helpers this round touches first; true of the profile's general case, it may be false of these two
 - the user asks what the coverage costs → say what measures it: run logs often carry no timestamps on step lines, so a step's duration is measured by a run on reverted code, repeated where the run-to-run spread rivals the delta
+- the change removes or renames a contract element (a field, a route) → the brief lists EVERY existing test it breaks, each with the count of what changes in it, taken from a scheduled run on the build with the change plus a search of all test classes for the removed name — never from the one test the manual result happened to name
 
 ## The decision
 
@@ -48,9 +49,12 @@ cheapest possible form) and launched the automator; the user's answer was «we o
 edits had to be reverted mid-run.
 
 **That question travels with the round's result.** It comes before the delivery at 6.5, so the user has not yet seen what the manual round
-found — put three lines above the options (what the change is and whether it is merged, the round's verdict with its counts, what the test
-would assert), or the user dismisses the choice and asks for exactly those lines first. Precedent: a bare automation dialog was dismissed
-with «first explain what you did, what automation needs, and what that merge request is».
+found. The result reaches them in two parts, in this order: first the status list in the chat — the same 🟢/🟡/🔴/⚪ lines step 6.5 opens
+with, a message of its own — and only then the question, with three lines above its options (what the change is and whether it is merged,
+the verdict with its counts, what the test would assert). A dialog box is not where a verdict is read: counts inside it are a summary of a
+list the user never saw, and the user asks for the list. Precedent: a bare automation dialog was dismissed with «first explain what you did,
+what automation needs, and what that merge request is»; once the three lines were added, a dialog carrying them was answered — and the user
+still asked mid-automation where the status list was, «you were supposed to show it before the autotests».
 
 **An answer to that question that is itself a question is a question, not the choice.** «Isn't a test required by our rules?» is answered on
 the merits, and then the choice is put again; acting on it starts work nobody ordered. Precedent: a reply of that shape was read as «write
@@ -70,3 +74,5 @@ iteration for the automator.
 
 **Asked what the coverage costs, say what measures it.** Run logs often lack timestamps on step lines, so a step's duration is unreadable
 from the log — then measure by a run on reverted code, repeated when the run-to-run spread rivals the delta.
+
+**A change that removes or renames a contract element breaks tests the manual round never looked at.** The manual tester reports the breakage it can see from its own scenarios — one admin test asserting a removed field — while the same assertion sits in the neighbouring tests of the other roles, and a shared helper calling the removed route drags in tests of another class. The cheapest complete list already exists when the environment has run its scheduled suite on the build with the change: every red test with the removed name in its error is on it; a search of all test classes for the removed field and route closes what the schedule did not run. The brief names each test with the count of what changes in it. Precedent: a brief named one export test with «seven» assertions of a removed field; it held six, two neighbouring role tests held six more, and the night's scheduled run on that build had already failed all three — the automator found them only by grepping on its own.

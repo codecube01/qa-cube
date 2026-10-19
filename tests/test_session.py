@@ -195,6 +195,14 @@ class Shot(unittest.TestCase):
         self.assertEqual(text.count("ABC-15-2.png"), 2)
         self.assertIn("📎 c13-2.png", text)
 
+    def test_a_marker_that_ends_a_sentence_follows_too(self):
+        (self.dir / "3-manual-result.md").write_text(
+            "the window is empty. 📎 c3-2.png. A control run followed.\nnot a marker: 📎 c3-2.png.bak\n", encoding="utf-8")
+        session.rename_shot(self.dir, "c3-2", "ABC-15")
+        text = (self.dir / "3-manual-result.md").read_text(encoding="utf-8")
+        self.assertIn("📎 ABC-15-2.png. A control", text)
+        self.assertIn("📎 c3-2.png.bak", text)
+
     def test_a_missing_candidate_changes_nothing(self):
         code, _ = session.rename_shot(self.dir, "c4-2", "ABC-15")
         self.assertEqual(code, 1)

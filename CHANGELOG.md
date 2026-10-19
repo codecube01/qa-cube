@@ -13,13 +13,44 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **A «harmless» write is a mutation when a concurrent run reads the newest of its kind**: `manual-brief.md`, what goes into
+  the brief — report requests or exports go behind the same «run finished» gate as the other mutations, or carry a discriminator.
+- **Capturing the page's request bodies from outside the page**: `browser-techniques.md`, intercepting network — where a page-script
+  hook runs in an isolated world and sees nothing, a debugger-protocol listener on the tab captures bodies and trace ids.
+- **A neighbouring build is «without the task» only when proven**: `planning.md`, the reference environment — dated before the task or
+  excluded by a merge base; a task with no merge request is never excluded, and nothing stronger is built on the comparison.
+- **An operation the brief misread**: `executor.md`, the round's limits — when the schema shows a write is not what the brief took it
+  for, the executor stops that probe instead of inventing a «safer» body under a role the guard admits.
+- **An empty list is not junk, and a schema-only operation is placed by its domain doc**: `planning.md`, the order of the
+  server-side checks — `[]` may make a handler create defaults; an operation found by introspection enters a sweep by its docs, not its name.
+- **A fix that moves a boundary**: `planning.md`, the bug-task checklist — the new boundary (an inclusive end, a new cut-off)
+  is a neighbour of its own, probed at the store's precision by closing a window at an existing record's whole unit.
+- **A reverse that answers success where a refusal was expected**: `planning.md`, the gate before an irreversible step — such a
+  gate is phrased by its effect (the object read back unchanged), and dry-called on the round's own object before a shared fixture.
+- **Every entry point of a frontend feature**: `planning.md`, recon — presence is checked by the feature's UI strings across the
+  served bundle, and every screen they land on gets a scenario of its own.
+- **A helper handed to the executor prints the trace id**: the brief's «Carriers» slot — body to stdout, status code and trace id
+  to stderr.
+- **A run that resumes after a gap reconstructs it first**: `executor.md` — what finished and whether anyone acted is read from the
+  object (state, last-modified), then the system's history, before any action, the gap is recorded, and a background logger's
+  ceiling is the operation's end plus an hour.
+- **A click timed against a running multi-step operation**: the brief's pause protocol gets a «Window in time» line — anchored at
+  the previous step's observed start plus the shortest («during») or longest («after») observed duration, never the mean.
+- **Four shell pitfalls**: `shell-pitfalls.md` — a buffering stage after `grep --line-buffered` silences a monitor; `"$tx:e…"`
+  is a zsh history modifier; a credential header never rides curl's argv; a helper resolves its path arguments before its `cd`.
+- **The fail-closed wrapper is removed right after its last guarded click**: `browser-techniques.md` — a tab that leaves the tool's
+  group otherwise keeps blocking, the user's own actions included.
+- **`automation.md` — a change that removes or renames a contract element**: the automator's brief lists every existing test it
+  breaks, from a scheduled run on the build with the change plus a search of all test classes, not only the test the manual result named.
 - **`transcripts.py` — the retro's numbers from the transcripts on disk**: per manager and executor, time, context peak,
   tool errors, refusals, retries after a failure, compactions. Step 7 runs it, keeps the table in `7-retro.md` (transcripts
   expire) and answers every note: a lesson or a «normal, because».
 - **`check_session.py` matches the brief's scenarios against the result's headings**: a scenario id from the brief's `#` column
   that no heading names is reported; the lines that ask a question are listed for the manager. `qa-manual.md`: headings carry the ids.
-- **`session.py shot`**: a candidate's screenshot takes the finding's id, its `📎` markers in the folder follow.
-- **A «Red flags» table at the end of `SKILL.md`**: eight thoughts that come just before a known rule is broken, each with
+  A brief that numbers its scenarios bare (`| 3 |`, `| 0a |` with a letter in any script) is answered by `S3` / `S0a` headings.
+- **`session.py shot`**: a candidate's screenshot takes the finding's id, its `📎` markers in the folder follow — a marker that
+  ends a sentence (`📎 c1.png.`) included.
+- **A «Red flags» table at the end of `SKILL.md`**: nine thoughts that come just before a known rule is broken, each with
   what it actually is and the step that holds the rule; `engine-edits.md` sends such a lesson there.
 - **Processes are stopped by PID, never by a pattern**: `shell-pitfalls.md` — `pkill -f`/`killall` on the user's machine
   matches their own applications; a hung foreground call is left to time out.
@@ -64,6 +95,15 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **A bounded poll also exits on an error response**: `shell-pitfalls.md` — a wait loop that only tests its condition spins to
+  the limit on a malformed request.
+- **The status list precedes the automation question**: `automation.md` and step 5 — before the automation dialog, the round's
+  🟢/🟡/🔴/⚪ status list goes to the chat as a message of its own; the dialog's three lines no longer stand in for it. A red flag row added.
+- **A fix with a condition of its own is a partial fix, not a new finding** (`manual-brief.md`, the brief template's «Fix scope»):
+  the inputs the fix leaves out keep the finding open under its id, narrowed; a new id is only for what it never covered.
+- **«Observable» in the automation decision means distinguishable from the build without the task** (`planning.md`): where only
+  the branch that behaves as before can be reached, the answer is «no automation» straight from recon — no round is offered to
+  look for an oracle.
 - **The automator reads `executor.md` too**: its «Contents» is on every automator brief's reading list, read before the first
   assertion — a computed reference value, rendered text and a refused request bite a test as they bite a manual run.
 - **`qa-manual.md` holds the executor's procedure again** (29k → ~23k characters): the run's situational lessons — the per-field matrix,
