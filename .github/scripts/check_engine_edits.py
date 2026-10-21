@@ -36,6 +36,14 @@ _NUM = "|".join(NUMBERS)
 ENGINE_PATHS = ("skills/", "agents/", "hooks/", "PROFILE-CONTRACT.md")
 CATALOGUES = "skills/*/references/*.md"
 AGENTS = "agents/*.md"
+# The harness and browser adapters: the engine's body names an action by its role («launch the role»,
+# «ask the user»), and the adapter of the harness or the browser tool says how. A heading missing from one
+# adapter is a question that harness cannot answer — and the engine sends every session there.
+ADAPTERS = "skills/*/references/*/*.md"
+HARNESS_QUESTIONS = ("## Detect", "## Launch a role", "## Continue a running executor", "## Ask the user",
+                     "## Plugin root", "## Transcripts", "## Hooks", "## Updating the engine from a clone")
+BROWSER_QUESTIONS = ("## Install", "## Preflight", "## Connect and pick the tab", "## Page scripts and their budget",
+                     "## Screenshots", "## Network", "## Known failures")
 
 # Characters, not lines (rewrapping moves lines; tokens are what is paid, ~4 characters each). A catalogue is
 # read whole at its step and an agent's instruction at every launch, so every entry a retro adds is paid in
@@ -143,6 +151,20 @@ def budget_problems(text: str, rel: str) -> list[str]:
             f"engine's repository, never by a retro"]
 
 
+def adapter_problems(root: Path) -> list[str]:
+    """Every harness adapter (its README aside) and every browser adapter answers all of its questions, as headings."""
+    out = []
+    for kind, questions in (("harness", HARNESS_QUESTIONS), ("browser", BROWSER_QUESTIONS)):
+        for path in sorted(root.glob(f"skills/qa/references/{kind}/*.md")):
+            if path.name == "README.md":
+                continue
+            headings = set(path.read_text().splitlines())
+            rel = str(path.relative_to(root))
+            out += [f"{rel}: missing heading «{q}» — every {kind} adapter answers it, even if only with "
+                    f"«not available here» and the fallback" for q in questions if q not in headings]
+    return out
+
+
 # --- ratchets: the edit against HEAD ----------------------------------------------------------------
 
 def _sections(text: str) -> dict[str, str]:
@@ -222,8 +244,9 @@ def problems(root: Path) -> list[str]:
     out: list[str] = []
     for path in sorted(root.glob(CATALOGUES)):
         out += count_problems(path.read_text(), str(path.relative_to(root)))
-    for path in sorted([*root.glob(CATALOGUES), *root.glob(AGENTS)]):
+    for path in sorted([*root.glob(CATALOGUES), *root.glob(ADAPTERS), *root.glob(AGENTS)]):
         out += budget_problems(path.read_text(), str(path.relative_to(root)))
+    out += adapter_problems(root)
     for path in sorted(root.glob(CATALOGUES)):
         out += index_rule_problems(path.read_text(), str(path.relative_to(root)))
 

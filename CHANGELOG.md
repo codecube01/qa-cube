@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **Harness adapters**: `skills/qa/references/harness/` — how each harness launches a role, asks the user, finds the
+  plugin root and its transcripts; the README says how to tell the harness and the fallbacks when a capability is missing.
 - **An invalidation is verified by replaying the old credential**: `report.md` — a sign-out, a revocation or a role change
   that should end sessions passes only when the credential captured before it is refused after it.
 - **A customer's order to file a bug is not a violated clause**: `report.md` — where the spec is silent on the ordered aspect, the

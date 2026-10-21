@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import importlib.util
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -169,7 +170,49 @@ class Budgets(unittest.TestCase):
         self.assertEqual([rel for rel in ce.BUDGETS if not (REPO / rel).is_file()], [])
 
 
+def _adapter_tree(files: dict[str, str]) -> Path:
+    root = Path(tempfile.mkdtemp())
+    for rel, text in files.items():
+        (root / rel).parent.mkdir(parents=True, exist_ok=True)
+        (root / rel).write_text(text)
+    return root
+
+
+def _adapter(headings: tuple[str, ...]) -> str:
+    return "# An adapter\n\n" + "".join(f"{h}\n\nwhat to do.\n\n" for h in headings)
+
+
+class Adapters(unittest.TestCase):
+    def test_adapter_missing_heading_is_caught(self):
+        partial = tuple(h for h in ce.HARNESS_QUESTIONS if h != "## Hooks")
+        found = ce.adapter_problems(_adapter_tree({"skills/qa/references/harness/x.md": _adapter(partial)}))
+        self.assertEqual(len(found), 1)
+        self.assertIn("x.md", found[0])
+        self.assertIn("## Hooks", found[0])
+
+    def test_complete_adapter_is_quiet(self):
+        root = _adapter_tree({"skills/qa/references/harness/x.md": _adapter(ce.HARNESS_QUESTIONS),
+                              "skills/qa/references/browser/y.md": _adapter(ce.BROWSER_QUESTIONS)})
+        self.assertEqual(ce.adapter_problems(root), [])
+
+    def test_harness_readme_is_exempt(self):
+        root = _adapter_tree({"skills/qa/references/harness/README.md": "# How to tell the harness\n"})
+        self.assertEqual(ce.adapter_problems(root), [])
+
+    def test_browser_adapter_is_held_to_its_own_questions(self):
+        found = ce.adapter_problems(_adapter_tree({"skills/qa/references/browser/y.md": _adapter(ce.HARNESS_QUESTIONS)}))
+        self.assertEqual(len(found), len(ce.BROWSER_QUESTIONS))
+
+    def test_a_heading_quoted_in_prose_does_not_count(self):
+        text = _adapter(tuple(h for h in ce.HARNESS_QUESTIONS if h != "## Hooks")) + "See `## Hooks` above.\n"
+        found = ce.adapter_problems(_adapter_tree({"skills/qa/references/harness/x.md": text}))
+        self.assertEqual(len(found), 1)
+
+
 class Corpus(unittest.TestCase):
+    def test_adapters_as_they_stand_answer_every_question(self):
+        self.assertEqual(ce.adapter_problems(REPO), [])
+
     def test_catalogues_as_they_stand_pass_the_counts(self):
         found = []
         for path in sorted(REPO.glob(ce.CATALOGUES)):
@@ -184,7 +227,7 @@ class Corpus(unittest.TestCase):
 
     def test_catalogues_and_agents_as_they_stand_fit_their_budgets(self):
         found = []
-        for path in sorted([*REPO.glob(ce.CATALOGUES), *REPO.glob(ce.AGENTS)]):
+        for path in sorted([*REPO.glob(ce.CATALOGUES), *REPO.glob(ce.ADAPTERS), *REPO.glob(ce.AGENTS)]):
             found += ce.budget_problems(path.read_text(), str(path.relative_to(REPO)))
         self.assertEqual(found, [])
 
