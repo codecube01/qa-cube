@@ -78,7 +78,10 @@ option in the questions; ask only about hypotheses and unknowns.
   (test-cases: `upfront` — the analyst writes the cases from the requirements before the run; `inline` — the tester creates the case after
   the run, from the facts; `none` — we do not maintain cases)? are there environments (environments)? are there autotests, and what runs
   them (autotests)?
-- pass B — the surroundings: is a browser needed for the checks, and which one (browser)? where do the services' logs live and how do you
+- pass B — the surroundings: is a browser needed for the checks, and which tool drives it (browser)? The options, in this order:
+  **Playwriter (Recommended)** — any harness, the user's own Chrome; **Claude in Chrome** — only if its tools are in this session, marked
+  «already connected, nothing to install» when its preflight passes; **Playwright MCP** — only if connected, its own browser without the
+  user's sign-ins; **no browser needed** → `none`. Where do the services' logs live and how do you
   search them (logs: kibana / grafana / files / a skill / nowhere)? where do the testing secrets live — environment credentials, tokens,
   test users (secrets: env / a vault or password manager / a file outside git / nowhere / not needed)? is there a product knowledge base
   (knowledge)? where should sessions go (sessions — suggest `docs/test-sessions/`)?
@@ -114,8 +117,12 @@ reach it through. The order:
      Credentials in the commands come only through variables from the secrets source; no values live in the skill;
   4. **«no channel for now»** — `TODO: no access channel` in the section, and the onboarding moves on.
 
+  **And the browser tool is a channel too:** not installed → the commands of `../qa/references/browser/<browser>.md`, «Install»; the user
+  installs it (an extension is theirs to click), and you wait for it before the live check.
+
 **4. A live check.** For every declared tool — one reading call: open any tracker task, find any case in the TMS, run the test runner's
-`--help`/dry-run, open the knowledge base's README. For secrets the check is different — not reading the values but making sure the source
+`--help`/dry-run, open the knowledge base's README; the browser: through the chosen tool, open a tab and read its URL and title, by its
+adapter's «Preflight». For secrets the check is different — not reading the values but making sure the source
 is out of git's reach: a file → `git check-ignore`; env/vault — fine by definition. It works → the section may hold specifics; it fails →
 put the line `TODO: not verified — <error in one line>` into the profile and carry on, the onboarding is not blocked. The check runs through
 the channel from step 3 — and thereby validates it too (a generated skill, an MCP, a CLI).

@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **Onboarding picks and checks the browser**: `/qa-setup` recommends Playwriter, offers Claude in Chrome and Playwright MCP
+  only where they are connected, installs the chosen tool as a channel and opens a tab through it in the live check.
 - **The profile names the browser tool**: `browser: playwriter | claude-in-chrome | playwright-mcp | none`; the older
   `default`/`dedicated` read as `claude-in-chrome`, no contract bump. A tool the harness cannot run falls back to Playwriter.
 - **Browser adapters, Playwriter by default**: `skills/qa/references/browser/` — Playwriter, Claude in Chrome, Playwright MCP;

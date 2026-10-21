@@ -75,6 +75,12 @@ class Browser(unittest.TestCase):
         self.assertIn("Playwriter instead, said in the session's first message and in the report", skill)
         self.assertIn("the API scenarios still run", skill)
 
+    def test_setup_recommends_playwriter_and_checks_it_live(self):
+        setup = read("skills/qa-setup/SKILL.md")
+        self.assertIn("Playwriter (Recommended)", setup)
+        self.assertIn("the browser: through the chosen tool, open a tab and read its URL and title", setup)
+        self.assertIn("the browser tool is a channel too", setup)
+
 
 class Manifests(unittest.TestCase):
     def test_codex_manifest_version_matches(self):
