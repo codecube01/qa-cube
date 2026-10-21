@@ -62,7 +62,7 @@ file holds what would hold in anyone's. Step 7 decides which is which.
 
 The `<sessions>` path below is the value of `sessions` from the profile (e.g. `docs/test-sessions/`).
 
-**The harness — before the first action it answers.** Read `references/harness/README.md` and the adapter it names for the harness you run in (`claude-code.md`, `codex.md`, `opencode.md`, `generic.md`): it says how this file's actions are done there — launching a role, continuing an executor, asking the user, `<plugin root>` (the plugin's own directory, in every script path below), the transcripts — and what to do where the harness lacks one. `0-session.md` records it as `Harness: <name>`; the profile never does.
+**The harness — before the first action it answers.** Read `references/harness/README.md` and the adapter it names for the harness you run in (`claude-code.md`, `codex.md`, `opencode.md`, `generic.md`): it says how this file's actions are done there — launching a role, continuing an executor, asking the user, `<plugin root>` (the plugin's own directory, in every script path below), the transcripts — and what to do where the harness lacks one. `0-session.md` records it as `Harness: <name>`; the profile never does. The browser tool is the profile's `browser` (`default`/`dedicated` → `claude-in-chrome`), its adapter `references/browser/<browser>.md`.
 
 **The manager runs the shell too** — the sweep, preflight, on-chain and bundle recon — so `references/shell-pitfalls.md` is read whole
 before the session's first shell command beyond reading the profile: a manager once printed every private key of a secrets file into the
@@ -542,6 +542,7 @@ later from upstream, then stood next to its own paraphrase.
 | logs | diagnostics only from response bodies; blockers are recorded without deep trace-id diagnostics — that is not the executor's fault |
 | autotests | step 5 is skipped entirely; the report records «autotests are not maintained in this project»; qa-automator is not launched |
 | browser | do not include UI scenarios in the plan; if the task is purely frontend, the session is blocked with an explicit message to the user |
+| browser (the profile's browser tool cannot run in this harness) | Playwriter instead, said in the session's first message and in the report; no Playwriter either → the browser scenarios are blocked with its install commands (`references/browser/playwriter.md`), the API scenarios still run; Playwright MCP is no fallback (no user sign-ins) |
 | secrets | the sessions need no secrets; a scenario requiring credentials came up — the executor records a blocker in the result (credentials are neither requested nor invented) and the manager raises it with the user |
 | knowledge | the step «read the product knowledge» is skipped; product findings from the retro are placed in `<sessions>/../knowledge/` (create it at the first finding) |
 | engine-clone (also: no `.git` there, or the path sits inside the harness's install cache) | the retro does not edit the engine — the normal state for a plugin installed from the marketplace. An engine lesson becomes a row of `.claude/qa-cube-feedback.md` and applies from the next session (step 0); only what holds for this project alone goes into the profile or a project skill, and no rule goes into both. No version bump, no `plugin update` — the engine arrives from upstream via `/qa-setup` |

@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **The profile names the browser tool**: `browser: playwriter | claude-in-chrome | playwright-mcp | none`; the older
+  `default`/`dedicated` read as `claude-in-chrome`, no contract bump. A tool the harness cannot run falls back to Playwriter.
 - **Browser adapters, Playwriter by default**: `skills/qa/references/browser/` — Playwriter, Claude in Chrome, Playwright MCP;
   what is true of one tool only (budgets, the output filter, the tab group) left `browser-techniques.md` for its adapter.
 - **Install on any agent harness**: README gives Claude Code, Codex (`.codex-plugin/`, `.agents/plugins/marketplace.json`) and

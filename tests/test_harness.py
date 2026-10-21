@@ -64,6 +64,17 @@ class Browser(unittest.TestCase):
         self.assertIn("are in browser/<tool>.md, named by the profile's browser", text)
         self.assertNotIn("[BLOCKED", text)
 
+    def test_legacy_browser_values_read_as_claude_in_chrome(self):
+        self.assertIn("default and dedicated, written before the tool was named, read as claude-in-chrome",
+                      read("PROFILE-CONTRACT.md"))
+        self.assertIn("default/dedicated → claude-in-chrome", read("skills/qa/SKILL.md"))
+
+    def test_unavailable_browser_tool_falls_back_to_playwriter(self):
+        skill = read("skills/qa/SKILL.md")
+        self.assertIn("the profile's browser tool cannot run in this harness", skill)
+        self.assertIn("Playwriter instead, said in the session's first message and in the report", skill)
+        self.assertIn("the API scenarios still run", skill)
+
 
 class Manifests(unittest.TestCase):
     def test_codex_manifest_version_matches(self):

@@ -230,7 +230,32 @@ class HarnessLeaks(unittest.TestCase):
         self.assertEqual(ce.harness_leak_problems(root), [])
 
 
+CONTRACT = "```markdown\n## Capabilities\nbrowser: playwriter    # claude-in-chrome | none\n```\n"
+
+
+class BrowserValues(unittest.TestCase):
+    def test_browser_value_without_adapter_is_caught(self):
+        root = _adapter_tree({"PROFILE-CONTRACT.md": CONTRACT,
+                              "skills/qa/references/browser/playwriter.md": "x"})
+        found = ce.browser_value_problems(root)
+        self.assertEqual(len(found), 1)
+        self.assertIn("claude-in-chrome", found[0])
+
+    def test_browser_values_with_adapters_are_quiet(self):
+        root = _adapter_tree({"PROFILE-CONTRACT.md": CONTRACT,
+                              "skills/qa/references/browser/playwriter.md": "x",
+                              "skills/qa/references/browser/claude-in-chrome.md": "x"})
+        self.assertEqual(ce.browser_value_problems(root), [])
+
+    def test_a_contract_without_the_key_is_caught(self):
+        root = _adapter_tree({"PROFILE-CONTRACT.md": "## Capabilities\ntracker: jira\n"})
+        self.assertEqual(len(ce.browser_value_problems(root)), 1)
+
+
 class Corpus(unittest.TestCase):
+    def test_every_browser_value_has_an_adapter(self):
+        self.assertEqual(ce.browser_value_problems(REPO), [])
+
     def test_engine_names_no_harness_outside_its_adapters(self):
         self.assertEqual(ce.harness_leak_problems(REPO), [])
 

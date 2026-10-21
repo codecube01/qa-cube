@@ -170,6 +170,17 @@ def adapter_problems(root: Path) -> list[str]:
     return out
 
 
+def browser_value_problems(root: Path) -> list[str]:
+    """Every value the contract allows for `browser` (but `none`) has its adapter, `browser/<value>.md`.
+    The value IS the adapter's name: the engine sends a browser round to that file, and a missing one is a round with no limits read."""
+    m = re.search(r"^browser:\s*([\w-]+)\s*(?:#\s*(.*))?$", (root / "PROFILE-CONTRACT.md").read_text(), re.M)
+    if not m:
+        return ["PROFILE-CONTRACT.md: no `browser:` line in the Capabilities block"]
+    values = {m.group(1), *(v.strip() for v in (m.group(2) or "").split("|"))} - {"none", ""}
+    return [f"PROFILE-CONTRACT.md: `browser: {v}` has no adapter skills/qa/references/browser/{v}.md"
+            for v in sorted(values) if not (root / f"skills/qa/references/browser/{v}.md").is_file()]
+
+
 def harness_leak_problems(root: Path) -> list[str]:
     """No engine file outside the adapters names a harness's own tool; the adapter says it instead."""
     out = []
@@ -266,6 +277,7 @@ def problems(root: Path) -> list[str]:
         out += budget_problems(path.read_text(), str(path.relative_to(root)))
     out += adapter_problems(root)
     out += harness_leak_problems(root)
+    out += browser_value_problems(root)
     for path in sorted(root.glob(CATALOGUES)):
         out += index_rule_problems(path.read_text(), str(path.relative_to(root)))
 
