@@ -59,3 +59,8 @@ project's tooling stays in its profile.
   process on the machine to read, so headers carrying a credential go from a file (`-H @<file>`, mode 600), as the body does
   (`qa-manual.md` holds the same rule for the executor's own calls: credential bodies by file, auth headers built inside the
   script). Precedent: a helper the manager handed over sent an account's API key as `-H`, and the executor rewrote it mid-round.
+- **A tool's parameters are JSON, so a `\uXXXX` typed into a file's content reaches the file as the character itself.** A brief
+  that lists `"\u00a0"` as a probe value then carries a real non-breaking space, indistinguishable from a plain one when copied. To
+  write the escape as text, double the backslash; before handing over a file that names invisible characters, scan it for them
+  (`python3 -c` over the file, counting `\u00a0`, `\u3000`, `\u200b`). Precedent: a brief's whitespace probes went out as real
+  characters, and only a reviewer reading the file noticed; the retro that wrote this line hit it again on the line itself.

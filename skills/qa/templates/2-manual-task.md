@@ -46,7 +46,7 @@
 
   | Requirement | Was | Finding | Value as quoted | Now, per recon |
   |---|---|---|---|---|
-  | <FR-3> | pass / fail / partial / not covered | <id or —> | <`RAW_ENUM` sends / «Caption» shows — say which one you hold> | <fixed / remains / unknown> |
+  | <FR-3> | pass / fail / partial / not covered; for a fail — what ALREADY held in that round (its control), or the executor reports old behaviour as «narrowed» | <id or —> | <`RAW_ENUM` sends / «Caption» shows — say which one you hold> | <fixed / remains / unknown> |
 
 - What remains: <what recon shows still unfixed — named here it comes back as a separate finding, unnamed it comes back as a doubt>
 - Already filed on these surfaces: <finding ids from the session reports and the side-findings registry — this task's and the neighbours' —

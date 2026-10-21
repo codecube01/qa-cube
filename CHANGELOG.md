@@ -11,6 +11,25 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+### Added
+
+- **An invalidation is verified by replaying the old credential**: `report.md` — a sign-out, a revocation or a role change
+  that should end sessions passes only when the credential captured before it is refused after it.
+- **A customer's order to file a bug is not a violated clause**: `report.md` — where the spec is silent on the ordered aspect, the
+  finding goes to the second table with the customer's priority, and the cell asks whether the order outlived the fix.
+- **A red flag for the liveness oracle**: `SKILL.md` — «I'll read the task first» is the thought before skipping step 1's first call.
+- **Inducing a race deterministically**: `browser-techniques.md` — the spy's wrapper delays one selected response.
+- **An issue file for an older finding starts from its latest verdict**: `report.md` — the id is grepped across later reports and
+  the knowledge base before the text is written; a requalified finding filed by order names the two clauses that disagree.
+- **Tool parameters decode `\uXXXX`**: `shell-pitfalls.md` — an escape typed into a file's content lands as the invisible character;
+  double the backslash and scan the file before handing it over.
+- **A «no browser selected» reply after a successful selection is the tool losing it**: `browser-techniques.md`, beside «No tab
+  group exists» — list the connected browsers before asking the user; the chosen one may already be in use.
+- **A title that names the model («as in X») binds every row, refusals included**: `planning.md`, beside the twin search — the
+  scope of the model is decided once at planning; a row passed by the model cannot sit next to its refusal declared «not required».
+- **The retest table's «Was» names what already held**: `templates/2-manual-task.md` — for a fail row, the previous round's control,
+  so old behaviour is not reported as the fix narrowing.
+
 ## [0.18.44] — 2026-10-19
 
 ### Added
