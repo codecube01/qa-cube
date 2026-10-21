@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **The engine speaks through the harness adapter**: `SKILL.md`, `qa-setup`, `qa-day` and the references name an action
+  by its role — «launch the role», «ask the user», `<plugin root>` — and the adapter says how; `0-session.md` records the harness.
 - **Harness adapters**: `skills/qa/references/harness/` — how each harness launches a role, asks the user, finds the
   plugin root and its transcripts; the README says how to tell the harness and the fallbacks when a capability is missing.
 - **An invalidation is verified by replaying the old credential**: `report.md` — a sign-out, a revocation or a role change

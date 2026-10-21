@@ -432,7 +432,7 @@ is what preflight does, and learns, before the brief is written.
   back «all done», and the round spent calls establishing which half of a two-step pause had happened; the numbered expectation for a
   human-only result — the entire verdict on alert merging rested on numbers stated in advance, and of five points put to the user, three
   were closed from the invitation workflow's own payload. **The manager's half:** read the request before relaying it — the sentence that
-  licenses a click on the wrong network is yours to catch — and return the user's answer **by a direct SendMessage to the same agent**, not
+  licenses a click on the wrong network is yours to catch — and return the user's answer **by continuing the same agent** (the harness adapter's «Continue a running executor»), not
   a fork, not a new agent. Group the pauses into series, and fill forms in only while the user is available: a pause of a day or more
   nullifies the page's prepared state. Precedent for the re-entry rule: a signature pause of about fifty minutes outlived a session that
   does not renew; the executor logged in from a second tab, and the signed ownership proof was still in the form when the next signer's

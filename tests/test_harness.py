@@ -38,6 +38,14 @@ class Harness(unittest.TestCase):
         adapters = sorted(p.name for p in HARNESS.glob("*.md") if p.name != "README.md")
         self.assertEqual([a for a in adapters if a not in readme], [])
 
+    def test_engine_update_command_comes_from_adapter(self):
+        skill = read("skills/qa/SKILL.md")
+        self.assertNotIn("claude plugin", skill)
+        self.assertIn("then the adapter's «Updating the engine from a clone»", skill)
+        self.assertNotIn("claude plugin", read("skills/qa/references/engine-edits.md"))
+        generic = read("skills/qa/references/harness/generic.md")
+        self.assertIn("Updating the engine from a clone No known command: commit the edit in the clone", generic)
+
 
 if __name__ == "__main__":
     unittest.main()

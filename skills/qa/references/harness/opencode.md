@@ -13,7 +13,7 @@ The tool list has `task` (with a `subagent_type` parameter) and `skill`. `0-sess
 `task` with `subagent_type: "qa-manual"` (or the other role) when the roles are linked into opencode's agents
 directory — the prompt as in Claude Code: `Output language: <language>` first, then the session folder and the
 brief. The role is not in the `subagent_type` list → the README's «subagents, but no named roles» fallback with
-the general subagent.
+the general subagent (`subagent_type: "general"`).
 
 ## Continue a running executor
 
@@ -37,6 +37,14 @@ Kept in opencode's own storage, in a format `transcripts.py` does not read: it e
 ## Hooks
 
 None for this engine: the session is not renamed after the task.
+
+## Connecting an MCP server
+
+An `mcp` entry in `opencode.json` (the project's, or `~/.config/opencode/opencode.json`); its tools appear after opencode restarts.
+
+## Updating the installed engine
+
+`git pull` in the clone the install linked from; it applies from the next session.
 
 ## Updating the engine from a clone
 

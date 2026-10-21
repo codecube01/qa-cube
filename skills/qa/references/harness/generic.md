@@ -33,6 +33,15 @@ exits 1 and the retro carries «no transcript numbers in this harness».
 
 None assumed: the session is not renamed after the task.
 
+## Connecting an MCP server
+
+The harness's own documentation; with no MCP support, the access channel falls to the next option of `/qa-setup` (a CLI, a generated
+REST skill).
+
+## Updating the installed engine
+
+Re-run the install from `README.md`, «Install»; it applies from the next session.
+
 ## Updating the engine from a clone
 
 No known command: commit the edit in the clone and tell the user to reinstall the engine the way they

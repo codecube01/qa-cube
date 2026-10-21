@@ -209,7 +209,31 @@ class Adapters(unittest.TestCase):
         self.assertEqual(len(found), 1)
 
 
+class HarnessLeaks(unittest.TestCase):
+    def test_harness_token_outside_adapter_is_caught(self):
+        root = _adapter_tree({"skills/qa/SKILL.md": "# Skill\n\nLaunch `Agent` with `subagent_type: \"qa-manual\"`.\n"})
+        found = ce.harness_leak_problems(root)
+        self.assertEqual(len(found), 1)
+        self.assertIn("skills/qa/SKILL.md:3", found[0])
+        self.assertIn("subagent_type", found[0])
+
+    def test_harness_token_inside_adapter_is_quiet(self):
+        root = _adapter_tree({"skills/qa/references/harness/claude-code.md": "`AskUserQuestion`, `${CLAUDE_PLUGIN_ROOT}`\n"})
+        self.assertEqual(ce.harness_leak_problems(root), [])
+
+    def test_hooks_are_allowed(self):
+        root = _adapter_tree({"hooks/hooks.json": "\"${CLAUDE_PLUGIN_ROOT}/hooks/rename-session.sh\"\n"})
+        self.assertEqual(ce.harness_leak_problems(root), [])
+
+    def test_files_outside_the_engine_are_not_checked(self):
+        root = _adapter_tree({"README.md": "claude plugin install qa-cube@qa-cube\n"})
+        self.assertEqual(ce.harness_leak_problems(root), [])
+
+
 class Corpus(unittest.TestCase):
+    def test_engine_names_no_harness_outside_its_adapters(self):
+        self.assertEqual(ce.harness_leak_problems(REPO), [])
+
     def test_adapters_as_they_stand_answer_every_question(self):
         self.assertEqual(ce.adapter_problems(REPO), [])
 

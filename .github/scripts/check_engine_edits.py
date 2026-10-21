@@ -41,7 +41,12 @@ AGENTS = "agents/*.md"
 # adapter is a question that harness cannot answer — and the engine sends every session there.
 ADAPTERS = "skills/*/references/*/*.md"
 HARNESS_QUESTIONS = ("## Detect", "## Launch a role", "## Continue a running executor", "## Ask the user",
-                     "## Plugin root", "## Transcripts", "## Hooks", "## Updating the engine from a clone")
+                     "## Plugin root", "## Transcripts", "## Hooks", "## Connecting an MCP server",
+                     "## Updating the installed engine", "## Updating the engine from a clone")
+# Words that name one harness's tools. Outside the adapters (and the harness's own wiring) they make the
+# engine Claude Code's alone: a Codex session reads «launch `Agent`» and has no such tool.
+HARNESS_TOKENS = ("subagent_type", "AskUserQuestion", "SendMessage", "CLAUDE_PLUGIN_ROOT", "claude plugin", "claude mcp", "~/.claude/")
+HARNESS_ALLOWED = ("skills/qa/references/harness/", "hooks/", "skills/qa/scripts/", "skills/qa-day/scripts/")
 BROWSER_QUESTIONS = ("## Install", "## Preflight", "## Connect and pick the tab", "## Page scripts and their budget",
                      "## Screenshots", "## Network", "## Known failures")
 
@@ -165,6 +170,19 @@ def adapter_problems(root: Path) -> list[str]:
     return out
 
 
+def harness_leak_problems(root: Path) -> list[str]:
+    """No engine file outside the adapters names a harness's own tool; the adapter says it instead."""
+    out = []
+    for path in sorted(root.rglob("*")):
+        rel = path.relative_to(root).as_posix()
+        if not path.is_file() or not rel.startswith(ENGINE_PATHS) or rel.startswith(HARNESS_ALLOWED):
+            continue
+        for i, line in enumerate(path.read_text(errors="replace").splitlines(), 1):
+            out += [f"{rel}:{i}: names «{t.strip()}» — say it through the harness adapter "
+                    f"(skills/qa/references/harness/)" for t in HARNESS_TOKENS if t in line]
+    return out
+
+
 # --- ratchets: the edit against HEAD ----------------------------------------------------------------
 
 def _sections(text: str) -> dict[str, str]:
@@ -247,6 +265,7 @@ def problems(root: Path) -> list[str]:
     for path in sorted([*root.glob(CATALOGUES), *root.glob(ADAPTERS), *root.glob(AGENTS)]):
         out += budget_problems(path.read_text(), str(path.relative_to(root)))
     out += adapter_problems(root)
+    out += harness_leak_problems(root)
     for path in sorted(root.glob(CATALOGUES)):
         out += index_rule_problems(path.read_text(), str(path.relative_to(root)))
 

@@ -9,7 +9,7 @@ The tool list has `Agent` (with a `subagent_type` parameter) and `AskUserQuestio
 
 ## Launch a role
 
-`Agent` with `subagent_type: "qa-analyst"` / `"qa-manual"` / `"qa-automator"` — the plugin registers the three
+`Agent` with `subagent_type: "qa-analyst"` / `"qa-manual"` / `"qa-automator"` (a general subagent: `"general-purpose"`) — the plugin registers the three
 roles from `agents/`, so the instruction is loaded as the subagent's system prompt and the prompt carries only
 `Output language: <language>` as its first line, then the session folder and the brief. The subagent runs in
 the background and its completion arrives as a notification on its own — wait for it, do nothing on its behalf.
@@ -39,6 +39,16 @@ answer reaches it as its next turn. This is how a «Pause protocol» answer is r
 
 Yes: `hooks/hooks.json` renames a `/qa <task>` session after the task number (`UserPromptSubmit` and a
 `PreToolUse` on `Skill`). Uses `jq`; without it the rename is skipped.
+
+## Connecting an MCP server
+
+`claude mcp list` shows what is connected; `claude mcp add <name> …` connects a server (the user runs it — `! <command>`
+in the prompt puts its output into the session). New servers' tools appear from the next `claude` launch.
+
+## Updating the installed engine
+
+`claude plugin marketplace update qa-cube && claude plugin update qa-cube@qa-cube`; it applies after `claude` restarts. The new copy
+lands in the directory named in `~/.claude/plugins/installed_plugins.json` (`installPath` of `qa-cube@qa-cube`).
 
 ## Updating the engine from a clone
 

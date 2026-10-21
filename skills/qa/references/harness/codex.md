@@ -12,7 +12,7 @@ The tool list has `spawn_agent` and `wait_agent` (multi-agent on), or neither (o
 ## Launch a role
 
 `spawn_agent` with `fork_turns: "none"` — a clean context, never your transcript — and no `agent_type`: the
-roles are not registered, so the prompt opens with «Your instruction is `<plugin root>/agents/qa-<role>.md` —
+roles are not registered (a general subagent is the same call without the instruction line), so the prompt opens with «Your instruction is `<plugin root>/agents/qa-<role>.md` —
 read it whole before anything else», then `Output language: <language>`, the session folder and the brief.
 Wait with `wait_agent` in bounded stretches of 5–10 minutes; a finished child's answer also arrives with your
 next turn. No multi-agent tools → the README's «no subagents» fallback.
@@ -40,6 +40,17 @@ the retro carries «no transcript numbers in this harness».
 ## Hooks
 
 None: `.codex-plugin/plugin.json` declares no hooks, so the session is not renamed after the task.
+
+## Connecting an MCP server
+
+`codex mcp list` shows what is connected; `codex mcp add <name> -- <command>` connects a server, or a `[mcp_servers.<name>]` table in
+`~/.codex/config.toml`. MCP starts only in CLI sessions in some versions — a server missing from the tool list in an IDE session is checked
+from the CLI before it is called broken.
+
+## Updating the installed engine
+
+Re-run the install from `README.md`, «Install» (the plugin is fetched again from `main`); it applies from the next session, and the new
+copy is wherever that install put it — read `PROFILE-CONTRACT.md` from there.
 
 ## Updating the engine from a clone
 

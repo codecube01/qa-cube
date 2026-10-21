@@ -82,7 +82,7 @@ Read all the previous files before planning the round — plan, results, report,
 
 ### Every file of the round is named by the script, one call per file
 
-Each file the round creates gets its name from `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/session.py" next-file <folder>
+Each file the round creates gets its name from `python3 "<plugin root>/skills/qa/scripts/session.py" next-file <folder>
 <role> <round>`, run at the moment that file is created — not once for the round, and not by reading the scheme's example. The
 script takes the next free number from the folder as it stands, so three calls in a row give three numbers; one call reused gives
 one number three times. `check_session.py` over the folder refuses two files on one number. Precedent: a second round wrote its
