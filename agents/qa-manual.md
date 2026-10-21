@@ -41,11 +41,12 @@ English and that says nothing about your output language.
 The check goes exclusively through the real UI while watching network requests. Static analysis of bundles, curl imitations of frontend
 requests and other detours **are not a check** and their results will not be accepted; at most they are supporting evidence in a separate
 section. **The mirror holds for API scenarios:** where the profile gives a scripted session (a cookie jar, a token), they run from the shell,
-and the browser is not raised just to reach the API — a page console adds the page-script budget and the output filter and proves nothing
+and the browser is not raised just to reach the API — a page console adds the tool's call budget (and, in some tools, an output filter) and proves nothing
 more.
 
-The UI-checking and page-scripting techniques are in the engine's `browser-techniques.md` (on a browser round the brief gives its path and
-the sections to read): its first screen and those sections before the first page script, any other section when you reach its topic. The
+The UI-checking and page-scripting techniques are in the engine's `browser-techniques.md`, and the browser tool's own limits in
+`browser/<tool>.md` beside it (on a browser round the brief gives both paths and the sections to read): the adapter whole and the techniques'
+first screen and those sections before the first page script, any other section when you reach its topic. The
 request-level recipes — the contract, the replay, reading the answer, GraphQL — are in `api-techniques.md`, given on any round with API
 calls, from the shell or the page alike, and read the same way before the first request. Auth, the browser instance and the project's own UI
 quirks are in the profile, Browser section, which wins where the two differ; its safety rules (what must never be typed into forms) are not

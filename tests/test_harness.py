@@ -47,6 +47,24 @@ class Harness(unittest.TestCase):
         self.assertIn("Updating the engine from a clone No known command: commit the edit in the clone", generic)
 
 
+def section(rel: str, heading: str) -> str:
+    text = (REPO / rel).read_text()
+    m = re.search(rf"^{re.escape(heading)}\n(.*?)(?=^## |\Z)", text, re.S | re.M)
+    return plain(m.group(1)) if m else ""
+
+
+class Browser(unittest.TestCase):
+    def test_playwriter_preflight_names_the_users_action(self):
+        pre = section("skills/qa/references/browser/playwriter.md", "## Preflight")
+        self.assertIn("extension is not connected", pre)
+        self.assertIn("do not launch the executor", pre)
+
+    def test_the_techniques_send_the_reader_to_the_tool_adapter(self):
+        text = read("skills/qa/references/browser-techniques.md")
+        self.assertIn("are in browser/<tool>.md, named by the profile's browser", text)
+        self.assertNotIn("[BLOCKED", text)
+
+
 class Manifests(unittest.TestCase):
     def test_codex_manifest_version_matches(self):
         import json

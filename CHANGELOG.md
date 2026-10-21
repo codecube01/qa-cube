@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **Browser adapters, Playwriter by default**: `skills/qa/references/browser/` — Playwriter, Claude in Chrome, Playwright MCP;
+  what is true of one tool only (budgets, the output filter, the tab group) left `browser-techniques.md` for its adapter.
 - **Install on any agent harness**: README gives Claude Code, Codex (`.codex-plugin/`, `.agents/plugins/marketplace.json`) and
   opencode (`.opencode/INSTALL.md`) routes, plus `INSTALL.md` an agent follows in any other harness; Playwriter is the default browser.
 - **The engine speaks through the harness adapter**: `SKILL.md`, `qa-setup`, `qa-day` and the references name an action

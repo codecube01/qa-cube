@@ -60,7 +60,7 @@ BUDGETS = {
     "skills/qa/references/planning.md": 215_000,  # its index carries the rules (~21k) since 0.18.19
     "skills/qa/references/manual-brief.md": 154_000,  # its index carries the rules since 0.18.23
     "skills/qa/references/report.md": 95_000,  # its index carries the rules since 0.18.23
-    "skills/qa/references/browser-techniques.md": 42_000,
+    "skills/qa/references/browser-techniques.md": 36_000,  # lowered after the tool-specific entries left for browser/ (33.3k)
     "agents/qa-manual.md": 25_000,  # lowered after the 0.18.25 audit (22.7k), so the room does not come back
 }
 DEFAULT_BUDGET = 15_000

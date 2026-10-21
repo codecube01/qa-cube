@@ -150,7 +150,8 @@ The wording that keeps a row a question:
 - <KB files/sections for the task's domain>
 - The engine's shell pitfalls: `<absolute path>/skills/qa/references/shell-pitfalls.md`
 - The engine's executor catalogue: `<absolute path>/skills/qa/references/executor.md` — the Contents whole, one entry per fired line
-- <a browser round: the engine's techniques, `<absolute path>/skills/qa/references/browser-techniques.md` — the first screen + §<the sections this task needs>>
+- <a browser round: the engine's techniques, `<absolute path>/skills/qa/references/browser-techniques.md` — the first screen + §<the sections this task needs>;
+  the tool's adapter, `<absolute path>/skills/qa/references/browser/<the browser tool>.md` — whole>
 - <a round with API requests: `<absolute path>/skills/qa/references/api-techniques.md` — the first screen + §<the sections, «GraphQL» only for a GraphQL API>>
 - The remaining profile subfiles — only when stuck.
 - <a session that may die in minutes: split this list into «Before the session-bound steps» (only what those steps cannot be run safely

@@ -255,7 +255,7 @@ nothing» groups of the same Contents are read again when the result comes back.
   about fees needs the wallets domain). The executor reads what is listed — a file, or the sections named after it — whole, plus the
   profile map; the rest — only when stuck. **Plus the engine's references, by ABSOLUTE path** (the executor's cwd is the project):
   `shell-pitfalls.md` and `executor.md` always; `api-techniques.md` on any round that sends requests to the API (its «GraphQL» section only where the
-  product's API is GraphQL); `browser-techniques.md` on a browser round — a round is one by its INSTRUMENT, not its subject: an API round
+  product's API is GraphQL); `browser-techniques.md` plus the tool's `browser/<browser>.md` on a browser round — a round is one by its INSTRUMENT, not its subject: an API round
   driven from the page console trips the same tool limits (a timeout on a polling loop, truncated output), so it gets both. The sections of
   each — picked from its contents. Do not retell the project's knowledge — the executor will take it from
   the profile and the project's skills;
