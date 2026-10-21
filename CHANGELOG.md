@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **Install on any agent harness**: README gives Claude Code, Codex (`.codex-plugin/`, `.agents/plugins/marketplace.json`) and
+  opencode (`.opencode/INSTALL.md`) routes, plus `INSTALL.md` an agent follows in any other harness; Playwriter is the default browser.
 - **The engine speaks through the harness adapter**: `SKILL.md`, `qa-setup`, `qa-day` and the references name an action
   by its role — «launch the role», «ask the user», `<plugin root>` — and the adapter says how; `0-session.md` records the harness.
 - **Harness adapters**: `skills/qa/references/harness/` — how each harness launches a role, asks the user, finds the

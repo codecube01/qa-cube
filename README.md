@@ -3,7 +3,8 @@
 [![Release](https://img.shields.io/github/v/release/codecube01/qa-cube?label=release)](https://github.com/codecube01/qa-cube/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**A QA test session, run end to end by Claude Code.** You hand it a tracker task; it plans the
+**A QA test session, run end to end by an AI agent** — Claude Code, Codex, opencode, or any other
+harness with files and a shell, on a hosted or a local model. You hand it a tracker task; it plans the
 round, checks the feature on your environment, files the findings, writes the autotest, delivers a
 report you can paste into the tracker — and closes with a retro that edits its own instructions.
 
@@ -17,14 +18,51 @@ One flow, many projects: the process lives here and is improved once. Everything
 > results, report, retro, test cases — in that language, down to what the subagents narrate in the
 > console while they work.
 
-## 60 seconds
+## Install
+
+**Claude Code**
 
 ```bash
 claude plugin marketplace add codecube01/qa-cube
 claude plugin install qa-cube@qa-cube
 ```
 
-Then, in your project:
+**Codex** — the multi-agent tools first (`[features] multi_agent = true` in `~/.codex/config.toml`), then:
+
+```bash
+codex plugin marketplace add https://github.com/codecube01/qa-cube
+codex plugin add qa-cube@qa-cube
+```
+
+**opencode** (any model, local ones included) — [.opencode/INSTALL.md](.opencode/INSTALL.md): a clone and a few links.
+
+**Any other agent** — tell it:
+
+```
+Fetch and follow instructions from https://raw.githubusercontent.com/codecube01/qa-cube/main/INSTALL.md
+```
+
+[INSTALL.md](INSTALL.md) is written for the agent: it clones the engine and wires the skills in the way your
+harness loads them. What differs between harnesses at run time — how a role is launched, how you are asked a
+question — the engine looks up itself, in `skills/qa/references/harness/`; nothing about the harness goes
+into your project.
+
+### Browser
+
+UI checks drive your own Chrome, with your logins, through [Playwriter](https://playwriter.dev) by default — it
+works from a shell, so in any harness:
+
+```bash
+npm i -g playwriter                          # the CLI
+npx -y skills add https://playwriter.dev -g -y   # optional: Playwriter's own skill for the agent
+```
+
+plus the Playwriter extension from the Chrome Web Store (click its icon once). Claude in Chrome and Playwright MCP
+are supported too; `/qa-setup` offers them where they are connected. A project with no UI to check needs none.
+
+## 60 seconds
+
+In your project:
 
 ```
 /qa-setup                      # an interview: where the tasks are, where the cases go,
@@ -116,8 +154,8 @@ neither the session, nor the files, nor the history of the runs.
 
 ## How it works
 
-Four roles. The manager is your main Claude Code session; the rest are subagents it launches and
-waits for.
+Four roles. The manager is your main agent session; the rest are subagents it launches and waits for
+(in a harness without subagents the manager plays them itself, one after another, and the report says so).
 
 - **QA Manager** (`/qa`) — reads the task *and its comments*, pulls related tasks into scope, plans
   the round, writes the briefs, accepts the results, writes the report, runs the retro. The only
@@ -143,7 +181,7 @@ Worth saying plainly, because the setup costs an interview and every session cos
   against a local build, but most of what it is good at — reading a task with its comments, finding
   the related backend task, dating a retest against the status history — has nothing to work with.
 - **A one-off check.** «Does this button work» does not need a session folder, a report and a
-  retro. Just ask Claude.
+  retro. Just ask your agent.
 - **A team that wants a different process.** The engine is opinionated: one report per session,
   findings phrased in business language, a mandatory retro, a file scheme it will not negotiate.
   Much of the detail is adjustable in the profile; the shape of the flow is not.
@@ -177,10 +215,16 @@ clone>`) but not for distributing to a team — it only works where that path ex
 ## Structure
 
 ```
-.claude-plugin/         plugin.json, marketplace.json
+.claude-plugin/         plugin.json, marketplace.json — the Claude Code plugin
+.codex-plugin/          plugin.json — the Codex plugin (same version)
+.agents/plugins/        marketplace.json — the Codex marketplace
+.opencode/INSTALL.md    the opencode install
+INSTALL.md              the install for any other harness, written for the agent
 skills/qa/              the test-session engine: SKILL.md — the pipeline's procedure,
                         references/ — the lesson catalogues for steps 2, 3, 4 and 6, plus the
                         browser, API and shell recipes the executors read,
+                        references/harness/ — one adapter per harness (how a role is launched,
+                        how the user is asked, where the transcripts are),
                         templates/ — the session file skeletons,
                         scripts/check_session.py — secrets and table checks over a session's files
                         scripts/session.py — file numbers, finding ids, screenshots, the monthly sweep
@@ -189,7 +233,7 @@ skills/qa-setup/        wiring a project in and updating its profile: interview 
 skills/qa-day/          the digest of a day's (or a week's) sessions across projects: SKILL.md +
                         scripts/qa_day.py — a stdlib-only walk over the session folders
 agents/                 qa-analyst, qa-manual, qa-automator
-hooks/                  hooks.json + rename-session.sh — a «/qa <task>» session gets named by task number
+hooks/                  hooks.json + rename-session.sh — in Claude Code a «/qa <task>» session gets named by task number
                         (uses jq; where jq is absent the rename is simply skipped)
 tests/                  unit tests for qa_day.py — run by CI
 evals/                  behavioural cases for the engine itself — run by a human before a release
@@ -211,10 +255,9 @@ Lessons about the **process** belong to the engine, and where they go depends on
   feedback file what would hold in anyone's. Nothing is sent anywhere and nothing asks you to
   send it.
 - **`engine-clone: <path to a git clone>`** — for anyone working on the engine itself. The retro
-  edits the clone, bumps the patch version in `plugin.json` and runs `claude plugin marketplace
-  update qa-cube && claude plugin update qa-cube@qa-cube` (installing a plugin **copies** its files
-  into the Claude Code cache, so edits do not apply without this); the update is picked up by the
-  next launch of claude.
+  edits the clone, bumps the patch version in `plugin.json` and updates the installed copy the way
+  your harness does it (in Claude Code installing a plugin **copies** its files into a cache, so
+  edits do not apply without `claude plugin update`); the update is picked up by the next session.
 
 Nothing updates a plugin on its own. A session mentions in one line when the engine is behind
 upstream, and `/qa-setup` is what actually updates it — and, having done so, says which of your

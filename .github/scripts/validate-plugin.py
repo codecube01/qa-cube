@@ -68,6 +68,17 @@ if plugin:
     if version and not re.fullmatch(r"\d+\.\d+\.\d+", version):
         fail(f"plugin.json: version `{version}` is not MAJOR.MINOR.PATCH")
 
+# --- .codex-plugin/plugin.json ------------------------------------------------
+# Codex installs from its own manifest; a version that lags the Claude one means a Codex install that never
+# notices an update, so the two move together (the bump edits both).
+codex = load_json(".codex-plugin/plugin.json")
+if codex and plugin:
+    for key in ("name", "version"):
+        if codex.get(key) != plugin.get(key):
+            fail(f".codex-plugin/plugin.json: `{key}` is {codex.get(key)!r}, .claude-plugin has {plugin.get(key)!r}")
+    if codex.get("skills") != "./skills/":
+        fail(".codex-plugin/plugin.json: `skills` must be \"./skills/\"")
+
 # --- marketplace.json --------------------------------------------------------
 market = load_json(".claude-plugin/marketplace.json")
 if market and plugin:

@@ -92,6 +92,7 @@ def _trackers(text: str) -> list[Finding]:
 ALLOWED_HOSTS = {
     "localhost", "anthropic.com", "claude.com", "claude.ai", "docs.anthropic.com",
     "keepachangelog.com", "semver.org", "img.shields.io",
+    "playwriter.dev",  # the default browser tool — a public open-source project, named in the install
 }
 # Reserved for documentation (RFC 2606 / RFC 6761): never anybody's real host.
 RESERVED_SUFFIXES = ("example.com", "example.org", "example.net", ".example", ".test", ".invalid")

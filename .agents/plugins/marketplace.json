@@ -1,0 +1,12 @@
+{
+  "name": "qa-cube",
+  "plugins": [
+    {
+      "name": "qa-cube",
+      "source": {
+        "source": "local",
+        "path": "./"
+      }
+    }
+  ]
+}

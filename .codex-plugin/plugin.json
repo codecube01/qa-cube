@@ -1,0 +1,38 @@
+{
+  "name": "qa-cube",
+  "version": "0.18.52",
+  "description": "A QA test-session engine: a manager plus the qa-analyst/qa-manual/qa-automator roles, a session file scheme, retros. Project specifics live in the project's .claude/qa-profile.md.",
+  "author": {
+    "name": "Vadim Glushonkov"
+  },
+  "homepage": "https://github.com/codecube01/qa-cube",
+  "repository": "https://github.com/codecube01/qa-cube",
+  "license": "MIT",
+  "keywords": [
+    "qa",
+    "testing",
+    "test-sessions",
+    "test-management",
+    "qa-automation",
+    "subagents"
+  ],
+  "skills": "./skills/",
+  "hooks": {},
+  "interface": {
+    "displayName": "qa-cube",
+    "shortDescription": "QA test sessions run end to end by an agent",
+    "longDescription": "A QA test-session engine: the manager plans the round, the qa-manual role checks the feature on your environment, the qa-automator writes the autotest, and a retro improves the instructions. Project specifics live in the project's .claude/qa-profile.md.",
+    "developerName": "Vadim Glushonkov",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Set up qa-cube for this project.",
+      "Run a test session on this task."
+    ],
+    "websiteURL": "https://github.com/codecube01/qa-cube"
+  }
+}

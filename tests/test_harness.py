@@ -47,5 +47,22 @@ class Harness(unittest.TestCase):
         self.assertIn("Updating the engine from a clone No known command: commit the edit in the clone", generic)
 
 
+class Manifests(unittest.TestCase):
+    def test_codex_manifest_version_matches(self):
+        import json
+        claude = (REPO / ".claude-plugin/plugin.json").read_text()
+        codex = (REPO / ".codex-plugin/plugin.json").read_text()
+        self.assertEqual(json.loads(codex)["version"], json.loads(claude)["version"])
+        self.assertEqual(json.loads(codex)["skills"], "./skills/")
+        self.assertTrue(codex.endswith("\n"))
+
+    def test_every_install_route_the_readme_names_exists(self):
+        readme = (REPO / "README.md").read_text()
+        self.assertIn("## Install", readme)
+        for rel in ("INSTALL.md", ".opencode/INSTALL.md"):
+            self.assertTrue((REPO / rel).is_file(), rel)
+            self.assertIn(rel, readme)
+
+
 if __name__ == "__main__":
     unittest.main()
