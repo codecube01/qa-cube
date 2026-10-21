@@ -42,6 +42,10 @@ session's group with no click, and `context.pages()` lists every session's tabs,
 - **`state` lives on the Node side and survives navigation and reload; `window.*` of the page dies on reload as usual.** So loggers built
   on `page.on(...)` or a CDP session persist across navigations, while an in-page `fetch` wrapper is reinstalled after each — install it
   with `page.addInitScript` to have it before the page's own code runs.
+- **A secret captured only in the page reaches a file without being printed**: the round's code runs in Node, so
+  `fs.writeFileSync(<secrets path>, await page.evaluate(...), {mode: 0o600})` moves it straight into the profile's secrets source (`fs` comes
+  from `await import('node:fs')`). Where the harness refuses that write for its shape, the value stays in the page's `localStorage` under a
+  named key, as with Claude in Chrome, and the result says which route it took.
 - `page.goto` has Playwright's own 10 s timeout, and on some sites `load` — even `domcontentloaded` — never arrives while the page has in
   fact opened. Navigate with `{waitUntil: 'commit'}`, then wait for what the scenario needs (`waitForFunction(() => document.readyState
   !== 'loading')`, a selector).

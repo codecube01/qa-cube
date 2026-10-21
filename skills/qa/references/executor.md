@@ -17,7 +17,7 @@ never the file without a `limit`.
 - an operation the server refused, and the theory is «maybe it was stale / cached» → before repeating it, find out where the validating side reads its data; a source that does not change between attempts cannot answer differently, and the retry only spends the expendable
 - single-use artifacts (an invite link, a one-time token, the only application in the queue) → consumed by any touch, a trial one included: work out the semantics on an expendable instance, measure on a clean one, one touch per control point; a channel that returns «the latest per key» → compare its timestamp with the clock, save each artifact under its instance's name, prove a batch distinct (`sort -u`) before measuring
 - an unknown time boundary (a TTL, a window, a deadline) → bisection from below (1 → 2 → 5 → 10 min), never long probes; many points of one TTL → a batch of untouched instances touched by a background scheduler keyed to absolute epoch times
-- a reference value you compute yourself (a hash, a signature, an aggregate) → self-check the primitives on a known vector, print the field-by-field decomposition of the input, and only then compare
+- a reference value you compute yourself (a hash, a signature, an aggregate) → self-check the primitives on a known vector, print the field-by-field decomposition of the input, and only then compare · a client-built ARTIFACT you replicate → rebuild a reference instance byte for byte first
 - text the user sees → quoted as RENDERED (`textContent`, the screenshot), never with the template's markup; emphasis in your own notation; markup that reaches the screen is said in words, it is itself a defect
 
 **When an outcome looks like a defect**
@@ -65,6 +65,8 @@ address encoder against an address from the same data) — two minutes remove a 
 decomposition of the input is printed BEFORE the comparison: a «does not match» verdict passed before the structure was taken apart is
 useless and more often points at your parsing than at the product. Precedent: a «MISMATCH» on a transaction hash turned out to be a wrongly
 posed question — the field held a 12-field form while the hash covers nine — and cost twenty minutes.
+
+*And where you replicate a whole artifact a client builds* (a wallet's envelope), rebuild the incident's own instance from its parts and require byte equality before a scenario rests on your copy: a copy off by one field verifies an artifact the client never sends. Precedent: a wrapped transaction matched the incident's bytes before the fix was judged, so the fix was confirmed in the incident's exact form, not in a lookalike.
 
 **Text the user sees is quoted as RENDERED, never with the template's markup.** A caption read from the bundle arrives as
 `<b>{email}</b> …`, and pasting the rendered string back in that form makes the one question a text finding exists to answer — «is the

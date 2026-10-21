@@ -112,6 +112,22 @@ class ReviewFixes(unittest.TestCase):
         self.assertIn("browser is default or dedicated → offer Playwriter", read("skills/qa-setup/SKILL.md"))
 
 
+class SharedRules(unittest.TestCase):
+    """A rule repeated where each reader meets it — kept in step, so an edit to one copy cannot quietly drop the others."""
+
+    FRESH_TAB = ("skills/qa/SKILL.md", "skills/qa/references/manual-brief.md", "skills/qa/templates/2-manual-task.md",
+                 "agents/qa-manual.md")
+
+    def test_a_dead_verdict_needs_a_new_tab_for_every_recheck(self):
+        self.assertEqual([p for p in self.FRESH_TAB if "every re-check" not in read(p)], [])
+        brief = read("skills/qa/references/manual-brief.md")
+        self.assertGreaterEqual(brief.count("every re-check"), 2)  # the index line and the entry
+
+    def test_the_page_secret_route_is_in_every_browser_adapter(self):
+        for tool in ("playwriter", "claude-in-chrome", "playwright-mcp"):
+            self.assertIn("A secret captured only in the page", read(f"skills/qa/references/browser/{tool}.md"), tool)
+
+
 class Manifests(unittest.TestCase):
     def test_codex_manifest_version_matches(self):
         import json

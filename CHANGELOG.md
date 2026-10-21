@@ -13,8 +13,12 @@ section gathers everything since the previous one.
 
 ### Added
 
-- **Version 0.19**: the engine runs in any agent harness through its adapters, and Playwriter is the default browser —
-  what the entries below add up to.
+- **A retest reads every thread the previous findings went into**: `session-folder.md` — the customer's triage of a layer's
+  findings lives in the task where that table was pasted; `report.md` points there.
+- **A replicated client artifact is proven first**: `executor.md` — a copy of what a client builds (a wallet's envelope) carries a
+  verdict only after the incident's own instance is rebuilt from its parts byte for byte.
+- **Version 0.19**: the engine runs in any agent harness through its adapters, and Playwriter is the default browser — the
+  harness, browser and install entries of this section.
 - **Lessons from the live Playwriter round**: `browser/playwriter.md` — a tab closed from outside is read from inside the page
   (`addInitScript` + `exposeBinding`); `harness/claude-code.md` — print mode stops background subagents after 10 minutes.
 - **Onboarding picks and checks the browser**: `/qa-setup` recommends Playwriter, offers Claude in Chrome and Playwright MCP
@@ -45,6 +49,19 @@ section gathers everything since the previous one.
   scope of the model is decided once at planning; a row passed by the model cannot sit next to its refusal declared «not required».
 - **The retest table's «Was» names what already held**: `templates/2-manual-task.md` — for a fail row, the previous round's control,
   so old behaviour is not reported as the fix narrowing.
+
+### Changed
+
+- **A «dead» session is re-checked from a new tab every time**, not only on the first probe: the tab that answered `401` is a
+  leftover from then on (`SKILL.md` step 1, `manual-brief.md`).
+- **A journal count is read against its scope** — the namespace holding the records on this build — not only its window (`planning.md`).
+- **A secret captured only in the page rests where the tool can put it**: a file written unprinted (Playwriter) or page storage under a
+  named key (Claude in Chrome) — the route is in `browser/<tool>.md` (`manual-brief.md`, `qa-manual.md`).
+- **A stale build can render whole, not only as a white page**: a deep route served from a long-lived cache runs the previous
+  build complete — compare `document.scripts` per directly navigated screen and cache-bust each direct navigation
+  (`browser-techniques.md`, «Bundle and route discovery»).
+- **A non-ASCII Python script starts with a coding line**: the system Python rejects even a valid UTF-8 file written by Write
+  when its lines are long (`shell-pitfalls.md`).
 
 ### Fixed
 

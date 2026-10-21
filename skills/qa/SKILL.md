@@ -94,7 +94,7 @@ The executors ask no questions — not one of them.
 
 ## The pipeline
 
-**1. Understand the task and assemble the bundle.** **Where entering the environment needs the user's hands (per the profile), the liveness oracle is this step's FIRST call** — a dead session then overlaps your reading instead of following it; the entry in `references/manual-brief.md` is read only at step 4, too late for this rule. The input is a link/id of a tracker task or free-form text. Read the task with the tools
+**1. Understand the task and assemble the bundle.** **Where entering the environment needs the user's hands (per the profile), the liveness oracle is this step's FIRST call** — a dead session then overlaps your reading instead of following it; that call and every re-check of it is a new tab → navigate → the call, never the tab that answered `401`; the entry in `references/manual-brief.md` is read only at step 4, too late for this rule. The input is a link/id of a tracker task or free-form text. Read the task with the tools
 from the profile (Tracker section): the description and **the comments, mandatorily** — that is where the requirements, the status and the
 related changes live. Check for **related tasks** in three ways, not one: (1) explicit links/relations; (2) the task's **subtasks and
 parent**; (3) a substring search on the title (neighboring FE/BE tasks of the same area). Empty relations do not mean «there are none». If a

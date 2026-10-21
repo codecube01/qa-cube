@@ -18,7 +18,7 @@
 
 - Instance / profile id: <the id of the browser profile, instance or device — never its caption, never a tab id; «if the tool moves you
   elsewhere, select this id back»>
-- Identity oracle: <the call that answers who is logged in>; a «dead» verdict is believed only from a FRESH tab — new tab → navigate → the call
+- Identity oracle: <the call that answers who is logged in>; a «dead» verdict is believed only from a FRESH tab — new tab → navigate → the call, for every re-check
 - Who is logged in: <account · organisation / tenant · role> — your first move is to open your own tab and check WHOSE session this is, not
   whether one is alive: a live session under someone else's role turns its refusals into «the result of a permissions check»
 - Role for this round's operations: <the role the operations need — permissions differ between roles that log in identically, and the wrong

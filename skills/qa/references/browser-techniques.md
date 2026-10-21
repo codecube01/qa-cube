@@ -26,7 +26,7 @@ Pitfalls and the full recipes, by topic, below.
 - component-library interaction — clicks that silently do nothing, tabs, options, modals, forms
 - the hidden tab — timer throttling, rendering, tooltips, toasts, viewport width, an expired session that still shows data
 - downloads — the browser's own block on repeated downloads, and capturing the file at the source
-- bundle and route discovery — the served bundle as a source, chunks, dictionaries, table columns, routes, the stale-bundle white page
+- bundle and route discovery — the served bundle as a source, chunks, dictionaries, table columns, routes, the stale bundle (a white page, or the previous build rendered whole)
 - design mock-ups — the design tool's call limit, boards of many frames, captions and texts read from the board's structure
 
 ## The page-scripting sandbox and its limits
@@ -108,6 +108,8 @@ Pitfalls and the full recipes, by topic, below.
 - **Table columns are found in the bundle by `header:`, not by `accessorKey`** — a composite column is declared with `id:"…"` and no accessor, and a search by accessor loses it (one reconnaissance counted 8 columns of 9).
 - **A route map comes from the string literals `"/…"` in the bundle** (`re.findall(r'"/[a-z][a-z0-9/:_-]{1,40}"', bundle)`), not from `path:"…"` — the minifier leaves only `path:"*"`.
 - **A blank white page while the API answers `200` is a stale bundle, not a broken product.** The cached index document references a chunk the deploy removed; the server answers its path with the SPA fallback, and the console shows `SyntaxError: Unexpected token '<'` on `/assets/index-*.js`. Diagnose in order — empty `body.innerText` → console errors → compare the chunk names in a `fetch('/index.html', {cache: 'no-store'})` with the loaded `script[src]` — and cure with a hard reload or a cache-busting `navigate`. Re-take the bundle fingerprint before writing ANY UI finding, not only at the round's edges: a deploy artefact is the cheapest false finding there is. A chunk already replaced on the environment can still be read from the cache of a profile that loaded it before the deploy (`fetch(path, {cache: 'only-if-cached', mode: 'same-origin'})`, recipe in `planning.md`, «Dating the build»).
+
+  *And the stale build can render whole, with no white page at all.* Where the server gives the SPA fallback of deep routes a long cache lifetime while the root is served uncached, a direct `navigate` to a deep route the profile opened before runs the previous build complete — every screen works, only the feature under test is missing, and it reads as «not deployed». So on every screen reached by a direct `navigate`, compare `document.scripts` with the chunk the root serves, and give each direct navigation a cache-busting query (`?cb=<n>`) — a new URL fetches a fresh document. Precedent: a preflight opened a card by its deep link and saw the old build's tabs without the feature's tab, while the root of the same host already served the new build.
 
 ## Design mock-ups
 

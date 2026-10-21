@@ -20,6 +20,7 @@ a way the folder has already been broken once, and the precedent that closes it 
 **Continuing a session: round 2+**
 
 - date the round's trigger before anything else
+- the previous findings' triage is read in every thread they were posted into, not only the task's own
 - a round whose trigger is the requirements arriving, not a fix — and which therefore launches nobody
 - renaming brings the whole name to the convention, not just the date — and the links to the old name are rewritten
 - every file of the round is named by the script, one call per file
@@ -61,6 +62,15 @@ moved, and a pointer to a session never migrated at all; the prefix rewrite fixe
 From the tracker: what happened to the task since the previous round (status history / `updated_at` / new comments). «Returned
 to Testing on Aug 17» answers whether we are testing a new deploy or the same one, and it sets up the «was → now» table in the
 report; the cheap way to pull that history is in the project's tracker skill.
+
+*And the threads to read are every task the previous round's findings were POSTED into, not only the task under test.* A triage
+is answered where its table was pasted: a layer's findings table that went into a sibling task (the frontend part filed under the
+frontend task) gets its «withdraw / later / fixed» in that sibling's thread, and the main task's thread stays silent about it. List
+the destinations from the previous report's tracker-comment section and from the round log before planning, and read each thread
+since the previous round — a «fixed» found there is a fix claim the round either verifies or names as out of scope. Precedent: a
+retest read only the main task's thread; the customer's verdicts on five frontend findings — two withdrawn, three marked fixed —
+sat in the sibling frontend task, and the round planned no check of the claimed fixes and learned of them from its own report
+reviewer.
 
 ### Renaming brings the whole name to the convention, not just the date
 

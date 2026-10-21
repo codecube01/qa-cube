@@ -22,7 +22,8 @@ the profile's Secrets — never typed from memory.
 
 ## Page scripts and their budget
 
-Its evaluate tool runs a function in the page; the budget is the server's call timeout (set in its own flags). Long work accumulates in
+Its evaluate tool runs a function in the page; the budget is the server's call timeout (set in its own flags). **A secret captured only
+in the page** cannot be written to a file from there: it stays in the page's `localStorage` under a named key, as with Claude in Chrome. Long work accumulates in
 `window.__…` as `../browser-techniques.md` describes.
 
 ## Screenshots

@@ -51,8 +51,10 @@ project's tooling stays in its profile.
   nested map keyed by address — straight into the transcript, and nothing warns that it did. Print the structure instead: keys and value
   types (or lengths) at every level, with no value at all. Precedent: a keys file masked by «`key` or `priv` in the name» printed every
   private key in full, because they sat under a two-letter field.
-- **A script whose source carries non-ASCII text (Cyrillic strings, quoted UI captions) goes into a file via Write, not into a heredoc.**
-  A heredoc fed to the system Python has failed with a "Non-UTF8 code" SyntaxError and not run at all — silently enough to be mistaken for an empty result.
+- **A script whose source carries non-ASCII text (Cyrillic strings, quoted UI captions) goes into a file via Write, not into a heredoc,
+  and its first line is `# -*- coding: utf-8 -*-`.** The system Python rejects such a source with a "Non-UTF-8 code" SyntaxError and
+  runs nothing — silently enough to be mistaken for an empty result — and the file being valid UTF-8 does not save it: a line past ~8 KB of
+  non-ASCII text fails the same way from a file written by Write (Python 3.9: 3 000 Cyrillic characters pass, 9 000 fail) until the coding line is added.
   The same goes for a request BODY with nested quotes or non-ASCII text: it is written to a file and passed by path, never through argv —
   keep argv for one-line reads.
 - **A SECRET never rides argv at all — a header no more than a body.** `curl -H "Key: $KEY"` puts the key in the process list for every

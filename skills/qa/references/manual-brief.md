@@ -16,12 +16,12 @@ is in `templates/2-manual-task.md`.
 
 **Preflight and access**
 
-- access the product issues from inside itself (an API key, a service token, a test tenant) → the manager issues it at preflight, puts it in the profile's `secrets` source, and the brief gets a contour that does not depend on a short session
+- access the product issues from inside itself (an API key, a service token, a test tenant) → the manager issues it at preflight, puts it in the profile's `secrets` source, and the brief gets a contour that does not depend on a short session; a secret the round captures only in the page and may not print → the brief names where it rests by the tool's route (`browser/<tool>.md`, «A secret captured only in the page»), with a pointer in the result
 - a state created by preflight (a blank, a session) → the «Entry state» section: its owner and its time («as of HH:MM it was …»), the profile's id as the only address (never a tab id, never a caption), and the executor's first move is to check WHOSE session they are in, not whether one is alive
 - a config edit made in the same session → does not reach the executor's context: the values go into «Values the round depends on», and any claim about a file's contents is made after reading it
 - an adjacent system with short-lived access → preflight hands over its entity IDs, not only their state (a «Recon facts» row of kind «ids of a short-lived contour»)
 - the name you gave an environment may never reach the executor's listing → the address is an id; where the tooling exposes no id either, the «On a refusal» slot names the identity oracle to sweep the candidates with, most-recently-connected first, the handshake last; where the user can re-enter quickly, pin ONE environment and make a refusal a stop, not a search
-- entering the environment needs a human → the liveness oracle is the session's FIRST call, before reading anything; a «dead» verdict is believed only from a fresh tab
+- entering the environment needs a human → the liveness oracle is the session's FIRST call, before reading anything; a «dead» verdict is believed only from a fresh tab — every re-check, not only the first: the tab that answered `401` is a leftover from that moment on
 - each entry spends a one-time artifact (a login link, a code) → choose the role the operations need and probe the existing session first; a scripted and a browser session are independent carriers, an identity per carrier (the «Role» and «Carriers» slots)
 - preflight proves the session → open the round's TARGET screen too, and compare the address you land on with the one you asked for; a redirect you explained to yourself is a question for the executor, not noise
 - the manager's recon → verifies the ADDRESS (path, method, headers, the selection criterion) and stops at the first response that proves it; running the scenario is the executor's work; the VALUES the probe returned are handed over as «Recon facts» rows
@@ -114,9 +114,18 @@ is what preflight does, and learns, before the brief is written.
 - **access that is issued from inside the product, the manager obtains themselves during preflight.** An API key, a service token, a test
   tenant are often created by a regular operation of the product itself (a «create key» mutation, an admin panel) — and «we have no keys»
   turns out not to be a blocker but an unperformed step. Before declaring a contour unverifiable, ask the user how the key is issued and
-  issue it yourself; put what you issued into the profile's `secrets` source, not into the session files. The payoff is twofold: the
+  issue it yourself; put what you issued into the profile's `secrets` source, not into the session files. The payoff: the
   executor gets **a contour that does not depend on a short session** (in one session the REST part of the run would have survived any
-  disconnect, and five findings were proven by the single fact that an operation was missing, without a single mutating call);
+  disconnect, and five findings were proven by the single fact that an operation was missing, without a single mutating call).
+
+  *And a secret the round captures only in the page and may not print* (a one-time link, a session token the product hands out) *gets
+  its resting place in the brief, by the tool's own route* — the tool adapter's «A secret captured only in the page» says whether a page
+  value can reach a file unprinted (Playwriter: the round's Node code writes it) or stays in page storage under a named key the round's
+  cleanup leaves in place (Claude in Chrome: the page cannot write files, and a bridge to a local listener writing into the secrets store
+  is refused by its shape). Either way the result carries a pointer and the expiry, and a move into the secrets source that the tool
+  cannot make is the manager's or the user's step after the round. Precedent: a brief ordered the round's verification links into the
+  secrets file «by script, values not printed» on a tool whose page cannot write files; the only route was such a bridge, it was
+  refused, and the executor left the links in page storage on its own judgement.
 
 - **A state created by preflight is described with its OWNER and its time, and the executor's first move is to check WHOSE session they
   are in — not whether one is alive.** «A payment in the right status» without «whose» is taken on faith, and a shared environment lives
@@ -170,11 +179,14 @@ is what preflight does, and learns, before the brief is written.
   and the knowledge base, wrote the plan, and only then found the session dead — the manual re-login was the round's longest pause, and
   it could have overlapped every one of those reads.
 
-  *And a «dead» answer is believed only from a FRESH navigation in a new tab* (the «Identity oracle» slot says so): a leftover tab
-  outlives what made it a valid probe — the extension reconnects, the tab group is rebuilt, the page keeps a state from before a re-login
-  — and its identity call answers `401` while the profile's session is alive; a false «dead» costs the user a re-login they did not need.
-  Precedent: a round-2 oracle fired from the round-1 tab answered `401` twice in two minutes, the user was asked to log in and replied
-  that the session was alive — a new tab in the same profile answered `200` at once.
+  *And a «dead» answer is believed only from a FRESH navigation in a new tab* (the «Identity oracle» slot says so) — and fresh is per
+  check, not per session: the tab you opened for the first probe becomes a leftover the moment it answered `401`. A leftover tab outlives
+  what made it a valid probe — the extension reconnects, the page's own client runs its refresh-then-logout chain on the refusal, the page
+  keeps a state from before the user's re-login — and its identity call keeps answering `401` while the profile's session is alive; a false
+  «dead» costs the user a re-login they did not need, or a wait on one they already made. So every re-check, and above all the one before
+  telling the user «still dead», is a new tab → navigate → the call. Precedent: a manager probed once from a new tab, got `401`, asked for
+  a re-login and then re-checked four times over forty minutes from that same tab, reporting «still dead» each time; the user answered
+  that the session was there, and a new tab in the same profile answered `200` at once.
 
 - **Where each entry spends a one-time artifact (a login link, a code), the identity is chosen and the existing session probed BEFORE
   the artifact is spent** — the «Role» and «Carriers» slots. Permissions differ between roles that log in identically, and entering under
