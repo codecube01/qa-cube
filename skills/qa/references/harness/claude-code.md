@@ -12,7 +12,9 @@ The tool list has `Agent` (with a `subagent_type` parameter) and `AskUserQuestio
 `Agent` with `subagent_type: "qa-analyst"` / `"qa-manual"` / `"qa-automator"` (a general subagent: `"general-purpose"`) — the plugin registers the three
 roles from `agents/`, so the instruction is loaded as the subagent's system prompt and the prompt carries only
 `Output language: <language>` as its first line, then the session folder and the brief. The subagent runs in
-the background and its completion arrives as a notification on its own — wait for it, do nothing on its behalf.
+the background and its completion arrives as a notification on its own — wait for it, do nothing on its behalf. In print mode
+(`claude -p`) background subagents are stopped 10 minutes after the manager's last turn, mid-round: a headless session sets
+`CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=0`.
 
 ## Continue a running executor
 

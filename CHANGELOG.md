@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **Lessons from the live Playwriter round**: `browser/playwriter.md` — a tab closed from outside is read from inside the page
+  (`addInitScript` + `exposeBinding`); `harness/claude-code.md` — print mode stops background subagents after 10 minutes.
 - **Onboarding picks and checks the browser**: `/qa-setup` recommends Playwriter, offers Claude in Chrome and Playwright MCP
   only where they are connected, installs the chosen tool as a channel and opens a tab through it in the live check.
 - **The profile names the browser tool**: `browser: playwriter | claude-in-chrome | playwright-mcp | none`; the older

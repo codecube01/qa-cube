@@ -64,6 +64,12 @@ fail-closed rule in `../browser-techniques.md` asks.
 - **No output filter and no length cut**: a query string, a cookie-shaped string and 6000 characters print whole. Nothing stops access
   from being printed, so the rule «Responses carry access» in `../browser-techniques.md` is the only guard — keep it.
 - A `goto` that waits for `load` times out on a page that opened (above) — the timeout is not a navigation failure.
+- **Every session shares the one browser, so a tab can be closed from outside** — by another session's code, an extension or a person —
+  and only on some pages. The sign is a `close` event you did not cause; prove it with a control URL in the same tab (another page of
+  the site stays open). Other sessions are not touched; read the page from INSIDE it instead: `page.addInitScript` takes the reading at
+  `DOMContentLoaded` and hands it to Node through `page.exposeBinding`, and the network logger in `state` outlives the tab. Say in the
+  result which readings were taken that way. Precedent: a live round's tabs on a login page closed 0.4–0.9 s after every load while the
+  site's other pages stayed open; reading from inside the page closed every requirement anyway.
 - Controlled tabs show Chrome's automation banner; a scenario about the page's own layout at the top edge accounts for it.
 - `snapshot()` returns an accessibility snapshot and, on later calls, diffs against the previous one — a diff that looks empty is «nothing
   changed», not «nothing there».
