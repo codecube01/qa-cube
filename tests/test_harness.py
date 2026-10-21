@@ -19,7 +19,7 @@ HARNESS = REPO / "skills/qa/references/harness"
 
 
 def plain(text: str) -> str:
-    text = re.sub(r"[*`_]", "", text)
+    text = re.sub(r"[*`]", "", text)
     return re.sub(r"\s+", " ", text)
 
 
@@ -80,6 +80,36 @@ class Browser(unittest.TestCase):
         self.assertIn("Playwriter (Recommended)", setup)
         self.assertIn("the browser: through the chosen tool, open a tab and read its URL and title", setup)
         self.assertIn("the browser tool is a channel too", setup)
+
+
+class ReviewFixes(unittest.TestCase):
+    def test_claude_code_is_told_by_agent_or_task_and_askuserquestion(self):
+        readme = read("skills/qa/references/harness/README.md")
+        self.assertIn("Agent or Task with a subagent_type parameter, AskUserQuestion", readme)
+        self.assertIn("task with a subagent_type parameter, skill, and no AskUserQuestion", readme)
+
+    def test_claude_code_plugin_root_is_taken_from_the_base_directory(self):
+        root = section("skills/qa/references/harness/claude-code.md", "## Plugin root")
+        self.assertIn("Two directories above the «Base directory for this skill»", root)
+
+    def test_preflight_reads_the_tool_adapter_first(self):
+        self.assertIn("against the browser tool adapter's «Preflight», then the profile's checklist", read("skills/qa/SKILL.md"))
+        self.assertIn("command not found", section("skills/qa/references/browser/playwriter.md", "## Preflight"))
+
+    def test_a_bump_moves_both_manifests(self):
+        self.assertIn("bump the patch version in <engine-clone>/.claude-plugin/plugin.json and .codex-plugin/plugin.json",
+                      read("skills/qa/SKILL.md"))
+        self.assertNotIn("bump the patch version", read("skills/qa/references/harness/claude-code.md"))
+        self.assertIn(".codex-plugin/plugin.json", read("skills/qa/references/engine-edits.md"))
+
+    def test_moved_entries_point_where_they_now_live(self):
+        cic = read("skills/qa/references/browser/claude-in-chrome.md")
+        self.assertNotIn("under «Your tab must be the ACTIVE one»", cic)
+        self.assertNotIn("«A full id is never reconstructed» above", cic)
+        self.assertIn("../harness/<name>.md", read("skills/qa/references/browser/playwright-mcp.md"))
+
+    def test_setup_offers_playwriter_to_a_legacy_profile(self):
+        self.assertIn("browser is default or dedicated → offer Playwriter", read("skills/qa-setup/SKILL.md"))
 
 
 class Manifests(unittest.TestCase):

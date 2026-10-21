@@ -44,6 +44,12 @@ section gathers everything since the previous one.
 - **The retest table's «Was» names what already held**: `templates/2-manual-task.md` — for a fail row, the previous round's control,
   so old behaviour is not reported as the fix narrowing.
 
+### Fixed
+
+- **Review of the multi-harness work**: Claude Code is told by `AskUserQuestion` (older `Task` too); its plugin root comes from the
+  skill's base directory; the browser preflight reads the tool adapter first; a clone bump moves both manifests; `transcripts.py`
+  exits 1 where no Claude Code transcripts exist; `/qa-setup` offers Playwriter to a `default`/`dedicated` profile.
+
 ## [0.18.44] — 2026-10-19
 
 ### Added

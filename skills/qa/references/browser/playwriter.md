@@ -17,7 +17,8 @@ that browser (once per browser, not per tab or per session). `ffmpeg` on `PATH` 
 ## Preflight
 
 `playwriter browser list` — the connected browsers with their keys (`install:Chrome:<id>` is the extension, `direct:9222` a debugging
-port) and, in PROFILE, whether that Chrome profile is signed in. The profile's Browser section names which one holds the round's accounts.
+port) and, in PROFILE, whether that Chrome profile is signed in. **`playwriter: command not found`** → the «Install» commands to the user;
+do not launch the executor until `playwriter --version` answers. The profile's Browser section names which one holds the round's accounts.
 **The list is empty, or the extension is not connected** («Waiting for extension to connect» that never ends) → tell the user exactly
 that: open Chrome, click the Playwriter icon once; do not launch the executor until a second `browser list` shows the key. Then one
 probe in a session of your own: open a tab, read its URL and title.

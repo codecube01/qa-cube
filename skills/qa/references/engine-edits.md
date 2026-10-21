@@ -63,7 +63,7 @@ line. The steps below are that review, moved to the place where the edit is made
 
 1. **A CHANGELOG line** under `## [Unreleased]` in `<engine-clone>/CHANGELOG.md`, in the right subsection (`Added` / `Changed` /
    `Fixed`): two or three lines, what changed for the reader, no precedent and no retold mechanics. A line on the same subject already
-   there is extended, not repeated. The patch bump from step 7 is made now, before the checks, and once per retro however many files
+   there is extended, not repeated. The patch bump from step 7 — in both `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` — is made now, before the checks, and once per retro however many files
    it touched; updating the installed plugin (the harness adapter) waits until after the review, so the cache gets the reviewed text.
 2. **The checks, from the clone:**
    `python3 <engine-clone>/.github/scripts/validate-plugin.py` and

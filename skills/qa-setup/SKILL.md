@@ -11,7 +11,8 @@ The deliverable is `.claude/qa-profile.md` (+ subfiles where needed) per the `PR
 
 The profile already exists → that is not a blocker: this is update mode. First compare the profile's `contract-version` (no field → 1) with
 the current version in the «Contract versions» section of `PROFILE-CONTRACT.md`: the profile is behind → walk the sections that were added
-or changed after its version (per the version history) and bump `contract-version` to the current one. Then show the user the current
+or changed after its version (per the version history) and bump `contract-version` to the current one. `browser` is `default` or `dedicated` → offer Playwriter (the browser
+question of pass B) — the profile keeps Claude in Chrome on a «no». Then show the user the current
 «Capabilities» header and ask what else to reconfigure; from there, the same steps for the affected sections only.
 
 ## Steps

@@ -7,7 +7,7 @@ That is why it is never the fallback for a tool the harness lacks (`../../SKILL.
 
 ## Install
 
-The harness's MCP route (`harness/<name>.md`, «Connecting an MCP server») with the server `npx @playwright/mcp@latest`; its browsers come
+The harness's MCP route (`../harness/<name>.md`, «Connecting an MCP server») with the server `npx @playwright/mcp@latest`; its browsers come
 with `npx playwright install chromium` the first time.
 
 ## Preflight

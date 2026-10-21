@@ -15,9 +15,9 @@ Match your own tool list, first hit wins:
 
 | You have | Harness | Adapter |
 |---|---|---|
-| `Agent` with a `subagent_type` parameter, `AskUserQuestion` | Claude Code | `claude-code.md` |
-| `spawn_agent`, `wait_agent` | Codex | `codex.md` |
-| `task` with a `subagent_type` parameter, `skill` | opencode | `opencode.md` |
+| `Agent` or `Task` with a `subagent_type` parameter, `AskUserQuestion` | Claude Code | `claude-code.md` |
+| `spawn_agent`, `wait_agent` — or, with multi-agent off, `apply_patch` and `update_plan` | Codex | `codex.md` |
+| `task` with a `subagent_type` parameter, `skill`, and no `AskUserQuestion` | opencode | `opencode.md` |
 | anything else with files and a shell | another harness | `generic.md` |
 
 The tool list is the evidence, not the harness's name in a system prompt or the user's word: a harness

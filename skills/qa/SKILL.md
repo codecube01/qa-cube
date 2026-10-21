@@ -245,7 +245,7 @@ template's slots. **Once `2-manual-task.md` is written, the catalogue reviewer o
 only after that: an executor is briefed once, and the situation you did not foresee cannot be added to the brief afterwards. The «Accepting the result» and «the control does
 nothing» groups of the same Contents are read again when the result comes back.
 - **the preflight check** — if the scenarios involve the browser (frontend tasks, UI verification): **before** launching the executor,
-  verify the access yourself against the profile's checklist (Browser section). Something does not work — **tell the user right away** and
+  verify the access yourself against the browser tool adapter's «Preflight», then the profile's checklist (Browser section). Something does not work — **tell the user right away** and
   do not launch the executor until the access is fixed. What preflight hands over about the state it created — the instance, the identity, the carriers, the values
   the round depends on, each dated — is the template's «Entry state» section; what each of its lines cost is in `references/manual-brief.md`;
 - `2-manual-task.md`: the context in one paragraph, the environment, in round 2+ the template's «Retest» section filled in (the
@@ -393,7 +393,7 @@ pass**. There are four addresses for fixes:
   had landed. **With a valid clone** edit the files directly, with no git operations that change the repository — the user is the one who
   commits and pushes — **by `references/engine-edits.md`, read whole before the first engine edit** (a twin searched for first; a
   CHANGELOG line, the validator and a fresh-eyes review of the diff last), and then **update the installed plugin**, because
-  installation copies the files into a cache and without this the edits will not apply: bump the patch version in `<engine-clone>/.claude-plugin/plugin.json`, then
+  installation copies the files into a cache and without this the edits will not apply: bump the patch version in `<engine-clone>/.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` (the validator holds them equal), then
   the adapter's «Updating the engine from a clone». The changes take effect from the next session (the current one finishes on the old copy — that is fine, the
   retro is the finale anyway). **Without a clone the lesson is written, not dropped — as a row of `.claude/qa-cube-feedback.md`**, in the
   form it would take as an entry at its engine address, and from the next session on it applies from there (step 0). It is **not** rephrased

@@ -45,4 +45,5 @@ Re-run the install from `README.md`, «Install»; it applies from the next sessi
 ## Updating the engine from a clone
 
 No known command: commit the edit in the clone and tell the user to reinstall the engine the way they
-installed it (`README.md`, «Install»); a harness that reads the clone directly needs nothing.
+installed it (`README.md`, «Install»); a harness that reads the clone directly needs nothing. No known install cache: the
+«not inside the install cache» check reduces to «it holds a `.git`».

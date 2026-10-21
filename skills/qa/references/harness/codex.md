@@ -34,7 +34,7 @@ commands get `${PLUGIN_ROOT}`, but the engine ships no Codex hooks.
 
 ## Transcripts
 
-`~/.codex/sessions/<yyyy>/<mm>/<dd>/rollout-*.jsonl` — a format `transcripts.py` does not read: it exits 1 and
+`~/.codex/sessions/<yyyy>/<mm>/<dd>/rollout-*.jsonl` — a format `transcripts.py` does not read: it exits 1 (no transcripts) and
 the retro carries «no transcript numbers in this harness».
 
 ## Hooks
@@ -55,5 +55,6 @@ copy is wherever that install put it — read `PROFILE-CONTRACT.md` from there.
 ## Updating the engine from a clone
 
 `codex plugin marketplace add <path to the clone>` once, then `codex plugin add qa-cube@<that marketplace>`
-after each edit; it applies from the next session. Without that wiring — the README's fallback: commit in the
+after each edit; it applies from the next session. The install cache is under `~/.codex/plugins/` — a path there is an installation,
+never a clone. Without that wiring — the README's fallback: commit in the
 clone and tell the user to reinstall.

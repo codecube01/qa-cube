@@ -4,7 +4,7 @@ The reference harness: the engine was written in it, and everything below is wha
 
 ## Detect
 
-The tool list has `Agent` (with a `subagent_type` parameter) and `AskUserQuestion`. `0-session.md`:
+The tool list has `AskUserQuestion` and a subagent tool with a `subagent_type` parameter — `Agent`, or `Task` in older versions. `0-session.md`:
 `Harness: claude-code`.
 
 ## Launch a role
@@ -28,9 +28,10 @@ answer reaches it as its next turn. This is how a «Pause protocol» answer is r
 
 ## Plugin root
 
-`${CLAUDE_PLUGIN_ROOT}` — set in the shell of every command the session runs, e.g.
-`python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/session.py" …`. It points at the install cache
-(`~/.claude/plugins/cache/qa-cube/qa-cube/<version>/`), never at a clone.
+Two directories above the «Base directory for this skill» Claude Code prints when it loads `/qa` (that line names
+`<root>/skills/qa`): write that absolute path into each script command. `${CLAUDE_PLUGIN_ROOT}` may be used only after
+`echo "${CLAUDE_PLUGIN_ROOT}"` has shown it set in this shell — an empty one turns the command into `python3 "/skills/…"`.
+For an installed plugin the root is the install cache (`~/.claude/plugins/cache/qa-cube/qa-cube/<version>/`), never a clone.
 
 ## Transcripts
 
@@ -55,7 +56,7 @@ lands in the directory named in `~/.claude/plugins/installed_plugins.json` (`ins
 ## Updating the engine from a clone
 
 An installed copy lives in the cache, and a path inside `~/.claude/plugins/` is an installation, never a clone.
-After an edit in the clone: bump the patch version in `<engine-clone>/.claude-plugin/plugin.json`, then
+After the edit and its bump (`../../SKILL.md`, step 7):
 `claude plugin marketplace update qa-cube && claude plugin update qa-cube@qa-cube`; it applies from the next
 `claude` launch. Which version is active: `~/.claude/plugins/installed_plugins.json`, `installPath` of
 `qa-cube@qa-cube`.
