@@ -13,6 +13,8 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **Version 0.19**: the engine runs in any agent harness through its adapters, and Playwriter is the default browser —
+  what the entries below add up to.
 - **Lessons from the live Playwriter round**: `browser/playwriter.md` — a tab closed from outside is read from inside the page
   (`addInitScript` + `exposeBinding`); `harness/claude-code.md` — print mode stops background subagents after 10 minutes.
 - **Onboarding picks and checks the browser**: `/qa-setup` recommends Playwriter, offers Claude in Chrome and Playwright MCP
