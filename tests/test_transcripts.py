@@ -187,5 +187,11 @@ class Cli(Fixture):
         self.assertIn("cleanupPeriodDays", out)
 
 
+class Exit(unittest.TestCase):
+    def test_a_missing_transcript_root_is_none_found_not_a_usage_error(self):
+        folder = Path(tempfile.mkdtemp())
+        self.assertEqual(transcripts.main([str(folder), "--root", str(folder / "no-such-dir")]), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -266,9 +266,12 @@ def main(argv: list[str] | None = None) -> int:
                     help="where Claude Code keeps transcripts")
     a = ap.parse_args(argv)
     folder = a.folder.absolute()
-    if not folder.is_dir() or not a.root.is_dir():
-        print(f"no such folder: {folder if not folder.is_dir() else a.root}", file=sys.stderr)
+    if not folder.is_dir():
+        print(f"no such folder: {folder}", file=sys.stderr)
         return 2
+    if not a.root.is_dir():  # another harness: no Claude Code transcripts at all — «none found», not a usage error
+        print(f"no transcripts: {a.root} does not exist", file=sys.stderr)
+        return 1
     found = collect(a.root, folder)
     if not found:
         print(f"no transcript names {slug_of(folder)} under {a.root}", file=sys.stderr)

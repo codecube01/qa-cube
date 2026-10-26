@@ -11,10 +11,14 @@ The deliverable is `.claude/qa-profile.md` (+ subfiles where needed) per the `PR
 
 The profile already exists → that is not a blocker: this is update mode. First compare the profile's `contract-version` (no field → 1) with
 the current version in the «Contract versions» section of `PROFILE-CONTRACT.md`: the profile is behind → walk the sections that were added
-or changed after its version (per the version history) and bump `contract-version` to the current one. Then show the user the current
+or changed after its version (per the version history) and bump `contract-version` to the current one. `browser` is `default` or `dedicated` → offer Playwriter (the browser
+question of pass B) — the profile keeps Claude in Chrome on a «no». Then show the user the current
 «Capabilities» header and ask what else to reconfigure; from there, the same steps for the affected sections only.
 
 ## Steps
+
+**The harness.** Before step −1, read `../qa/references/harness/README.md` and the adapter it names for your harness — how to ask the user,
+connect an MCP server and update the engine there. It is never asked about and never written into the profile.
 
 **−1. Update the engine — the very first thing, before the language question.** `/qa-setup` is the only place the engine ever updates
 itself: nothing updates a plugin on its own, and a session only ever mentions in one line that a newer version exists. So start here.
@@ -22,26 +26,22 @@ itself: nothing updates a plugin on its own, and a session only ever mentions in
 Compare the installed `version` (`../../.claude-plugin/plugin.json`, the plugin root above this skill) with one read of
 `https://raw.githubusercontent.com/codecube01/qa-cube/main/.claude-plugin/plugin.json`. Equal, ahead, or the read failed for any reason (no
 network, a 404 while the repository is private, a slow answer) → **say nothing and move on**: the update is a courtesy, and an onboarding
-must not die because a fetch did. Behind → say which versions, then run:
+must not die because a fetch did. Behind → say which versions, then run the adapter's «Updating the installed engine».
 
-```bash
-claude plugin marketplace update qa-cube && claude plugin update qa-cube@qa-cube
-```
-
-**The update applies only after claude restarts, so the rest of this run is still executing the OLD instructions.** Two consequences, and
+**The update applies only after the harness restarts, so the rest of this run is still executing the OLD instructions.** Two consequences, and
 both are handled rather than hidden:
 
-- **read `PROFILE-CONTRACT.md` from the NEW installation, not from your own root** — the fresh directory is named in
-  `~/.claude/plugins/installed_plugins.json` (`installPath` for `qa-cube@qa-cube`). Migrating a profile against the contract shipped with the
+- **read `PROFILE-CONTRACT.md` from the NEW installation, not from your own root** — where the new copy lands is in the adapter's
+  «Updating the installed engine». Migrating a profile against the contract shipped with the
   old copy would quietly write yesterday's `contract-version` into it;
 - **tell the user in one line** that the engine is now at X, that the profile is being migrated against the new contract, and that if the
-  onboarding procedure itself changed in that version they should restart claude and run `/qa-setup` once more. It costs a sentence, and the
+  onboarding procedure itself changed in that version they should restart the harness and run `/qa-setup` once more. It costs a sentence, and the
   alternative is an onboarding that silently ran a stale procedure.
 
 With a valid `engine-clone` (the user develops the engine itself) there is nothing to fetch — their clone is the source. Skip the update,
 say so in a word, and carry on.
 
-**0. The language — the first question, before anything else.** Ask it in English (AskUserQuestion): "Which language should the QA flow use
+**0. The language — the first question, before anything else.** Ask it in English (the adapter's «Ask the user»): "Which language should the QA flow use
 — questions, reports and test cases?" Options: English / Russian / Other (their own language, as text). Write the answer into the profile
 under the key `language: <code>` — it governs the language of the conversation with the user and of every artifact of every session: the
 plan, the executors' briefs, the results, the report, the retro, the TMS cases, the tracker comment. **Write the profile itself in that
@@ -49,8 +49,8 @@ language too** — it is a project artifact that the user edits by hand and the 
 `tms`, `language`, …); the prose around them goes in the user's language.
 
 **The engine's files are not translated under any answer** — they stay in English. There is one engine for every project on the machine,
-while `language` differs per project: translating it would make the engine the property of a single project, would break on `claude plugin
-update` and would demand a re-translation after every retro edit. The instructions are read by agents, and the language of the instructions
+while `language` differs per project: translating it would make the engine the property of a single project, would break on the next engine
+update and would demand a re-translation after every retro edit. The instructions are read by agents, and the language of the instructions
 has no effect on the language of the output — that is set by `language` in the profile alone.
 
 **1. Recon — study the project before asking anything: many answers are already in the folder.** Walk the repo and collect what exists:
@@ -65,7 +65,7 @@ has no effect on the language of the output — that is set by `language` in the
   hint about the value of `test-cases`;
 - **mentions of a tracker and a TMS**: links in README/CLAUDE.md, configs (`.gitlab-ci.yml`, `qase.config.json`, `.jira`, tags/annotations
   in tests like `@QaseId`);
-- **ready-made access channels to the tools**: connected MCP servers (`claude mcp list`), CLIs in PATH (`which jira glab …`), the project's
+- **ready-made access channels to the tools**: connected MCP servers (the adapter's «Connecting an MCP server» lists them), CLIs in PATH (`which jira glab …`), the project's
   skills — these come in handy at the «Access channels» step;
 - **logs**: logging configs, mentions of Kibana/Grafana/ELK in the docs, where the services write when run locally.
 
@@ -74,12 +74,15 @@ exists, one clarifying question needed) or **unknown**. Do not put what you foun
 profile (the user will see it in full at the final review and will correct it if needed). Hypotheses become the first, «(Recommended)»
 option in the questions; ask only about hypotheses and unknowns.
 
-**2. The interview.** AskUserQuestion, grouped into 2–3 passes (≤4 questions each), and every question has a «no / we don't use one» option:
+**2. The interview.** The adapter's «Ask the user», grouped into 2–3 passes (≤4 questions each), and every question has a «no / we don't use one» option:
 - pass A — the capabilities themselves: where do the tasks live (tracker)? where do the test cases live (tms) and **when do they appear**
   (test-cases: `upfront` — the analyst writes the cases from the requirements before the run; `inline` — the tester creates the case after
   the run, from the facts; `none` — we do not maintain cases)? are there environments (environments)? are there autotests, and what runs
   them (autotests)?
-- pass B — the surroundings: is a browser needed for the checks, and which one (browser)? where do the services' logs live and how do you
+- pass B — the surroundings: is a browser needed for the checks, and which tool drives it (browser)? The options, in this order:
+  **Playwriter (Recommended)** — any harness, the user's own Chrome; **Claude in Chrome** — only if its tools are in this session, marked
+  «already connected, nothing to install» when its preflight passes; **Playwright MCP** — only if connected, its own browser without the
+  user's sign-ins; **no browser needed** → `none`. Where do the services' logs live and how do you
   search them (logs: kibana / grafana / files / a skill / nowhere)? where do the testing secrets live — environment credentials, tokens,
   test users (secrets: env / a vault or password manager / a file outside git / nowhere / not needed)? is there a product knowledge base
   (knowledge)? where should sessions go (sessions — suggest `docs/test-sessions/`)?
@@ -102,10 +105,10 @@ reach it through. The order:
 
 - **the channel already exists** (found by recon): a project skill → a connected MCP → a CLI in PATH. Use it: the profile's section gets a
   reference to the channel, and you ask nothing;
-- **there is no channel → the choice is the user's** (AskUserQuestion, one question per tool), the options ordered by quality, the first
+- **there is no channel → the choice is the user's** (the adapter's «Ask the user», one question per tool), the options ordered by quality, the first
   available one marked «(Recommended)»:
   1. **MCP** — if the tool has an official/well-known server (Jira/Confluence — the Atlassian MCP, and so on): name the server and the
-     connection command (`claude mcp add …`), wait for the user to connect it, and check that the tools are visible. There is no server —
+     connection command (the adapter's «Connecting an MCP server»), wait for the user to connect it, and check that the tools are visible. There is no server —
      the option is not offered;
   2. **CLI** — if the tool has a live client: point at the installation (`brew install …`), and check `--help` once it is installed;
   3. **generate a REST skill**: gather the non-secret parameters through questions (base URL, project key, the account's email — these are
@@ -115,8 +118,12 @@ reach it through. The order:
      Credentials in the commands come only through variables from the secrets source; no values live in the skill;
   4. **«no channel for now»** — `TODO: no access channel` in the section, and the onboarding moves on.
 
+  **And the browser tool is a channel too:** not installed → the commands of `../qa/references/browser/<browser>.md`, «Install»; the user
+  installs it (an extension is theirs to click), and you wait for it before the live check.
+
 **4. A live check.** For every declared tool — one reading call: open any tracker task, find any case in the TMS, run the test runner's
-`--help`/dry-run, open the knowledge base's README. For secrets the check is different — not reading the values but making sure the source
+`--help`/dry-run, open the knowledge base's README; the browser: through the chosen tool, open a tab and read its URL and title, by its
+adapter's «Preflight». For secrets the check is different — not reading the values but making sure the source
 is out of git's reach: a file → `git check-ignore`; env/vault — fine by definition. It works → the section may hold specifics; it fails →
 put the line `TODO: not verified — <error in one line>` into the profile and carry on, the onboarding is not blocked. The check runs through
 the channel from step 3 — and thereby validates it too (a generated skill, an MCP, a CLI).
@@ -129,9 +136,9 @@ the channel from step 3 — and thereby validates it too (a generated skill, an 
   none and `tms: none`, state the path for file cases in the TMS section (the default is `docs/test-cases/`);
 - **`engine-clone` — the default is `none`, and asking otherwise takes an explicit yes.** Ask outright: «Do you develop the qa-cube engine
   itself? Yes → the path to your git clone. No (the usual case) → none, and the engine will simply update from upstream.» **Never derive the
-  value from the plugin's own root**: `${CLAUDE_PLUGIN_ROOT}` points at the install cache, which the next update writes past, so a lesson
+  value from the plugin's own root**: `<plugin root>` points at the install cache, which the next update writes past, so a lesson
   written there disappears while reporting success. A clone is a clone only if the directory holds a `.git` and does not sit inside
-  `~/.claude/plugins/` — check before writing the value down, whatever the user answered;
+  the harness's install cache (named in the adapter's «Updating the engine from a clone») — check before writing the value down, whatever the user answered;
 - in the project's CLAUDE.md — one line: «Test sessions — the qa-cube plugin (`/qa`); the project profile is `.claude/qa-profile.md`» (in
   the project's language);
 - **check how thick CLAUDE.md is** (the contract's «A thin CLAUDE.md» rule): CLAUDE.md is loaded into every session and every subagent — QA
@@ -177,7 +184,7 @@ Editing by hand:
   `.claude/qa-cube-feedback.md` next to it holds what would hold in any project. With `engine-clone: none` (the usual case) that second
   file is where a retro's engine-level lessons go, and every session applies them from the next one on; nothing leaves the project —
   `/qa-setup` updates the engine, tells you which of them have since arrived upstream and offers the rest to the community. With a clone:
-  the retro edits it → bumps the patch version in `plugin.json` → `claude plugin update qa-cube@qa-cube`.
+  the retro edits it → bumps the patch version in `plugin.json` → updates the installed plugin.
 
 And if the flow turns out useful — a star on https://github.com/codecube01/qa-cube would be a nice thing to get, entirely optional.
 ```

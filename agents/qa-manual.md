@@ -41,11 +41,12 @@ English and that says nothing about your output language.
 The check goes exclusively through the real UI while watching network requests. Static analysis of bundles, curl imitations of frontend
 requests and other detours **are not a check** and their results will not be accepted; at most they are supporting evidence in a separate
 section. **The mirror holds for API scenarios:** where the profile gives a scripted session (a cookie jar, a token), they run from the shell,
-and the browser is not raised just to reach the API — a page console adds the page-script budget and the output filter and proves nothing
+and the browser is not raised just to reach the API — a page console adds the tool's call budget (and, in some tools, an output filter) and proves nothing
 more.
 
-The UI-checking and page-scripting techniques are in the engine's `browser-techniques.md` (on a browser round the brief gives its path and
-the sections to read): its first screen and those sections before the first page script, any other section when you reach its topic. The
+The UI-checking and page-scripting techniques are in the engine's `browser-techniques.md`, and the browser tool's own limits in
+`browser/<tool>.md` beside it (on a browser round the brief gives both paths and the sections to read): the adapter whole and the techniques'
+first screen and those sections before the first page script, any other section when you reach its topic. The
 request-level recipes — the contract, the replay, reading the answer, GraphQL — are in `api-techniques.md`, given on any round with API
 calls, from the shell or the page alike, and read the same way before the first request. Auth, the browser instance and the project's own UI
 quirks are in the profile, Browser section, which wins where the two differ; its safety rules (what must never be typed into forms) are not
@@ -58,7 +59,7 @@ Walk the brief's scenarios top to bottom — the order is the execution order, n
 
 **The brief's sections are not all of one kind, and the heading says which.** «Entry state» is a dated hypothesis about the entry:
 your first move is to open your own tab and run its identity oracle — WHOSE session this is, not whether one is alive — and to work from
-the actual state with a note where it diverged; a «dead» verdict comes only from a fresh tab. «Recon facts» are the manager's
+the actual state with a note where it diverged; a «dead» verdict comes only from a fresh tab, a new one for every re-check. «Recon facts» are the manager's
 measurements, each row with its kind, source, date and boundary: a row of kind *composition*, *field-name oracle*, *identifier scheme*,
 *bundle excerpt* or *client artifact: names only* is a hypothesis to confirm by looking, a *state* row older than the build is re-measured
 first. «Open hypotheses» are what the manager did NOT verify — questions with a stake, never facts; a row marked «not from outside»
@@ -247,7 +248,9 @@ As your final text, return a short 5–10 line summary to the manager; the detai
 - **One-time links and access tokens (magic link, invite link, password reset) are credentials too**, even when you requested them yourself:
   they go into the result masked.
 - The brief requires you to **leave a live marker artifact** behind for the next round's check — put its value into the profile's `secrets`
-  source (which is outside the backup of session folders), and leave only a pointer to the file plus its lifetime in the result.
+  source (which is outside the backup of session folders), and leave only a pointer to the file plus its lifetime in the result; a value
+  that lives only in the page and may not be printed goes where the brief's tool route puts it (`browser/<tool>.md`, «A secret captured
+  only in the page») — a file written unprinted, or the page's `localStorage` under a named key the cleanup leaves — and the pointer names that place.
   **When the round produced no new secret, the marker IS that pointer** — where the fixture's credentials already live and until what event
   they stay valid — and copying an existing secret into the secrets store to satisfy the wording is forbidden: it multiplies the secret for
   nothing. Say in one line which of the two cases you are in.

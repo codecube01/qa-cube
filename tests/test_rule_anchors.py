@@ -56,7 +56,8 @@ ANCHORS: dict[str, list[tuple[str, str]]] = {
     ],
     "engine-clone-guard": [
         (SKILL, "but first check that `engine-clone` is a clone at all"),
-        (SKILL, "its path is not inside `~/.claude/plugins/`"),
+        (SKILL, "its path is not inside the harness's install cache"),
+        ("skills/qa/references/harness/claude-code.md", "a path inside `~/.claude/plugins/` is an installation, never a clone"),
         (SKILL, "Without a clone the lesson is written, not dropped — as a row of `.claude/qa-cube-feedback.md`"),
         (SKILL, "No version bump, no `plugin update`"),
     ],

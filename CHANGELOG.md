@@ -11,6 +11,104 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.19.15] — 2026-10-26
+
+### Added
+
+- **Playwriter: multipart bodies, `route.fetch()`, downloads**: `browser/playwriter.md` — a file upload's body is read
+  by an in-page `fetch` wrapper, `route.fetch()` is replaced by `route.fulfill` (it crashed the relay once), and `saveAs` falls back to
+  the download folder.
+- **A requirement's text beside its label is the plan's, word for word**: `report.md` — a qualifier dropped while
+  retyping flips the verdict.
+- **A number the user reads says what it is**: `SKILL.md`, next to the language rule, and a «Red flags» row — a task, merge
+  request or pipeline number carries its kind and title in brackets, in the chat at every mention; `report.md` points there.
+- **The manager presses in the executor's tab through the executor's Playwriter session**: `browser/playwriter.md` — one call
+  checks the page marker, the identity and the armed interceptor before the click; the request carries session id, marker, selector.
+- **A mock that pads a list from a real row keeps its template from a non-empty response**: `browser-techniques.md`;
+  `browser/playwriter.md` — a route is re-installed only after `unroute(pattern)` with no handler.
+- **A Playwriter CLI upgraded mid-round restarts the relay and drops every session**: `browser/playwriter.md` — the preflight
+  version goes into the fingerprint, the restart is dated as a tool incident, tabs are recovered by an in-page marker
+  (`window.name`, which survives a reload).
+- **A sanctioned probe's body is written out whole**: `manual-brief.md` and a «Body» line in the template's «Sanctioned probe»
+  block — each field checked against the knowledge base for a value known to crash or page someone; `planning.md`'s made-up-id
+  probe points there.
+- **`textContent` returns the tail an ellipsis hides**: `browser-techniques.md`, pointed to from `executor.md` — an
+  inventory of visible text checks clipping per item or by screenshot.
+- **A call quoted into an automator's brief uses the signature's types**: `automation.md`.
+- **A closed task with no body is not «related»**: `report.md` and `SKILL.md` step 4 — a defect is anchored on the
+  document that states it, never on a closed task whose title alone shares a word with the defect's source.
+- **«Requires context C» is tested by C's absence, not by omitting it**: `planning.md` — a gateway may fill a missing tenant from
+  the identity's only membership; one probe at planning, and an identity with zero or several memberships as a start question.
+- **A relayed answer to a pause carries a clock time**: `manual-brief.md` — never an estimate, and a late answer is flagged against
+  the deadline the pause rested on.
+- **A gate is phrased by the property its side effect consumes**: `planning.md` — a gate protecting other objects names what
+  is at risk and exempts the snapshot's permanent residues, instead of stopping on a whole class of objects.
+- **A mechanism fact names the branch it was read on**: `manual-brief.md` and the brief template — a process history read off a
+  success says nothing about the failure path a fix may live in.
+- **A retest reads every thread the previous findings went into**: `session-folder.md` — the customer's triage of a layer's
+  findings lives in the task where that table was pasted; `report.md` points there.
+- **A replicated client artifact is proven first**: `executor.md` — a copy of what a client builds (a wallet's envelope) carries a
+  verdict only after the incident's own instance is rebuilt from its parts byte for byte.
+- **Version 0.19**: the engine runs in any agent harness through its adapters, and Playwriter is the default browser — the
+  harness, browser and install entries of this section.
+- **Lessons from the live Playwriter round**: `browser/playwriter.md` — a tab closed from outside is read from inside the page
+  (`addInitScript` + `exposeBinding`); `harness/claude-code.md` — print mode stops background subagents after 10 minutes.
+- **Onboarding picks and checks the browser**: `/qa-setup` recommends Playwriter, offers Claude in Chrome and Playwright MCP
+  only where they are connected, installs the chosen tool as a channel and opens a tab through it in the live check.
+- **The profile names the browser tool**: `browser: playwriter | claude-in-chrome | playwright-mcp | none`; the older
+  `default`/`dedicated` read as `claude-in-chrome`, no contract bump. A tool the harness cannot run falls back to Playwriter.
+- **Browser adapters, Playwriter by default**: `skills/qa/references/browser/` — Playwriter, Claude in Chrome, Playwright MCP;
+  what is true of one tool only (budgets, the output filter, the tab group) left `browser-techniques.md` for its adapter.
+- **Install on any agent harness**: README gives Claude Code, Codex (`.codex-plugin/`, `.agents/plugins/marketplace.json`) and
+  opencode (`.opencode/INSTALL.md`) routes, plus `INSTALL.md` an agent follows in any other harness; Playwriter is the default browser.
+- **The engine speaks through the harness adapter**: `SKILL.md`, `qa-setup`, `qa-day` and the references name an action
+  by its role — «launch the role», «ask the user», `<plugin root>` — and the adapter says how; `0-session.md` records the harness.
+- **Harness adapters**: `skills/qa/references/harness/` — how each harness launches a role, asks the user, finds the
+  plugin root and its transcripts; the README says how to tell the harness and the fallbacks when a capability is missing.
+- **An invalidation is verified by replaying the old credential**: `report.md` — a sign-out, a revocation or a role change
+  that should end sessions passes only when the credential captured before it is refused after it.
+- **A customer's order to file a bug is not a violated clause**: `report.md` — where the spec is silent on the ordered aspect, the
+  finding goes to the second table with the customer's priority, and the cell asks whether the order outlived the fix.
+- **A red flag for the liveness oracle**: `SKILL.md` — «I'll read the task first» is the thought before skipping step 1's first call.
+- **Inducing a race deterministically**: `browser-techniques.md` — the spy's wrapper delays one selected response.
+- **An issue file for an older finding starts from its latest verdict**: `report.md` — the id is grepped across later reports and
+  the knowledge base before the text is written; a requalified finding filed by order names the two clauses that disagree.
+- **Tool parameters decode `\uXXXX`**: `shell-pitfalls.md` — an escape typed into a file's content lands as the invisible character;
+  double the backslash and scan the file before handing it over.
+- **A «no browser selected» reply after a successful selection is the tool losing it**: `browser-techniques.md`, beside «No tab
+  group exists» — list the connected browsers before asking the user; the chosen one may already be in use.
+- **A title that names the model («as in X») binds every row, refusals included**: `planning.md`, beside the twin search — the
+  scope of the model is decided once at planning; a row passed by the model cannot sit next to its refusal declared «not required».
+- **The retest table's «Was» names what already held**: `templates/2-manual-task.md` — for a fail row, the previous round's control,
+  so old behaviour is not reported as the fix narrowing.
+
+### Changed
+
+- **The report holds a round's findings before its status list goes out**: `automation.md` — the list names ids the user opens the
+  report to read; only the automation section waits for the answer.
+- **A backgrounded Python script buffers its stdout**: `shell-pitfalls.md` — long scripts run as `python3 -u`.
+- **A regression run that fails early leaves its later steps unverified**: `automation.md` — the brief names the step the run reached,
+  and the old negatives after it are replayed by hand before the automator starts.
+- **A seeding route through the project's test framework**: `manual-brief.md` — the framework's own preconditions (hosts it pings,
+  channels its asserts read) are checked at preflight, one call each.
+- **A «dead» session is re-checked from a new tab every time**, not only on the first probe: the tab that answered `401` is a
+  leftover from then on (`SKILL.md` step 1, `manual-brief.md`).
+- **A journal count is read against its scope** — the namespace holding the records on this build — not only its window (`planning.md`).
+- **A secret captured only in the page rests where the tool can put it**: a file written unprinted (Playwriter) or page storage under a
+  named key (Claude in Chrome) — the route is in `browser/<tool>.md` (`manual-brief.md`, `qa-manual.md`).
+- **A stale build can render whole, not only as a white page**: a deep route served from a long-lived cache runs the previous
+  build complete — compare `document.scripts` per directly navigated screen and cache-bust each direct navigation
+  (`browser-techniques.md`, «Bundle and route discovery»).
+- **A non-ASCII Python script starts with a coding line**: the system Python rejects even a valid UTF-8 file written by Write
+  when its lines are long (`shell-pitfalls.md`).
+
+### Fixed
+
+- **`session.py max-id` reads the side-findings registry too**: an id assigned only there was handed out again as «next».
+- **Review of the multi-harness work**: Claude Code is told by `AskUserQuestion` (older `Task` too); its plugin root comes from the
+  skill's base directory; the browser preflight reads the tool adapter first; a clone bump moves both manifests; `transcripts.py`
+  exits 1 where no Claude Code transcripts exist; `/qa-setup` offers Playwriter to a `default`/`dedicated` profile.
+
 ## [0.18.44] — 2026-10-19
 
 ### Added

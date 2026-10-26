@@ -30,6 +30,14 @@ starts working, and narrating what it does, before it has opened the profile, an
 final summary — is shown to the user in the same console as your own; a round whose language lived only in the profile read as English
 in the console while its files came out right.
 
+**A number in the text the user reads says what it is: its kind and title in brackets** — `ACME-123 (task «Export of payouts»)`,
+`merge request 45 («Add export», draft)`, `pipeline 2071 (the nightly run)`. A title not in hand is looked up in the tracker or the TMS
+before the message goes out, never left bare, and «(the same title)» or «(see above)» is no title: it sends the reader up the scroll. A
+file writes the full title at the first mention; **in the chat every mention carries its bracket** — the full title first in a message, a
+short tag after it (`ACME-123 (the frontend task)`), a question's options included: the chat is read in pieces, and every bare number
+costs the reader a question. Precedent: a triage named a task and its merge
+request by number alone, then a sibling task as «(the same title)» — both drew «what is this number?».
+
 No profile → do not start the session: suggest the user run `/qa-setup`. A capability declared `none` **or a key missing from the profile**
 → apply the degradation from the table at the end of this file; the profile does not invent degradations of its own. The single exception is
 `test-cases`: a missing key reads as `inline` (the manual tester creates the case after the run), not as `none` — otherwise a contract
@@ -62,6 +70,8 @@ file holds what would hold in anyone's. Step 7 decides which is which.
 
 The `<sessions>` path below is the value of `sessions` from the profile (e.g. `docs/test-sessions/`).
 
+**The harness — before the first action it answers.** Read `references/harness/README.md` and the adapter it names for the harness you run in (`claude-code.md`, `codex.md`, `opencode.md`, `generic.md`): it says how this file's actions are done there — launching a role, continuing an executor, asking the user, `<plugin root>` (the plugin's own directory, in every script path below), the transcripts — and what to do where the harness lacks one. `0-session.md` records it as `Harness: <name>`; the profile never does. The browser tool is the profile's `browser` (`default`/`dedicated` → `claude-in-chrome`), its adapter `references/browser/<browser>.md`.
+
 **The manager runs the shell too** — the sweep, preflight, on-chain and bundle recon — so `references/shell-pitfalls.md` is read whole
 before the session's first shell command beyond reading the profile: a manager once printed every private key of a secrets file into the
 transcript through a pitfall that file already named.
@@ -74,16 +84,16 @@ has raised an objection after delivery** (step 9): such a claim gets re-verified
 the only one who may ask the user a question: at the start (1–2 at most, and only if the plan falls apart without them) and after delivery —
 when their question grows into a candidate rule and you must ask whether to adopt it (step 9).
 
-**QA Manual — a subagent** (`subagent_type: "qa-manual"`, its instruction lives in the qa-cube plugin). The manual check on the environment;
+**QA Manual — a subagent** (the role `qa-manual`, its instruction is `agents/qa-manual.md`). The manual check on the environment;
 with `test-cases: inline` also the TMS case for what was verified, while with `upfront` it runs the analyst's cases and creates none of its
 own. Its result is the evidence for automation and, with `inline`, also the source of the case id. It does not touch code.
 
-**QA Analyst — a subagent** (`subagent_type: "qa-analyst"`, its instruction lives in the qa-cube plugin). Runs when `test-cases: upfront`:
+**QA Analyst — a subagent** (the role `qa-analyst`, its instruction is `agents/qa-analyst.md`). Runs when `test-cases: upfront`:
 unfolds the plan's scenarios into test cases **from the requirements**, before the run and without seeing the environment. Creates no files
 in the session — it receives its assignment in the prompt and reports through the cases plus a final summary. Files no bugs and passes no
 verdict on whether things work.
 
-**QA Automator — a subagent** (`subagent_type: "qa-automator"`, its instruction lives in the qa-cube plugin). From the manual tester's
+**QA Automator — a subagent** (the role `qa-automator`, its instruction is `agents/qa-automator.md`). From the manual tester's
 evidence: an autotest driven to green and linked to a case (with `upfront` — from the analyst, with `inline` — from the manual tester, with
 `none` — to the tracker task), then the automation flag on the case. The project's automation specifics (code map, code style) live in the
 profile, not here.
@@ -92,7 +102,7 @@ The executors ask no questions — not one of them.
 
 ## The pipeline
 
-**1. Understand the task and assemble the bundle.** **Where entering the environment needs the user's hands (per the profile), the liveness oracle is this step's FIRST call** — a dead session then overlaps your reading instead of following it; the entry in `references/manual-brief.md` is read only at step 4, too late for this rule. The input is a link/id of a tracker task or free-form text. Read the task with the tools
+**1. Understand the task and assemble the bundle.** **Where entering the environment needs the user's hands (per the profile), the liveness oracle is this step's FIRST call** — a dead session then overlaps your reading instead of following it; that call and every re-check of it is a new tab → navigate → the call, never the tab that answered `401`; the entry in `references/manual-brief.md` is read only at step 4, too late for this rule. The input is a link/id of a tracker task or free-form text. Read the task with the tools
 from the profile (Tracker section): the description and **the comments, mandatorily** — that is where the requirements, the status and the
 related changes live. Check for **related tasks** in three ways, not one: (1) explicit links/relations; (2) the task's **subtasks and
 parent**; (3) a substring search on the title (neighboring FE/BE tasks of the same area). Empty relations do not mean «there are none». If a
@@ -135,7 +145,7 @@ only after a refusal, and the report says so; either way its contents are what w
 
 If there is a critical ambiguity (which environment? which direction?) — one question to the user now, and no questions after that.
 
-**2. Create or continue the session.** First, the monthly sweep: `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/session.py" sweep
+**2. Create or continue the session.** First, the monthly sweep: `python3 "<plugin root>/skills/qa/scripts/session.py" sweep
 <sessions>` moves the session folders of previous months into their month archives `<sessions>/<YYYY-MM>/`, rewrites every link to them
 and, when it moved anything, checks that every path naming a session folder resolves. The invariant: the root of `<sessions>/` holds what is alive (the
 current month and active retests), the month folders hold closed history; `side-findings.md` and the non-session folders stay. **It
@@ -204,7 +214,7 @@ the requirements are ambiguous and there is nowhere else to clarify them; what y
 briefs — those carry only the expected behavior from the requirements.
 
 **Before writing the plan, read the «Contents» of `references/planning.md` whole — it is the rules**: one line per shape of scenario,
-the trigger and what the plan does. **Read the Contents and nothing else**: `grep -n '^## '` gives the first body heading, `Read` with `limit` just below it returns the index alone; a `Read` with no limit returns a third of the body too. Plan from that list and open one entry per fired line, as the catalogue's header says. **Once `1-plan.md` is written, launch the catalogue reviewer: `Agent` with `subagent_type: "general-purpose"`, with no context
+the trigger and what the plan does. **Read the Contents and nothing else**: `grep -n '^## '` gives the first body heading, `Read` with `limit` just below it returns the index alone; a `Read` with no limit returns a third of the body too. Plan from that list and open one entry per fired line, as the catalogue's header says. **Once `1-plan.md` is written, launch the catalogue reviewer: a general subagent, with no context
 from the session.** Its brief: the absolute path of the catalogue (`references/planning.md`, next to this skill); the paths of the
 session files it judges (`0-session.md`, `1-plan.md`); «read the catalogue whole, bodies included, then the files;
 return the entries whose situation this round is in and the file does not honour: for each, the entry's title, the line it would change,
@@ -215,7 +225,7 @@ who reads the whole catalogue for them pays for every entry in every later step;
 **3.5. Test design** (only with `test-cases: upfront`; with `inline` and `none` the step is skipped entirely). The plan's scenarios are
 turned into cases by the `qa-analyst` subagent — **before** the manual run and without seeing the environment, so that a case describes a
 requirement rather than an observation. It has no brief file: the plan already contains the scenarios, the scope and the priorities, and a
-brief file would be a retelling of it. Launch `Agent` with `subagent_type: "qa-analyst"`, passing in the prompt:
+brief file would be a retelling of it. Launch the role `qa-analyst`, passing in the prompt:
 - `Output language: <language>` **as the first line** (step 0);
 - the path to the session folder (it will read `0-session.md` and `1-plan.md` itself);
 - **the verdict on the requirements** from step 1 (`spec-grade` / `draft` + the rationale) — it sets the analyst's strictness bar;
@@ -243,7 +253,7 @@ template's slots. **Once `2-manual-task.md` is written, the catalogue reviewer o
 only after that: an executor is briefed once, and the situation you did not foresee cannot be added to the brief afterwards. The «Accepting the result» and «the control does
 nothing» groups of the same Contents are read again when the result comes back.
 - **the preflight check** — if the scenarios involve the browser (frontend tasks, UI verification): **before** launching the executor,
-  verify the access yourself against the profile's checklist (Browser section). Something does not work — **tell the user right away** and
+  verify the access yourself against the browser tool adapter's «Preflight», then the profile's checklist (Browser section). Something does not work — **tell the user right away** and
   do not launch the executor until the access is fixed. What preflight hands over about the state it created — the instance, the identity, the carriers, the values
   the round depends on, each dated — is the template's «Entry state» section; what each of its lines cost is in `references/manual-brief.md`;
 - `2-manual-task.md`: the context in one paragraph, the environment, in round 2+ the template's «Retest» section filled in (the
@@ -253,11 +263,11 @@ nothing» groups of the same Contents are read again when the result comes back.
   about fees needs the wallets domain). The executor reads what is listed — a file, or the sections named after it — whole, plus the
   profile map; the rest — only when stuck. **Plus the engine's references, by ABSOLUTE path** (the executor's cwd is the project):
   `shell-pitfalls.md` and `executor.md` always; `api-techniques.md` on any round that sends requests to the API (its «GraphQL» section only where the
-  product's API is GraphQL); `browser-techniques.md` on a browser round — a round is one by its INSTRUMENT, not its subject: an API round
+  product's API is GraphQL); `browser-techniques.md` plus the tool's `browser/<browser>.md` on a browser round — a round is one by its INSTRUMENT, not its subject: an API round
   driven from the page console trips the same tool limits (a timeout on a polling loop, truncated output), so it gets both. The sections of
   each — picked from its contents. Do not retell the project's knowledge — the executor will take it from
   the profile and the project's skills;
-- launch `Agent` with `subagent_type: "qa-manual"`; in the prompt — `Output language: <language>` as the first line, then the path to the
+- launch the role `qa-manual`; in the prompt — `Output language: <language>` as the first line, then the path to the
   session folder and to the brief file. Wait for it to finish (the notification arrives on its own) and do nothing on its behalf;
 - accepting `3-manual-result.md`: failures carry trace ids (with `logs: none` do not require them and do not make the executor note their
   absence — the request and response bodies are enough), bugs carry a severity, the checks are business-effect-based, the request/response
@@ -266,10 +276,10 @@ nothing» groups of the same Contents are read again when the result comes back.
   the **case candidates**: a scenario uncovered during the run with no case behind it the manual tester does not create but names — you
   decide, and the decision is one of two: take the candidate into the next round's plan, or hand it back to the analyst together with a
   widened scope. Mention the result's list of case corrections in the report in one line: it shows where a case drifted from the
-  requirement). Gaps → an addendum to the brief and a second pass, not a manual redo. **Before reading the result yourself, run the checker over it**: `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/check_session.py" <the result file>` — leaked secret values, shifted table columns, oversized cells and a brief's scenario no heading names, none of which survive being noticed later; it also lists the lines that ask a question, to read against the closing open questions. It judges nothing about the content: that part is yours;
+  requirement). Gaps → an addendum to the brief and a second pass, not a manual redo. **Before reading the result yourself, run the checker over it**: `python3 "<plugin root>/skills/qa/scripts/check_session.py" <the result file>` — leaked secret values, shifted table columns, oversized cells and a brief's scenario no heading names, none of which survive being noticed later; it also lists the lines that ask a question, to read against the closing open questions. It judges nothing about the content: that part is yours;
 - **before locking findings into the report — reconcile their class against the tracker** (with `tracker` ≠ none), closed tasks included:
   already filed → «confirmation of a known issue»; related → «a new trigger for task N»; closed as done but absent from the product → a
-  different conversation with the team. The search itself — by the operation's name and the requirement's subject, beyond your own task and
+  different conversation with the team; a closed task whose body is its title alone → none of these (`references/report.md`, «The table's own mechanics», «Filed in the tracker»). The search itself — by the operation's name and the requirement's subject, beyond your own task and
   project — is `references/manual-brief.md`, «Accepting the result»; the closed-task shapes are `references/planning.md`, «The tracker is
   searched at step 1»; where each result lands in the report is `references/report.md`, «Is this a finding at all».
 
@@ -291,7 +301,7 @@ that is a valid outcome:
   (`references/automation.md`, «The brief»). In automation-only mode there is no
   evidence — write exactly that, and the automator will do a minimal run itself; in that mode a case exists with `upfront` (the analyst
   wrote it) and is absent with `inline` — then the automator creates it itself;
-- launch `Agent` with `subagent_type: "qa-automator"`; in the prompt — `Output language: <language>` as the first line, then the path to the
+- launch the role `qa-automator`; in the prompt — `Output language: <language>` as the first line, then the path to the
   session folder and to the brief file;
 - accepting `5-automator-result.md` (the checker first, as in step 4 — test code carries credentials more often than prose does): the test was actually run (the run log is cited), the case exists in the TMS, and the test-to-case link
   in the code matches the case, and a partly covered case names its manual steps (with `test-cases: none` there is no case — then what gets
@@ -333,14 +343,14 @@ mismatch with the requirements that genuinely blocks a section) → `Major` (mis
 
 **ID numbering:** running across the project, numbers are not reused, gaps are normal; the next number is
 `session.py max-id <sessions> --prefix <prefix>`, run BEFORE the draft (after it, it finds your own fresh numbers), never taken from memory —
-it counts assignments across every report, the month archives included, not mentions. The prefixes and conventions come from the profile. **The screenshot follows the id:** in the same pass, a candidate that becomes a
+it counts assignments across every report, the month archives and the side-findings registry included, not mentions. The prefixes and conventions come from the profile. **The screenshot follows the id:** in the same pass, a candidate that becomes a
 finding is renamed by `session.py shot <folder> c<N>[-<round>] <ID>` — the file to `<ID>….png` (the round suffix stays), every `📎` in the folder with it;
 a frontend finding's *Tech.* part ends with `📎 <ID>.png` (with that suffix, `📎 <ID>-2.png`; a backend finding has no screenshot and no marker) — the bare file name, the one thing a person filing the
 bug needs to pick the attachment; the checker below confirms every marker resolves to a file.
 
 **A finding's cell — the order is mandatory**, 3–5 lines and **no more than ~850 characters** (the limit is the same for a Critical and a
 Minor; longer, and the tracker's reader stops reading while the customer sends the report back to be shortened). **Before delivering, run
-the checker over the finished report** — `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/check_session.py" --no-structure 99-report.md` —
+the checker over the finished report** — `python3 "<plugin root>/skills/qa/scripts/check_session.py" --no-structure 99-report.md` —
 it verifies that every row carries the same number of `|` as the separator row, that no cell exceeds the limit and that no secret value
 slipped in. All three were eyeball checks until the script existed, and all three went out wrong at least once. Why a cell that feels short
 enough is not, and what a stray `|` does to the row, are in `references/report.md`. Cut, first of all, the
@@ -375,9 +385,9 @@ The user asked for exactly this ordering after a session announced «the report 
 and `*automator-result*.md` (the executors are obliged to write them), **the analyst's retro from its final summary** (it has no file —
 carry it into `7-retro.md` from your own context; the analyst most often complains about the plan and the profile rather than the
 environment) plus your own view: where you got bogged down, what you violated, what information was missing, what the manager planned badly.
-**Then the numbers, which nobody's memory holds**: `python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa/scripts/transcripts.py" <folder>` — per
+**Then the numbers, which nobody's memory holds**: `python3 "<plugin root>/skills/qa/scripts/transcripts.py" <folder>` (plus `--root` where the adapter's «Transcripts» names one; exit 1 → the line «no transcript numbers in this harness») — per
 manager and executor transcript: time, context peak, tool errors, refusals, retries after a failure, compactions. Its table goes into
-`7-retro.md` as printed (Claude Code deletes transcripts after 30 days). **Every note it prints is answered**: either it becomes a row
+`7-retro.md` as printed (the harness may delete transcripts — Claude Code after 30 days). **Every note it prints is answered**: either it becomes a row
 of the observation table with an address, or it gets one line under «Numbers» saying why it is normal («navigate ×6 — waiting for the
 deploy, per the brief»); a note passed over in silence leaves the numbers on the page and no lesson drawn from them.
 Precedent: over one week of sessions it showed managers at 400–750k tokens and one compacted mid-session — invisible from inside.
@@ -385,14 +395,14 @@ The output is `7-retro.md` in the format of a table «observation → rule → l
 pass**. There are four addresses for fixes:
 - **the engine** (the process: roles, acceptance, formats, degradations, this SKILL.md, the lesson catalogues in `references/`, the agent
   instructions, the templates) — **but first check that `engine-clone` is a clone at all**: the directory exists, it holds a `.git`, and its
-  path is not inside `~/.claude/plugins/`. Any of the three fails (and a missing key always fails) → the address is an *installation*, not a
+  path is not inside the harness's install cache. Any of the three fails (and a missing key always fails) → the address is an *installation*, not a
   clone, and the lesson takes the route below instead. The marketplace copy carries no `.git` and the cache is a flat copy that the next
   `plugin update` writes past, so an edit at either address disappears without an error — while the version bump is reported as if the lesson
   had landed. **With a valid clone** edit the files directly, with no git operations that change the repository — the user is the one who
   commits and pushes — **by `references/engine-edits.md`, read whole before the first engine edit** (a twin searched for first; a
   CHANGELOG line, the validator and a fresh-eyes review of the diff last), and then **update the installed plugin**, because
-  installation copies the files into a cache and without this the edits will not apply: bump the patch version in `<engine-clone>/.claude-plugin/plugin.json`, then `claude plugin marketplace update qa-cube && claude plugin update
-  qa-cube@qa-cube`. The changes take effect from the next launch of claude (the current session finishes on the old copy — that is fine, the
+  installation copies the files into a cache and without this the edits will not apply: bump the patch version in `<engine-clone>/.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` (the validator holds them equal), then
+  the adapter's «Updating the engine from a clone». The changes take effect from the next session (the current one finishes on the old copy — that is fine, the
   retro is the finale anyway). **Without a clone the lesson is written, not dropped — as a row of `.claude/qa-cube-feedback.md`**, in the
   form it would take as an entry at its engine address, and from the next session on it applies from there (step 0). It is **not** rephrased
   into the profile to make it work sooner: it already works from the next session, and a copy in the profile is a duplicate that drifts
@@ -540,9 +550,10 @@ later from upstream, then stood next to its own paraphrase.
 | logs | diagnostics only from response bodies; blockers are recorded without deep trace-id diagnostics — that is not the executor's fault |
 | autotests | step 5 is skipped entirely; the report records «autotests are not maintained in this project»; qa-automator is not launched |
 | browser | do not include UI scenarios in the plan; if the task is purely frontend, the session is blocked with an explicit message to the user |
+| browser (the profile's browser tool cannot run in this harness) | Playwriter instead, said in the session's first message and in the report; no Playwriter either → the browser scenarios are blocked with its install commands (`references/browser/playwriter.md`), the API scenarios still run; Playwright MCP is no fallback (no user sign-ins) |
 | secrets | the sessions need no secrets; a scenario requiring credentials came up — the executor records a blocker in the result (credentials are neither requested nor invented) and the manager raises it with the user |
 | knowledge | the step «read the product knowledge» is skipped; product findings from the retro are placed in `<sessions>/../knowledge/` (create it at the first finding) |
-| engine-clone (also: no `.git` there, or the path sits inside `~/.claude/plugins/`) | the retro does not edit the engine — the normal state for a plugin installed from the marketplace. An engine lesson becomes a row of `.claude/qa-cube-feedback.md` and applies from the next session (step 0); only what holds for this project alone goes into the profile or a project skill, and no rule goes into both. No version bump, no `plugin update` — the engine arrives from upstream via `/qa-setup` |
+| engine-clone (also: no `.git` there, or the path sits inside the harness's install cache) | the retro does not edit the engine — the normal state for a plugin installed from the marketplace. An engine lesson becomes a row of `.claude/qa-cube-feedback.md` and applies from the next session (step 0); only what holds for this project alone goes into the profile or a project skill, and no rule goes into both. No version bump, no `plugin update` — the engine arrives from upstream via `/qa-setup` |
 
 ## Boundaries
 
@@ -568,7 +579,9 @@ do what the right-hand cell says.
 | «I'll just check this one myself, it's faster» | the manager does not test: the two exceptions are in «Roles», everything else is an addendum to the brief (step 4) |
 | «The MR diff will show me what to test» | a plan read off the implementation agrees with it; the scenarios come from the requirements (step 3) |
 | «The report is written — the retro first, the user after» | the result goes to the chat before the retro (step 6.5); a session that went quiet for minutes is why |
+| «I'll read the task first — then I'll know whether this round needs the environment at all» | where the profile says entering needs the user's hands, the liveness oracle is step 1's first call whatever the task turns out to be (step 1) |
 | «The profile is behind — I'll mention it with the summary» | that line is the session's first message, before any other call (step 0) |
+| «I have read this number for twenty calls — it is a name by now» | the user did not read those calls: every mention in the chat carries its bracket (step 0) |
 | «The classifier refused the mutation — I'll phrase it differently» | a refused MUTATION is never reworded: the user's permission, then one repeat in your own session, paired with a control (`references/manual-brief.md`, «Your own harness refuses a call») |
 | «The automation dialog carries the counts — the status list can wait for 6.5» | the status list goes to the chat as its own message before the automation question (step 5, `references/automation.md`) |
 | «The template will do for the report» | the project's format from the profile outranks it, read before the first line (step 6) |

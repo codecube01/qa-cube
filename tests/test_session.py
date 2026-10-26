@@ -91,6 +91,16 @@ class MaxId(unittest.TestCase):
             self.assertEqual(n, 31)
             self.assertEqual(where.name, "report.md")
 
+    def test_an_id_living_only_in_the_side_findings_registry_counts(self):
+        with tempfile.TemporaryDirectory() as d:
+            s = Path(d)
+            (s / AUG).mkdir()
+            (s / AUG / "99-report.md").write_text("| **ABC-5 · Minor** | FR-1 | x |\n")
+            (s / "side-findings.md").write_text("| **ABC-9** | Minor | **Area \\ moved here from a report** |\n")
+            n, where = session.max_id(s, "ABC-")
+            self.assertEqual(n, 9)
+            self.assertEqual(where.name, "side-findings.md")
+
 
 class Sweep(unittest.TestCase):
     def setUp(self):

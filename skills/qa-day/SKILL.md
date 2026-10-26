@@ -8,11 +8,11 @@ description: Use when the user asks what was tested over a day or a week, or how
 The typical case, one command:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/skills/qa-day/scripts/qa_day.py" <project root> [<another root> …]
+python3 "<plugin root>/skills/qa-day/scripts/qa_day.py" <project root> [<another root> …]
 ```
 
-No root given — the current repository. The variable is expanded by the plugin runtime; a shell that does not have it takes the
-path from this very file's own directory (`scripts/qa_day.py` sits next to this SKILL.md).
+No root given — the current repository. `<plugin root>` is the plugin's own directory (`../qa/references/harness/README.md`, «Plugin root»):
+the path is taken from this very file's own directory (`scripts/qa_day.py` sits next to this SKILL.md).
 
 The script prints facts out of the session folders; **the answer to the user is written by you**, not by the script — see «How to
 deliver it». Nothing here needs configuring: the paths come from the project profile that `/qa-setup` already wrote, and the

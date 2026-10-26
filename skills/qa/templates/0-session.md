@@ -4,6 +4,7 @@
 - **Mode:** full cycle | automation-only (status→mode mapping — in the profile)
 - **Requirements:** spec-grade | draft — <one-phrase rationale: are there acceptance criteria / FRs / numbered items>
 - **Environment:** <env>
+- **Harness:** <claude-code | codex | opencode | other — per `references/harness/README.md`>
 - **Status:** in progress | done | bugs | blocked
 - **TMS cases:** <ids; with `test-cases: upfront` the analyst writes them before the run, with `inline` they appear after the executor>
 - **Autotest:** <test: class/file#method> (appears after the executor)

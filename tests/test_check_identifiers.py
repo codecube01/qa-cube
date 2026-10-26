@@ -123,7 +123,8 @@ class Quiet(unittest.TestCase):
     def test_allowed_and_reserved_hosts(self):
         for text in ("http://localhost:8080", "https://shop.example.com/join", "tracker.example.com",
                      "https://keepachangelog.com/en/1.1.0/", "https://img.shields.io/badge/license-MIT-blue.svg",
-                     "https://anthropic.com/claude-code/marketplace.schema.json", "api.test", "host.invalid"):
+                     "https://anthropic.com/claude-code/marketplace.schema.json", "api.test", "host.invalid",
+                     "https://playwriter.dev", "npx -y skills add https://playwriter.dev -g -y"):
             self.assertQuiet(text)
 
     def test_allowed_emails(self):

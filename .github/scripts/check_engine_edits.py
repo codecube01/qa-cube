@@ -36,6 +36,19 @@ _NUM = "|".join(NUMBERS)
 ENGINE_PATHS = ("skills/", "agents/", "hooks/", "PROFILE-CONTRACT.md")
 CATALOGUES = "skills/*/references/*.md"
 AGENTS = "agents/*.md"
+# The harness and browser adapters: the engine's body names an action by its role («launch the role»,
+# «ask the user»), and the adapter of the harness or the browser tool says how. A heading missing from one
+# adapter is a question that harness cannot answer — and the engine sends every session there.
+ADAPTERS = "skills/*/references/*/*.md"
+HARNESS_QUESTIONS = ("## Detect", "## Launch a role", "## Continue a running executor", "## Ask the user",
+                     "## Plugin root", "## Transcripts", "## Hooks", "## Connecting an MCP server",
+                     "## Updating the installed engine", "## Updating the engine from a clone")
+# Words that name one harness's tools. Outside the adapters (and the harness's own wiring) they make the
+# engine Claude Code's alone: a Codex session reads «launch `Agent`» and has no such tool.
+HARNESS_TOKENS = ("subagent_type", "AskUserQuestion", "SendMessage", "CLAUDE_PLUGIN_ROOT", "claude plugin", "claude mcp", "~/.claude/")
+HARNESS_ALLOWED = ("skills/qa/references/harness/", "hooks/", "skills/qa/scripts/", "skills/qa-day/scripts/")
+BROWSER_QUESTIONS = ("## Install", "## Preflight", "## Connect and pick the tab", "## Page scripts and their budget",
+                     "## Screenshots", "## Network", "## Known failures")
 
 # Characters, not lines (rewrapping moves lines; tokens are what is paid, ~4 characters each). A catalogue is
 # read whole at its step and an agent's instruction at every launch, so every entry a retro adds is paid in
@@ -47,7 +60,7 @@ BUDGETS = {
     "skills/qa/references/planning.md": 215_000,  # its index carries the rules (~21k) since 0.18.19
     "skills/qa/references/manual-brief.md": 154_000,  # its index carries the rules since 0.18.23
     "skills/qa/references/report.md": 95_000,  # its index carries the rules since 0.18.23
-    "skills/qa/references/browser-techniques.md": 42_000,
+    "skills/qa/references/browser-techniques.md": 36_000,  # lowered after the tool-specific entries left for browser/ (33.3k)
     "agents/qa-manual.md": 25_000,  # lowered after the 0.18.25 audit (22.7k), so the room does not come back
 }
 DEFAULT_BUDGET = 15_000
@@ -143,6 +156,44 @@ def budget_problems(text: str, rel: str) -> list[str]:
             f"engine's repository, never by a retro"]
 
 
+def adapter_problems(root: Path) -> list[str]:
+    """Every harness adapter (its README aside) and every browser adapter answers all of its questions, as headings."""
+    out = []
+    for kind, questions in (("harness", HARNESS_QUESTIONS), ("browser", BROWSER_QUESTIONS)):
+        for path in sorted(root.glob(f"skills/qa/references/{kind}/*.md")):
+            if path.name == "README.md":
+                continue
+            headings = set(path.read_text().splitlines())
+            rel = str(path.relative_to(root))
+            out += [f"{rel}: missing heading «{q}» — every {kind} adapter answers it, even if only with "
+                    f"«not available here» and the fallback" for q in questions if q not in headings]
+    return out
+
+
+def browser_value_problems(root: Path) -> list[str]:
+    """Every value the contract allows for `browser` (but `none`) has its adapter, `browser/<value>.md`.
+    The value IS the adapter's name: the engine sends a browser round to that file, and a missing one is a round with no limits read."""
+    m = re.search(r"^browser:\s*([\w-]+)\s*(?:#\s*(.*))?$", (root / "PROFILE-CONTRACT.md").read_text(), re.M)
+    if not m:
+        return ["PROFILE-CONTRACT.md: no `browser:` line in the Capabilities block"]
+    values = {m.group(1), *(v.strip() for v in (m.group(2) or "").split("|"))} - {"none", ""}
+    return [f"PROFILE-CONTRACT.md: `browser: {v}` has no adapter skills/qa/references/browser/{v}.md"
+            for v in sorted(values) if not (root / f"skills/qa/references/browser/{v}.md").is_file()]
+
+
+def harness_leak_problems(root: Path) -> list[str]:
+    """No engine file outside the adapters names a harness's own tool; the adapter says it instead."""
+    out = []
+    for path in sorted(root.rglob("*")):
+        rel = path.relative_to(root).as_posix()
+        if not path.is_file() or not rel.startswith(ENGINE_PATHS) or rel.startswith(HARNESS_ALLOWED):
+            continue
+        for i, line in enumerate(path.read_text(errors="replace").splitlines(), 1):
+            out += [f"{rel}:{i}: names «{t.strip()}» — say it through the harness adapter "
+                    f"(skills/qa/references/harness/)" for t in HARNESS_TOKENS if t in line]
+    return out
+
+
 # --- ratchets: the edit against HEAD ----------------------------------------------------------------
 
 def _sections(text: str) -> dict[str, str]:
@@ -222,8 +273,11 @@ def problems(root: Path) -> list[str]:
     out: list[str] = []
     for path in sorted(root.glob(CATALOGUES)):
         out += count_problems(path.read_text(), str(path.relative_to(root)))
-    for path in sorted([*root.glob(CATALOGUES), *root.glob(AGENTS)]):
+    for path in sorted([*root.glob(CATALOGUES), *root.glob(ADAPTERS), *root.glob(AGENTS)]):
         out += budget_problems(path.read_text(), str(path.relative_to(root)))
+    out += adapter_problems(root)
+    out += harness_leak_problems(root)
+    out += browser_value_problems(root)
     for path in sorted(root.glob(CATALOGUES)):
         out += index_rule_problems(path.read_text(), str(path.relative_to(root)))
 
