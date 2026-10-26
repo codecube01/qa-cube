@@ -30,6 +30,14 @@ starts working, and narrating what it does, before it has opened the profile, an
 final summary — is shown to the user in the same console as your own; a round whose language lived only in the profile read as English
 in the console while its files came out right.
 
+**A number in the text the user reads says what it is: its kind and title in brackets** — `ACME-123 (task «Export of payouts»)`,
+`merge request 45 («Add export», draft)`, `pipeline 2071 (the nightly run)`. A title not in hand is looked up in the tracker or the TMS
+before the message goes out, never left bare, and «(the same title)» or «(see above)» is no title: it sends the reader up the scroll. A
+file writes the full title at the first mention; **in the chat every mention carries its bracket** — the full title first in a message, a
+short tag after it (`ACME-123 (the frontend task)`), a question's options included: the chat is read in pieces, and every bare number
+costs the reader a question. Precedent: a triage named a task and its merge
+request by number alone, then a sibling task as «(the same title)» — both drew «what is this number?».
+
 No profile → do not start the session: suggest the user run `/qa-setup`. A capability declared `none` **or a key missing from the profile**
 → apply the degradation from the table at the end of this file; the profile does not invent degradations of its own. The single exception is
 `test-cases`: a missing key reads as `inline` (the manual tester creates the case after the run), not as `none` — otherwise a contract
@@ -271,7 +279,7 @@ nothing» groups of the same Contents are read again when the result comes back.
   requirement). Gaps → an addendum to the brief and a second pass, not a manual redo. **Before reading the result yourself, run the checker over it**: `python3 "<plugin root>/skills/qa/scripts/check_session.py" <the result file>` — leaked secret values, shifted table columns, oversized cells and a brief's scenario no heading names, none of which survive being noticed later; it also lists the lines that ask a question, to read against the closing open questions. It judges nothing about the content: that part is yours;
 - **before locking findings into the report — reconcile their class against the tracker** (with `tracker` ≠ none), closed tasks included:
   already filed → «confirmation of a known issue»; related → «a new trigger for task N»; closed as done but absent from the product → a
-  different conversation with the team. The search itself — by the operation's name and the requirement's subject, beyond your own task and
+  different conversation with the team; a closed task whose body is its title alone → none of these (`references/report.md`, «The table's own mechanics», «Filed in the tracker»). The search itself — by the operation's name and the requirement's subject, beyond your own task and
   project — is `references/manual-brief.md`, «Accepting the result»; the closed-task shapes are `references/planning.md`, «The tracker is
   searched at step 1»; where each result lands in the report is `references/report.md`, «Is this a finding at all».
 
@@ -335,7 +343,7 @@ mismatch with the requirements that genuinely blocks a section) → `Major` (mis
 
 **ID numbering:** running across the project, numbers are not reused, gaps are normal; the next number is
 `session.py max-id <sessions> --prefix <prefix>`, run BEFORE the draft (after it, it finds your own fresh numbers), never taken from memory —
-it counts assignments across every report, the month archives included, not mentions. The prefixes and conventions come from the profile. **The screenshot follows the id:** in the same pass, a candidate that becomes a
+it counts assignments across every report, the month archives and the side-findings registry included, not mentions. The prefixes and conventions come from the profile. **The screenshot follows the id:** in the same pass, a candidate that becomes a
 finding is renamed by `session.py shot <folder> c<N>[-<round>] <ID>` — the file to `<ID>….png` (the round suffix stays), every `📎` in the folder with it;
 a frontend finding's *Tech.* part ends with `📎 <ID>.png` (with that suffix, `📎 <ID>-2.png`; a backend finding has no screenshot and no marker) — the bare file name, the one thing a person filing the
 bug needs to pick the attachment; the checker below confirms every marker resolves to a file.
@@ -573,6 +581,7 @@ do what the right-hand cell says.
 | «The report is written — the retro first, the user after» | the result goes to the chat before the retro (step 6.5); a session that went quiet for minutes is why |
 | «I'll read the task first — then I'll know whether this round needs the environment at all» | where the profile says entering needs the user's hands, the liveness oracle is step 1's first call whatever the task turns out to be (step 1) |
 | «The profile is behind — I'll mention it with the summary» | that line is the session's first message, before any other call (step 0) |
+| «I have read this number for twenty calls — it is a name by now» | the user did not read those calls: every mention in the chat carries its bracket (step 0) |
 | «The classifier refused the mutation — I'll phrase it differently» | a refused MUTATION is never reworded: the user's permission, then one repeat in your own session, paired with a control (`references/manual-brief.md`, «Your own harness refuses a call») |
 | «The automation dialog carries the counts — the status list can wait for 6.5» | the status list goes to the chat as its own message before the automation question (step 5, `references/automation.md`) |
 | «The template will do for the report» | the project's format from the profile outranks it, read before the first line (step 6) |

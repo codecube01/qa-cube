@@ -21,15 +21,24 @@ port) and, in PROFILE, whether that Chrome profile is signed in. **`playwriter: 
 do not launch the executor until `playwriter --version` answers. The profile's Browser section names which one holds the round's accounts.
 **The list is empty, or the extension is not connected** («Waiting for extension to connect» that never ends) → tell the user exactly
 that: open Chrome, click the Playwriter icon once; do not launch the executor until a second `browser list` shows the key. Then one
-probe in a session of your own: open a tab, read its URL and title.
+probe in a session of your own: open a tab, read its URL and title. The `playwriter --version` you read goes into the brief as part of
+the build fingerprint — the CLI can change under a running round (below, «Known failures»).
 
 ## Connect and pick the tab
 
 A session per actor: `playwriter session new --tab-group qa-<task>-<role> [--browser <key>]` prints its id; every later call is
 `playwriter -s <id> -e '<code>'`. `session list` shows the other sessions on the machine — the user's other work included — and they are
 never reset or deleted from a round. There is no default page: `state.page = await context.newPage()` opens a controlled tab in the
-session's group with no click, and `context.pages()` lists every session's tabs, so a tab is found by its exact URL or kept in
-`state.page`. The tabs a round opened stay open when it ends.
+session's group with no click, and `context.pages()` lists every session's tabs, so a tab is kept in `state.page` or found by a marker
+it carries (below) — an exact URL may match another actor's tab. The tabs a round opened stay open when it ends.
+
+**Another actor's tab is reached through that actor's session, never by URL.** When the manager presses an irreversible step the
+executor prepared, two actors' tabs may sit on the same URL, so the press goes through `-s <the executor's session id>` and its
+`state.page`, in ONE call with its checks: the marker the executor planted in the page (`window.name`, naming the step — it survives a reload, below), the
+identity oracle, and the interceptor's armed flag in `state` — any of them off, the call aborts before the click. The executor's
+request therefore carries its session id, tab group, marker and the control's selector. Precedent: the manager's own tab stood on the
+very registry URL where the executor had prepared three irreversible submits; all three went through its session and marker without a
+single clarification.
 
 ## Page scripts and their budget
 
@@ -62,7 +71,14 @@ Playwright's own: `page.route(pattern, r => r.fulfill({...}))` substitutes a res
 not appear in `page.on('response')`); `page.on('request'|'response')` logs real traffic with bodies on demand (`await r.text()`);
 `getCDPSession({page})` + `Network.enable` gives the debugging protocol's events. Unlike an in-page wrapper these see every request the
 page makes, XHR and workers included, and survive navigation — remove a route (`page.unroute`) right after the click it guards, as the
-fail-closed rule in `../browser-techniques.md` asks.
+fail-closed rule in `../browser-techniques.md` asks. To re-install a route, remove it by pattern with no handler first
+(`page.unroute(pattern)`), or the old handler keeps answering beside the new one.
+
+- **A multipart body is not in the request log**: `request.postData()` comes back empty for a `FormData` that carries a file. Read it with a
+  read-only in-page `fetch` wrapper that clones the request (`req.clone().formData()`) and leaves the call itself untouched.
+- **`route.fetch()` — sending the intercepted request on from a route handler — crashed the relay in extension mode** and dropped every
+  session on the machine, as a version mismatch does (below); observation 1/1, held as the rule until a round reproduces or refutes it.
+  Substitute with `route.fulfill` from a body you already hold, or with an in-page `fetch` wrapper, which does not touch the relay.
 
 ## Known failures
 
@@ -75,6 +91,17 @@ fail-closed rule in `../browser-techniques.md` asks.
   `DOMContentLoaded` and hands it to Node through `page.exposeBinding`, and the network logger in `state` outlives the tab. Say in the
   result which readings were taken that way. Precedent: a live round's tabs on a login page closed 0.4–0.9 s after every load while the
   site's other pages stayed open; reading from inside the page closed every requirement anyway.
+- **A CLI of another version than the running relay restarts the relay and drops EVERY session on the machine.** The call prints
+  `CDP relay server version mismatch (server: X, client: Y), restarting...`, and from then on every session id — the manager's, other
+  projects' — answers `Session <id> not found`; the tabs survive in Chrome. A global upgrade of the CLI by anyone mid-round is enough. So
+  the version read at preflight is compared on that message, the restart is dated in the result as an incident of the tool, and nobody
+  resets or deletes other sessions to «repair» it — they are already gone, and their owners re-create them. The executor opens a new
+  session and finds its own tabs by a marker it planted in the page, never by position or title: `window.name`, which survives a reload
+  of that tab, while a `window.__<round>` value dies with any reload a failing call made. Precedent: an
+  executor's first call after a mid-round upgrade restarted the relay, dropped the manager's session with the rest, and the round went on
+  only because its tabs carried such a marker.
+- **`download.saveAs()` fails in extension mode** (`ENOENT` on Playwright's artifact): the file lands in the browser's own download folder —
+  take it from there by name and time, and hash it there.
 - Controlled tabs show Chrome's automation banner; a scenario about the page's own layout at the top edge accounts for it.
 - `snapshot()` returns an accessibility snapshot and, on later calls, diffs against the previous one — a diff that looks empty is «nothing
   changed», not «nothing there».

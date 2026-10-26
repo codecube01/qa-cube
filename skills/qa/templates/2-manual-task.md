@@ -84,8 +84,8 @@ Kinds, each with what its row must add:
   («one carrier found» is a floor to extend, «none found» is your ignorance, not the product's absence);
 - **client artifact: names only** (a query document from a captured request or a generated client) — composition is exact, types are unknown;
   never «can be relied on»; an independent introspection is the executor's first step;
-- **mechanism** («this path does not go through the outbox») — from the knowledge base, dated by the BUILD it was measured on; «if the behaviour
-  differs, the knowledge base is stale and that is a result»;
+- **mechanism** («this path does not go through the outbox») — from the knowledge base, dated by the BUILD it was measured on and the BRANCH
+  of the process it was read on; «if the behaviour differs, the knowledge base is stale and that is a result»;
 - **state / count** («in state X», «free remainder 0», «observations 4/4/3») — dated to the minute, with the window, the filter and the page;
   «re-check that the precondition still holds; if not — do not bend it, look for a direct discriminator and say so»;
 - **negative** («nothing of that kind here») — a property of the places looked, in the terms the executor will look in (the screen's columns,
@@ -115,8 +115,9 @@ The wording that keeps a row a question:
 ## Sanctioned probe (a mutation the user authorised — one block per probe; delete the section otherwise)
 
 - Probe: <the call, the object, the hostile value(s), what the permission said>
+- Body: <written out whole, field by field — each checked against the knowledge base for a value known to crash or page someone; the other fields chosen by the order of the checks>
 - Read channel for the effect: <alive, proven by <a read the manager took at planning> — a probe whose oracle recon already showed dead is not sanctioned; it is deferred with its carrier recorded>
-- Who presses: <the executor — a reversible step | the user, through the pause protocol | the manager, in its own session — an IRREVERSIBLE step is never the executor's; the sanction question already said who>
+- Who presses: <the executor — a reversible step | the user, through the pause protocol | the manager, by its own call or in the executor's prepared tab (through the executor's session where the tool has sessions, `browser/<tool>.md`) — an IRREVERSIBLE step is never the executor's; the sanction question already said who>
 - Combining hostile values: <allowed into one artifact if each stays identifiable in the output; one failing the operation → unwind into separate probes | not allowed>
 - Unanticipated refusal: <names the cause literally → the response proves the mechanism, no control; generic → one control call with <a value known to resolve> is authorised, leaving <residue>>
 - Overshoot cap: <exceed the available amount by the smallest amount that still proves the guard is gone>

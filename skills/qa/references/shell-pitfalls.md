@@ -24,7 +24,8 @@ project's tooling stays in its profile.
   exit is not optional — a poll that tests only its condition spins to the limit on a malformed request, since an unknown field errors on
   every iteration. Precedent: such a poll lost nine minutes of a time-boxed window. **A measurement due at an exact second is
   never `sleep N && curl` across the tool's time limit** — past it the call is backgrounded or killed unpredictably and the point lands in
-  the wrong second: one background script owns the whole schedule and writes each timestamped result to a file, judged by that file.
+  the wrong second: one background script owns the whole schedule and writes each timestamped result to a file, judged by that file
+  (a Python one run as `python3 -u`, below — buffered, the file stays empty until it exits).
 - **A helper that can run in two processes at once writes its temp files under a name unique to the call** — `mktemp`, or the pid plus a
   counter. A fixed `_out.txt` shared by a background batch and the foreground checks lets one call's body land in another call's
   comparison, and it reads as a product answer: a `200` with a body of the wrong shape. Precedent: a background batch of detail reads
@@ -36,6 +37,9 @@ project's tooling stays in its profile.
   `cut`, `sed` without `-u`, `head` and `awk` without `fflush()` buffer their output, so the event reaches the watcher long after it
   happened, or never. After a `--line-buffered` stage only `grep --line-buffered` / `awk '{…; fflush()}'` follow, or the whole filter is one
   Python loop that flushes. Precedent: a monitor for a long operation's commits fired nothing for twenty minutes while the log grew.
+  *And a Python script that outlives the tool call buffers its whole stdout once it is not on a terminal* — a call moved to the background
+  leaves an empty output file until the script exits. Run long scripts as `python3 -u` (or `print(..., flush=True)`). Precedent: a deadline
+  wait backgrounded at the tool's limit left nothing to read; the state was rebuilt from the helper's own call log.
 - **zsh is not bash.** An unquoted `$VAR` is not word-split, and `set -- $pair` inside `for` sets no positionals — use arrays or Python. A
   word starting with `=` is expanded (`echo ===X===` fails). An unquoted glob that matches nothing aborts the command — quote `'*.md'`.
   Some lowercase names are zsh's own special parameters and do not hold a value of yours. `path` is tied to `PATH`, so `path=$3` in a

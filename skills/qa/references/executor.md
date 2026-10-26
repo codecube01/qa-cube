@@ -18,7 +18,7 @@ never the file without a `limit`.
 - single-use artifacts (an invite link, a one-time token, the only application in the queue) → consumed by any touch, a trial one included: work out the semantics on an expendable instance, measure on a clean one, one touch per control point; a channel that returns «the latest per key» → compare its timestamp with the clock, save each artifact under its instance's name, prove a batch distinct (`sort -u`) before measuring
 - an unknown time boundary (a TTL, a window, a deadline) → bisection from below (1 → 2 → 5 → 10 min), never long probes; many points of one TTL → a batch of untouched instances touched by a background scheduler keyed to absolute epoch times
 - a reference value you compute yourself (a hash, a signature, an aggregate) → self-check the primitives on a known vector, print the field-by-field decomposition of the input, and only then compare · a client-built ARTIFACT you replicate → rebuild a reference instance byte for byte first
-- text the user sees → quoted as RENDERED (`textContent`, the screenshot), never with the template's markup; emphasis in your own notation; markup that reaches the screen is said in words, it is itself a defect
+- text the user sees → quoted as RENDERED (the screenshot; `textContent` only where the screen clips nothing, `browser-techniques.md`), never with the template's markup; emphasis in your own notation; markup that reaches the screen is said in words, it is itself a defect
 
 **When an outcome looks like a defect**
 

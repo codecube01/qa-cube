@@ -106,8 +106,10 @@ def assigned_ids(text: str, prefix: str) -> list[int]:
 
 
 def reports(sessions: Path) -> list[Path]:
-    """Every report under the sessions root, the month archives and the old scheme's names included."""
-    return sorted(p for p in sessions.rglob("*.md") if "report" in p.name and p.is_file())
+    """Every report under the sessions root, the month archives and the old scheme's names included, plus the
+    side-findings registry: a finding moved there keeps its id, and a scan of reports alone hands that id out again."""
+    return sorted(p for p in sessions.rglob("*.md")
+                  if ("report" in p.name or p.name == "side-findings.md") and p.is_file())
 
 
 def max_id(sessions: Path, prefix: str) -> tuple[int, Path | None]:
