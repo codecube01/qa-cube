@@ -11,6 +11,8 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.19.15] — 2026-10-26
+
 ### Added
 
 - **Playwriter: multipart bodies, `route.fetch()`, downloads**: `browser/playwriter.md` — a file upload's body is read
