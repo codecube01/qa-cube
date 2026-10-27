@@ -8,10 +8,11 @@ CHANGELOG.md, an entry added to a catalogue with its «Contents» group left unt
 review is left with what only a reader sees — a duplicate, a wrong address, a second precedent patched onto an
 entry (the corpus holds dozens of legitimate riders with their own, so that one stays with the reviewer).
 
-Three kinds of check:
+Four kinds of check:
 
 * **counts** are read off the text as it stands, so they hold in CI on a clean tree too;
 * **budgets** are too: the size of every file an agent reads whole (see BUDGETS);
+* **pointers** too: every «`file.md`, «Title»» between engine files lands on a heading or a bold lead sentence;
 * **ratchets** compare the working tree with HEAD — «this edit made it worse». The catalogues are not 1:1
   with their indexes (a family is one index line), so a check of the whole text would either fail on the
   corpus or say nothing; a ratchet says exactly «the edit you are making». On a clean tree (CI) they are
@@ -194,6 +195,40 @@ def harness_leak_problems(root: Path) -> list[str]:
     return out
 
 
+POINTER = re.compile(r"`(?:\.\./)*(?:skills/qa/)?(?:references/|templates/)?([a-z0-9-]+\.md)`,?\s+(?:sections?\s+)?«([^»]+)»")
+QUOTES = str.maketrans("", "", "«»\"“”")
+
+
+def _plain(text: str) -> str:
+    """Markup and line wrapping are not the title: drop bold markers and quotes, collapse whitespace, ignore case."""
+    return re.sub(r"\s+", " ", text.replace("**", "")).strip().lower().translate(QUOTES)
+
+
+def pointer_titles(text: str) -> list[str]:
+    """What a pointer may land on: a heading, or an entry's bold lead sentence — an italic rider is not one."""
+    heads = [re.sub(r"^#+\s*", "", line) for line in text.splitlines() if line.startswith("#")]
+    return [_plain(t) for t in heads + re.findall(r"\*\*(.+?)\*\*", text, flags=re.S)]
+
+
+def unresolved_pointers(text: str, targets: dict[str, str]) -> list[str]:
+    """Every «`file.md`, «Title»» pointer into an engine file whose title is no heading or bold lead of that file."""
+    bad = []
+    for name, title in POINTER.findall(re.sub(r"\s+", " ", text)):
+        if name not in targets:
+            continue  # a project's profile subfile or a file outside the engine
+        if not any(_plain(title) in t for t in pointer_titles(targets[name])):
+            bad.append(f"{name} «{title}»")
+    return bad
+
+
+def pointer_problems(root: Path) -> list[str]:
+    files = sorted([*root.glob("skills/qa/**/*.md"), *root.glob(AGENTS)])
+    targets = {p.name: p.read_text() for p in files}
+    return [f"{p.relative_to(root)}: pointer to {bad} lands on no heading or bold lead sentence — name the "
+            f"entry's bold head (an italic rider is not a target)"
+            for p in files for bad in unresolved_pointers(p.read_text(), targets)]
+
+
 # --- ratchets: the edit against HEAD ----------------------------------------------------------------
 
 def _sections(text: str) -> dict[str, str]:
@@ -278,6 +313,7 @@ def problems(root: Path) -> list[str]:
     out += adapter_problems(root)
     out += harness_leak_problems(root)
     out += browser_value_problems(root)
+    out += pointer_problems(root)
     for path in sorted(root.glob(CATALOGUES)):
         out += index_rule_problems(path.read_text(), str(path.relative_to(root)))
 

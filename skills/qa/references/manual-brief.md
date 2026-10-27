@@ -17,7 +17,7 @@ is in `templates/2-manual-task.md`.
 **Preflight and access**
 
 - access the product issues from inside itself (an API key, a service token, a test tenant) → the manager issues it at preflight, puts it in the profile's `secrets` source, and the brief gets a contour that does not depend on a short session; a secret the round captures only in the page and may not print → the brief names where it rests by the tool's route (`browser/<tool>.md`, «A secret captured only in the page»), with a pointer in the result
-- a state created by preflight (a blank, a session) → the «Entry state» section: its owner and its time («as of HH:MM it was …»), the profile's id as the only address (never a tab id, never a caption), and the executor's first move is to check WHOSE session they are in, not whether one is alive
+- a state created by preflight (a blank, a session) → the «Entry state» section: its owner and its time («as of HH:MM it was …», the zone read off the shell's own UTC clock, never the conversation's), the profile's id as the only address (never a tab id, never a caption), and the executor's first move is to check WHOSE session they are in, not whether one is alive
 - a config edit made in the same session → does not reach the executor's context: the values go into «Values the round depends on», and any claim about a file's contents is made after reading it
 - an adjacent system with short-lived access → preflight hands over its entity IDs, not only their state (a «Recon facts» row of kind «ids of a short-lived contour»)
 - the name you gave an environment may never reach the executor's listing → the address is an id; where the tooling exposes no id either, the «On a refusal» slot names the identity oracle to sweep the candidates with, most-recently-connected first, the handshake last; where the user can re-enter quickly, pin ONE environment and make a refusal a stop, not a search
@@ -33,7 +33,7 @@ is in `templates/2-manual-task.md`.
 - the waits in the brief exceed an hour → the «Waits over an hour» slot says whether isolated environments may run in parallel
 - a hypothesis about flakiness or survivability → the «Control instance» slot (one instance, polled rarely, experiments elsewhere) and the «Expendables» slot (minimum per scenario + 1 control + 1 transient, the unit is what is actually spent, restorations count)
 - a round about appearance in the user's own environment → the «Window and focus» slot settled at preflight: resizing yes/no, the focus never taken programmatically, the user does not work in the environment until the round ends
-- the launch comes after a WAIT on the environment → re-read the task's thread in the same breath as the launch (the «Requirements read as of» slot)
+- the launch comes after a WAIT on the environment, or after a planning pass long enough for the thread to move (reviewers included) → re-read the task's thread in the same breath as the launch (the «Requirements read as of» slot carries the time of THAT read, never of step 1's)
 
 **What goes into the brief**
 
@@ -49,7 +49,7 @@ is in `templates/2-manual-task.md`.
 - the scenario may run into a neighbouring contour with a different entry → the «Neighbouring contour» slot: ask through the manager for <one phrase>, or record an open question and move on
 - the scenario needs reference values (constants, vectors, addresses) → the «Reference values» slot: from public sources per <standard>, source cited
 - a negative that needs someone else's entity → a concrete identifier in the «Fixture» column, found and verified by you; or where to look AND to collect it during the other contour's snapshot pass
-- a step performed «under another role» → the «Acting identity» column is a role plus the exact account handle, and the step begins with «who am I» to the API under test, printed into the result before the target call
+- a step performed «under another role» → the «Acting identity» column is a role plus the exact account handle, and the step begins with «who am I» to the API under test, printed into the result before the target call; every identity the plan's steps need → signed in once at preflight, and one that does not answer is a human step put into the start question, never a «check it is still alive» line in the brief
 - a compound requirement («and») → the brief requires a third verdict, partial, with the breakdown of which half passed
 - the scenario needs the user's own click mid-run, or the round logs in through the browser → the template's «Pause protocol» section, filled in; the manager reads every request before relaying it and returns the answer by a direct message to the same agent; the pauses are grouped into series, forms filled in only while the user is available
 - after recon nothing is left that can be done by hand → do not launch the executor: file the recon as `<N>-recon-<source>.md` and say in the report why there was no manual run
@@ -64,9 +64,10 @@ is in `templates/2-manual-task.md`.
 - a retest → check that the observation path itself is still alive, and rest the verdict on the final artifact, never an intermediate UI state
 - the finding is about the client's reaction → retest on substituted responses, the real refusal once as the control, not on expendables
 - the retest verdict → scoped to what the FIX was asked to do, quoted verbatim; a defect beyond that scope is a new finding with its own id; a fix whose own CONDITION leaves out part of the inputs the finding named is partial — the finding stays open, narrowed, under its id
-- a previous finding quoted into the brief → say whether each value is a raw enum or a caption on screen
+- a previous finding quoted into the brief → say whether each value is a raw enum or a caption on screen; a control the fix RENAMES or merges (a filter option, a status caption) → the previous round's raw request value per option goes into the retest table
 - what recon says is fixed → write out «what remains» too; it comes back as a separate finding, not a doubt
 - the surfaces the round will look at → the findings already filed against them, this task's and the neighbours', named with their ids
+- a retested property that appears late in the flow → the «An unforeseen failure earlier in the flow» slot says what such a failure gets: reproduced bare twice (one after a quiet interval) and kept as a candidate, then the checks on a scaffold that removes only that obstacle, every result marked
 - a discrepancy found passively → dated, or reproduced by a fresh action of the TARGET operation alone (re-syncing operations forbidden for the check), before it is called live; a value stored at the moment of an event confirms no fix either way → secure a fresh carrier
 
 **While the executor is running**
@@ -137,6 +138,13 @@ is what preflight does, and learns, before the brief is written.
   confirmation of the access matrix. The address is the profile's id, never a tab or window id (the executor's tab group is its own) and
   never a caption: labels are user-editable and get reshuffled, and the label of a known-good profile once migrated onto the profile the
   environment blocks — a brief naming ids caught it, a brief naming captions would have sent the executor straight into the block.
+
+  *And the time in that entry carries a zone measured, not assumed.* The manager's sense of «now» comes from the conversation, which runs
+  in the user's local time; the environment's logs, deploy jobs and records run in UTC. A brief that stamps local times as «UTC» sends
+  every log window the executor derives from it hours off — an empty search that reads as «nothing happened». Take the stamp from the
+  shell (`date -u`) in the same call that records the state — the executor's own rule (`qa-manual.md`), held by the manager too, in
+  every time a manager's message carries. Precedent: a brief dated its entry state three hours ahead under a «UTC» label; the executor
+  caught it only by comparing the session's own creation time with the shell clock.
 
 - **An edit you make to a project config file in the same session does not reliably reach the executor's context — the values go
   into the brief («Values the round depends on»).** The executor is handed its own snapshot of the file at launch, and a snapshot from the
@@ -306,14 +314,18 @@ is what preflight does, and learns, before the brief is written.
   action; the whole width-threshold scenario was struck out with its measurements spent, while the parts the executor could have closed
   instead stayed uncovered.
 
-- **When the launch comes after a WAIT on the environment, the task's comment thread is re-read in the same breath as the launch** —
-  the «Requirements read as of» slot carries the timestamp that makes the gap visible. The team fixes the environment and writes about it
-  in one motion: the developer who deploys the build also posts the contract it implements, the defaults, the route the plan guessed
-  wrong, while the manager, released by the environment's own signal, goes straight to the brief on text read an hour earlier. One read of
+- **When the launch comes after a WAIT — on the environment, or on the round's own planning — the task's comment thread is re-read in
+  the same breath as the launch** — the «Requirements read as of» slot carries the time of that read, the timestamp that makes the gap
+  visible. The team fixes the environment and writes about it in one motion: the developer who deploys the build also posts the contract
+  it implements, the defaults, the route the plan guessed wrong, while the manager, released by the environment's own signal, goes
+  straight to the brief on text read an hour earlier. The round's own planning is as long a wait: a plan, a brief and the catalogue
+  reviews of both take an hour, and the thread moves meanwhile as it does during any deploy. One read of
   the comments posted since costs a call; missing it costs a brief built on superseded text and a correction competing with the scenarios
   it rewrites. Precedent: the developer posted the implementation contract — the only creation route, the verdict operation, a replaced
   requirement, a new negative — a minute before the deploy job finished; the executor was launched on the old brief, the user had to point
-  at the comment, and the correction reached the executor before its first scenario only by luck of timing.
+  at the comment, and the correction reached the executor before its first scenario only by luck of timing. The same happened on a
+  retest with no wait at all: the developer's second comment, adding a dozen cases and announcing a rebuilt database, landed while the
+  plan was under review; the brief went out stamped with the first read, and again the user had to point at the comment.
 
 ## What goes into the brief
 
@@ -422,6 +434,14 @@ is what preflight does, and learns, before the brief is written.
   the company's account» is ambiguous wherever one organisation holds several accounts with different roles: «do it under the client's
   account» pointed at the administrator, who is refused that operation, and the round survived only because the profile repeated the
   warning.
+
+  *And the identity itself is proven alive at preflight, one sign-in per role the plan's steps use — not only the round's main one.* A
+  handle copied from the environment snapshot is a hypothesis: after a data wipe, or with a credential the fixture's owner set
+  differently, it answers a refusal, and the executor — who registers nobody and asks nobody — can only record the requirement as not
+  covered. Found at preflight, the same fact is a one-line request to the user before the launch — the start-question step `planning.md`
+  gives an identity that does not exist yet («The same wall stands in front of a new LOGIN»). Precedent: a role-refusal requirement
+  was briefed as «take a live account of each role, check it is alive»; mid-run neither role had a single account that would sign in,
+  and the requirement left the round uncovered for want of one call the manager could have made before writing the brief.
 
 - **a compound requirement gets a compound verdict.** Half the requirements of a typical spec are «and»: «the status changes **and** the
   officer sees it», «up to five attempts **and** then it is recorded as FAILED». A binary pass/fail on such an item lies in both directions:
@@ -697,6 +717,12 @@ section states the rule.
   affordable. Precedent: an executor lost half a minute deciding whether a dictionary had changed under them, rescued only by remembering
   that the bundle hash was unchanged and the captions had nowhere to change from.
 
+  *And where the fix renames or merges the options of a control*, the retest table carries the raw value each option SENT in the previous
+  round, not only its caption: a merge keeps one caption and picks one value, and the value it drops is a regression the new caption hides.
+  The executor who holds only captions sees «one option, as asked» and passes it. Precedent: two intermediate statuses were merged under
+  one caption, the surviving filter option switched to the other status's value, and the record in the dropped status vanished from the
+  filter; it was caught only by the report's reviewer reading the first round's request log.
+
 - **A discrepancy found PASSIVELY on a retest proves that it exists, not that the defect reproduces on the current build.** Before the
   verdict «still broken», either date it — did it arise after the fix (for on-chain data, the explorer's own timestamps) — or reproduce
   it by a controlled fresh action with a baseline before and the value after: «the discrepancy exists» → «when it arose» → «reproduces /
@@ -724,6 +750,16 @@ section states the rule.
   executor reached the end of a round before discovering that two of its observations (an untranslated back button and a raw driver
   error in a failure message) had been filed by neighbouring sessions — its retro asked for exactly this line.
 
+- **A retested property that appears LATE in the flow gets a line for an unforeseen failure EARLIER in it.** A file name, a message, a
+  column all sit after the reads that build the result, and an obstacle nobody anticipated can stop the flow before them: the gateway
+  throttles the burst of reads the feature makes, a dependency refuses once. Both outcomes are needed and neither cancels the other, so
+  the brief says in advance: the bare failure is reproduced twice, the second after a quiet interval that rules out the executor's own
+  traffic (the two readings of `planning.md`, «The channel is closed»), and kept as a candidate; the fixes are then checked on a
+  client-side scaffold that removes only that obstacle (a retry that honours the throttling answer's delay) and touches nothing the
+  verdict reads — the legitimate workaround of `planning.md`, «A gate that stops the run is not a ban on initiative» — every result
+  under it marked, and the report leads with the failing flow. Precedent: a retest of two fixes found the export dying on the gateway's
+  rate limit after sixteen requests; the executor had to decide on the scaffold alone, and its retro asked for this line.
+
 ## While the executor is running
 
 - **any message to a working executor — a scope correction, an answer to a pause, a resume — does not assert the state of the environment
@@ -735,7 +771,7 @@ section states the rule.
   correction arrived, the scenario it removed had already been run along with three other expendable steps — the executor kept the evidence
   and wrote the amendment themselves, but the loss was one message away.
 
-  *And where the message relays the user's answer to a pause,* the time in it is taken from a clock (`date`) at the moment of writing — the
+  *And where the message relays the user's answer to a pause,* the time in it is taken from a clock (`date -u`, «A state created by preflight») at the moment of writing — the
   conversation does not show how long the user took, and a time inferred from it is a guess that reads as a measurement. If the pause
   rested on a deadline (a session's expiry, a window in a running operation), compare the two and say «the answer came after <deadline>»
   in the same message, so the executor re-reads the access before anything else. Precedent: a manager relayed «clicked, at about HH:MM»

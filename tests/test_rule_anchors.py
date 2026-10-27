@@ -16,11 +16,19 @@ Run: python3 -m unittest discover -s tests
 
 from __future__ import annotations
 
+import importlib.util
 import re
+import sys
 import unittest
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[1]
+_spec = importlib.util.spec_from_file_location("check_engine_edits", REPO / ".github/scripts/check_engine_edits.py")
+ce = importlib.util.module_from_spec(_spec)
+sys.modules["check_engine_edits"] = ce
+assert _spec.loader is not None
+_spec.loader.exec_module(ce)
+unresolved_pointers = ce.unresolved_pointers  # the validator's own resolver: one definition for CI and the retro
 EVALS = REPO / "evals"
 SKILL = "skills/qa/SKILL.md"
 
@@ -69,10 +77,6 @@ ANCHORS: dict[str, list[tuple[str, str]]] = {
     ],
 }
 
-POINTER = re.compile(r"`(?:\.\./)*(?:skills/qa/)?(?:references/|templates/)?([a-z0-9-]+\.md)`,?\s+(?:sections?\s+)?«([^»]+)»")
-QUOTES = str.maketrans("", "", "«»\"“”")
-
-
 def normalise(text: str) -> str:
     """Markup and line wrapping are not the rule: drop bold markers, collapse whitespace, ignore case."""
     return re.sub(r"\s+", " ", text.replace("**", "")).strip().lower()
@@ -81,29 +85,6 @@ def normalise(text: str) -> str:
 def missing_anchors(text: str, phrases: list[str]) -> list[str]:
     body = normalise(text)
     return [p for p in phrases if normalise(p) not in body]
-
-
-def titles(text: str) -> list[str]:
-    """What a pointer may land on: a heading, or an entry's bold lead sentence."""
-    heads = [re.sub(r"^#+\s*", "", line) for line in text.splitlines() if line.startswith("#")]
-    bold = re.findall(r"\*\*(.+?)\*\*", text, flags=re.S)
-    return [normalise(t).translate(QUOTES) for t in heads + bold]
-
-
-def unresolved_pointers(text: str, targets: dict[str, str]) -> list[str]:
-    bad = []
-    for name, title in POINTER.findall(re.sub(r"\s+", " ", text)):
-        if name not in targets:
-            continue  # a project's profile subfile or a file outside the engine
-        wanted = normalise(title).translate(QUOTES)
-        if not any(wanted in t for t in titles(targets[name])):
-            bad.append(f"{name} «{title}»")
-    return bad
-
-
-def engine_files() -> dict[str, Path]:
-    paths = list((REPO / "skills/qa").rglob("*.md")) + list((REPO / "agents").glob("*.md"))
-    return {p.relative_to(REPO).as_posix(): p for p in paths}
 
 
 def eval_cases() -> set[str]:
@@ -162,11 +143,7 @@ class EvalRules(unittest.TestCase):
 
 class Pointers(unittest.TestCase):
     def test_every_section_pointer_resolves(self):
-        files = engine_files()
-        targets = {p.name: p.read_text() for p in files.values()}
-        for rel, path in sorted(files.items()):
-            with self.subTest(file=rel):
-                self.assertEqual(unresolved_pointers(path.read_text(), targets), [])
+        self.assertEqual(ce.pointer_problems(REPO), [])
 
 
 if __name__ == "__main__":

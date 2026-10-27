@@ -130,7 +130,7 @@ The automator will write the test from your result without re-checking by hand. 
   in the same call as the measurement, never estimate it from how long the run «feels». A section header stamped «~12:30» while the clock
   said 11:20 misdates every observation under it, and on a shared environment the times are what ties an observation to a build or to
   somebody else's action — four sections stamped by estimate once had to be re-dated at the final fingerprint. **A probe helper logs, from
-  its first call, the status, the body, the response time and the delta from the previous call** — free in advance and unrecoverable
+  its first call, the status, the body (a ≥400's headers too), the response time and the delta from the previous call** — free in advance and unrecoverable
   afterwards: a session found dead cannot be re-measured — durations once logged only from the third session on left the first two
   deaths unclassifiable.
 - **a scenario's section heading carries its id from the brief's `#` column** (`## S3 — …`); scenarios run in one pass name every id in

@@ -23,6 +23,7 @@ that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines fro
 **The brief**
 
 - a rule of the project's own profile is about to go into the brief as an instruction («these helpers assert 200 internally, add a raw variant») → it is checked against the specific helpers this round touches first; true of the profile's general case, it may be false of these two; a call quoted into the brief → in the helper's own signature types, read off its declaration
+- a negative control proving a new step can go red → the brief names the assert the red must land on and suspends the step's precondition asserts for that run, restored after
 - the user asks what the coverage costs → say what measures it: run logs often carry no timestamps on step lines, so a step's duration is measured by a run on reverted code, repeated where the run-to-run spread rivals the delta
 - the change removes or renames a contract element (a field, a route) → the brief lists EVERY existing test it breaks, each with the count of what changes in it, taken from a scheduled run on the build with the change plus a search of all test classes for the removed name — never from the one test the manual result happened to name; a run that fails at step K proves nothing about the steps after K → the brief lists them as unverified, and the old negatives among them are replayed by hand before the automator starts
 
@@ -78,6 +79,13 @@ touches; a brief that carries it unchecked orders work that is not needed. The n
 of their parameters, if you quote them — are verified by grepping the code rather than from memory: an inexact name or number is an extra
 iteration for the automator. A quoted call is written in the types its declaration takes: an amount given as `-1` where the parameter
 is a decimal object does not compile when copied literally.
+
+**A negative control of a new step names the assert it is aimed at, and suspends the guards that would fire before it.** «Run it once
+with the condition flipped — it must go red» proves the step can fail only if the red lands on the step's own verdict assert; a step that
+first asserts its precondition (the setting really produces the state under test) goes red on that precondition instead, and the control
+proves the precondition, not the step. The brief says which assert the red must come from and that the precondition asserts are switched
+off for the control run and restored after. Precedent: a step asserting «this setting makes the margin negative» before «the payout
+fails» was briefed a control with a profitable setting — it failed on the precondition, and the automator had to improvise a switch.
 
 **Asked what the coverage costs, say what measures it.** Run logs often lack timestamps on step lines, so a step's duration is unreadable
 from the log — then measure by a run on reverted code, repeated when the run-to-run spread rivals the delta.

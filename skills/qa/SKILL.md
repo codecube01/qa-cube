@@ -580,6 +580,7 @@ do what the right-hand cell says.
 | «The MR diff will show me what to test» | a plan read off the implementation agrees with it; the scenarios come from the requirements (step 3) |
 | «The report is written — the retro first, the user after» | the result goes to the chat before the retro (step 6.5); a session that went quiet for minutes is why |
 | «I'll read the task first — then I'll know whether this round needs the environment at all» | where the profile says entering needs the user's hands, the liveness oracle is step 1's first call whatever the task turns out to be (step 1) |
+| «Only a question — a quick curl first» | `/qa` with a question is a session: `references/shell-pitfalls.md` before the first shell command (step 0) |
 | «The profile is behind — I'll mention it with the summary» | that line is the session's first message, before any other call (step 0) |
 | «I have read this number for twenty calls — it is a name by now» | the user did not read those calls: every mention in the chat carries its bracket (step 0) |
 | «The classifier refused the mutation — I'll phrase it differently» | a refused MUTATION is never reworded: the user's permission, then one repeat in your own session, paired with a control (`references/manual-brief.md`, «Your own harness refuses a call») |

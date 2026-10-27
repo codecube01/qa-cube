@@ -43,9 +43,21 @@ single clarification.
 ## Page scripts and their budget
 
 - The code in `-e` is ordinary async Node with Playwright's `page`, `context` and a per-session `state`; its output is what it
-  `console.log`s. Keep the code in single quotes (the shell leaves `$`, backticks and `\` alone), or in a file passed as `-e "$(cat f.js)"`.
+  `console.log`s — under a «Console output:» header, **every line prefixed `[log] `**, so a shell parser strips the prefix before
+  `json.loads` (an unstripped one costs a `JSONDecodeError` and a repeat). Keep the code in single quotes (the shell leaves `$`,
+  backticks and `\` alone), or in a file passed as `-e "$(cat f.js)"`.
 - **One call has 10 s by default; `--timeout <ms>` raises it** (waits of 30, 120 and 300 s inside one call passed with the timeout set
   20 s above the wait). Size the timeout per call instead of splitting a wait.
+
+  *And the harness's own shell call has a limit of its own*, which `--timeout` does not lift, so both limits are set above the wait (past
+  the shell's limit the call goes to the background: `../shell-pitfalls.md`, «A wait is a bounded poll in the FOREGROUND»). Precedent: a
+  six-minute wait with `--timeout` set went to the background at the shell's two-minute default, and the executor polled the output file
+  by hand.
+- **The code runs with the cwd of the relay process, not of your session** — the relay is started by whichever project called
+  Playwriter first on the machine, so a relative path in `-e` (a helper spawned with `child_process`, a file read with `fs`) resolves
+  inside another project. Every path in page-script code is absolute. Precedent: a login helper spawned `scripts/<helper>.py` by a
+  relative path, the relay had been started from a neighbouring project, and the call failed after the login email had already been
+  requested — one rate-limited link spent for nothing.
 - **A call that timed out has still run** — the first navigation of a round opened its page while the call reported a timeout. Read the
   state back before repeating anything (`../browser-techniques.md`, «A call that timed out»).
 - **`state` lives on the Node side and survives navigation and reload; `window.*` of the page dies on reload as usual.** So loggers built
@@ -76,6 +88,12 @@ fail-closed rule in `../browser-techniques.md` asks. To re-install a route, remo
 
 - **A multipart body is not in the request log**: `request.postData()` comes back empty for a `FormData` that carries a file. Read it with a
   read-only in-page `fetch` wrapper that clones the request (`req.clone().formData()`) and leaves the call itself untouched.
+- **WebSocket frames are logged from Node — `page.on('websocket')` with the socket's `framesent` / `framereceived` / `close`** — not by
+  the in-page prototype patch of `../browser-techniques.md`, which dies with every navigation. The Node-side log survives SPA transitions
+  and reloads and shows a subscription's whole life — `subscribe`, `complete`, the socket closing — which is what tells «this screen
+  never subscribed» from «no event came». It sees sockets opened after the listener is attached: attach it, then navigate into the
+  screen under observation. Precedent: a «the status does not refresh» retest proved the detail screen held no subscription at all —
+  the log showed the list screen's subscription completed and its socket closed at the transition, and no socket afterwards.
 - **`route.fetch()` — sending the intercepted request on from a route handler — crashed the relay in extension mode** and dropped every
   session on the machine, as a version mismatch does (below); observation 1/1, held as the rule until a round reproduces or refutes it.
   Substitute with `route.fulfill` from a body you already hold, or with an in-page `fetch` wrapper, which does not touch the relay.
@@ -85,12 +103,23 @@ fail-closed rule in `../browser-techniques.md` asks. To re-install a route, remo
 - **No output filter and no length cut**: a query string, a cookie-shaped string and 6000 characters print whole. Nothing stops access
   from being printed, so the rule «Responses carry access» in `../browser-techniques.md` is the only guard — keep it.
 - A `goto` that waits for `load` times out on a page that opened (above) — the timeout is not a navigation failure.
+- **`ControlOrMeta+a` does not select a field's text on macOS in extension mode** — the typed value is appended, not replacing
+  (`3` typed over `2` reads `32`). Replace a value with `locator.fill(…)` and read the field back before acting on it.
+  Precedent: a threshold edit came out as `32` and cost a repeat.
 - **Every session shares the one browser, so a tab can be closed from outside** — by another session's code, an extension or a person —
   and only on some pages. The sign is a `close` event you did not cause; prove it with a control URL in the same tab (another page of
   the site stays open). Other sessions are not touched; read the page from INSIDE it instead: `page.addInitScript` takes the reading at
   `DOMContentLoaded` and hands it to Node through `page.exposeBinding`, and the network logger in `state` outlives the tab. Say in the
   result which readings were taken that way. Precedent: a live round's tabs on a login page closed 0.4–0.9 s after every load while the
   site's other pages stayed open; reading from inside the page closed every requirement anyway.
+
+  *And where the page that closes is the one an ENTRY goes through* (a sign-in form the login helper opens to send its requests from) —
+  the entry does not need that page: the auth requests go from a same-origin page that does not boot the app (`../browser-techniques.md`,
+  «A session is observed without the application»; for an entry, any GET that answers JSON serves — the logout endpoint
+  too, since there is no session to lose yet, never on a live one), and the one-time link opens
+  in a fresh tab. Every attempt through the closing page may still have spent a rate-limited link before it died, so count them against
+  the budget. Precedent: three logins in one browser profile died with «execution context destroyed» on the sign-in page, each possibly
+  spending a link; the same helper, moved to the logout endpoint's JSON page, entered on the first try.
 - **A CLI of another version than the running relay restarts the relay and drops EVERY session on the machine.** The call prints
   `CDP relay server version mismatch (server: X, client: Y), restarting...`, and from then on every session id — the manager's, other
   projects' — answers `Session <id> not found`; the tabs survive in Chrome. A global upgrade of the CLI by anyone mid-round is enough. So

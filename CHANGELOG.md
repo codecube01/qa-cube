@@ -11,6 +11,54 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+### Added
+
+- **An unpublished previous comment carries its questions forward**: `session-folder.md`, «Date the round's trigger» — «posted» is
+  checked in the thread itself; questions never asked go into the new comment in full, re-rated against the thread and the spec.
+- **A long planning pass counts as a wait before the launch**: `manual-brief.md`, the thread re-read entry — the thread is re-read
+  right before the executor is launched, and the brief's timestamp is that read's.
+- **A guard held by an in-flight state is judged by reads that bracket the repeat**: `planning.md`, overlapping operations — the
+  state is read before and after the repeat in the same call, so a window shortened by a failing dependency no longer voids the probe.
+- **A change that feeds an existing branch reads that branch's documented outcome as its requirement**: `planning.md`, the
+  no-requirements entry — a new rejection routed into «no suitable candidate» is checked against that path before the round is recording-only.
+- **A negative control of a new step names the assert it is aimed at**: `automation.md`, «The brief» — the step's precondition asserts
+  are suspended for the control run, so the red proves the step rather than its precondition.
+- **The entry state's time carries a measured zone**: `manual-brief.md`, the preflight state entry, and the «Entry state» heading of
+  `templates/2-manual-task.md` — the stamp comes from `date -u`, never from the conversation's local clock.
+- **Every identity the plan uses is signed in at preflight**: `manual-brief.md`, «under another role» — one sign-in per role, a dead
+  one becomes a start question for a human instead of a «check it is alive» line in the brief.
+- **«Was the data wiped» is read off the named fixtures and the count**: `planning.md`, dating the build — seeded records keep their
+  original dates through a wipe, so the oldest record proves nothing.
+- **Playwriter: an entry around a login page that closes from outside**: `browser/playwriter.md`, «Known failures» — the auth
+  requests go from a same-origin page that does not boot the app (a GET endpoint's JSON answer, a static asset); failed attempts count
+  against the link budget.
+- **A window that needs two states at once**: `planning.md`, the stuck-state family — the second trigger's own duration is compared
+  with the shortest run first; where it does not fit, one trigger is watched through a view prepared before it.
+- **A control the fix renames or merges**: `manual-brief.md`, retest, and the «Value as quoted» column of
+  `templates/2-manual-task.md` — the retest table carries each option's previous raw request value, so a value dropped under a
+  surviving caption reads as a regression.
+- **Playwriter: WebSocket frames logged from Node**: `browser/playwriter.md`, «Network» — `page.on('websocket')` survives navigation
+  and shows `subscribe` / `complete` / close, so «never subscribed» is told from «no event came»; `browser-techniques.md` points there.
+- **Playwriter page scripts: two limits, the relay's cwd, the `[log] ` prefix**: `browser/playwriter.md` — `--timeout` does not
+  lift the harness's own shell-call limit, so both are set above a wait; page-script code runs with the relay process's cwd, so every
+  path in it is absolute; every printed line comes prefixed with `[log] `, stripped before decoding JSON.
+- **An edited contract is a new source**: `report.md` — when the fix comment says the spec was corrected, the served contract is
+  pulled again and diffed before behaviour is rated against the previous round's copy; an unchanged version header proves nothing.
+- **A retested property late in the flow**: `manual-brief.md` and a slot of the «Retest» section in `templates/2-manual-task.md` —
+  the brief says what an unforeseen earlier failure gets: the bare failure reproduced twice and kept as a candidate, the checks on a
+  scaffold that removes only that obstacle, every result marked.
+- **The request logger records every response ≥400 whole from its first call**: `browser-techniques.md` — status, headers and body,
+  so a throttling answer is told from an expired session on the first refusal; `qa-manual.md`'s probe helper keeps a ≥400's headers too.
+- **A text for an earlier round's finding is dated against the served build**: `report.md`, «When the customer files the finding
+  by hand», with a pointer from `session-folder.md`'s «requirements arriving» entry — where the build moved since the observation,
+  each finding's mechanism is read in the served artifact, and the text ends «file» / «look once before filing» / «cannot tell — look once».
+- **Playwriter: select-all does not select a field on macOS**: `browser/playwriter.md`, «Known failures» — values are replaced
+  with `locator.fill` and read back.
+- **Red flag «only a question — a quick curl first»**: `SKILL.md` — `/qa` with a question still reads `shell-pitfalls.md` before
+  the first shell command.
+- **The validator resolves section pointers** (`check_engine_edits.py`): a «`file.md`, «Title»» between engine files must land
+  on a heading or a bold lead sentence, so a retro sees a pointer to an italic rider before CI does.
+
 ## [0.19.15] — 2026-10-26
 
 ### Added

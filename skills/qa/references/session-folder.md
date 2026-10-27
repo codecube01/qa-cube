@@ -21,7 +21,9 @@ a way the folder has already been broken once, and the precedent that closes it 
 
 - date the round's trigger before anything else
 - the previous findings' triage is read in every thread they were posted into, not only the task's own
-- a round whose trigger is the requirements arriving, not a fix — and which therefore launches nobody
+- «posted» is checked in the thread itself: a previous comment that never reached the tracker carries its questions forward in full
+- a round whose trigger is the requirements arriving, not a fix — and which therefore launches nobody; the backlog texts it writes
+  are dated against the served build (`report.md`)
 - renaming brings the whole name to the convention, not just the date — and the links to the old name are rewritten
 - every file of the round is named by the script, one call per file
 - what the executor's brief carries over is the line-by-line verdict, not the gist
@@ -72,6 +74,15 @@ retest read only the main task's thread; the customer's verdicts on five fronten
 sat in the sibling frontend task, and the round planned no check of the claimed fixes and learned of them from its own report
 reviewer.
 
+*And «posted» is a fact read in the thread, not in the report.* Where the tracker is read-only, the report's comment section is a draft
+the user pastes by hand, and a draft can stay unpasted. Before any previous question is rated «unanswered», find our own comment in the
+thread by its date and opening words; absent, the questions were never asked — the team cannot have answered them. They go into this
+round's comment in full, each re-rated against what the thread and the current spec now say (answered since, moot, still open), and the
+report says in one line that the earlier comment was not published (the same check for a FINDING: `report.md`, «The same statement
+usually arrives in its IMPLICIT form»). Precedent: a retest listed «previous questions, unanswered» by
+reference; the user asked which ones, and the thread showed the comment carrying all eight had never been posted — one was answered by a
+spec edit meanwhile, two were moot after a database rebuild, five went out for the first time.
+
 ### Renaming brings the whole name to the convention, not just the date
 
 The folder is renamed to the current date (`mv <sessions>/2026-08-10_… <sessions>/2026-08-14_…`; a folder coming out of a month
@@ -121,6 +132,11 @@ the poser actually reads. Precedent: a spike with no requirements at all was acc
 numbered questions; the poser answered all four within five hours, one answer set a limit five times higher than the measured
 one, another said «I was wrong, it is the other flow» — and the round that turned those four lines into requirements ran
 without a single executor.
+
+*And «the same build» is a fact to check, not the default.* The answers say nothing about deploys: where the round turns aged
+findings into texts for a backlog, each one is dated against the served build as `report.md` requires of any finding from an
+earlier round («When the customer files the finding by hand») — and the round still launches nobody, since reading served code
+is the manager's recon.
 
 ### What the executor's brief carries over is the line-by-line verdict, not the gist
 

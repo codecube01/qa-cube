@@ -14,7 +14,7 @@
 - Documentation: <paths in the project knowledge base relevant to the task>
 - QA findings: <paths to findings from past sessions, if the section has any>
 
-## Entry state (as of <HH:MM, date> — a dated hypothesis, not a fact: work from the actual state, with a note in the result)
+## Entry state (as of <HH:MM UTC, date — read off `date -u`, never the conversation's clock> — a dated hypothesis, not a fact: work from the actual state, with a note in the result)
 
 - Instance / profile id: <the id of the browser profile, instance or device — never its caption, never a tab id; «if the tool moves you
   elsewhere, select this id back»>
@@ -46,11 +46,14 @@
 
   | Requirement | Was | Finding | Value as quoted | Now, per recon |
   |---|---|---|---|---|
-  | <FR-3> | pass / fail / partial / not covered; for a fail — what ALREADY held in that round (its control), or the executor reports old behaviour as «narrowed» | <id or —> | <`RAW_ENUM` sends / «Caption» shows — say which one you hold> | <fixed / remains / unknown> |
+  | <FR-3> | pass / fail / partial / not covered; for a fail — what ALREADY held in that round (its control), or the executor reports old behaviour as «narrowed» | <id or —> | <`RAW_ENUM` sends / «Caption» shows — say which one you hold; for a control the fix renames or merges, the raw value each option sent then> | <fixed / remains / unknown> |
 
 - What remains: <what recon shows still unfixed — named here it comes back as a separate finding, unnamed it comes back as a doubt>
 - Already filed on these surfaces: <finding ids from the session reports and the side-findings registry — this task's and the neighbours' —
   on the header, the shared formatter, the pass-through text the round will meet>
+- An unforeseen failure earlier in the flow: <where the retested property appears LATE in the flow — the bare failure reproduced twice (the
+  second after a quiet interval) and kept as a candidate; then the checks on a scaffold that removes only that obstacle, <the scaffold>,
+  every result under it marked; the report leads with the failing flow>
 - Forbidden for the duration of a check: <operations that re-synchronise the same state through another path (a neighbouring write that
   refreshes the whole record) — the fresh action is the TARGET operation alone>
 - After a calendar wait: <first read the OBJECT — its state and its last-modified — never the process's history first; sweep the whole
