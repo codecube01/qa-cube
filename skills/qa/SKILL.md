@@ -288,9 +288,9 @@ if the feature is broken, automation may be postponed until the fix, with that r
 — the local rules on «what we do not automate» are in the profile, Autotests section. Before writing the brief, check the existing coverage
 (grep the tests: endpoint, tags, «also covers») — the preference is always: an existing test already covers it → write nothing; a test for
 the same area exists → **add a step to it**; and only then a separate test. A small feature or a follow-up on existing behavior is always a
-step in an existing test (reusing the setup is the main win); a separate test is justified only for a large standalone feature. **The choice
-is put to the user before the automator is
-launched, and before that read the «Contents» of `references/automation.md`, as step 3 reads `planning.md`'s**: the price of a run computed
+step in an existing test (reusing the setup is the main win, once the host reaches the step); a separate test is justified only for a large
+standalone feature. **The choice is put to the user before the automator is launched, and before that read the «Contents» of
+`references/automation.md`, as step 3 reads `planning.md`'s**: the price of a run computed
 from the round's own timings, the size of the feature as a ground of its own, the status list sent to the chat before the question
 and the three lines the question carries, an answer that is a question, a statistical criterion made into a stable assertion. In doubt — record «no automation was done» in the report with a reason;
 that is a valid outcome:
@@ -580,6 +580,7 @@ do what the right-hand cell says.
 | «The MR diff will show me what to test» | a plan read off the implementation agrees with it; the scenarios come from the requirements (step 3) |
 | «The report is written — the retro first, the user after» | the result goes to the chat before the retro (step 6.5); a session that went quiet for minutes is why |
 | «I'll read the task first — then I'll know whether this round needs the environment at all» | where the profile says entering needs the user's hands, the liveness oracle is step 1's first call whatever the task turns out to be (step 1) |
+| «Only a question — a quick curl first» | `/qa` with a question is a session: `references/shell-pitfalls.md` before the first shell command (step 0) |
 | «The profile is behind — I'll mention it with the summary» | that line is the session's first message, before any other call (step 0) |
 | «I have read this number for twenty calls — it is a name by now» | the user did not read those calls: every mention in the chat carries its bracket (step 0) |
 | «The classifier refused the mutation — I'll phrase it differently» | a refused MUTATION is never reworded: the user's permission, then one repeat in your own session, paired with a control (`references/manual-brief.md`, «Your own harness refuses a call») |

@@ -230,6 +230,28 @@ class HarnessLeaks(unittest.TestCase):
         self.assertEqual(ce.harness_leak_problems(root), [])
 
 
+RIDER = "**A comment names the fixed findings.** Text.\n\n*The reading holds only for findings filed.* Text.\n"
+
+
+class Pointers(unittest.TestCase):
+    # The slip: a rider pointed at by its italic lead, which no reader can find as a title.
+    def test_pointer_to_an_italic_rider_is_caught(self):
+        text = "the same check: `report.md`, «The reading\nholds only for findings filed»"
+        self.assertEqual(ce.unresolved_pointers(text, {"report.md": RIDER}),
+                         ["report.md «The reading holds only for findings filed»"])
+
+    def test_pointer_to_the_bold_head_is_quiet(self):
+        text = "the same check: `../report.md`, «A comment names\nthe fixed findings»"
+        self.assertEqual(ce.unresolved_pointers(text, {"report.md": RIDER}), [])
+
+    def test_pointer_problems_name_the_file(self):
+        root = _adapter_tree({"skills/qa/references/report.md": RIDER,
+                              "skills/qa/references/a.md": "see `report.md`, «Gone»\n"})
+        found = ce.pointer_problems(root)
+        self.assertEqual(len(found), 1)
+        self.assertTrue(found[0].startswith("skills/qa/references/a.md: pointer to report.md «Gone»"))
+
+
 CONTRACT = "```markdown\n## Capabilities\nbrowser: playwriter    # claude-in-chrome | none\n```\n"
 
 

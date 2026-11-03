@@ -48,8 +48,9 @@ project's tooling stays in its profile.
   positional parameters, `pipestatus` is overwritten by the next pipeline — name variables `url_path`, `code`, `args`. A colon right after
   a variable is a history modifier: `"$tx:e…"` eats `:e` and the key comes out wrong — brace it, `"${tx}:e…"`; the failure reads as «not
   found» from the API, not as a shell error.
-- **A minified bundle is searched with `python3` + `re`, not `grep`.** macOS grep (ugrep) aborts with «exceeds complexity limits» on
-  wide quantifiers (`.{0,400}`) over one-line JS; `re.finditer` over the same file answers at once.
+- **A wide-context search is run with `python3` + `re`, not `grep`.** macOS grep (ugrep) aborts with «exceeds complexity limits» on
+  wide quantifiers (`.{0,400}`) over a minified bundle, and on a narrower one (`.{0,200}`) over ordinary markdown in a non-Latin script —
+  multibyte characters widen the automaton the same way a one-line file does; `re.finditer` over the same file answers at once.
 - **The shape of a secrets file is read with its VALUES replaced, never through a filter that masks the keys it guesses are secret.**
   A mask keyed on field names (`key`, `priv`, `token`) prints every secret stored under a name it did not foresee — a short alias, a
   nested map keyed by address — straight into the transcript, and nothing warns that it did. Print the structure instead: keys and value

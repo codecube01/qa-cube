@@ -14,7 +14,7 @@
 - Documentation: <paths in the project knowledge base relevant to the task>
 - QA findings: <paths to findings from past sessions, if the section has any>
 
-## Entry state (as of <HH:MM, date> — a dated hypothesis, not a fact: work from the actual state, with a note in the result)
+## Entry state (as of <HH:MM UTC, date — read off `date -u`, never the conversation's clock> — a dated hypothesis, not a fact: work from the actual state, with a note in the result)
 
 - Instance / profile id: <the id of the browser profile, instance or device — never its caption, never a tab id; «if the tool moves you
   elsewhere, select this id back»>
@@ -46,11 +46,14 @@
 
   | Requirement | Was | Finding | Value as quoted | Now, per recon |
   |---|---|---|---|---|
-  | <FR-3> | pass / fail / partial / not covered; for a fail — what ALREADY held in that round (its control), or the executor reports old behaviour as «narrowed» | <id or —> | <`RAW_ENUM` sends / «Caption» shows — say which one you hold> | <fixed / remains / unknown> |
+  | <FR-3> | pass / fail / partial / not covered; for a fail — what ALREADY held in that round (its control), or the executor reports old behaviour as «narrowed» | <id or —> | <`RAW_ENUM` sends / «Caption» shows — say which one you hold; for a control the fix renames or merges, the raw value each option sent then> | <fixed / remains / unknown> |
 
 - What remains: <what recon shows still unfixed — named here it comes back as a separate finding, unnamed it comes back as a doubt>
 - Already filed on these surfaces: <finding ids from the session reports and the side-findings registry — this task's and the neighbours' —
   on the header, the shared formatter, the pass-through text the round will meet>
+- An unforeseen failure earlier in the flow: <where the retested property appears LATE in the flow — the bare failure reproduced twice (the
+  second after a quiet interval) and kept as a candidate; then the checks on a scaffold that removes only that obstacle, <the scaffold>,
+  every result under it marked; the report leads with the failing flow>
 - Forbidden for the duration of a check: <operations that re-synchronise the same state through another path (a neighbouring write that
   refreshes the whole record) — the fresh action is the TARGET operation alone>
 - After a calendar wait: <first read the OBJECT — its state and its last-modified — never the process's history first; sweep the whole
@@ -63,7 +66,8 @@
 - Verdict artifact: <the file, the record, the callback the verdict rests on — never an intermediate UI state; the observation path itself is
   checked alive first, a symptom goes stale with the build>
 - Substituted responses: <where the finding is about the client's REACTION to a refusal (logout, retry, rollback) — the response to substitute
-  on the client side, the real refusal once as the control — or «n/a»>
+  on the client side, the real refusal once as the control; a substituted success in the real response's shape, its ids included, never
+  `{}` — or «n/a»>
 
 ## Recon facts (what the manager measured — one row per fact, the value itself, never a retelling)
 
@@ -124,6 +128,7 @@ The wording that keeps a row a question:
 - Reverse: <works | known not to work — the stuck value is the expected artifact and the evidence; record it under environment artifacts, not as a protocol failure>
 - Budget unit: <one pair of mutations per PROPERTY to be shown, on the same object, each reversed before the next; restorations count>
 - A process the probe starts: <not terminated by you — record its id, state and attempt count at the end of the round; the report hands the decision to the team>
+- Timed burst (a paid probe of simultaneous and offset calls): <rehearsed first, free — the same code with a harmless read under the mutation's alias, no budget flag, nothing stored; the measured offsets reported before the pause | not a burst>
 
 ## Budget & limits (delete a line that does not apply)
 
@@ -153,6 +158,8 @@ The wording that keeps a row a question:
 - The engine's executor catalogue: `<absolute path>/skills/qa/references/executor.md` — the Contents whole, one entry per fired line
 - <a browser round: the engine's techniques, `<absolute path>/skills/qa/references/browser-techniques.md` — the first screen + §<the sections this task needs>;
   the tool's adapter, `<absolute path>/skills/qa/references/browser/<the browser tool>.md` — whole>
+- <a UI round on a task that links a design: the frames to compare, per screen, as node ids — every screen verdict carries a «design»
+  column; a look the design prescribes is a question for the analyst, not a defect>
 - <a round with API requests: `<absolute path>/skills/qa/references/api-techniques.md` — the first screen + §<the sections, «GraphQL» only for a GraphQL API>>
 - The remaining profile subfiles — only when stuck.
 - <a session that may die in minutes: split this list into «Before the session-bound steps» (only what those steps cannot be run safely
@@ -174,7 +181,9 @@ message opening with `CLICK NEEDED:` (the marker the manager greps the result fo
   step before it — plus the SHORTEST observed step duration for «during step k», the LONGEST for «after step k has finished»; never the
   mean, whose spread puts the click a step early or late; the sizing rule — `planning.md`, «When the fixture the round needs IS a stuck
   state», its rider on several observations in one window>
-- Do not reload the page; do not work in this environment until the round ends
+- Several tabs prepared for one series: <each tab's `document.title` rewritten as its number and step («1 SETTINGS …», «2 SUBMIT A …», «3 SUBMIT B …»),
+  re-set after any navigation, and the request names the tab by that title — tabs on one URL look identical to the user | one tab>
+- Do not reload or close the tab; do not work in this environment until the round ends
 - Expected answer: one word («done» / «clicked») — the executor re-reads the state itself; ask for at most 1–2 concrete VALUES
 - Wrong click (confirmed where cancel was asked): <recorded as a fact; the scenario is replayed only if the stand was affected>
 - A second window (signature → send) cannot be merged into one request: announce it in advance, the user stays at the keyboard
