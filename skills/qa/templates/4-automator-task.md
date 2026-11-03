@@ -22,7 +22,7 @@
 
 | Scenario | Candidate (class/file) | TMS case |
 |---|---|---|
-| <from the plan, usually the 1–2 main ones> | <per the code map in the profile> | <id> — with `test-cases: upfront` from the analyst, with `inline` from the manual tester; with `none` there are no cases and the link goes to the tracker task |
+| <from the plan, usually the 1–2 main ones> | <per the code map in the profile> | <id>, steps <numbers> where the scenario is steps of an existing case — the source of each expected result, cited, never retold — with `test-cases: upfront` from the analyst, with `inline` from the manual tester; with `none` there are no cases and the link goes to the tracker task |
 
 ## Deliverable
 

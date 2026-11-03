@@ -36,7 +36,8 @@ it carries (below) — an exact URL may match another actor's tab. The tabs a ro
 executor prepared, two actors' tabs may sit on the same URL, so the press goes through `-s <the executor's session id>` and its
 `state.page`, in ONE call with its checks: the marker the executor planted in the page (`window.name`, naming the step — it survives a reload, below), the
 identity oracle, and the interceptor's armed flag in `state` — any of them off, the call aborts before the click. The executor's
-request therefore carries its session id, tab group, marker and the control's selector. Precedent: the manager's own tab stood on the
+request therefore carries its session id, tab group, marker and the control's selector — or, for a step prepared as a function in
+`state`, the line that calls it and prints its return value (below, «Page scripts and their budget»). Precedent: the manager's own tab stood on the
 very registry URL where the executor had prepared three irreversible submits; all three went through its session and marker without a
 single clarification.
 
@@ -46,6 +47,11 @@ single clarification.
   `console.log`s — under a «Console output:» header, **every line prefixed `[log] `**, so a shell parser strips the prefix before
   `json.loads` (an unstripped one costs a `JSONDecodeError` and a repeat). Keep the code in single quotes (the shell leaves `$`,
   backticks and `\` alone), or in a file passed as `-e "$(cat f.js)"`.
+
+  *And a function stored in `state` by an earlier call logs into that call, not the one that runs it* — its own `console.log` lines never
+  reach a later call's output. A function prepared for another actor's call (the manager pressing a step the executor set up) returns its
+  result, and the calling line prints the return value. Precedent: a prepared paid step logged its summary inside and was called with
+  the return value printed — only the printed line came back; its dry run, called without printing, looked like nothing had happened.
 - **One call has 10 s by default; `--timeout <ms>` raises it** (waits of 30, 120 and 300 s inside one call passed with the timeout set
   20 s above the wait). Size the timeout per call instead of splitting a wait.
 
@@ -63,6 +69,10 @@ single clarification.
 - **`state` lives on the Node side and survives navigation and reload; `window.*` of the page dies on reload as usual.** So loggers built
   on `page.on(...)` or a CDP session persist across navigations, while an in-page `fetch` wrapper is reinstalled after each — install it
   with `page.addInitScript` to have it before the page's own code runs.
+
+  *And they outlive the round*: a `page.on('response')` logger writing a file, a `setInterval` poller — removed at the round's end
+  (`page.removeAllListeners('response')`, `clearInterval`), named in the result; the tabs stay open. Precedent: a round's logger
+  wrote into the session folder five more hours under the page's auto-refresh — 28 MB.
 - **A secret captured only in the page reaches a file without being printed**: the round's code runs in Node, so
   `fs.writeFileSync(<secrets path>, await page.evaluate(...), {mode: 0o600})` moves it straight into the profile's secrets source (`fs` comes
   from `await import('node:fs')`). Where the harness refuses that write for its shape, the value stays in the page's `localStorage` under a
@@ -79,13 +89,16 @@ for your own eyes, not for the result.
 
 ## Network
 
-Playwright's own: `page.route(pattern, r => r.fulfill({...}))` substitutes a response to the page's `fetch` (a fulfilled response does
-not appear in `page.on('response')`); `page.on('request'|'response')` logs real traffic with bodies on demand (`await r.text()`);
+Playwright's own: `page.route(pattern, r => r.fulfill({...}))` substitutes a response to the page's `fetch` (on CLI 0.9.0 it DOES
+reach `page.on('response')`, without server headers — mark your own); `page.on('request'|'response')` logs real traffic with bodies
+on demand (`await r.text()`);
 `getCDPSession({page})` + `Network.enable` gives the debugging protocol's events. Unlike an in-page wrapper these see every request the
 page makes, XHR and workers included, and survive navigation — remove a route (`page.unroute`) right after the click it guards, as the
 fail-closed rule in `../browser-techniques.md` asks. To re-install a route, remove it by pattern with no handler first
 (`page.unroute(pattern)`), or the old handler keeps answering beside the new one.
 
+- **A string `pattern` is a glob over the WHOLE URL, query included** — `**/path` misses `…/path?x=1`; match with a function on
+  `new URL(u).pathname`. Precedent: a «pass one, abort the rest» route on a GET with a query hit zero times on its dry run.
 - **A multipart body is not in the request log**: `request.postData()` comes back empty for a `FormData` that carries a file. Read it with a
   read-only in-page `fetch` wrapper that clones the request (`req.clone().formData()`) and leaves the call itself untouched.
 - **WebSocket frames are logged from Node — `page.on('websocket')` with the socket's `framesent` / `framereceived` / `close`** — not by
@@ -94,14 +107,17 @@ fail-closed rule in `../browser-techniques.md` asks. To re-install a route, remo
   never subscribed» from «no event came». It sees sockets opened after the listener is attached: attach it, then navigate into the
   screen under observation. Precedent: a «the status does not refresh» retest proved the detail screen held no subscription at all —
   the log showed the list screen's subscription completed and its socket closed at the transition, and no socket afterwards.
-- **`route.fetch()` — sending the intercepted request on from a route handler — crashed the relay in extension mode** and dropped every
-  session on the machine, as a version mismatch does (below); observation 1/1, held as the rule until a round reproduces or refutes it.
-  Substitute with `route.fulfill` from a body you already hold, or with an in-page `fetch` wrapper, which does not touch the relay.
+- **`route.fetch()` from a route handler crashed the relay in extension mode** and dropped every session on the machine; observation
+  1/1, held as the rule until a round refutes it. Substitute with `route.fulfill` from a body you already hold, or with an in-page
+  `fetch` wrapper. `route.continue()` on every GET for an hour did not crash it.
 
 ## Known failures
 
-- **No output filter and no length cut**: a query string, a cookie-shaped string and 6000 characters print whole. Nothing stops access
-  from being printed, so the rule «Responses carry access» in `../browser-techniques.md` is the only guard — keep it.
+- **No output filter**: a query string, a cookie-shaped string and 6000 characters print whole. The rule «Responses carry access»
+  in `../browser-techniques.md` is the only guard.
+
+  *And the output IS cut, at about 10 000 characters (0.9.0)*, silently: a population dump is written to a file from the page script
+  and only its summary printed, or the tail is lost and the read repeated. Precedent: a round's batch inventory came back cut and was re-read from a file.
 - A `goto` that waits for `load` times out on a page that opened (above) — the timeout is not a navigation failure.
 - **`ControlOrMeta+a` does not select a field's text on macOS in extension mode** — the typed value is appended, not replacing
   (`3` typed over `2` reads `32`). Replace a value with `locator.fill(…)` and read the field back before acting on it.
@@ -129,6 +145,12 @@ fail-closed rule in `../browser-techniques.md` asks. To re-install a route, remo
   of that tab, while a `window.__<round>` value dies with any reload a failing call made. Precedent: an
   executor's first call after a mid-round upgrade restarted the relay, dropped the manager's session with the rest, and the round went on
   only because its tabs carried such a marker.
+
+  *And the same loss arrives without the version message*: a long call returns `Target page, context or browser has been closed` minutes
+  late and every page handle in `state` is dead, while `context.pages()` still lists the tabs. That is the channel failing, not the tabs
+  closing — re-bind `state.page` by the `window.name` marker and read the state the page reached; what fell inside the gap is «observed
+  after the event», never re-played as if it were live. Precedent: an observation call hung for 27 minutes behind a degraded proxy, the
+  handles died, all three marked tabs were alive on their final pages, and the expiry screen it was watching could only be dated afterwards.
 - **`download.saveAs()` fails in extension mode** (`ENOENT` on Playwright's artifact): the file lands in the browser's own download folder —
   take it from there by name and time, and hash it there.
 - Controlled tabs show Chrome's automation banner; a scenario about the page's own layout at the top edge accounts for it.

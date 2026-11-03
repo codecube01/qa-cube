@@ -66,7 +66,8 @@
 - Verdict artifact: <the file, the record, the callback the verdict rests on — never an intermediate UI state; the observation path itself is
   checked alive first, a symptom goes stale with the build>
 - Substituted responses: <where the finding is about the client's REACTION to a refusal (logout, retry, rollback) — the response to substitute
-  on the client side, the real refusal once as the control — or «n/a»>
+  on the client side, the real refusal once as the control; a substituted success in the real response's shape, its ids included, never
+  `{}` — or «n/a»>
 
 ## Recon facts (what the manager measured — one row per fact, the value itself, never a retelling)
 
@@ -127,6 +128,7 @@ The wording that keeps a row a question:
 - Reverse: <works | known not to work — the stuck value is the expected artifact and the evidence; record it under environment artifacts, not as a protocol failure>
 - Budget unit: <one pair of mutations per PROPERTY to be shown, on the same object, each reversed before the next; restorations count>
 - A process the probe starts: <not terminated by you — record its id, state and attempt count at the end of the round; the report hands the decision to the team>
+- Timed burst (a paid probe of simultaneous and offset calls): <rehearsed first, free — the same code with a harmless read under the mutation's alias, no budget flag, nothing stored; the measured offsets reported before the pause | not a burst>
 
 ## Budget & limits (delete a line that does not apply)
 
@@ -156,6 +158,8 @@ The wording that keeps a row a question:
 - The engine's executor catalogue: `<absolute path>/skills/qa/references/executor.md` — the Contents whole, one entry per fired line
 - <a browser round: the engine's techniques, `<absolute path>/skills/qa/references/browser-techniques.md` — the first screen + §<the sections this task needs>;
   the tool's adapter, `<absolute path>/skills/qa/references/browser/<the browser tool>.md` — whole>
+- <a UI round on a task that links a design: the frames to compare, per screen, as node ids — every screen verdict carries a «design»
+  column; a look the design prescribes is a question for the analyst, not a defect>
 - <a round with API requests: `<absolute path>/skills/qa/references/api-techniques.md` — the first screen + §<the sections, «GraphQL» only for a GraphQL API>>
 - The remaining profile subfiles — only when stuck.
 - <a session that may die in minutes: split this list into «Before the session-bound steps» (only what those steps cannot be run safely
@@ -177,7 +181,9 @@ message opening with `CLICK NEEDED:` (the marker the manager greps the result fo
   step before it — plus the SHORTEST observed step duration for «during step k», the LONGEST for «after step k has finished»; never the
   mean, whose spread puts the click a step early or late; the sizing rule — `planning.md`, «When the fixture the round needs IS a stuck
   state», its rider on several observations in one window>
-- Do not reload the page; do not work in this environment until the round ends
+- Several tabs prepared for one series: <each tab's `document.title` rewritten as its number and step («1 SETTINGS …», «2 SUBMIT A …», «3 SUBMIT B …»),
+  re-set after any navigation, and the request names the tab by that title — tabs on one URL look identical to the user | one tab>
+- Do not reload or close the tab; do not work in this environment until the round ends
 - Expected answer: one word («done» / «clicked») — the executor re-reads the state itself; ask for at most 1–2 concrete VALUES
 - Wrong click (confirmed where cancel was asked): <recorded as a fact; the scenario is replayed only if the stand was affected>
 - A second window (signature → send) cannot be merged into one request: announce it in advance, the user stays at the keyboard

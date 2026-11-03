@@ -288,9 +288,9 @@ if the feature is broken, automation may be postponed until the fix, with that r
 — the local rules on «what we do not automate» are in the profile, Autotests section. Before writing the brief, check the existing coverage
 (grep the tests: endpoint, tags, «also covers») — the preference is always: an existing test already covers it → write nothing; a test for
 the same area exists → **add a step to it**; and only then a separate test. A small feature or a follow-up on existing behavior is always a
-step in an existing test (reusing the setup is the main win); a separate test is justified only for a large standalone feature. **The choice
-is put to the user before the automator is
-launched, and before that read the «Contents» of `references/automation.md`, as step 3 reads `planning.md`'s**: the price of a run computed
+step in an existing test (reusing the setup is the main win, once the host reaches the step); a separate test is justified only for a large
+standalone feature. **The choice is put to the user before the automator is launched, and before that read the «Contents» of
+`references/automation.md`, as step 3 reads `planning.md`'s**: the price of a run computed
 from the round's own timings, the size of the feature as a ground of its own, the status list sent to the chat before the question
 and the three lines the question carries, an answer that is a question, a statistical criterion made into a stable assertion. In doubt — record «no automation was done» in the report with a reason;
 that is a valid outcome:

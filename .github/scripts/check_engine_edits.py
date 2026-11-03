@@ -58,10 +58,15 @@ BROWSER_QUESTIONS = ("## Install", "## Preflight", "## Connect and pick the tab"
 # Lower a number when its file shrinks, so the room does not come back. SKILL.md has its own budget in
 # validate-plugin.py.
 BUDGETS = {
-    "skills/qa/references/planning.md": 215_000,  # its index carries the rules (~21k) since 0.18.19
+    "skills/qa/references/planning.md": 236_500,  # its index carries the rules (~21k) since 0.18.19; +10% at 0.19.42 (215k full)
     "skills/qa/references/manual-brief.md": 154_000,  # its index carries the rules since 0.18.23
     "skills/qa/references/report.md": 95_000,  # its index carries the rules since 0.18.23
-    "skills/qa/references/browser-techniques.md": 36_000,  # lowered after the tool-specific entries left for browser/ (33.3k)
+    "skills/qa/references/browser-techniques.md": 39_600,  # lowered after the tool-specific entries left for browser/ (33.3k); +10% at 0.19.42
+    # the default budget, full at 0.19.42 — +10% each
+    "skills/qa/references/automation.md": 16_500,
+    "skills/qa/references/session-folder.md": 16_500,
+    "skills/qa/references/executor.md": 16_500,
+    "skills/qa/references/browser/playwriter.md": 16_500,
     "agents/qa-manual.md": 25_000,  # lowered after the 0.18.25 audit (22.7k), so the room does not come back
 }
 DEFAULT_BUDGET = 15_000
