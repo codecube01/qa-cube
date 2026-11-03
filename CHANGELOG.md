@@ -11,6 +11,8 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.19.42] — 2026-11-03
+
 ### Added
 
 - **A substituted success carries the real response's shape**: `manual-brief.md`, «A retest round» — a dry run of the client's
