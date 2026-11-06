@@ -26,9 +26,13 @@ the build fingerprint — the CLI can change under a running round (below, «Kno
 
 ## Connect and pick the tab
 
-A session per actor: `playwriter session new --tab-group qa-<task>-<role> [--browser <key>]` prints its id; every later call is
-`playwriter -s <id> -e '<code>'`. `session list` shows the other sessions on the machine — the user's other work included — and they are
-never reset or deleted from a round. There is no default page: `state.page = await context.newPage()` opens a controlled tab in the
+A session per actor: `playwriter session new --tab-group qa-<task> [--browser <key>]` prints its id; every later call is
+`playwriter -s <id> -e '<code>'`. **One group per task, not per actor**: `<task>` is the tracker id in lower case (`qa-acme-412`), or
+the session folder's name without its date — one string for every actor and round, no role or round suffix, given in the brief.
+Sessions with one group name share one Chrome group (0.9.0) and keep their own `state`: actors stay apart by session id and the
+marker below. Precedent: the manager and the executor each named their own group, spelling the task differently, and the user
+hunted for one task's tabs across two groups. `session list` shows the other sessions on the machine — the user's other work
+included — and they are never reset or deleted from a round. There is no default page: `state.page = await context.newPage()` opens a controlled tab in the
 session's group with no click, and `context.pages()` lists every session's tabs, so a tab is kept in `state.page` or found by a marker
 it carries (below) — an exact URL may match another actor's tab. The tabs a round opened stay open when it ends.
 
@@ -71,8 +75,10 @@ single clarification.
   with `page.addInitScript` to have it before the page's own code runs.
 
   *And they outlive the round*: a `page.on('response')` logger writing a file, a `setInterval` poller — removed at the round's end
-  (`page.removeAllListeners('response')`, `clearInterval`), named in the result; the tabs stay open. Precedent: a round's logger
-  wrote into the session folder five more hours under the page's auto-refresh — 28 MB.
+  by the reference kept when it was attached (`state.onResp = …; page.on('response', state.onResp)` → `page.off('response',
+  state.onResp)`, `clearInterval`), named in the result; the tabs stay open. Never `page.removeAllListeners(…)`: it strips
+  Playwriter's own listeners on the page too, and the CLI's own skill forbids it — a brief that prescribes it is overruled by the
+  skill mid-round. Precedent: a round's logger wrote into the session folder five more hours under the page's auto-refresh — 28 MB.
 - **A secret captured only in the page reaches a file without being printed**: the round's code runs in Node, so
   `fs.writeFileSync(<secrets path>, await page.evaluate(...), {mode: 0o600})` moves it straight into the profile's secrets source (`fs` comes
   from `await import('node:fs')`). Where the harness refuses that write for its shape, the value stays in the page's `localStorage` under a
@@ -100,7 +106,12 @@ fail-closed rule in `../browser-techniques.md` asks. To re-install a route, remo
 - **A string `pattern` is a glob over the WHOLE URL, query included** — `**/path` misses `…/path?x=1`; match with a function on
   `new URL(u).pathname`. Precedent: a «pass one, abort the rest» route on a GET with a query hit zero times on its dry run.
 - **A multipart body is not in the request log**: `request.postData()` comes back empty for a `FormData` that carries a file. Read it with a
-  read-only in-page `fetch` wrapper that clones the request (`req.clone().formData()`) and leaves the call itself untouched.
+  read-only in-page `fetch` wrapper that clones the request (`req.clone().formData()`) and leaves the call itself untouched — **installed with
+  `page.addInitScript` and a reload, before the bundle runs** (the `state` entry above): a wrapper over a global the client captured at init
+  logs nothing while the upload goes through (`../manual-brief.md`, «armed in the SAME call»). Where the page cannot be reloaded, «how
+  many files went out» is proven by the server's own trace of that request (the log line by its trace id), not by an empty wrapper.
+  Precedent: a «one file only» check set its spies on the loaded form, caught no request, and the count came from the backend's
+  `attachments_count` in the upload's trace.
 - **WebSocket frames are logged from Node — `page.on('websocket')` with the socket's `framesent` / `framereceived` / `close`** — not by
   the in-page prototype patch of `../browser-techniques.md`, which dies with every navigation. The Node-side log survives SPA transitions
   and reloads and shows a subscription's whole life — `subscribe`, `complete`, the socket closing — which is what tells «this screen

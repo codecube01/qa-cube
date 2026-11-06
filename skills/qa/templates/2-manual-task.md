@@ -18,6 +18,7 @@
 
 - Instance / profile id: <the id of the browser profile, instance or device — never its caption, never a tab id; «if the tool moves you
   elsewhere, select this id back»>
+- Tab group: <where the tool names groups (Playwriter's `--tab-group`): `qa-<task>`, the manager's own string for this task — one group for every actor and round, no role or round suffix (`browser/<tool>.md`, «Connect and pick the tab»); delete the line otherwise>
 - Identity oracle: <the call that answers who is logged in>; a «dead» verdict is believed only from a FRESH tab — new tab → navigate → the call, for every re-check
 - Who is logged in: <account · organisation / tenant · role> — your first move is to open your own tab and check WHOSE session this is, not
   whether one is alive: a live session under someone else's role turns its refusals into «the result of a permissions check»
@@ -36,7 +37,8 @@
 
 - Build fingerprint: <how it is read — the bundle hash, the deploy ref, the image version; taken FIRST, repeated as the LAST action, and again
   right after any anomaly (data vanishing, sessions dropping, 5xx on a healthy endpoint) and before a UI finding is written down; «development must confirm the fix is in the build» is
-  a full answer, silence is not>
+  a full answer, silence is not; where the target is served from a branch that keeps being redeployed, the bundle each reading names is
+  saved into the session folder at that reading — `planning.md`, «Dating the build»>
 - Matching versions prove nothing: <the one behavioural probe of the previous round's sharpest finding — the blocked page, the failing
   operation, the wrong field — before a single measurement is inherited; a server can be redeployed under the same reported version>
 - Fix scope, verbatim: <what the team accepted — the retest verdict is passed on THIS; verify both, report them apart: the same outcome by
@@ -118,7 +120,7 @@ The wording that keeps a row a question:
 
 ## Sanctioned probe (a mutation the user authorised — one block per probe; delete the section otherwise)
 
-- Probe: <the call, the object, the hostile value(s), what the permission said>
+- Probe: <the call, the object (checked free before the question: the test code by its id and name, its own description, the environment snapshot), the hostile value(s), what the permission said>
 - Body: <written out whole, field by field — each checked against the knowledge base for a value known to crash or page someone; the other fields chosen by the order of the checks>
 - Read channel for the effect: <alive, proven by <a read the manager took at planning> — a probe whose oracle recon already showed dead is not sanctioned; it is deferred with its carrier recorded>
 - Who presses: <the executor — a reversible step | the user, through the pause protocol | the manager, by its own call or in the executor's prepared tab (through the executor's session where the tool has sessions, `browser/<tool>.md`) — an IRREVERSIBLE step is never the executor's; the sanction question already said who>
@@ -211,7 +213,7 @@ block only what it cannot run safely without, the rest right after it.
 |---|---|---|---|---|---|---|---|
 | 0 | The refuting check: <the source of truth that would invalidate the round's central hypothesis — the contract file, the schema, the declared route table — read for <the fact>> | <confirmed → go on; refuted → stop, the plan is rebuilt> | — | <who, or — for a file read locally> | <yes / no> | yes | — |
 | 1 | The batch snapshot into the result file: <the contract, the population, reference numbers per filter value, samples, anchor ids; a bulk source is dumped ONCE and queried locally> | <the file holds …> | — | <who> | yes | yes | — |
-| N | <scenario> | <never a code alone: what changes and where it is seen — the record, the journal, the receiver, the log line> | <a selection criterion on the OBSERVED object, a value only as an illustration; a foreign entity: <id, verified <date>, or where to collect it in the other contour's snapshot pass>> | <role + exact account handle; «who am I» against the API under test before the target call> | yes / no | yes / depends on <the executor's own limit> | <the shared fixture — a rule, a price, a flag — disarmed the moment the decision it steers has been taken; re-armed explicitly where a later scenario needs it> |
+| N | <scenario> | <never a code alone: what changes and where it is seen — the record, the journal, the receiver, the log line> | <a selection criterion on the OBSERVED object, a value only as an illustration; a foreign entity: <id, verified <date>, or where to collect it in the other contour's snapshot pass>> | <role + exact account handle; «who am I» against the API under test before the target call> | yes / no | yes / depends on <the executor's own limit> | <the shared fixture — a rule, a price, a flag — disarmed the moment the decision it steers has been taken; re-armed explicitly where a later scenario needs it; the disarming call's body, each value checked against the knowledge base's latest measurement, and a second route for its refusal> |
 | N+1 | After the negatives: the journal / audit log for the run's window — <what each refusal was recorded as; each refusal's text, whole> | <nothing recorded as performed; the texts quoted> | — | <who> | <yes/no> | yes | — |
 
 ## Deliverable

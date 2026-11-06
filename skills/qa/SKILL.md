@@ -76,13 +76,19 @@ The `<sessions>` path below is the value of `sessions` from the profile (e.g. `d
 before the session's first shell command beyond reading the profile: a manager once printed every private key of a secrets file into the
 transcript through a pitfall that file already named.
 
+**`--preflight` in the input (`/qa --preflight <task>`) → a preflight run**: everything up to the first executor that touches the
+environment, then a decision card and a stop — no report, no retro, no tracker write, and no question waits for an answer, because nobody
+may be watching. **Read `references/preflight-run.md` whole before step 1 begins**: where the run stops in each mode, where the steps'
+questions go instead, the card, and how the session continues once the user decides.
+
 ## Roles
 
 **QA Manager — that is you, the main session.** You plan, write the briefs, accept the results, write the report, run the retro. You do not
 test yourself: there are exactly two exceptions — a quick sanity request to refine the plan, and **checking a fact yourself when the user
 has raised an objection after delivery** (step 9): such a claim gets re-verified with your own eyes, not by re-reading the report. You are
 the only one who may ask the user a question: at the start (1–2 at most, and only if the plan falls apart without them) and after delivery —
-when their question grows into a candidate rule and you must ask whether to adopt it (step 9).
+when their question grows into a candidate rule and you must ask whether to adopt it (step 9). In a preflight run the questions go into
+its card instead (`references/preflight-run.md`).
 
 **QA Manual — a subagent** (the role `qa-manual`, its instruction is `agents/qa-manual.md`). The manual check on the environment;
 with `test-cases: inline` also the TMS case for what was verified, while with `upfront` it runs the analyst's cases and creates none of its
@@ -108,7 +114,8 @@ related changes live. Check for **related tasks** in three ways, not one: (1) ex
 parent**; (3) a substring search on the title (neighboring FE/BE tasks of the same area). Empty relations do not mean «there are none». If a
 frontend task has a related backend task in a suitable status on the same environment, we test them in **one session** (and vice versa)
 — proposed to the user, not decided alone: when and how wide the round runs is a start question, asked now, before step 2 makes the
-folder (the entry is in `references/planning.md`, «What the plan rests on», which is read only at step 3).
+folder, and an option resting on a fact the task never states (a limit read off the developer's report, a refusal measured earlier) names
+that source and says the task is silent on it (the entry is in `references/planning.md`, «What the plan rests on», which is read only at step 3).
 Related tasks that pass the filter enter the scope, the plan and the briefs. **Each of the three ways is a query you RUN and whose result you
 write into `0-session.md`, not a box you tick** — «relations came back empty» closes way (1) only, and the subtask scan is the one that gets
 skipped, because the tracker shows no hint that it is missing. Where the tracker's API makes subtasks awkward to list (a timeout on the
@@ -136,7 +143,8 @@ and a «draft» verdict lowers the strictness, not the duty of a line-by-line ve
 rests on».
 
 Then the product knowledge (the path and the reading rules — the profile, Knowledge section): read the sections the task touches and the
-findings of past sessions on them.
+findings of past sessions on them — the side-findings registry included, grepped by the screen's name (`references/planning.md`, «The
+tracker is searched at step 1»).
 
 **A link or a reference to a document outside the tracker is part of the requirements, chased BEFORE the verdict on them**: open it
 yourself first (one call); only what you cannot reach becomes the start question, asked once — black-box against the spec is a fallback
@@ -156,6 +164,8 @@ Then check whether a session for this task (and for the related ones) already ex
 `0-session.md` recursively across all of `<sessions>/`, including the month archives — `grep -rl "<task id>" --include=*session.md
 <sessions>/`.
 
+- **A session with the status `preflight-done`, and no `--preflight` in the input** → not a new round: the session continues from the
+  launch (`references/preflight-run.md`, «The continuation»).
 - **A session existed** → this is a new round in **the same folder**: the folder is renamed to the current date (out of a month archive it
   returns to the root of `<sessions>/`), the round's new files **continue the folder's running numbering** with a round-number suffix
   (`8-manual-task-2.md`, `9-manual-result-2.md`, … — **each name from `session.py next-file <folder> <role> <round>`, called once per
@@ -250,7 +260,8 @@ and access, what the brief carries, a retest round, the executor mid-run, accept
 or the manager does. Read it as step 3 reads `planning.md`'s, open one entry per fired line, and write the brief from that list and the
 template's slots. **Once `2-manual-task.md` is written, the catalogue reviewer of step 3 reads `references/manual-brief.md` against `0-session.md`,
 `1-plan.md` and the brief — and also returns every template slot left as a placeholder.** Apply what it returns and launch the executor
-only after that: an executor is briefed once, and the situation you did not foresee cannot be added to the brief afterwards. The «Accepting the result» and «the control does
+only after that: an executor is briefed once, and the situation you did not foresee cannot be added to the brief afterwards. **A preflight
+run stops here**, before the launch. The «Accepting the result» and «the control does
 nothing» groups of the same Contents are read again when the result comes back.
 - **the preflight check** — if the scenarios involve the browser (frontend tasks, UI verification): **before** launching the executor,
   verify the access yourself against the browser tool adapter's «Preflight», then the profile's checklist (Browser section). Something does not work — **tell the user right away** and
@@ -301,7 +312,7 @@ that is a valid outcome:
   (`references/automation.md`, «The brief»). In automation-only mode there is no
   evidence — write exactly that, and the automator will do a minimal run itself; in that mode a case exists with `upfront` (the analyst
   wrote it) and is absent with `inline` — then the automator creates it itself;
-- launch the role `qa-automator`; in the prompt — `Output language: <language>` as the first line, then the path to the
+- launch the role `qa-automator` (a preflight run in automation-only mode stops before this move); in the prompt — `Output language: <language>` as the first line, then the path to the
   session folder and to the brief file;
 - accepting `5-automator-result.md` (the checker first, as in step 4 — test code carries credentials more often than prose does): the test was actually run (the run log is cited), the case exists in the TMS, and the test-to-case link
   in the code matches the case, and a partly covered case names its manual steps (with `test-cases: none` there is no case — then what gets
@@ -381,7 +392,7 @@ render it and a reader may not separate red from green. In round 2+ a changed ve
 
 The user asked for exactly this ordering after a session announced «the report is written, now the retro» and went quiet for minutes.
 
-**7. The retro — a mandatory step, not an «if I feel like it».** The inputs are the **«Executor retro»** sections in `*manual-result*.md`
+**7. The retro — a mandatory step, not an «if I feel like it»** (a preflight run alone has none: the retro of the round it prepares covers it). The inputs are the **«Executor retro»** sections in `*manual-result*.md`
 and `*automator-result*.md` (the executors are obliged to write them), **the analyst's retro from its final summary** (it has no file —
 carry it into `7-retro.md` from your own context; the analyst most often complains about the plan and the profile rather than the
 environment) plus your own view: where you got bogged down, what you violated, what information was missing, what the manager planned badly.
@@ -584,7 +595,8 @@ do what the right-hand cell says.
 | «The profile is behind — I'll mention it with the summary» | that line is the session's first message, before any other call (step 0) |
 | «I have read this number for twenty calls — it is a name by now» | the user did not read those calls: every mention in the chat carries its bracket (step 0) |
 | «The classifier refused the mutation — I'll phrase it differently» | a refused MUTATION is never reworded: the user's permission, then one repeat in your own session, paired with a control (`references/manual-brief.md`, «Your own harness refuses a call») |
-| «The automation dialog carries the counts — the status list can wait for 6.5» | the status list goes to the chat as its own message before the automation question (step 5, `references/automation.md`) |
+| «The automation dialog carries the counts — the status list can wait for 6.5» / «the list is printed — the dialog can follow in the same turn» / «no findings, the report can wait for the automation answer» | the status list goes to the chat before the automation question, in a turn no dialog covers — the question as plain text at its end, or the dialog next turn; verdict rows and analyst questions go into the report at acceptance (step 5, `references/automation.md`) |
 | «The template will do for the report» | the project's format from the profile outranks it, read before the first line (step 6) |
 | «The user is wrong — my report says otherwise» | an objection about a fact is re-checked by your own direct observation, never by re-reading the report (step 9) |
+| «It's only a preflight — I'll ask and they'll answer soon» / «the entry is alive and the brief is ready — I'll launch it myself» | in a preflight run no question waits and nothing is launched: both go into the card (`references/preflight-run.md`) |
 | «The round went cleanly, there is nothing for a retro» | the retro is mandatory; «no edits» is an outcome written after it, not a reason to skip it (step 7) |

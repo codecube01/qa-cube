@@ -24,7 +24,9 @@ answer reaches it as its next turn. This is how a «Pause protocol» answer is r
 ## Ask the user
 
 `AskUserQuestion`: up to four questions per call, two to four options each, the recommended option first with
-«(Recommended)» in its label; the user can always type «Other».
+«(Recommended)» in its label; the user can always type «Other». The dialog is drawn over the text printed in the same
+turn, so a text the user must read before answering (a status list, a verdict) is not followed by `AskUserQuestion` in that
+turn: the question goes as plain text at its end, or as the dialog in the next turn.
 
 ## Plugin root
 
