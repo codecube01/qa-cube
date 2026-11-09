@@ -11,6 +11,76 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.19.61] — 2026-11-09
+
+### Added
+
+- **A label or a deploy only minutes old is re-read right before the start question and again at the launch**: `planning.md`,
+  «Dating the build» — the environment a fresh task names can still move, and a job listing can lag a finished deploy.
+- **A Playwriter screenshot on a high-DPR wide viewport is taken at CSS scale and cropped**: `browser/playwriter.md`, «Screenshots» —
+  device scale with a clip comes back blank.
+- **What a round leaves on a shared environment is judged against the automated runs' preconditions**: `manual-brief.md`, the
+  «harmless» write line — a test that waits for «no live record of that kind» times out on a leftover it never reads.
+- **A deadline the executor holds during a pause is sized from the other side's step and counted from the request**: `manual-brief.md`,
+  the «Pause protocol» line.
+- **A host class's hooks that change shared state without restoring it go into the automator's brief**: a «Host class» slot in
+  `templates/4-automator-task.md`, ruled by `automation.md`'s line on a test new to its host class — with the snapshot to take and the
+  restore after each run.
+- **A carrier that only a paid or irreversible operation can manufacture is first looked for among the background writers**:
+  `planning.md`, «nothing to show» — the history of a subscription or sync that writes such records is read before the probe is
+  priced, and the population is re-scanned right before each paid call.
+- **`/qa --preflight <task>` — a preflight run**: `references/preflight-run.md`, pointers from `SKILL.md` — prepares the
+  round unattended (plan, preflight, brief) and stops before the first executor with a decision card; no report, no retro, no
+  tracker write, no question that waits. `0-session.md` gains the statuses `preflight-done` and `dropped`.
+- **A long run on a laptop starts with a read of the lid and the power source**: `shell-pitfalls.md` — a closed lid on battery
+  sleeps the machine and the sleep reads as a network fault; a run killed from outside skips its teardown, so the fixture's
+  mutations are restored by hand from its log; `manual-brief.md`, «The executor stopped», names the same case beside a killed executor.
+- **A seconds-long state whose verdict is about a composed view is polled through that view**: `planning.md`, the stuck-state
+  family — a narrow single-value probe plus a control read of the view arrives after the state has left.
+- **The call that disarms a shared fixture is held to the rule for a probe's body**: `manual-brief.md`, the «Disarm after» line —
+  each value checked against the knowledge base's latest measurement, not a test helper's default, and a second route named for a refusal.
+- **A receiver the round sends to is checked against the system's own registry of receivers before the brief calls it neutral**:
+  `manual-brief.md`, «What goes into the brief» — a receiver the system knows turns every outgoing operation into an inbound event
+  with its side effects.
+- **A gate before a write is a call of its own; in a series it lives inside the write helper**: `executor.md`, «The round's
+  limits» — a gate packed into the write's call reports after the write has already gone out.
+- **The step-1 search runs by the noun of every requirement and through the project's own findings registry by the screen's name**:
+  `planning.md`, «The tracker is searched at step 1», pointer from `SKILL.md` step 1 — a cross-cutting ask is often owned elsewhere,
+  and a filed mechanism today's data hides makes the requirement partial, not pass.
+- **A start question names the source of a premise the task never states**: `SKILL.md`, step 1 (where the start question is
+  asked), and `planning.md`, «What the plan rests on» — options built on an implementation limit or an earlier measurement say where
+  the fact comes from and that the task is silent on it.
+- **The object a sanction question names is checked free first**: `manual-brief.md`, «A sanctioned mutating probe», and the
+  «Probe» line of `templates/2-manual-task.md` — the test code, the object's description and the environment snapshot are read
+  before the user is asked, so no swap follows the answer.
+
+### Changed
+
+- **The bundle fingerprint is taken only from a tab on the application's own origin**: `browser-techniques.md`, the stale-bundle
+  entry — a relative `fetch('/index.html')` from a tab redirected to a return URL reads a foreign SPA and fakes a redeploy.
+- **An error substitution in the fail-closed wrapper stays armed for every request of the click, and the requests are counted**:
+  `browser-techniques.md` — a client may repeat an erroring mutation on its own; a one-shot arm shows the stub's text on screen.
+- **A multipart upload is read by a wrapper installed before the bundle runs** (`browser/playwriter.md`): a spy set on a loaded
+  page sees nothing; without a reload, the file count is proven by the server's trace of the request.
+- **A verdict with a narrowing qualifier is partial** (`agents/qa-manual.md`): «pass (desktop)» against an expected outcome that also
+  named mobile goes into the totals as partial, with the breakdown.
+- **The status list is read before the automation question, and the report holds the round first**: `automation.md`, «The decision»;
+  the Claude Code adapter's «Ask the user»; a red flag in `SKILL.md` — no dialog in the turn that prints the list, and verdict rows and
+  analyst questions go into the report at acceptance even in a round with no finding.
+- **The dated bundle is kept, not only read**: `planning.md`, «Dating the build», and the «Build fingerprint» line of
+  `templates/2-manual-task.md` — where the target is served from a branch that keeps being redeployed, each fingerprint saves the
+  bundle into the session folder, so the next retest can diff builds; the browser cache is the fallback, not the store.
+- **One Playwriter tab group per task, shared by every actor and round**: `browser/playwriter.md`, «Connect and pick the tab», and the
+  «Tab group» line of `templates/2-manual-task.md` — `qa-<task>` with no role or round suffix; the actors stay apart by session and marker.
+
+### Fixed
+
+- **`check_session.py` no longer flags `📎` markers inside quoted lines**: a tracker comment quoted into the raw source names another
+  session's screenshots.
+- **A Playwriter round's loggers are removed by the reference kept when they were attached, never `removeAllListeners`**:
+  `browser/playwriter.md`, «Page scripts and their budget» — the old advice also stripped the tool's own listeners and contradicted
+  the CLI's skill, so executors had to overrule the brief.
+
 ## [0.19.42] — 2026-11-03
 
 ### Added

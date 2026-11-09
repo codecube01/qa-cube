@@ -26,6 +26,16 @@ project's tooling stays in its profile.
   never `sleep N && curl` across the tool's time limit** — past it the call is backgrounded or killed unpredictably and the point lands in
   the wrong second: one background script owns the whole schedule and writes each timestamped result to a file, judged by that file
   (a Python one run as `python3 -u`, below — buffered, the file stays empty until it exits).
+- **A run longer than a few minutes on the user's laptop starts with a read of the lid and the power source** — `ioreg -r -k
+  AppleClamshellState -d 4` and `pmset -g batt`. A closed lid on battery puts the machine to sleep every quarter of an hour, and
+  `caffeinate` does not hold it; the sleep shows up as a network fault — a handshake dropped mid-request, one call «hanging» for many
+  minutes, a poll overrunning its own limit, the clock jumping between two calls — so the first two failures get blamed on the VPN or the
+  environment. `pmset -g log` (`Entering Sleep state`) settles it in one read. Closed and on battery → the run is not started: say so and
+  wait for the lid or the charger. *And a run that dies from outside — the sleep, the tool's background limit — skips the test's own
+  teardown*: every mutation its fixture made stays on the shared environment and is restored by hand at once, as for a killed executor
+  (`manual-brief.md`, «The executor stopped»), and named in the result. Precedent: three runs of one test broke in a row and the first
+  two were written off as a proxy fault; the third left two accounts holding the top routing priority, ready to intercept other runs'
+  operations, until they were restored by hand.
 - **A helper that can run in two processes at once writes its temp files under a name unique to the call** — `mktemp`, or the pid plus a
   counter. A fixed `_out.txt` shared by a background batch and the foreground checks lets one call's body land in another call's
   comparison, and it reads as a product answer: a `200` with a body of the wrong shape. Precedent: a background batch of detail reads

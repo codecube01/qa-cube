@@ -241,6 +241,8 @@ def image_info(path: Path) -> tuple[str, int] | None:
 def scan_screenshots(lines: list[str], folder: Path) -> list[tuple[int, str]]:
     out: list[tuple[int, str]] = []
     for n, line in enumerate(lines, 1):
+        if line.lstrip().startswith(">"):
+            continue  # a quoted tracker comment (the raw source) names another session's screenshots
         for match in SCREENSHOT.finditer(line):
             name = match.group(1)
             path = folder / "screenshots" / name

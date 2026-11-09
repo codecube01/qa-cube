@@ -31,6 +31,7 @@ never the file without a `limit`.
 - the scenario's result is visible only to the user (a chat message, an email, a screen) → side experiments that produce the same kind of observable event are deferred to the end of the observation loop, not cancelled, not squeezed in; a dropped control is named in the result as what stays an observation
 - your own precondition cannot be built (another defect blocks the path) and the requirement is a guard («the action is unavailable while …») → check it on someone else's entity already in the required state: the expected outcome is a refusal, `updated_at` before and after proves the environment untouched
 - the brief's prescribed body does not fit the operation as the schema shows it (the operation is not what the brief took it for) → do not design a «safer» body yourself on a write your role is admitted to: leave that probe, record what the schema says, flag it for the manager, go on with the rest
+- the brief sets a gate before each write (no live run, the same build) → the gate is a call of its own whose output you read before the write goes out, never a printed check beside an unconditional write in one call; in a series the gate is code inside the write helper that stops the series on any deviation
 - your run resumes after a gap (a usage limit, a crash, hours away) while an operation you started may still have been running → no action before the object itself (its state, its last-modified) and then the system's own history say what finished, when and how, and whether anyone else acted in the gap; the gap's interval goes into the result and what ended inside it is marked «observed after the fact»; then the brief's retry rules apply unchanged. A background logger meant to cover a long operation gets a ceiling of at least its expected end plus an hour
 
 ## Probing and measuring
@@ -115,6 +116,14 @@ then, and a handler may answer it by creating defaults (`planning.md`, «A junk 
 refuses stay safe and run as planned. Precedent: a brief prescribed a duplicate identifier for what it took to be a registry write; the
 schema showed the tenant's own onboarding accounts, the executor sent an empty list under the one role admitted to it, and the server's
 default record locked the tenant's whole interface for three days.
+
+**A gate before each write is a call of its own, read before the write goes out; in a series it lives inside the write helper.** The
+brief's gate (no live automated run, the build unchanged) exists to stop the write, and a gate printed in the same call as an
+unconditional write reports after the fact: the write has already gone out under the condition the gate was there to catch. So the first write is preceded by
+the gate alone, its output read; and a series of writes does not lean on your discipline call after call — the helper that performs each
+write runs the gate first and stops the whole series on any deviation, recording what had already been written. Precedent: an executor ran
+the gate and the round's first write in one call and read only afterwards that the backend had been redeployed a minute earlier; the
+series that followed, with the gate inside its helper, stopped itself on the next redeploy before writing and resumed on the new build.
 
 **A run that resumes after a gap first reconstructs the gap, and only then acts.** The run is not continuous: a usage limit, a crash or
 a pause of hours can cut you off while an operation you launched keeps going on the environment. Your memory then ends at the last thing you

@@ -201,7 +201,8 @@ what was left on the environment deliberately and what covers that.
 
 - **a verdict per requirement out of four values — pass / fail / partial / not covered.** A compound requirement («the status changes
   **and** the officer sees it») cannot be described by a binary verdict: «partial» is written with an explicit breakdown of which half
-  passed, and «not covered» always comes with a reason. **These four values are what the manager renders to the user as the round's status
+  passed, and «not covered» always comes with a reason. A verdict with a narrowing qualifier — «pass (desktop)» where the brief's expected
+  outcome named desktop AND mobile — is «partial» with that breakdown, never a pass counted in the totals. **These four values are what the manager renders to the user as the round's status
   list**, one line per requirement — so a «partial» without its breakdown, or a «not covered» without its reason, becomes a line the reader
   cannot act on;
 - **the case id** — the automator will take it from here for the link. With `test-cases: upfront` it is the one the analyst gave, plus the

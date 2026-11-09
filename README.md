@@ -69,6 +69,7 @@ In your project:
                                # what the environments are, what runs the tests
 /qa <link to a task>           # the session runs
 /qa <the same task>            # a retest: the next round lands in the same session folder
+/qa --preflight <task>         # prepare only: plan, preflight, brief — then stop and wait
 /qa-day                        # what did I test today?  --days 7 for the week
 ```
 

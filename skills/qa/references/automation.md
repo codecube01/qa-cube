@@ -14,9 +14,9 @@ that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines fro
 **The decision**
 
 - the scenario needs dozens of operations or long waits to reach its conclusion → the price of a run is an input to the decision, computed from the manual result's own timings (operations × measured durations + every propagation lag), never from intuition; a noticeable price goes to the user BEFORE the automator is launched
-- the test is NEW to its host class → the class's fixed cost (provisioning, per-test hooks, stabilising reads) is read off a recent run log of a neighbouring test and added — no manual timing contains it
+- the test is NEW to its host class → the class's fixed cost (provisioning, per-test hooks, stabilising reads) is read off a recent run log of a neighbouring test and added — no manual timing contains it · the class's hooks change SHARED state and do not restore it → the brief's «Host class» slot, with the snapshot and the restore owed after each run
 - the feature is the size of one query parameter (a filter, a flag) → its size is a ground of its own, beside the price: «is this feature worth a test at all» is asked before the automator edits the code, whatever the run costs
-- the automation question is put to the user → it comes before the delivery at 6.5, so the round's status list (step 6.5's format, one line per requirement) goes to the chat as its own message FIRST, and the question carries three lines above the options: what the change is and whether it is merged, the verdict with its counts, what the test would assert; the findings that list names are written into the report file BEFORE it goes out — the user opens the file to read them
+- the automation question is put to the user → it comes before the delivery at 6.5, so the round's status list (step 6.5's format, one line per requirement) goes to the chat FIRST, in a turn the question dialog cannot cover (where the harness's dialog hides the text printed with it — the adapter's «Ask the user» — the question is plain text at the end of the list's message, or a dialog in the next turn), and the question carries three lines above the options: what the change is and whether it is merged, the verdict with its counts, what the test would assert; the round's verdict rows, findings and analyst questions are written into the report file at ACCEPTANCE, before the list goes out — a round with no finding id included
 - the option is a step in an EXISTING test → first read the host's skip reason and the unmerged changes its earlier steps need; no build holds them with the task → the option says «written, not run until both land», a standalone test beside it
 - the user's answer is itself a question («isn't a test required by our rules?») → it is a question, not the choice: answer it on the merits, then put the choice again; acting on it starts work nobody ordered
 - the manual run's acceptance criterion is statistical («each variant ≥ 20 %») → the test asserts the degenerate outcome («each variant occurred at least once»), translated by the manager, not the automator
@@ -45,6 +45,10 @@ and chosen; it cost 131 s — two operations of ~50 s each plus a setting lag, a
 manual timing contains: read it off a recent run log of a neighbouring test in the same class and add it. Precedent: a new test priced at
 ~3 min from the manual timings ran 9–10 min, two thirds of it the class's account provisioning, per-test waits and state snapshots.
 
+*And where the class's hooks change SHARED state and do not restore it*, the brief's «Host class» slot names them with the snapshot and
+the restore: no manual round runs the class, so no evidence shows them. Precedent: an automator found integrations switched off by the
+class setup only after its runs.
+
 **The size of the feature is an independent ground, alongside the cost of the run.** A cheap merge into an existing test can still be work
 nobody wants: a feature the size of one query parameter may deserve no test at all, whatever the run costs. So the question to the user
 before launching the automator is not only «is this run expensive» but also «is this feature worth a test at all» — and it is asked before,
@@ -54,17 +58,21 @@ edits had to be reverted mid-run.
 
 **That question travels with the round's result.** It comes before the delivery at 6.5, so the user has not yet seen what the manual round
 found. The result reaches them in two parts, in this order: first the status list in the chat — the same 🟢/🟡/🔴/⚪ lines step 6.5 opens
-with, a message of its own — and only then the question, with three lines above its options (what the change is and whether it is merged,
-the verdict with its counts, what the test would assert). A dialog box is not where a verdict is read: counts inside it are a summary of a
-list the user never saw, and the user asks for the list. Precedent: a bare automation dialog was dismissed with «first explain what you did,
-what automation needs, and what that merge request is»; once the three lines were added, a dialog carrying them was answered — and the user
-still asked mid-automation where the status list was, «you were supposed to show it before the autotests».
+with — and only then the question, with three lines above its options (what the change is and whether it is merged, the verdict with its
+counts, what the test would assert). A dialog box is not where a verdict is read: counts inside it are a summary of a list the user never
+saw, and the user asks for the list. «First» means the user READ it first, and where the harness draws the question dialog over the text
+printed in the same turn, a list followed by a dialog in one turn is a list nobody read: the question then goes as plain text at the end of
+the list's message, or as a dialog in the next turn — never «the question follows in my next message», which ends a turn the user must
+restart. Precedent: one automation dialog was dismissed with «first explain what you did, what automation needs, and what that merge
+request is»; a later status list printed in the same turn as the dialog drew «wait, show me the status list first» — and the shape recurred
+twice more with the rule already written as «a message of its own».
 
-*And the status list names finding ids, so the report file must already hold them when the list goes out.* The order «automation first,
-report after» is the order of WRITING the delivery, not of recording the findings: a user who sees an id in the chat opens the report to read
-it, and an id that exists only in the executor's result reads as a lost finding. Write the round's findings, its verdict rows and its
-questions into the report at acceptance; only the automation section waits for the answer. Precedent: a second round's status list named a
-new frontend finding while the report still showed the first round; the user's next message was «where is it in the report?».
+*And the report file holds the round's result before the list goes out.* The order «automation first, report after» is the order of
+WRITING the delivery, not of recording the result: a user who sees an id or a question in the chat opens the report to read it, and what
+exists only in the executor's result reads as lost. Write the round's verdict rows, its findings and its analyst questions into the report
+at acceptance — a round with no finding at all still has questions — and only the automation section waits for the answer. Precedent: a
+second round's status list named a new frontend finding while the report still showed the first round, «where is it in the report?»; a
+later round with no finding skipped the file altogether, and its five analyst questions existed only in the chat.
 
 **A merge reuses the host's setup, so every step above the new one must pass on the task's build.** Before the option is put, read why
 the host is skipped, if it is, and which unmerged changes its earlier steps rest on. Where no build holds those changes together with the
