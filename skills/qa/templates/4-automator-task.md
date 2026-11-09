@@ -9,6 +9,7 @@
 - Manual run: `3-manual-result.md`, scenarios <numbers>   (or: «none — do a minimal run yourself»)
 - Output language: <language from the profile — everything you write and narrate goes in it; test code follows the project's code style>
 - Env: <env>
+- Host class: <its hooks that change shared state and do not restore it — the snapshot to take and the restore owed after each run; «none» when the hooks restore or the test joins no class>
 
 ## What to read (targeted, not everything)
 

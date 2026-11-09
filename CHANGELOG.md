@@ -13,6 +13,20 @@ section gathers everything since the previous one.
 
 ### Added
 
+- **A label or a deploy only minutes old is re-read right before the preflight card and again at the launch**: `planning.md`,
+  «Dating the build» — the environment a fresh task names can still move, and a job listing can lag a finished deploy.
+- **A Playwriter screenshot on a high-DPR wide viewport is taken at CSS scale and cropped**: `browser/playwriter.md`, «Screenshots» —
+  device scale with a clip comes back blank.
+- **What a round leaves on a shared environment is judged against the automated runs' preconditions**: `manual-brief.md`, the
+  «harmless» write line — a test that waits for «no live record of that kind» times out on a leftover it never reads.
+- **A deadline the executor holds during a pause is sized from the other side's step and counted from the request**: `manual-brief.md`,
+  the «Pause protocol» line.
+- **A host class's hooks that change shared state without restoring it go into the automator's brief**: a «Host class» slot in
+  `templates/4-automator-task.md`, ruled by `automation.md`'s line on a test new to its host class — with the snapshot to take and the
+  restore after each run.
+- **A carrier that only a paid or irreversible operation can manufacture is first looked for among the background writers**:
+  `planning.md`, «nothing to show» — the history of a subscription or sync that writes such records is read before the probe is
+  priced, and the population is re-scanned right before each paid call.
 - **`/qa --preflight <task>` — a preflight run**: `references/preflight-run.md`, pointers from `SKILL.md` — prepares the
   round unattended (plan, preflight, brief) and stops before the first executor with a decision card; no report, no retro, no
   tracker write, no question that waits. `0-session.md` gains the statuses `preflight-done` and `dropped`.
@@ -40,6 +54,8 @@ section gathers everything since the previous one.
 
 ### Changed
 
+- **The bundle fingerprint is taken only from a tab on the application's own origin**: `browser-techniques.md`, the stale-bundle
+  entry — a relative `fetch('/index.html')` from a tab redirected to a return URL reads a foreign SPA and fakes a redeploy.
 - **An error substitution in the fail-closed wrapper stays armed for every request of the click, and the requests are counted**:
   `browser-techniques.md` — a client may repeat an erroring mutation on its own; a one-shot arm shows the stub's text on screen.
 - **A multipart upload is read by a wrapper installed before the bundle runs** (`browser/playwriter.md`): a spy set on a loaded
@@ -57,6 +73,8 @@ section gathers everything since the previous one.
 
 ### Fixed
 
+- **`check_session.py` no longer flags `📎` markers inside quoted lines**: a tracker comment quoted into the raw source names another
+  session's screenshots.
 - **A Playwriter round's loggers are removed by the reference kept when they were attached, never `removeAllListeners`**:
   `browser/playwriter.md`, «Page scripts and their budget» — the old advice also stripped the tool's own listeners and contradicted
   the CLI's skill, so executors had to overrule the brief.

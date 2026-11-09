@@ -26,7 +26,7 @@ Pitfalls and the full recipes, by topic, below.
 - component-library interaction — clicks that silently do nothing, tabs, options, modals, forms, text clipped by an ellipsis
 - the hidden tab — timer throttling, rendering, tooltips, toasts, viewport width, an expired session that still shows data
 - downloads — the browser's own block on repeated downloads, and capturing the file at the source
-- bundle and route discovery — the served bundle as a source, chunks, dictionaries, table columns, routes, the stale bundle (a white page, or the previous build rendered whole)
+- bundle and route discovery — the served bundle as a source, chunks, dictionaries, table columns, routes, the stale bundle (a white page, or the previous build rendered whole), the fingerprint read from a foreign origin
 - design mock-ups — the design tool's call limit, boards of many frames, captions and texts read from the board's structure
 
 ## The page-scripting sandbox and its limits
@@ -118,6 +118,8 @@ Pitfalls and the full recipes, by topic, below.
 - **A blank white page while the API answers `200` is a stale bundle, not a broken product.** The cached index document references a chunk the deploy removed; the server answers its path with the SPA fallback, and the console shows `SyntaxError: Unexpected token '<'` on `/assets/index-*.js`. Diagnose in order — empty `body.innerText` → console errors → compare the chunk names in a `fetch('/index.html', {cache: 'no-store'})` with the loaded `script[src]` — and cure with a hard reload or a cache-busting `navigate`. Re-take the bundle fingerprint before writing ANY UI finding, not only at the round's edges: a deploy artefact is the cheapest false finding there is. A chunk already replaced on the environment is read from the copy saved into the session folder at the fingerprint, and failing that from the cache of a profile that loaded it before the deploy (`fetch(path, {cache: 'only-if-cached', mode: 'same-origin'})`, recipe in `planning.md`, «Dating the build»).
 
   *And the stale build can render whole, with no white page at all.* Where the server gives the SPA fallback of deep routes a long cache lifetime while the root is served uncached, a direct `navigate` to a deep route the profile opened before runs the previous build complete — every screen works, only the feature under test is missing, and it reads as «not deployed». So on every screen reached by a direct `navigate`, compare `document.scripts` with the chunk the root serves, and give each direct navigation a cache-busting query (`?cb=<n>`) — a new URL fetches a fresh document. Precedent: a preflight opened a card by its deep link and saw the old build's tabs without the feature's tab, while the root of the same host already served the new build.
+
+  *And the comparison answers for the tab's CURRENT origin.* A relative `fetch('/index.html')` goes to whatever host the tab stands on now, and a flow that ends by sending the user to a return URL (a success or failure redirect to another service) leaves the tab on a foreign SPA whose index names other chunks — a «redeploy» that never happened. So the fingerprint call reads `location.origin` in the same breath and runs only from a tab on the application's own origin; a tab elsewhere takes the fingerprint from a fresh tab on the application's root. Precedent: a final fingerprint taken from a tab already redirected to a callback host read a different bundle name, and the executor nearly filed a mid-round redeploy before spotting the origin.
 
 ## Design mock-ups
 

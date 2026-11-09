@@ -193,6 +193,10 @@ class ScreenshotTest(unittest.TestCase):
         self.assertEqual(self.shots("📎 `ACME-12.png`\n"), [])
         self.assertTrue(self.shots("📎 `ACME-13.png`\n"))
 
+    def test_quoted_marker_is_not_checked(self):
+        # a tracker comment quoted verbatim into the raw source names screenshots of another session
+        self.assertEqual(self.shots("  > | F-5 · Minor | text _📎 F-5.png_ |\n"), [])
+
     def test_an_image_named_without_the_marker_is_the_product_s_not_ours(self):
         self.assertEqual(self.shots("the page requests logo.png and gets a 404\n"), [])
 

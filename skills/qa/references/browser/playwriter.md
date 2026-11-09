@@ -92,6 +92,7 @@ single clarification.
 `await state.page.screenshot({path: '<absolute path>'})` writes a PNG there; `fullPage: true` for the whole page. The path is the session
 folder's artifact path from `session.py`, never a guess. `screenshotWithAccessibilityLabels()` overlays labels on interactive elements —
 for your own eyes, not for the result.
+On high DPR with a wide viewport, `clip` at `scale: 'device'` comes back blank: shoot at `scale: 'css'`, then crop.
 
 ## Network
 
