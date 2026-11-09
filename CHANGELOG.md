@@ -11,9 +11,11 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.19.61] — 2026-11-09
+
 ### Added
 
-- **A label or a deploy only minutes old is re-read right before the preflight card and again at the launch**: `planning.md`,
+- **A label or a deploy only minutes old is re-read right before the start question and again at the launch**: `planning.md`,
   «Dating the build» — the environment a fresh task names can still move, and a job listing can lag a finished deploy.
 - **A Playwriter screenshot on a high-DPR wide viewport is taken at CSS scale and cropped**: `browser/playwriter.md`, «Screenshots» —
   device scale with a clip comes back blank.
