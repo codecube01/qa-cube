@@ -14,7 +14,7 @@ that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines fro
 **The decision**
 
 - the scenario needs dozens of operations or long waits to reach its conclusion → the price of a run is an input to the decision, computed from the manual result's own timings (operations × measured durations + every propagation lag), never from intuition; a noticeable price goes to the user BEFORE the automator is launched
-- the test is NEW to its host class → the class's fixed cost (provisioning, per-test hooks, stabilising reads) is read off a recent run log of a neighbouring test and added — no manual timing contains it · the class's hooks change SHARED state and do not restore it → the brief's «Host class» slot, with the snapshot and the restore owed after each run
+- the test is NEW to its host class → the class's fixed cost (provisioning, per-test hooks, stabilising reads) is read off a recent run log of a neighbouring test and added — no manual timing contains it · the class's hooks change SHARED state and do not restore it → the brief's «Host class» slot, with the snapshot and the restore owed after each run, every runner seen first
 - the feature is the size of one query parameter (a filter, a flag) → its size is a ground of its own, beside the price: «is this feature worth a test at all» is asked before the automator edits the code, whatever the run costs
 - the automation question is put to the user → it comes before the delivery at 6.5, so the round's status list (step 6.5's format, one line per requirement) goes to the chat FIRST, in a turn the question dialog cannot cover (where the harness's dialog hides the text printed with it — the adapter's «Ask the user» — the question is plain text at the end of the list's message, or a dialog in the next turn), and the question carries three lines above the options: what the change is and whether it is merged, the verdict with its counts, what the test would assert; the round's verdict rows, findings and analyst questions are written into the report file at ACCEPTANCE, before the list goes out — a round with no finding id included
 - the option is a step in an EXISTING test → first read the host's skip reason and the unmerged changes its earlier steps need; no build holds them with the task → the option says «written, not run until both land», a standalone test beside it
@@ -42,12 +42,12 @@ expensive» — the price was visible from the manual result in advance. Precede
 and chosen; it cost 131 s — two operations of ~50 s each plus a setting lag, all three durations printed in the manual result.
 
 **A test NEW to its host class pays that class's fixed cost too** — its provisioning, its per-test hooks, its stabilising reads — which no
-manual timing contains: read it off a recent run log of a neighbouring test in the same class and add it. Precedent: a new test priced at
-~3 min from the manual timings ran 9–10 min, two thirds of it the class's account provisioning, per-test waits and state snapshots.
+manual timing contains: read it off a neighbouring test's recent run log and add it. Precedent: a new test priced at
+~3 min from the manual timings ran 9–10 min, two thirds of it the class's provisioning and waits.
 
-*And where the class's hooks change SHARED state and do not restore it*, the brief's «Host class» slot names them with the snapshot and
-the restore: no manual round runs the class, so no evidence shows them. Precedent: an automator found integrations switched off by the
-class setup only after its runs.
+*And where the class's hooks change SHARED state and do not restore it*, the «Host class» slot names them, the snapshot, the restore and
+how to see every runner first: no manual round runs the class; CI shows no peer's local run. Precedent: one automator saw
+integrations off by class setup too late; another, checking CI alone, broke a peer session's run.
 
 **The size of the feature is an independent ground, alongside the cost of the run.** A cheap merge into an existing test can still be work
 nobody wants: a feature the size of one query parameter may deserve no test at all, whatever the run costs. So the question to the user

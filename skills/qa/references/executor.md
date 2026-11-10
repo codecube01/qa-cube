@@ -22,7 +22,7 @@ never the file without a `limit`.
 
 **When an outcome looks like a defect**
 
-- an unexpected transition or refusal → not a finding until a control experiment on a deliberately clean object has been run; the same result means normal behaviour
+- an unexpected transition or refusal → not a finding until a control experiment on a deliberately clean object has been run; the same result means normal behaviour · it contradicts a rule an earlier round recorded → the control is that record's original inputs, before «stale» is written
 - «the system rejects a valid input» → diff your input against a recent SUCCESSFUL call of the same type, element by element, before writing it: a refused home-made request is usually not the one the product sends
 - a conclusion drawn from one passive observation («the interface does not flag X», «the component is locked») → driven to an action before it is written down: press the control, call the method that would refute it
 
@@ -82,6 +82,10 @@ something odd on an object that went through the feature under test — repeat t
 same result means the behaviour is normal and unrelated to the feature, a different one means it is now a finding. Costs a minute, saves
 you from a false bug in the report. Precedent: a status moved to a failed terminal state on its own and looked like a regression from a
 «stale value», yet it reproduced with an empty field too.
+
+*And where it contradicts a rule an earlier round recorded* («equal amounts → closes at once»), rerun that record's original values
+before writing «stale»: a probe changing both compared sides refutes neither reading. Precedent: a record called stale after two such
+probes held on its original values.
 
 **Before writing «the system rejects a valid input», diff your input against a recent SUCCESSFUL call of the same type** — decode what the
 product itself sent and compare element by element: a refusal of a home-made request more often means the request is not the one the

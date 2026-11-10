@@ -11,6 +11,16 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+### Changed
+
+- **The automator's «Host class» slot also names how to see every runner on the environment before each run**: `automation.md`,
+  the host-class line, and `templates/4-automator-task.md` — a class whose hooks change shared state breaks another session's local
+  run, which no CI pipeline listing shows.
+- **A finding «the same value comes out different by different paths» names its culprit only after the documented formula is read
+  to its named inputs** (`report.md`, «Wording a finding»): where the formula sides with the minority path, the finding is the inconsistency.
+- **The executor re-runs a recorded rule's original inputs before calling the record stale** (`executor.md`, «When an outcome looks
+  like a defect»): a probe that changed two compared quantities at once refutes neither reading.
+
 ## [0.19.61] — 2026-11-09
 
 ### Added
