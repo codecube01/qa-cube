@@ -131,6 +131,7 @@ The wording that keeps a row a question:
 - Budget unit: <one pair of mutations per PROPERTY to be shown, on the same object, each reversed before the next; restorations count>
 - A process the probe starts: <not terminated by you — record its id, state and attempt count at the end of the round; the report hands the decision to the team>
 - Timed burst (a paid probe of simultaneous and offset calls): <rehearsed first, free — the same code with a harmless read under the mutation's alias, no budget flag, nothing stored; the measured offsets reported before the pause | not a burst>
+- When it runs: <a step in scenario <N>'s row, between <step> and <step> — written there, not only here | any point of the round>
 
 ## Budget & limits (delete a line that does not apply)
 

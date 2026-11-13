@@ -228,7 +228,10 @@ the trigger and what the plan does. **Read the Contents and nothing else**: `gre
 from the session.** Its brief: the absolute path of the catalogue (`references/planning.md`, next to this skill); the paths of the
 session files it judges (`0-session.md`, `1-plan.md`); «read the catalogue whole, bodies included, then the files;
 return the entries whose situation this round is in and the file does not honour: for each, the entry's title, the line it would change,
-and what to add — at most eight items, those that would change a verdict, a budget or an irreversible step; nothing else». Apply what it returns by targeted edits — the file is in your context, do not re-read it — and say in it, in one line, what the
+and what to add — at most eight items, those that would change a verdict, a budget or an irreversible step; nothing else». On a round
+whose subject is security (sign-in, tokens, access), the brief opens with one line of context — an authorised test of the team's own
+product — and asks for process wording, not attack steps: the harness's classifier refused one such reviewer's answer after it had read
+the whole catalogue, and the re-launch paid for that read twice. Apply what it returns by targeted edits — the file is in your context, do not re-read it — and say in it, in one line, what the
 review added. Why a reviewer and not your own reading: the value of a catalogue is in the shapes you did not think of, and an author
 who reads the whole catalogue for them pays for every entry in every later step; a reader with no stake reads it once and leaves. Steps 4 and 6 reuse it.
 

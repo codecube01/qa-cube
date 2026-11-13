@@ -11,8 +11,35 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+### Added
+
+- **A finding reproduced only through a trigger no user produces is published only with a realistic path** (`report.md`, «Is this a
+  finding at all»): an upload from a second tab or a call only the product's own client makes puts the candidate in side findings,
+  not the task's table; for a server-side guard or an API its users call, the direct call is the realistic path.
+- **A binding check (a token to its challenge, a code to its session) is planned with another owner's half too** (`planning.md`,
+  «A binding check is planned across owners»): a same-owner swap proves no escalation and leaves the priority a guess.
+- **Playwriter: a file upload goes as a payload, not a path** (`browser/playwriter.md`, «Known failures»): `setInputFiles(<path>)`
+  hangs in extension mode.
+- **A series that may hit a rate limit runs outside the page where the tool allows** (`api-techniques.md`, the read-back helper
+  entry): a `429` reload kills an in-page loop and its count.
+- **A sanctioned action that must fall between two steps of a scenario is written into that scenario's row** (`manual-brief.md`,
+  «A sanctioned mutating probe», «WHEN it runs»; `templates/2-manual-task.md`, the «When it runs» slot): left in the sanctions block
+  alone it runs too late.
+
 ### Changed
 
+- **A blocked host no longer brings a standalone test as the default second option** (`automation.md`, the «step in an EXISTING test»
+  line): a follow-up gets «written, not run» or «no test»; a standalone test only for a feature large enough on its own.
+- **Playwriter: a route comes off by its pattern or by the same handler object** (`browser/playwriter.md`, «Network»): an
+  `unroute` with a fresh function removes nothing and the stub answers later probes.
+- **On a security-themed round the catalogue reviewer's brief opens with the authorisation context** (`SKILL.md`, step 3): a
+  reviewer whose answer the classifier refused had read the whole catalogue for nothing.
+- **A property of the user's instrument already on record is stated for confirmation, not asked open** (`planning.md`,
+  «The human's instrument has PROPERTIES»): only what the environment snapshot or an earlier round lacks is a question.
+- **A preflight card puts the fact that decides whether the round should start on a `❗` line under its first line** (`preflight-run.md`,
+  «The finale: the card»): typically a layer the round rests on that is deployed but not in testing — no longer one question among several.
+- **A session opened with the automation question itself puts its options only after the plan and its review** (`automation.md`,
+  «The decision», the price line): the price and the brief's lever window decide whether an option is feasible at all.
 - **The automator's «Host class» slot also names how to see every runner on the environment before each run**: `automation.md`,
   the host-class line, and `templates/4-automator-task.md` — a class whose hooks change shared state breaks another session's local
   run, which no CI pipeline listing shows.
@@ -20,6 +47,11 @@ section gathers everything since the previous one.
   to its named inputs** (`report.md`, «Wording a finding»): where the formula sides with the minority path, the finding is the inconsistency.
 - **The executor re-runs a recorded rule's original inputs before calling the record stale** (`executor.md`, «When an outcome looks
   like a defect»): a probe that changed two compared quantities at once refutes neither reading.
+
+### Fixed
+
+- **`session.py max-id` counts an id written in code quotes** (`` `ABC-12` · Minor ``): such an assignment was missed and its
+  number handed out again.
 
 ## [0.19.61] — 2026-11-09
 

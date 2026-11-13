@@ -16,7 +16,7 @@ its endpoints, its wrappers, its own auth flow — stays in the profile. Every r
 
 ## Contents
 
-- requests and answers — the replay, the status and raw text, an error body printed whole, a redirect chain hop by hop, a write-then-read helper that checks the read's own status
+- requests and answers — the replay, the status and raw text, an error body printed whole, a redirect chain hop by hop, a write-then-read helper that checks the read's own status, a rate-limited series run outside the page
 - does it exist — the SPA catch-all and the responder that answers every key alike
 - GraphQL (only where the product's API is GraphQL) — the schema, replaying an operation, the error object and a null `data`, the client's cache, what arrived and what is missing
 
@@ -25,6 +25,8 @@ its endpoints, its wrappers, its own auth flow — stays in the profile. Every r
 - **Replay beats composing.** Take the captured request as it is and change only its parameters: the request is valid by construction (the GraphQL form — «GraphQL», below). Filters, limits and permissions are checked by comparing responses across parameter values — and with and without a secondary argument, which is how a filter silently ignored in the presence of another argument is found. No captured request yet → read the contract first, compose second.
 - **Read the status and the raw text first, never a parsed body** (`r.status` + `r.text()` in a page, `resp.status_code` + `resp.text` or `curl -sS -w '%{http_code}'` from the shell) — an expired session answers `401` with an empty or non-JSON body, and a parser replaces the cause with a parse error. **Print the whole error body**, and in a «write, then read» script log the write's result BEFORE the read — a read that throws must not take the record of the writes with it (the GraphQL shapes of both — «GraphQL», below).
 - **A «write, then read back» helper checks the READ's own status before comparing values** — a throttled (`429`), expired or failed read that returns no object must come out as «read failed», never as a field equal to `null`. Otherwise a rate limit reads as «the write erased the field», and the finding is filed against the write path. Precedent: a validation sweep paired every write with a read; one read hit the environment's rate limit, the helper mapped the missing profile to `null`, and «a four-character address wipes the field» stood in the result until the journal showed the write had landed. Pace a sweep below the environment's limit and retry the read on `429`.
+
+  *And where a series may hit the limit, it runs outside the page* wherever the browser tool has an outside (Playwriter's Node side, the credential from its state): a `429` may reload the page and kill an in-page loop with its count. Precedent: a series broke twice in the page and ran clean from Node.
 - **Trim a response's output only when it succeeded; an error response from `curl`/Python is printed whole** (in a page, the same
   rule as «Read the status and the raw text first» above). A «keep the interesting keys» filter turned a `400` into `{}`, which read as
   «the contract promises an error schema and sends an empty body» — the formatter nearly became the source of a finding.

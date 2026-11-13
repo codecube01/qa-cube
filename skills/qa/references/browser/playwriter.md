@@ -101,8 +101,8 @@ reach `page.on('response')`, without server headers — mark your own); `page.on
 on demand (`await r.text()`);
 `getCDPSession({page})` + `Network.enable` gives the debugging protocol's events. Unlike an in-page wrapper these see every request the
 page makes, XHR and workers included, and survive navigation — remove a route (`page.unroute`) right after the click it guards, as the
-fail-closed rule in `../browser-techniques.md` asks. To re-install a route, remove it by pattern with no handler first
-(`page.unroute(pattern)`), or the old handler keeps answering beside the new one.
+fail-closed rule in `../browser-techniques.md` asks. A route comes off by its pattern (`page.unroute(p)`) or by the same handler object
+kept in a variable; a fresh function removes nothing, the stub keeps answering.
 
 - **A string `pattern` is a glob over the WHOLE URL, query included** — `**/path` misses `…/path?x=1`; match with a function on
   `new URL(u).pathname`. Precedent: a «pass one, abort the rest» route on a GET with a query hit zero times on its dry run.
@@ -129,11 +129,10 @@ fail-closed rule in `../browser-techniques.md` asks. To re-install a route, remo
   in `../browser-techniques.md` is the only guard.
 
   *And the output IS cut, at about 10 000 characters (0.9.0)*, silently: a population dump is written to a file from the page script
-  and only its summary printed, or the tail is lost and the read repeated. Precedent: a round's batch inventory came back cut and was re-read from a file.
+  and only its summary printed, or the tail is lost and the read repeated.
 - A `goto` that waits for `load` times out on a page that opened (above) — the timeout is not a navigation failure.
 - **`ControlOrMeta+a` does not select a field's text on macOS in extension mode** — the typed value is appended, not replacing
   (`3` typed over `2` reads `32`). Replace a value with `locator.fill(…)` and read the field back before acting on it.
-  Precedent: a threshold edit came out as `32` and cost a repeat.
 - **Every session shares the one browser, so a tab can be closed from outside** — by another session's code, an extension or a person —
   and only on some pages. The sign is a `close` event you did not cause; prove it with a control URL in the same tab (another page of
   the site stays open). Other sessions are not touched; read the page from INSIDE it instead: `page.addInitScript` takes the reading at
@@ -163,8 +162,9 @@ fail-closed rule in `../browser-techniques.md` asks. To re-install a route, remo
   closing — re-bind `state.page` by the `window.name` marker and read the state the page reached; what fell inside the gap is «observed
   after the event», never re-played as if it were live. Precedent: an observation call hung for 27 minutes behind a degraded proxy, the
   handles died, all three marked tabs were alive on their final pages, and the expiry screen it was watching could only be dated afterwards.
-- **`download.saveAs()` fails in extension mode** (`ENOENT` on Playwright's artifact): the file lands in the browser's own download folder —
-  take it from there by name and time, and hash it there.
+- **Files cross the extension badly both ways**: `setInputFiles(<path>)` hangs to the timeout — pass `{name, mimeType, buffer}`,
+  clearing a selected file through the form first where it hides the input; `download.saveAs()` fails (`ENOENT`) — take
+  the file from the browser's download folder by name and time, and hash it there.
 - Controlled tabs show Chrome's automation banner; a scenario about the page's own layout at the top edge accounts for it.
 - `snapshot()` returns an accessibility snapshot and, on later calls, diffs against the previous one — a diff that looks empty is «nothing
   changed», not «nothing there».

@@ -13,11 +13,11 @@ that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines fro
 
 **The decision**
 
-- the scenario needs dozens of operations or long waits to reach its conclusion → the price of a run is an input to the decision, computed from the manual result's own timings (operations × measured durations + every propagation lag), never from intuition; a noticeable price goes to the user BEFORE the automator is launched
+- the scenario needs dozens of operations or long waits to reach its conclusion → the price of a run is an input to the decision, computed from the manual result's own timings (operations × measured durations + every propagation lag), never from intuition; a noticeable price goes to the user BEFORE the automator is launched · the session's own input IS the automation question → the options wait for the plan, its review, the price and the lever window
 - the test is NEW to its host class → the class's fixed cost (provisioning, per-test hooks, stabilising reads) is read off a recent run log of a neighbouring test and added — no manual timing contains it · the class's hooks change SHARED state and do not restore it → the brief's «Host class» slot, with the snapshot and the restore owed after each run, every runner seen first
 - the feature is the size of one query parameter (a filter, a flag) → its size is a ground of its own, beside the price: «is this feature worth a test at all» is asked before the automator edits the code, whatever the run costs
 - the automation question is put to the user → it comes before the delivery at 6.5, so the round's status list (step 6.5's format, one line per requirement) goes to the chat FIRST, in a turn the question dialog cannot cover (where the harness's dialog hides the text printed with it — the adapter's «Ask the user» — the question is plain text at the end of the list's message, or a dialog in the next turn), and the question carries three lines above the options: what the change is and whether it is merged, the verdict with its counts, what the test would assert; the round's verdict rows, findings and analyst questions are written into the report file at ACCEPTANCE, before the list goes out — a round with no finding id included
-- the option is a step in an EXISTING test → first read the host's skip reason and the unmerged changes its earlier steps need; no build holds them with the task → the option says «written, not run until both land», a standalone test beside it
+- the option is a step in an EXISTING test → first read the host's skip reason and the unmerged changes its earlier steps need; no build holds them with the task → «written, not run until both land», or no test; a standalone test only for a feature large on its own (step 5)
 - the user's answer is itself a question («isn't a test required by our rules?») → it is a question, not the choice: answer it on the merits, then put the choice again; acting on it starts work nobody ordered
 - the manual run's acceptance criterion is statistical («each variant ≥ 20 %») → the test asserts the degenerate outcome («each variant occurred at least once»), translated by the manager, not the automator
 
@@ -33,13 +33,14 @@ that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines fro
 ## The decision
 
 **The cost of a run is as much an input to the decision as the value of the coverage, and it is computed from the manual result's own
-timings.** A scenario that needs dozens of operations to reach its conclusion (a series for a distribution, long waits for workers) costs
-minutes in every nightly run: count the operations the steps will wait on — each one through its asynchronous pipeline, create to callback
-to final read — multiply by the durations the round measured, and add every propagation lag a step must sit out. A figure put to the user
-from intuition under-prices exactly the waits, and the choice is then made at a price that does not exist. Precedent: two tests (30 payments
-and 20 payouts with a wait for the cascade) were written and then stopped by the user on the very first run with the words «that run is too
-expensive» — the price was visible from the manual result in advance. Precedent: a merge into an existing test was offered at «about 50 s»
-and chosen; it cost 131 s — two operations of ~50 s each plus a setting lag, all three durations printed in the manual result.
+timings.** Count the operations the steps will wait on — each through its asynchronous pipeline, create to callback to final read —
+multiply by the durations the round measured, and add every propagation lag a step must sit out: a figure from intuition under-prices
+exactly the waits, and the choice is made at a price that does not exist. Precedent: a merge offered at «about 50 s» was chosen and cost
+131 s — two operations of ~50 s plus a setting lag, all printed in the manual result.
+
+*And where the session was opened with the automation question itself* («does this need a test?»), the answer still waits for the plan,
+its review, the price and the lever window of «The brief»: they decide whether the option can work at all. Precedent: a merge chosen at a lever
+read off a neighbouring session could not change the sign — the host's parties sat on different rate sources.
 
 **A test NEW to its host class pays that class's fixed cost too** — its provisioning, its per-test hooks, its stabilising reads — which no
 manual timing contains: read it off a neighbouring test's recent run log and add it. Precedent: a new test priced at
@@ -52,9 +53,8 @@ integrations off by class setup too late; another, checking CI alone, broke a pe
 **The size of the feature is an independent ground, alongside the cost of the run.** A cheap merge into an existing test can still be work
 nobody wants: a feature the size of one query parameter may deserve no test at all, whatever the run costs. So the question to the user
 before launching the automator is not only «is this run expensive» but also «is this feature worth a test at all» — and it is asked before,
-not after the automator has edited the code. Precedent: the manager sliced the automation as steps merged into three existing tests (the
-cheapest possible form) and launched the automator; the user's answer was «we only automate bigger features, this is just a filter», and the
-edits had to be reverted mid-run.
+not after the automator has edited the code. Precedent: steps merged into three existing tests (the cheapest form) were reverted mid-run
+on «we only automate bigger features, this is just a filter».
 
 **That question travels with the round's result.** It comes before the delivery at 6.5, so the user has not yet seen what the manual round
 found. The result reaches them in two parts, in this order: first the status list in the chat — the same 🟢/🟡/🔴/⚪ lines step 6.5 opens
@@ -63,9 +63,8 @@ counts, what the test would assert). A dialog box is not where a verdict is read
 saw, and the user asks for the list. «First» means the user READ it first, and where the harness draws the question dialog over the text
 printed in the same turn, a list followed by a dialog in one turn is a list nobody read: the question then goes as plain text at the end of
 the list's message, or as a dialog in the next turn — never «the question follows in my next message», which ends a turn the user must
-restart. Precedent: one automation dialog was dismissed with «first explain what you did, what automation needs, and what that merge
-request is»; a later status list printed in the same turn as the dialog drew «wait, show me the status list first» — and the shape recurred
-twice more with the rule already written as «a message of its own».
+restart. Precedent: a dialog was dismissed with «first explain what you did and what that merge request is»; a status list printed in
+the same turn as the dialog drew «wait, show me the status list first», twice more after the rule was written.
 
 *And the report file holds the round's result before the list goes out.* The order «automation first, report after» is the order of
 WRITING the delivery, not of recording the result: a user who sees an id or a question in the chat opens the report to read it, and what
@@ -76,9 +75,9 @@ later round with no finding skipped the file altogether, and its five analyst qu
 
 **A merge reuses the host's setup, so every step above the new one must pass on the task's build.** Before the option is put, read why
 the host is skipped, if it is, and which unmerged changes its earlier steps rest on. Where no build holds those changes together with the
-task, the option says «written, not run until both land», and a standalone test that runs today stands beside it as an option of its own.
-Precedent: a merge into a host parked for a sibling's unmerged branch was chosen; the task's branch lacked that sibling, the host could
-not reach the step anywhere, and the user was asked a second time.
+task, the option says «written, not run until both land», beside «no test»; a blocked host does not make a follow-up big enough for a
+standalone test (step 5). Precedent: a merge into a host parked for an unmerged sibling was chosen and could not run anywhere; in another
+round the parked host turned the advice into a standalone test for one extra document in an existing flow — «isn't that too small for a test?».
 
 **An answer to the automation question that is itself a question is a question, not the choice.** «Isn't a test required by our rules?» is answered on
 the merits, and then the choice is put again; acting on it starts work nobody ordered. Precedent: a reply of that shape was read as «write

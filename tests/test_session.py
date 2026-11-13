@@ -72,6 +72,9 @@ class MaxId(unittest.TestCase):
     def test_the_fixed_line_is_an_assignment(self):
         self.assertEqual(session.assigned_ids("Fixed: ABC-9 · Minor — the filter", "ABC-"), [9])
 
+    def test_an_id_in_code_quotes_is_an_assignment(self):
+        self.assertEqual(session.assigned_ids("  - `ABC-14` + `ABC-21` · Minor → added to task 46", "ABC-"), [21])
+
     def test_a_mention_in_prose_is_not(self):
         self.assertEqual(session.assigned_ids("see ABC-40; numbering starts at ABC-50 in the brief", "ABC-"), [])
 

@@ -97,11 +97,12 @@ def rename_shot(folder: Path, candidate: str, finding: str) -> tuple[int, list[s
 
 def assigned_ids(text: str, prefix: str) -> list[int]:
     """Ids ASSIGNED in a report, not mentioned: `<ID> · <priority>` (the template's cell and its «Fixed»
-    line), or an id that opens a table cell (a project format with its own id column). A brief's «start at
-    N» or a «see ABC-12» in prose is a mention and does not count."""
+    line), or an id that opens a table cell (a project format with its own id column). The id may sit in
+    bold or in code quotes (`` `ABC-12` · Minor ``). A brief's «start at N» or a «see ABC-12» in prose is a
+    mention and does not count."""
     p = re.escape(prefix)
-    found = re.findall(rf"(?<![\w-]){p}(\d+)\**\s*·", text)
-    found += re.findall(rf"\|\s*\**{p}(\d+)\b", text)
+    found = re.findall(rf"(?<![\w-]){p}(\d+)[*`]*\s*·", text)
+    found += re.findall(rf"\|\s*[*`]*{p}(\d+)\b", text)
     return [int(n) for n in found]
 
 

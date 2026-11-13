@@ -26,7 +26,8 @@ the answer. **No question dialog (the adapter's «Ask the user») and no questio
 holds the run until somebody happens to look, which is exactly what the run exists to avoid.
 
 - **A choice that shapes the plan** — the environment, the width of a bundle of related tasks, step 1's start question → the plan is built
-  on an assumption stated in it, and the card puts that assumption as a question together with what changes if the answer differs.
+  on an assumption stated in it, and the card puts that assumption as a question together with what changes if the answer differs —
+  except a layer of the bundle deployed but not in testing, which goes on the card's `❗` line instead («The finale: the card»).
 - **What needs the user's hands** — a sign-in the profile says only the user can make, a wallet, a one-time code, the «Window and focus»
   slot → not attempted; the scenarios resting on it are marked blocked in the plan, and the card names what is needed.
 - **A mutation a normal round sanctions with the user** → not performed; the brief carries it as the sanction question, answered at the
@@ -45,6 +46,7 @@ Then the card — the run's last message, in the session's language; it replaces
 
 ```
 <READY | READY WITH CAVEATS | BLOCKED: <reason>> — <task id> (<kind> «<title>»)
+❗ <the fact that decides whether the round should start at all, and what waiting on it means>
 Mode: <full cycle | automation-only> · environment: <env> · requirements: <spec-grade | draft>
 Plan: <n> scenarios — <what they cover>; not covered from the start: <… or «nothing»>; <with upfront: cases written — ids>
 Entry state (as of HH:MM UTC): <identity, the screen it is on, the access issued>
@@ -57,6 +59,14 @@ Next: «continue» launches <qa-manual | qa-automator>; «stop» closes the sess
 assumption the questions name. **BLOCKED** — it cannot start without the user: the environment is unreachable, the entry needs hands, the
 build under test is not on the environment. The first line is the decision, because the user reads several cards in a row; a line with
 nothing in it (no questions) is left out.
+
+**A fact that decides whether the round should start at all stands on the `❗` line right under the first line, never among the
+questions** — above all a layer the round rests on that is deployed but not in a testing status (the other half of a bundle, a backend
+whose contract the screen consumes; the WHEN question of `planning.md`, «A task whose status says»): the line names its status and labels, says that the plan assumed it in, and says what «wait for it»
+means — the run closes as dropped and the session is reopened once that layer reaches testing. The first line is then READY WITH
+CAVEATS at most, and the question about it is not repeated below. The line is chat-only, like every icon. Precedent: a card listed «the
+backend is still in to-do — take it into the bundle?» as the first of four questions under READY WITH CAVEATS; the user's answer was
+to drop the round and wait for the backend, and to have that fact stand out next time.
 
 ## The continuation
 
