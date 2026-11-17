@@ -11,6 +11,8 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.19.78] — 2026-11-17
+
 ### Added
 
 - **The noun test routes a lesson between the engine and the profile** (`SKILL.md`, step 7 and «Red flags»; `engine-edits.md`;
