@@ -7,7 +7,8 @@ referring to them explicitly); the profile's scripts live in `.claude/qa-profile
 
 **Next to the profile lives its counterpart, `.claude/qa-cube-feedback.md` — the project's layer
 of engine rules.** The two never carry the same rule: the profile holds what is true only for
-this project (a tool, an environment, a service, a team convention); the feedback file holds
+this project (a tool, an environment, a service, a team convention) or for its kind of product
+(the «Domain rules» subfile); the feedback file holds
 what would hold in anyone's project — the retro's lessons about the process, kept here because
 with `engine-clone: none` there is no clone of the engine to write them into. Every `/qa`
 session reads its open rows as additions to the engine, and `/qa-setup` offers them upstream.
@@ -56,18 +57,18 @@ The profile's first section is a declaration:
 ```markdown
 ## Capabilities
 contract-version: 7    # the contract version the profile matches; set by /qa-setup
-tracker: gitlab        # jira | <other> | none — none: the input is free-form text only
-tms: qase              # <other> | none — none: cases = md files next to the sessions
+tracker: jira          # <other> | none — none: the input is free-form text only
+tms: testrail          # <other> | none — none: cases = md files next to the sessions
 test-cases: upfront    # inline | none — upfront: qa-analyst writes the cases before the run; inline: qa-manual writes them from the facts; none: we do not maintain cases
 environments: stages   # local | none
 logs: kibana           # grafana | <path|skill> | none — none: diagnostics from response bodies only
-autotests: junit       # <any runner> | none — none: the automation step is skipped
+autotests: playwright  # <any runner> | none — none: the automation step is skipped
 browser: playwriter    # claude-in-chrome | playwright-mcp | none
 secrets: .claude/qa-profile/secrets.env  # env | vault | <path> | none — none: the sessions need no secrets
 knowledge: docs/knowledge/     # path | none
 sessions: docs/test-sessions/  # path — mandatory, always present
 engine-clone: none     # a git clone of the engine (the address for retro edits), or none — the usual case
-language: ru           # the sessions' language: the conversation and every artifact (no field → the engine's language, English)
+language: en           # the sessions' language: the conversation and every artifact (no field → the engine's language, English)
 ```
 
 The values to the left of `#` are an illustration; the engine cares about two things: `none`
@@ -108,6 +109,7 @@ instead of retelling it; only what the skills do not have stays in the profile.
 | **Autotests** | how to run a single test (tool/skill); where to put new ones (the code map) and the code style — usually a subfile; where the run logs are; known false failures of the environment; the local «what we do not automate» rules |
 | **Browser** | which browser instance/profile and how to bring it up — the preflight checklist for the manager, on top of the tool adapter's own «Preflight»; how to authenticate (the safety rules: what must never be typed into forms); the project's own UI-checking techniques — usually a subfile (the universal ones ship with the engine, `skills/qa/references/browser-techniques.md`, and are not repeated here) |
 | **Secrets** | where the values live (the source: env, a vault, a file outside git); which variable/record names are there and what each is for; how to read from the source. The hard rule: **the profile holds only the source and the names, never the values** |
+| **Domain rules** (optional) | the subfile holding process rules for this product's KIND — what the retro's noun test (`skills/qa/SKILL.md`, step 7) kept out of the engine: one row per rule, «rule · engine address it applies at · precedent» (the precedent may name anything, the file stays in the project). Read whole before planning, every row an entry at its address. Sibling projects of one product keep ONE master and point to it — copies drift at the first retro |
 | **Knowledge** | what to read before a session (the structure, the README); where to write the retro's product findings. The recommended organization: **one domain = one file** (the business logic + that domain's API contract + its known defects) — then the rule «read the profile doc for the feature» hands the agent the API contract too, without reading a general reference; cross-domain API conventions go into a separate small file |
 
 `sessions` and `engine-clone` are just paths and require no sections. `engine-clone` is `none` for

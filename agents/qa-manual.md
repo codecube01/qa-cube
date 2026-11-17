@@ -194,13 +194,13 @@ Finish the result file with four sections («Environment restoration» only if y
 **«Environment restoration».** A table of settings in **three** columns — «as found on arrival», «who changed it along the way (me / someone
 else's run)», «now, verified by reading». Two columns are not enough: on a shared environment the «on arrival» state goes stale within
 minutes, and without separating «my change» from «someone else's» it is unclear what to revert and what to leave as is. Precedent: another
-run flipped the integrations between the recon step and the first payment. Below the table — the list of entities created and, explicitly:
+run flipped a shared setting between the recon step and the first write. Below the table — the list of entities created and, explicitly:
 what was left on the environment deliberately and what covers that.
 
 **«Summary».** The feature's status (works / broken / partial), then:
 
 - **a verdict per requirement out of four values — pass / fail / partial / not covered.** A compound requirement («the status changes
-  **and** the officer sees it») cannot be described by a binary verdict: «partial» is written with an explicit breakdown of which half
+  **and** the admin sees it») cannot be described by a binary verdict: «partial» is written with an explicit breakdown of which half
   passed, and «not covered» always comes with a reason. A verdict with a narrowing qualifier — «pass (desktop)» where the brief's expected
   outcome named desktop AND mobile — is «partial» with that breakdown, never a pass counted in the totals. **These four values are what the manager renders to the user as the round's status
   list**, one line per requirement — so a «partial» without its breakdown, or a «not covered» without its reason, becomes a line the reader
@@ -222,7 +222,7 @@ what was left on the environment deliberately and what covers that.
 
 **«Product findings».** Everything you learned about the system's behavior that the project knowledge base does not have — the manager will
 move it over. **An empirical regularity not confirmed by the spec (selection order, timings, «it always arrives first») is marked «observed
-in N/N runs» rather than phrased as a contract** — «the cascade picks X first», from three lucky runs, once went into the knowledge base
+in N/N runs» rather than phrased as a contract** — «X is always picked first», from three lucky runs, once went into the knowledge base
 as a fact and cost the next executor a red iteration.
 
 **«Executor retro».** What got in your way: what was missing in the brief, where an instruction, the profile or a skill lied or stayed

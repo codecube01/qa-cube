@@ -88,8 +88,8 @@ ASSIGNED = re.compile(
 # What a credential VALUE looks like, as opposed to a word of prose. Both halves matter: the engine's
 # own verdict vocabulary («pass», «fail») and sentences like «token: expired» are the exact shapes a
 # looser rule fires on, and a check that cries wolf on correct work gets switched off within a week.
-# Precedent: the first version flagged the phrase «a wall the executor cannot pass: signing in a
-# wallet» in the engine's own lesson catalogue.
+# Precedent: the first version flagged the phrase «a wall the executor cannot pass: signing a
+# transfer» in the engine's own lesson catalogue.
 CREDENTIAL_VALUE = re.compile(r"^[A-Za-z0-9._~+/=-]{8,}$")
 
 # Shapes that are a secret whatever they are assigned to.
@@ -188,6 +188,13 @@ def scan_tables(lines: list[str], max_cell: int) -> list[tuple[int, str]]:
             block.append((n, line))
             continue
         if block:
+            # text on the very next line is read as one more row of the table (or swallows its last row),
+            # and the rendered table breaks — a blank line must separate them
+            if line.strip() and any(SEPARATOR.match(text) for _, text in block):
+                out.append(
+                    (n, "a line of text right under a table — markdown glues it to the last row and the table "
+                        "breaks when rendered; leave a blank line between them")
+                )
             flush(block)
             block = []
     if block:
@@ -271,9 +278,11 @@ def scan_screenshots(lines: list[str], folder: Path) -> list[tuple[int, str]]:
 
 # --- scenarios against the brief ----------------------------------------------------------------
 
-# An id in the brief's `#` column: a short prefix in any script, a number, an optional letter — S3, B12,
-# 7, S2b. The template's placeholders (`N`, `N+1`) are not ids and are skipped.
-SCENARIO_ID = re.compile(r"[^\W\d_]{0,3}\d+[^\W\d_]?")
+# An id in the brief's `#` column: a short prefix in any script, a number, an optional decimal part (a
+# row inserted between two others, `1.5`), an optional letter — S3, B12, 7, S2b, 13.2. The template's
+# placeholders (`N`, `N+1`) are not ids and are skipped.
+SCENARIO_ID = re.compile(r"[^\W\d_]{0,3}\d+(?:\.\d+)?[^\W\d_]?")
+DECIMAL_ID = re.compile(r"[^\W\d_]{0,3}\d+\.\d+[^\W\d_]?")
 RANGE = re.compile(r"([^\W\d_]{0,3})(\d+)\s*[–-]\s*([^\W\d_]{0,3})(\d+)")
 MANUAL_RESULT = re.compile(r"^\d+-manual-result(.*)\.md$")
 # Executors stamp their headings with the time and the date; `(11:02–11:05)` read as a range would
@@ -319,6 +328,8 @@ def heading_tokens(lines: list[str]) -> set[str]:
             continue
         line = CLOCK.sub(" ", line)
         tokens.update(w.lower() for w in re.findall(r"[^\W_]+", line))
+        # the word split above cuts `1.5` into `1` and `5`; a decimal id is taken whole as well
+        tokens.update(w.lower() for w in DECIMAL_ID.findall(line))
         for pa, a, pb, b in RANGE.findall(line):
             if (not pb or pa.lower() == pb.lower()) and 0 < int(b) - int(a) <= 50:
                 tokens.update(f"{pa}{k}".lower() for k in range(int(a), int(b) + 1))

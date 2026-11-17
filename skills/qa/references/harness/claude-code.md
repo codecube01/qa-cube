@@ -16,6 +16,12 @@ the background and its completion arrives as a notification on its own — wait 
 (`claude -p`) background subagents are stopped 10 minutes after the manager's last turn, mid-round: a headless session sets
 `CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=0`.
 
+A launch that ends at once with an API authentication error (`403 … authentication_failed`, «Please run /login») is the account's
+state, not the brief's: relaunch once with `model` set to another model — if that one runs, it is the account's access to the default model that failed —
+and tell the user in one line that `/login` restores it (in a preflight run, on the card's `❗` line, since the executor cannot start
+without it). Another launch on the same model learns nothing. Precedent: two catalogue reviewers died at their first call with that error; the
+same brief on another model ran, and the executor launched after the user's `/login`.
+
 ## Continue a running executor
 
 `SendMessage` to the same agent (by the id the launch returned): the executor keeps its context, and the

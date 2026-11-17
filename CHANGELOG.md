@@ -11,6 +11,76 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.19.78] — 2026-11-17
+
+### Added
+
+- **The noun test routes a lesson between the engine and the profile** (`SKILL.md`, step 7 and «Red flags»; `engine-edits.md`;
+  `qa-setup`, the feedback reconciliation): a rule that needs the product's own nouns is a domain rule and stays in the project.
+- **An optional «Domain rules» profile subfile** (`PROFILE-CONTRACT.md`; `SKILL.md`, step 0): read whole before planning, each row an
+  entry at its engine address; sibling projects share one master. No contract bump — the section is optional.
+- **A fix made as a data edit with no deploy is retested as «pass by data»** (`report.md`, the latent-pass entry): the same round asks
+  whether the release's migration carries the change.
+- **`check_session.py` catches text glued right under a table** (it breaks the rendered table) and **accepts decimal scenario ids**
+  (`1.5`, `13.2`) in a brief, matching them whole in the result's headings.
+- **Playwriter: the extension dropping mid-run is handled as the dead-handles loss** (`browser/playwriter.md`, «Known failures»):
+  the user's click on its icon, then the re-bind by the tab's marker.
+- **The brief's control instance states its expiry beside the observation window** (`templates/2-manual-task.md`, «Control instance»).
+- **A red negative control that leaves a live timed artifact delays the green run** (`automation.md`, the negative-control entry).
+- **Playwriter: `setViewportSize` sticks in the session** (`browser/playwriter.md`, «Known failures»): a narrow window goes over CDP.
+- **A screen's list said to come from source X is checked where X and the screen's other sources disagree** (`planning.md`, «The main
+  run and its control», a rider of the degenerate-oracle entry).
+- **A question after delivery about an artifact is answered from a fresh read of it** (`after-delivery.md`, «A question»), not from
+  memory; a connector that failed to start sends the read to the profile's other route.
+- **A sanction's object is also checked for whether it can serve the probe** (`manual-brief.md`, «WHICH object takes the mutation»).
+- **Claude Code: a subagent that dies at launch with an API authentication error is relaunched once on another model**
+  (`harness/claude-code.md`, «Launch a role»), and the user is told `/login` in one line.
+- **Every journal of a round is keyed by its event, not deduplicated by text** (`browser-techniques.md`, the request-logger entry), and
+  a call's decisive fields are kept as fields of their own.
+- **A finding reproduced only through a trigger no user produces is published only with a realistic path** (`report.md`, «Is this a
+  finding at all»): an upload from a second tab or a call only the product's own client makes puts the candidate in side findings,
+  not the task's table; for a server-side guard or an API its users call, the direct call is the realistic path.
+- **A binding check (a token to its challenge, a code to its session) is planned with another owner's half too** (`planning.md`,
+  «A binding check is planned across owners»): a same-owner swap proves no escalation and leaves the priority a guess.
+- **Playwriter: a file upload goes as a payload, not a path** (`browser/playwriter.md`, «Known failures»): `setInputFiles(<path>)`
+  hangs in extension mode.
+- **A series that may hit a rate limit runs outside the page where the tool allows** (`api-techniques.md`, the read-back helper
+  entry): a `429` reload kills an in-page loop and its count.
+- **A sanctioned action that must fall between two steps of a scenario is written into that scenario's row** (`manual-brief.md`,
+  «A sanctioned mutating probe», «WHEN it runs»; `templates/2-manual-task.md`, the «When it runs» slot): left in the sanctions block
+  alone it runs too late.
+- **Component libraries: an option outside the visible part of a scrolled list is picked by keys** (`browser-techniques.md`,
+  «Component-library interaction»): arrow keys and `Enter`, reading `data-highlighted`.
+
+### Changed
+
+- **Domain-specific rules moved out of the catalogues into the projects' profiles**, and the remaining precedents retold in class
+  words: the engine's rules no longer describe the products they were learned on.
+- **A blocked host no longer brings a standalone test as the default second option** (`automation.md`, the «step in an EXISTING test»
+  line): a follow-up gets «written, not run» or «no test»; a standalone test only for a feature large enough on its own.
+- **Playwriter: a route comes off by its pattern or by the same handler object** (`browser/playwriter.md`, «Network»): an
+  `unroute` with a fresh function, as handler or as predicate pattern, removes nothing and the stub answers later probes.
+- **On a security-themed round the catalogue reviewer's brief opens with the authorisation context** (`SKILL.md`, step 3): a
+  reviewer whose answer the classifier refused had read the whole catalogue for nothing.
+- **A property of the user's instrument already on record is stated for confirmation, not asked open** (`planning.md`,
+  «The human's instrument has PROPERTIES»): only what the environment snapshot or an earlier round lacks is a question.
+- **A preflight card puts the fact that decides whether the round should start on a `❗` line under its first line** (`preflight-run.md`,
+  «The finale: the card»): typically a layer the round rests on that is deployed but not in testing — no longer one question among several.
+- **A session opened with the automation question itself puts its options only after the plan and its review** (`automation.md`,
+  «The decision», the price line): the price and the brief's lever window decide whether an option is feasible at all.
+- **The automator's «Host class» slot also names how to see every runner on the environment before each run**: `automation.md`,
+  the host-class line, and `templates/4-automator-task.md` — a class whose hooks change shared state breaks another session's local
+  run, which no CI pipeline listing shows.
+- **A finding «the same value comes out different by different paths» names its culprit only after the documented formula is read
+  to its named inputs** (`report.md`, «Wording a finding»): where the formula sides with the minority path, the finding is the inconsistency.
+- **The executor re-runs a recorded rule's original inputs before calling the record stale** (`executor.md`, «When an outcome looks
+  like a defect»): a probe that changed two compared quantities at once refutes neither reading.
+
+### Fixed
+
+- **`session.py max-id` counts an id written in code quotes** (`` `ABC-12` · Minor ``): such an assignment was missed and its
+  number handed out again.
+
 ## [0.19.61] — 2026-11-09
 
 ### Added
@@ -92,7 +162,7 @@ section gathers everything since the previous one.
   host's skip reason and the unmerged changes its earlier steps rest on are read before the question; where no build carries both,
   the option says «written, not run until both land» and a standalone test that runs today stands beside it.
 - **A lever named in the automator's brief is checked for a window in the host test first**: `automation.md`, «The brief» — the
-  window is computed from the host test's own rates, fees and earlier filters before the lever is named, and where the arithmetic
+  window is computed from the host test's own coefficients and earlier filters before the lever is named, and where the arithmetic
   already predicts the existing test's outcome, it replaces the confirming run.
 - **A burst that proves «served while supply lasts» is sized by the per-caller maximum**: `manual-brief.md`, «What goes into
   the brief», the «Fixture» entry — where one caller may take several units, supply must outlast what the earlier callers may
@@ -143,7 +213,7 @@ section gathers everything since the previous one.
 - **A guard held by an in-flight state is judged by reads that bracket the repeat**: `planning.md`, overlapping operations — the
   state is read before and after the repeat in the same call, so a window shortened by a failing dependency no longer voids the probe.
 - **A change that feeds an existing branch reads that branch's documented outcome as its requirement**: `planning.md`, the
-  no-requirements entry — a new rejection routed into «no suitable candidate» is checked against that path before the round is recording-only.
+  no-requirements entry — a new rejection routed into an existing fallback is checked against that path before the round is recording-only.
 - **A negative control of a new step names the assert it is aimed at**: `automation.md`, «The brief» — the step's precondition asserts
   are suspended for the control run, so the red proves the step rather than its precondition.
 - **The entry state's time carries a measured zone**: `manual-brief.md`, the preflight state entry, and the «Entry state» heading of
@@ -229,7 +299,7 @@ section gathers everything since the previous one.
   success says nothing about the failure path a fix may live in.
 - **A retest reads every thread the previous findings went into**: `session-folder.md` — the customer's triage of a layer's
   findings lives in the task where that table was pasted; `report.md` points there.
-- **A replicated client artifact is proven first**: `executor.md` — a copy of what a client builds (a wallet's envelope) carries a
+- **A replicated client artifact is proven first**: `executor.md` — a copy of what a client builds (a signed payload) carries a
   verdict only after the incident's own instance is rebuilt from its parts byte for byte.
 - **Version 0.19**: the engine runs in any agent harness through its adapters, and Playwriter is the default browser — the
   harness, browser and install entries of this section.
@@ -307,7 +377,7 @@ section gathers everything since the previous one.
   server-side checks — `[]` may make a handler create defaults; an operation found by introspection enters a sweep by its docs, not its name.
 - **A fix that moves a boundary**: `planning.md`, the bug-task checklist — the new boundary (an inclusive end, a new cut-off)
   is a neighbour of its own, probed at the store's precision by closing a window at an existing record's whole unit.
-- **A reverse that answers success where a refusal was expected**: `planning.md`, the gate before an irreversible step — such a
+- **An undo that answers success where a refusal was expected**: `planning.md`, the gate before an irreversible step — such a
   gate is phrased by its effect (the object read back unchanged), and dry-called on the round's own object before a shared fixture.
 - **Every entry point of a frontend feature**: `planning.md`, recon — presence is checked by the feature's UI strings across the
   served bundle, and every screen they land on gets a scenario of its own.
@@ -318,7 +388,7 @@ section gathers everything since the previous one.
   ceiling is the operation's end plus an hour.
 - **A click timed against a running multi-step operation**: the brief's pause protocol gets a «Window in time» line — anchored at
   the previous step's observed start plus the shortest («during») or longest («after») observed duration, never the mean.
-- **Four shell pitfalls**: `shell-pitfalls.md` — a buffering stage after `grep --line-buffered` silences a monitor; `"$tx:e…"`
+- **Four shell pitfalls**: `shell-pitfalls.md` — a buffering stage after `grep --line-buffered` silences a monitor; `"$id:e…"`
   is a zsh history modifier; a credential header never rides curl's argv; a helper resolves its path arguments before its `cd`.
 - **The fail-closed wrapper is removed right after its last guarded click**: `browser-techniques.md` — a tab that leaves the tool's
   group otherwise keeps blocking, the user's own actions included.
@@ -353,8 +423,8 @@ section gathers everything since the previous one.
   REPLACED by a sibling's text is recovered from its edit history before «no requirements of its own» is written anywhere.
 - **Two output-reading riders** (`browser-techniques.md`, «Output censorship»): a form's state is read as its whole visible
   text, not through a whitelist of expected words; a link that may not be printed is checked inside the tab it opens (status, sha256).
-- **A wallet signature request is a human click too, free typed-data signatures included**: `manual-brief.md`
-  («Your own harness refuses a call») — a page script records or refuses wallet calls, never originates them.
+- **An external signer's request is a human click too, free confirmations included**: `manual-brief.md`
+  («Your own harness refuses a call») — a page script records or refuses the signer's calls, never originates them.
 - **An irreversible step the user sanctioned in chat is the user's click or the manager's call, never the executor's**:
   `manual-brief.md` («A sanctioned mutating probe») and a «Who presses» slot in the brief's «Sanctioned probe» block.
 - **A size budget for every catalogue and agent instruction** (`check_engine_edits.py`): each is read whole, so an
@@ -406,7 +476,7 @@ section gathers everything since the previous one.
   (`SKILL.md` step 3). `engine-edits.md` says how such an index is edited; the validator refuses an index line without an arrow.
 
 - **The round's budgets and limits are a section of the brief template**: expendables by the formula, the control instance, parallel
-  waits, the amount cap with the fee beside it, the neighbouring contour, reference values, window and focus; five `manual-brief.md`
+  waits, the spend cap with its cost beside it, the neighbouring contour, reference values, window and focus; five `manual-brief.md`
   entries and the cap section are rewritten around the slots.
 
 - **The scenario table of the brief template has its columns and its mandatory rows**: expected effect with its channel, fixture as a
@@ -458,9 +528,9 @@ section gathers everything since the previous one.
 
 - **A device-class branch reached by spoofing detection**: `report.md` (the appearance entry) — proves the branch
   exists, not what that device's user sees; check the screen at that device's width before writing findings there.
-- **The pause protocol: a session that dies, a human's reload, a chain**: `manual-brief.md` — re-entry in a separate
+- **The pause protocol: a session that dies, a human's reload, one target**: `manual-brief.md` — re-entry in a separate
   tab, the page holding an unsaved artifact is never navigated or reloaded; an in-page recorder is guarded by «do not
-  reload» and re-armed after; the request names the only network on which confirming is allowed.
+  reload» and re-armed after; the request names the only target where confirming is allowed.
 - **A probe that is accepted and starts a background process**: `manual-brief.md` («A sanctioned mutating probe»,
   now six questions) — the executor records the process and leaves the decision to the team.
 - **Asking the user to create an instrument**: `planning.md` («The human's instrument has PROPERTIES») — say what
@@ -652,13 +722,13 @@ folds in the patches 0.15.3–0.15.7, which were cut by retros without a section
   finding often amends how it was described, and the amendment arrives with the authority of
   whoever owns the code — so it slides into the brief and the executor ends up measuring
   against the author's model instead of against the requirement. Quote it verbatim, attribute
-  it, name the observation that settles it. Precedent: a fix comment said a signing pause
+  it, name the observation that settles it. Precedent: a fix comment said a safety pause
   «never engaged once»; the retest found it engaging and clearing normally, and the whole
   block had been framed around the author's version.
 - **A lever that works can still be unable to produce the state a scenario needs — check
   what it CONSERVES, not only that it moves** (`planning.md`). A transfer conserves the
   total, a reassignment conserves the count, a rename conserves everything but the label, so
-  «empty both wallets by converting between them» is not hard but arithmetically impossible.
+  «empty both warehouses by moving stock between them» is not hard but arithmetically impossible.
   Where the lever only redistributes, the state is usually reachable from the other side.
 - **A lever handed over BY THE USER is verified at preflight like any other, and a
   credential is only half of one** (`planning.md`). The value's authority exempts it from the
@@ -714,8 +784,8 @@ folds in the patches 0.15.3–0.15.7, which were cut by retros without a section
 - **«The channel does not exist» is asked of every contour — visibility is scoped per identity, not per environment** (`report.md`, «What
   "not covered" is allowed to claim»). An empty listing under the credentials the round happens to hold is a fact about the identity that
   asked; the give-away is that the round holds two ways in and consulted one. Where contours disagree, the disagreement is itself the
-  finding. Precedent: «no delivery channel is configured» came from an empty listing under an integrator's key, while the operator's
-  contour showed two active subscriptions of the same tenant, one of which had accepted four deliveries from the round's own actions.
+  finding. Precedent: «no delivery channel is configured» came from an empty listing under a client's API key, while the admin
+  contour showed two active subscriptions of that same client, one of which had accepted four deliveries from the round's own actions.
 
 ## [0.15.1] — 2026-09-15
 
@@ -807,8 +877,8 @@ folds in the patches 0.15.3–0.15.7, which were cut by retros without a section
 - **28 tests for it, paired by design.** A checker over somebody else's writing fails two ways, and only one is visible: it can miss a
   token, or it can fire on correct work and be switched off within a week. So every «must be caught» case has a «must stay quiet» twin, and
   one test runs the whole engine corpus — the largest body of correct prose available, full of masked credentials and wide tables — and
-  requires silence. It caught a real false positive: the first rule flagged the phrase «a wall the executor cannot pass: signing in a
-  wallet» in the lesson catalogue, which is how the value-shape guard (letters **and** digits) got in.
+  requires silence. It caught a real false positive: the first rule flagged the phrase «a wall the executor cannot pass: signing a
+  transfer» in the lesson catalogue, which is how the value-shape guard (letters **and** digits) got in.
 - **`ROADMAP.md`: what is deliberately not built yet, and why.** `/qa --plan` with a checkpoint on the first session in a project,
   `/qa-doctor`, a budget for the round, `qa_day.py --registry` — each with the gap it closes and the shape it would take, plus a «not
   planned» section (a web-tester role, parallel executors, a schema for the profile) so the same proposals stop being re-litigated.
@@ -1075,9 +1145,9 @@ includes what was bumped as 0.10.1, which was never released separately).
   when the rollback proves impossible through the product's own fault: record it, report it, do
   not repair it by bypassing the product.
 - **Two fields every «click needed» request to the user must carry**: what the step does to the
-  environment (amount, recipient, which entity changes) and what kind of window it is — a free
-  reversible signature or an irreversible transaction that costs a fee. Plus: a signature and the
-  send cannot be merged into one request (the executor's turn ends between them), and the brief
+  environment (cost, target, which entity changes) and what kind of window it is — a free
+  reversible confirmation or a paid irreversible operation. Plus: a confirmation and the
+  submit cannot be merged into one request (the executor's turn ends between them), and the brief
   states what happens if the user clicks the wrong thing.
 - **Acceptance requires the version of the artifact the run actually exercised** — the served
   bundle's hash, the deploy ref, the image version. Without it a verdict cannot be tied to a

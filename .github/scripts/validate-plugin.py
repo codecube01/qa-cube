@@ -252,7 +252,10 @@ for path in sorted(engine_files):
     except UnicodeDecodeError:
         continue  # a binary file: an image, an archive
     for problem in scan_lines(text, str(path.relative_to(ROOT))):
-        fail(f"{problem} — anonymise it (keep the mechanics, drop the address)")
+        hint = ("; a domain term means the rule itself belongs in the project profile's «Domain rules» "
+                "(skills/qa/SKILL.md, step 7, the noun test), not reworded around the term"
+                if "private denylist" in problem else "")
+        fail(f"{problem} — anonymise it (keep the mechanics, drop the address){hint}")
 
 # --- the edit itself: counts in the text, and ratchets against HEAD ----------
 # A retro edits the engine from another project's session and never sees this

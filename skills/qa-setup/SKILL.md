@@ -63,8 +63,8 @@ has no effect on the language of the output — that is set by `language` in the
 - **traces of past test sessions**: folders like `test-sessions/`, reports, cases in md — if sessions have been run before, adopt their
   paths rather than inventing new ones; whether ready-made cases sit nearby (`test-cases/`, cases in a TMS created before the runs) is a
   hint about the value of `test-cases`;
-- **mentions of a tracker and a TMS**: links in README/CLAUDE.md, configs (`.gitlab-ci.yml`, `qase.config.json`, `.jira`, tags/annotations
-  in tests like `@QaseId`);
+- **mentions of a tracker and a TMS**: links in README/CLAUDE.md, configs (`.gitlab-ci.yml`, `.jira`, a TMS config, tags/annotations
+  in tests like `@TmsLink`);
 - **ready-made access channels to the tools**: connected MCP servers (the adapter's «Connecting an MCP server» lists them), CLIs in PATH (`which jira glab …`), the project's
   skills — these come in handy at the «Access channels» step;
 - **logs**: logging configs, mentions of Kibana/Grafana/ELK in the docs, where the services write when run locally.
@@ -212,7 +212,9 @@ to the file's «Closed» block with the version it arrived in; it is not deleted
 the whole payoff of keeping the log. From then on the sessions stop reading it — the engine carries the rule, and a closed row read on top
 of it would be the same rule twice. Then one line in the chat: how many moved and what they were about.
 
-Rows that did not arrive stay open. **When three or more of them are open, offer — once — to hand them upstream:** render the open rows as
+Rows that did not arrive stay open. **Before any offer, each open row passes the noun test** (`../qa/SKILL.md`, step 7): a row whose
+trigger needs the product's own nouns is a domain rule written to the wrong layer — it moves to the profile's «Domain rules» with its
+address, not upstream. **When three or more of them are open, offer — once — to hand them upstream:** render the open rows as
 plain text the user can paste, **anonymised the way engine edits are** (the mechanics of the lesson stay, the tracker ids, hostnames,
 service and company names go), and give them the link `https://github.com/codecube01/qa-cube/issues/new/choose`. Nothing is posted, opened
 or sent by the engine: the text and the link are handed over, the decision is the user's.

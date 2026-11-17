@@ -131,6 +131,7 @@ The wording that keeps a row a question:
 - Budget unit: <one pair of mutations per PROPERTY to be shown, on the same object, each reversed before the next; restorations count>
 - A process the probe starts: <not terminated by you — record its id, state and attempt count at the end of the round; the report hands the decision to the team>
 - Timed burst (a paid probe of simultaneous and offset calls): <rehearsed first, free — the same code with a harmless read under the mutation's alias, no budget flag, nothing stored; the measured offsets reported before the pause | not a burst>
+- When it runs: <a step in scenario <N>'s row, between <step> and <step> — written there, not only here | any point of the round>
 
 ## Budget & limits (delete a line that does not apply)
 
@@ -139,15 +140,15 @@ The wording that keeps a row a question:
   the unit is what is actually spent (not «activations» if an activation spends nothing); a restoration spends the same budget; recompute
   against the facts and say so in the result>
 - Control instance: <the one session / application / account set up as the control and only polled rarely — every experiment runs on a
-  separate instance>
+  separate instance; where the control is a session or token, its expiry stated beside the observation window — it must outlive the window plus the pauses before it (the rule: `planning.md`, «A scenario whose own RUNNING TIME»)>
 - Waits over an hour: <observations may run in parallel on isolated environments (profiles, contours): yes / no — «one session at a time»
   forbids a login over a live session, not two isolated environments>
 - Amount cap: <the cap, with the platform's fee or the minimum viable amount beside it; where the cost is paid BEFORE the refusal (a
-  signature, gas, a one-time token) — no figure: «measure the fee across a few amounts, take the smallest that leaves a positive result,
+  fee per try, a one-time token) — no figure: «measure the fee across a few amounts, take the smallest that leaves a positive result,
   record it»>
 - Neighbouring contour (another environment, account, closed network): <ask through the manager for <one phrase> | record an open question
   and move on>
-- Reference values (cryptographic constants, test vectors, test addresses): <take them from public sources per <standard>, cite the source>
+- Reference values (standard constants, test vectors, sample ids): <take them from public sources per <standard>, cite the source>
 - Window and focus (an appearance round, the user's own environment): <resizing allowed: yes / no; the focus is never taken
   programmatically — record the degraded channel, switch to the non-interactive part, re-check later, escalate; the user does not work in this
   environment until the round ends>
@@ -176,8 +177,8 @@ message opening with `CLICK NEEDED:` (the marker the manager greps the result fo
 - Environment: <browser profile / instance id — the id, never its label — then the tab and the button; a tab id alone means nothing outside the executor's own group>
 - Account to type: <the exact handle — a pre-filled login form may hold a neighbour's>
 - What the step does TO THE STAND: <amount, recipient, which entity changes>
-- Kind of window: <a free, reversible signature | an irreversible transaction, with its fee>
-- Network allowed: <the one network on which confirming is allowed; a window on any other — reject, whatever it would prove>
+- Kind of window: <a free, reversible approval | an irreversible paid commit, its cost>
+- Target allowed: <the one target on which confirming is allowed; a window on any other — reject, whatever it would prove>
 - Boundary instead of a value: <«click at any value up to X, above that — do not click», when the on-screen value is computed live>
 - Window in time (a click timed against a running multi-step operation): <an absolute clock window, anchored at the observed start of the
   step before it — plus the SHORTEST observed step duration for «during step k», the LONGEST for «after step k has finished»; never the
@@ -188,7 +189,7 @@ message opening with `CLICK NEEDED:` (the marker the manager greps the result fo
 - Do not reload or close the tab; do not work in this environment until the round ends
 - Expected answer: one word («done» / «clicked») — the executor re-reads the state itself; ask for at most 1–2 concrete VALUES
 - Wrong click (confirmed where cancel was asked): <recorded as a fact; the scenario is replayed only if the stand was affected>
-- A second window (signature → send) cannot be merged into one request: announce it in advance, the user stays at the keyboard
+- A second window (approve → commit) cannot be merged into one request: announce it in advance, the user stays at the keyboard
 - Identity fallback (a round that logs in through the browser): <first the manager — the executor ends its turn with «LOGIN NEEDED: <account>», the manager logs in from its own session and confirms the identity; only if that is refused too — «the user logs in as <account> in <environment>»; ready for every switch however many passed before; an irreversible step observed under that identity waits until it is in place>
 
 After the pause the executor re-reads the actual state and the tab list (ids die), checks WHOSE session came back, compares the page's

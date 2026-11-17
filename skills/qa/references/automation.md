@@ -1,10 +1,9 @@
 # Deciding what to automate
 
 Read at step 5 of `../SKILL.md`, before the automation choice is put to the user and before `4-automator-task.md` is written. Each entry is
-a way the automation decision has gone wrong — a test nobody wanted, a price that did not exist, a question read as an order — and the line
+a way the automation decision has gone wrong and the line
 that would have settled it before the automator touched the code; the precedent that closes an entry is what paid for the rule.
-**The «Contents» below is read whole, and it is the rules** — one line
-per entry, the trigger and what the manager does; an entry's body is opened for its mechanism and its precedent only when its line fired —
+**The «Contents» below is read whole, and it is the rules**; an entry's body is opened for its mechanism and its precedent only when its line fired —
 that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines from there, never the file without a `limit`.
 
 ## Contents
@@ -13,48 +12,48 @@ that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines fro
 
 **The decision**
 
-- the scenario needs dozens of operations or long waits to reach its conclusion → the price of a run is an input to the decision, computed from the manual result's own timings (operations × measured durations + every propagation lag), never from intuition; a noticeable price goes to the user BEFORE the automator is launched
-- the test is NEW to its host class → the class's fixed cost (provisioning, per-test hooks, stabilising reads) is read off a recent run log of a neighbouring test and added — no manual timing contains it · the class's hooks change SHARED state and do not restore it → the brief's «Host class» slot, with the snapshot and the restore owed after each run
+- the scenario needs dozens of operations or long waits to reach its conclusion → the price of a run is an input to the decision, computed from the manual result's own timings (operations × measured durations + every propagation lag), never from intuition; a noticeable price goes to the user BEFORE the automator is launched · the session's own input IS the automation question → the options wait for the plan, its review, the price and the lever window
+- the test is NEW to its host class → the class's fixed cost (provisioning, per-test hooks, stabilising reads) is read off a recent run log of a neighbouring test and added — no manual timing contains it · the class's hooks change SHARED state and do not restore it → the brief's «Host class» slot, with the snapshot and the restore owed after each run, every runner seen first
 - the feature is the size of one query parameter (a filter, a flag) → its size is a ground of its own, beside the price: «is this feature worth a test at all» is asked before the automator edits the code, whatever the run costs
 - the automation question is put to the user → it comes before the delivery at 6.5, so the round's status list (step 6.5's format, one line per requirement) goes to the chat FIRST, in a turn the question dialog cannot cover (where the harness's dialog hides the text printed with it — the adapter's «Ask the user» — the question is plain text at the end of the list's message, or a dialog in the next turn), and the question carries three lines above the options: what the change is and whether it is merged, the verdict with its counts, what the test would assert; the round's verdict rows, findings and analyst questions are written into the report file at ACCEPTANCE, before the list goes out — a round with no finding id included
-- the option is a step in an EXISTING test → first read the host's skip reason and the unmerged changes its earlier steps need; no build holds them with the task → the option says «written, not run until both land», a standalone test beside it
+- the option is a step in an EXISTING test → first read the host's skip reason and the unmerged changes its earlier steps need; no build holds them with the task → «written, not run until both land», or no test; a standalone test only for a feature large on its own (step 5)
 - the user's answer is itself a question («isn't a test required by our rules?») → it is a question, not the choice: answer it on the merits, then put the choice again; acting on it starts work nobody ordered
 - the manual run's acceptance criterion is statistical («each variant ≥ 20 %») → the test asserts the degenerate outcome («each variant occurred at least once»), translated by the manager, not the automator
 
 **The brief**
 
 - a rule of the project's own profile is about to go into the brief as an instruction («these helpers assert 200 internally, add a raw variant») → it is checked against the specific helpers this round touches first; true of the profile's general case, it may be false of these two; a call quoted into the brief → in the helper's own signature types, read off its declaration
-- a lever the brief names for a new step («drive it by X») → its window is computed under the HOST test's own configuration (every party's rates and fees, every filter ahead of the one under test) before the brief goes out, and an empty window → the brief says what in the setup must change; where the same arithmetic predicts how the existing test fares on the new build, it replaces the confirming run
+- a lever the brief names for a new step («drive it by X») → its window is computed under the HOST test's own configuration (every party's own values, every filter ahead of the one under test) before the brief goes out, and an empty window → the brief says what in the setup must change; where the same arithmetic predicts how the existing test fares on the new build, it replaces the confirming run
 - the scenarios being automated are steps of an existing TMS case → the brief cites the case's step numbers as the source of each expected result and quotes nothing it could paraphrase; the automator reads the case itself
-- a negative control proving a new step can go red → the brief names the assert the red must land on and suspends the step's precondition asserts for that run, restored after
-- the user asks what the coverage costs → say what measures it: run logs often carry no timestamps on step lines, so a step's duration is measured by a run on reverted code, repeated where the run-to-run spread rivals the delta
+- a negative control proving a new step can go red → the brief names the assert the red must land on and suspends the step's precondition asserts for that run, restored after · a red run leaving a live timed artifact → the green run waits out its lifetime
+- the user asks what the coverage costs → a step's duration is measured by a run on reverted code (run logs rarely time steps), repeated where the run-to-run spread rivals the delta
 - the change removes or renames a contract element (a field, a route) → the brief lists EVERY existing test it breaks, each with the count of what changes in it, taken from a scheduled run on the build with the change plus a search of all test classes for the removed name — never from the one test the manual result happened to name; a run that fails at step K proves nothing about the steps after K → the brief lists them as unverified, and the old negatives among them are replayed by hand before the automator starts
 
 ## The decision
 
 **The cost of a run is as much an input to the decision as the value of the coverage, and it is computed from the manual result's own
-timings.** A scenario that needs dozens of operations to reach its conclusion (a series for a distribution, long waits for workers) costs
-minutes in every nightly run: count the operations the steps will wait on — each one through its asynchronous pipeline, create to callback
-to final read — multiply by the durations the round measured, and add every propagation lag a step must sit out. A figure put to the user
-from intuition under-prices exactly the waits, and the choice is then made at a price that does not exist. Precedent: two tests (30 payments
-and 20 payouts with a wait for the cascade) were written and then stopped by the user on the very first run with the words «that run is too
-expensive» — the price was visible from the manual result in advance. Precedent: a merge into an existing test was offered at «about 50 s»
-and chosen; it cost 131 s — two operations of ~50 s each plus a setting lag, all three durations printed in the manual result.
+timings.** Count the operations the steps will wait on — each through its asynchronous pipeline, create to callback to final read —
+multiply by the durations the round measured, and add every propagation lag a step must sit out: a figure from intuition under-prices
+exactly the waits, and the choice is made at a price that does not exist. Precedent: a merge offered at «about 50 s» was chosen and cost
+131 s — two operations of ~50 s plus a setting lag, all printed in the manual result.
+
+*And where the session was opened with the automation question itself* («does this need a test?»), the answer still waits for the plan,
+its review, the price and the lever window of «The brief»: they decide whether the option can work at all. Precedent: a merge chosen at a lever
+read off a neighbouring session could not change the sign — the host's parties sat on different price lists.
 
 **A test NEW to its host class pays that class's fixed cost too** — its provisioning, its per-test hooks, its stabilising reads — which no
-manual timing contains: read it off a recent run log of a neighbouring test in the same class and add it. Precedent: a new test priced at
-~3 min from the manual timings ran 9–10 min, two thirds of it the class's account provisioning, per-test waits and state snapshots.
+manual timing contains: read it off a neighbouring test's recent run log and add it. Precedent: a new test priced at
+~3 min from the manual timings ran 9–10 min, two thirds of it the class's provisioning and waits.
 
-*And where the class's hooks change SHARED state and do not restore it*, the brief's «Host class» slot names them with the snapshot and
-the restore: no manual round runs the class, so no evidence shows them. Precedent: an automator found integrations switched off by the
-class setup only after its runs.
+*And where the class's hooks change SHARED state and do not restore it*, the «Host class» slot names them, the snapshot, the restore and
+how to see every runner first: no manual round runs the class; CI shows no peer's local run. Precedent: one automator saw
+integrations off by class setup too late; another, checking CI alone, broke a peer session's run.
 
 **The size of the feature is an independent ground, alongside the cost of the run.** A cheap merge into an existing test can still be work
 nobody wants: a feature the size of one query parameter may deserve no test at all, whatever the run costs. So the question to the user
 before launching the automator is not only «is this run expensive» but also «is this feature worth a test at all» — and it is asked before,
-not after the automator has edited the code. Precedent: the manager sliced the automation as steps merged into three existing tests (the
-cheapest possible form) and launched the automator; the user's answer was «we only automate bigger features, this is just a filter», and the
-edits had to be reverted mid-run.
+not after the automator has edited the code. Precedent: steps merged into three existing tests (the cheapest form) were reverted mid-run
+on «we only automate bigger features, this is just a filter».
 
 **That question travels with the round's result.** It comes before the delivery at 6.5, so the user has not yet seen what the manual round
 found. The result reaches them in two parts, in this order: first the status list in the chat — the same 🟢/🟡/🔴/⚪ lines step 6.5 opens
@@ -63,9 +62,8 @@ counts, what the test would assert). A dialog box is not where a verdict is read
 saw, and the user asks for the list. «First» means the user READ it first, and where the harness draws the question dialog over the text
 printed in the same turn, a list followed by a dialog in one turn is a list nobody read: the question then goes as plain text at the end of
 the list's message, or as a dialog in the next turn — never «the question follows in my next message», which ends a turn the user must
-restart. Precedent: one automation dialog was dismissed with «first explain what you did, what automation needs, and what that merge
-request is»; a later status list printed in the same turn as the dialog drew «wait, show me the status list first» — and the shape recurred
-twice more with the rule already written as «a message of its own».
+restart. Precedent: a dialog was dismissed with «first explain what you did and what that merge request is»; a status list printed in
+the same turn as the dialog drew «wait, show me the status list first», twice more after the rule was written.
 
 *And the report file holds the round's result before the list goes out.* The order «automation first, report after» is the order of
 WRITING the delivery, not of recording the result: a user who sees an id or a question in the chat opens the report to read it, and what
@@ -76,17 +74,16 @@ later round with no finding skipped the file altogether, and its five analyst qu
 
 **A merge reuses the host's setup, so every step above the new one must pass on the task's build.** Before the option is put, read why
 the host is skipped, if it is, and which unmerged changes its earlier steps rest on. Where no build holds those changes together with the
-task, the option says «written, not run until both land», and a standalone test that runs today stands beside it as an option of its own.
-Precedent: a merge into a host parked for a sibling's unmerged branch was chosen; the task's branch lacked that sibling, the host could
-not reach the step anywhere, and the user was asked a second time.
+task, the option says «written, not run until both land», beside «no test»; a blocked host does not make a follow-up big enough for a
+standalone test (step 5). Precedent: a merge into a host parked for an unmerged sibling was chosen and could not run anywhere; in another
+round the parked host turned the advice into a standalone test for one extra document — «too small for a test?».
 
 **An answer to the automation question that is itself a question is a question, not the choice.** «Isn't a test required by our rules?» is answered on
 the merits, and then the choice is put again; acting on it starts work nobody ordered. Precedent: a reply of that shape was read as «write
 it», and the user stopped the first tool call of the automator's brief with «that was a question, not a request».
 
 **A statistical criterion is translated into a stable assertion by the manager.** The manual run's acceptance threshold («each variant
-≥ 20 %») flakes in a test; what should be asserted is the degenerate outcome («each variant occurred at least once»), and the brief says so
-rather than leaving the translation to the automator.
+≥ 20 %») flakes in a test; what should be asserted is the degenerate outcome («each variant occurred at least once»), and the brief says so.
 
 ## The brief
 
@@ -98,32 +95,36 @@ iteration for the automator. A quoted call is written in the types its declarati
 is a decimal object does not compile when copied literally.
 
 **A lever named in the brief has a window in the host test, or it is not a lever.** The manual round proved the lever on a fixture
-where the manager chose every rate and fee; the host test carries its own, and an earlier filter in the same pipeline may decide the
+where the manager chose every input value; the host test carries its own, and an earlier filter in the same pipeline may decide the
 outcome first, so the window «the stage under test fails, every stage before it passes» (`planning.md`, «The order of the server-side
 checks») can be empty there. Compute it from
 the host test's setup and the formula the manual round recovered before naming the lever, and say in the brief what has to change in the
 setup for the window to exist. The same arithmetic often predicts how the existing test fares on the new build; then it is the evidence,
-and a run that only confirms it is not ordered. Precedent: a brief told the automator to drive a step by one party's fee; under the
-host test's own rates no fee made the earlier filter pass and the later one fail, the automator had to re-base the test's rates first, and
+and a run that only confirms it is not ordered. Precedent: a brief told the automator to drive a step by one party's price; under the
+host test's own prices no price made the earlier filter pass and the later one fail, the automator had to re-base its prices first, and
 a six-minute run the brief ordered «to check» reproduced a failure the manager had already computed.
 
 **The expected results of a case's steps are cited by step number, not retold.** Where the scenarios to automate are steps of a case
 that already exists, the brief names the case and its step numbers as the source of each expectation, and the automator reads them
 there. A paraphrase is a second, shorter copy of the expectation: it keeps what the manager thought mattered and drops the rest, and
-the automator asserts the paraphrase. Precedent: a brief retold a case step as «the three remainders reach zero»; the case's step also
-expected the margin at zero and the status unchanged — the automator noticed only by reading the case, and ran both tests a third time.
+the automator asserts the paraphrase. Precedent: a brief retold a case step as «the three counters reach zero»; the case's step also
+expected the total at zero and the status unchanged — the automator noticed only by reading the case, and ran both tests a third time.
 
 **A negative control of a new step names the assert it is aimed at, and suspends the guards that would fire before it.** «Run it once
 with the condition flipped — it must go red» proves the step can fail only if the red lands on the step's own verdict assert; a step that
 first asserts its precondition (the setting really produces the state under test) goes red on that precondition instead, and the control
 proves the precondition, not the step. The brief says which assert the red must come from and that the precondition asserts are switched
-off for the control run and restored after. Precedent: a step asserting «this setting makes the margin negative» before «the payout
-fails» was briefed a control with a profitable setting — it failed on the precondition, and the automator had to improvise a switch.
+off for the control run and restored after. Precedent: a step asserting «this setting makes the total negative» before «the checkout
+fails» was briefed a control with an ordinary setting — it failed on the precondition, and the automator had to improvise a switch.
 
-**Asked what the coverage costs, say what measures it.** Run logs often lack timestamps on step lines, so a step's duration is unreadable
-from the log — then measure by a run on reverted code, repeated when the run-to-run spread rivals the delta.
+*And where the red run leaves a live timed artifact* (a lock, a hold), the green run starts after its lifetime, or it may be handed
+the red run's leftover. Precedent: a red control left a stock reservation alive for five minutes, in the green run's value
+band; the automator waited it out unbriefed.
 
-**A change that removes or renames a contract element breaks tests the manual round never looked at.** The manual tester reports the breakage it can see from its own scenarios — one admin test asserting a removed field — while the same assertion sits in the neighbouring tests of the other roles, and a shared helper calling the removed route drags in tests of another class. The cheapest complete list already exists when the environment has run its scheduled suite on the build with the change: every red test with the removed name in its error is on it; a search of all test classes for the removed field and route closes what the schedule did not run. The brief names each test with the count of what changes in it. Precedent: a brief named one export test with «seven» assertions of a removed field; it held six, two neighbouring role tests held six more, and the night's scheduled run on that build had already failed all three — the automator found them only by grepping on its own.
+**Asked what the coverage costs, say what measures it.** Run logs often lack step timestamps, so a step's duration is unreadable
+from them — then measure by a run on reverted code, repeated where the spread rivals the delta.
+
+**A change that removes or renames a contract element breaks tests the manual round never looked at.** The manual round sees the breakage in its own scenarios — one admin test asserting a removed field — while the same assertion sits in the other roles' tests, and a shared helper calling the removed route drags in another class. The cheapest complete list already exists when the environment has run its scheduled suite on the build with the change: every red test with the removed name in its error is on it; a search of all test classes for the removed field and route closes what the schedule did not run. The brief names each test with the count of what changes in it. Precedent: a brief named one export test with «seven» assertions of a removed field; it held six, two neighbouring role tests held six more, and the night's scheduled run on that build had already failed all three — the automator found them only by grepping on its own.
 
 *And where the list comes from a run of the existing test on the new build* — that run stops at its first failure, and every step after it is
 untested, not «still fine». The steps most likely to hide a regression there are the old NEGATIVES: a guard of the previous contract is

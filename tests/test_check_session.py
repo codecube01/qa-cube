@@ -85,7 +85,7 @@ class SecretsQuietTest(unittest.TestCase):
     def test_prose_that_merely_uses_the_words(self):
         """The shape a looser rule fires on — and the engine's own verdict vocabulary lives here."""
         text = (
-            "a wall the executor cannot pass: signing in a wallet\n"
+            "a wall the executor cannot pass: signing a transfer\n"
             "token: expired\n"
             "FR-2 — verdict: pass\n"
             "the password field is required\n"
@@ -122,6 +122,13 @@ class TableTest(unittest.TestCase):
         found = tables(broken)
         self.assertEqual(len(found), 1)
         self.assertIn("5 cell(s) against the separator's 3", found[0])
+
+    def test_text_glued_under_a_table_is_caught(self):
+        """No blank line: the renderer folds the paragraph into the table and the table breaks."""
+        found = tables(GOOD_TABLE.rstrip("\n") + "\nThe id B-4 was not issued.\n")
+        self.assertEqual(len(found), 1)
+        self.assertIn("right under a table", found[0])
+        self.assertEqual(tables(GOOD_TABLE.rstrip("\n") + "\n\nThe id B-4 was not issued.\n"), [])
 
     def test_an_escaped_bar_is_allowed(self):
         ok = GOOD_TABLE.replace("the total is wrong", r"the columns ID \| Name are swapped")
@@ -387,6 +394,12 @@ class ScenarioHeadingsTest(unittest.TestCase):
         (self.dir / "2-manual-task.md").write_text(brief, encoding="utf-8")
         result = "## 0. Fingerprint (2026-10-08T11:01:00Z)\n## 1 — once (11:02–11:05 UTC)\n"
         self.assertEqual(self.missing(result), ["2", "3"])
+
+    def test_a_decimal_id_inserted_between_rows_is_checked_and_answered_whole(self):
+        brief = BRIEF.replace("| S2 |", "| 1.5 |")
+        (self.dir / "2-manual-task.md").write_text(brief, encoding="utf-8")
+        self.assertEqual(self.missing("## 0\n## S1\n## 1.5 — the probe (14:21:19)\n## S3\n"), [])
+        self.assertEqual(self.missing("## 0\n## S1 (14:21:19)\n## S3\n"), ["1.5"])
 
     def test_a_bare_numbered_brief_is_answered_by_s_prefixed_headings(self):
         brief = BRIEF.replace("| S1 |", "| 1 |").replace("| S2 |", "| 2 |").replace("| S3 |", "| 3 |")
