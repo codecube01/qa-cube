@@ -86,7 +86,7 @@ class Caught(unittest.TestCase):
 
     def test_entity_ids(self):
         self.assertCaught(j("3f2b8c1e-9a47-", "4d2e-b6c0-5e8f1a2d7b94"), "an entity id (UUID)")
-        self.assertCaught(j("0x9f8e7d6c5b4a", "39281706f5e4d3c2b1a09f8e7d6c"), "an on-chain address")
+        self.assertCaught(j("0x9f8e7d6c5b4a", "39281706f5e4d3c2b1a09f8e7d6c"), "a hex account address (0x…)")
 
     def test_secrets(self):
         self.assertTrue(any(k.startswith("a secret") for k in kinds(j("AKIA", "IOSFODNN7EXAMPLE"))))

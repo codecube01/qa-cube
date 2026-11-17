@@ -22,7 +22,7 @@ is in `templates/2-manual-task.md`.
 - an adjacent system with short-lived access → preflight hands over its entity IDs, not only their state (a «Recon facts» row of kind «ids of a short-lived contour»)
 - the name you gave an environment may never reach the executor's listing → the address is an id; where the tooling exposes no id either, the «On a refusal» slot names the identity oracle to sweep the candidates with, most-recently-connected first, the handshake last; where the user can re-enter quickly, pin ONE environment and make a refusal a stop, not a search
 - entering the environment needs a human → the liveness oracle is the session's FIRST call, before reading anything; a «dead» verdict is believed only from a fresh tab — every re-check, not only the first: the tab that answered `401` is a leftover from that moment on
-- each entry spends a one-time artifact (a login link, a code) → choose the role the operations need and probe the existing session first; a scripted and a browser session are independent carriers, an identity per carrier (the «Role» and «Carriers» slots)
+- each entry spends a one-time artifact (a login link, a code) → choose the role the operations need and probe the existing session first; a scripted and a browser session are independent carriers, an identity per carrier (the «Role» and «Carriers» slots) · a connected signer → its carrier is the app's ACTIVE connection, never what is advertised
 - preflight proves the session → open the round's TARGET screen too, and compare the address you land on with the one you asked for; a redirect you explained to yourself is a question for the executor, not noise
 - the manager's recon → verifies the ADDRESS (path, method, headers, the selection criterion) and stops at the first response that proves it; running the scenario is the executor's work; the VALUES the probe returned are handed over as «Recon facts» rows
 - access refused on every host of the environment, even without cookies → suspect the browser profile (its egress), not the environment; compare the external IP from the tab and from the shell; which profiles work goes into the project profile and the brief, asked once
@@ -49,14 +49,14 @@ is in `templates/2-manual-task.md`.
 - the scenario may run into a neighbouring contour with a different entry → the «Neighbouring contour» slot: ask through the manager for <one phrase>, or record an open question and move on
 - the scenario needs reference values (constants, vectors, addresses) → the «Reference values» slot: from public sources per <standard>, source cited
 - a negative that needs someone else's entity → a concrete identifier in the «Fixture» column, found and verified by you; or where to look AND to collect it during the other contour's snapshot pass
-- a counterparty the round SENDS to (a recipient address, a target account, a webhook URL) named as neutral → checked against the system's own registry of receivers before the brief goes out; one the system recognises turns every outgoing operation into an inbound event of its own, side effects included — the brief names a receiver the round created
+- a counterparty the round SENDS to (a recipient mailbox, a target account, a webhook URL) named as neutral → checked against the system's own registry of receivers before the brief goes out; one the system recognises turns every outgoing operation into an inbound event of its own, side effects included — the brief names a receiver the round created
 - a step performed «under another role» → the «Acting identity» column is a role plus the exact account handle, and the step begins with «who am I» to the API under test, printed into the result before the target call; every identity the plan's steps need → signed in once at preflight, and one that does not answer is a human step put into the start question, never a «check it is still alive» line in the brief
 - a compound requirement («and») → the brief requires a third verdict, partial, with the breakdown of which half passed
 - the scenario needs the user's own click mid-run, or the round logs in through the browser → the template's «Pause protocol» section, filled in; the manager reads every request before relaying it and returns the answer by a direct message to the same agent; the pauses are grouped into series, forms filled in only while the user is available · a deadline the executor holds DURING a pause (a shared setting left changed while it waits) → sized from the other side's step, its own duration plus the reaction, and counted from the request, not from the state the executor prepared
 - a UI round on a task that links a design → the brief names the frames the round compares, read by the manager at planning, and the screen verdicts get a «design» column; «do not pull the design» is never written, because a visual finding the design itself prescribes is a spec-versus-design question, not a defect
 - after recon nothing is left that can be done by hand → do not launch the executor: file the recon as `<N>-recon-<source>.md` and say in the report why there was no manual run
 - **What you have not checked yourself is handed over as a question** — the «Open hypotheses» table, a question with its stake, never a fact, a verdict or a menu: a claim about the environment → «is there an object in state X? it would close Y» · a doubt about an instrument → «check whether it can do X; if so, that closes Y» · a seeding route you have not run → «as far as I know it yields …; if not, what else produces this state»; a route through the project's own test framework → its preconditions (the hosts it pings, the channels its asserts read) checked by you at preflight, one call each · a link between two records joined by TIME → «matched by time only, the join by id is the question» · a hypothesis about the shape of the fix → «the marker not found is not a verdict, verify by behaviour» · the fixer's correction to your previous description, or the team's claim about the environment → quoted and attributed, the measurement is the verdict · a hypothesis nothing outside the product can settle → marked so, no calls, replaced by its observable consequence · a list of expected outcomes → illustrations only, «any other outcome is also a result»
-- **A sanctioned mutating probe: what the permission must also say** — the «Sanctioned probe» block answers in advance what the executor would otherwise decide mid-probe: is the read channel for the effect alive → asked before the sanction, a dead oracle defers the probe with its carrier · who presses an irreversible step → the user through the pause protocol or the manager, never the executor · may the hostile values be combined → yes if each stays identifiable, unwound on a failure · an unanticipated refusal → a literal cause needs no control, a generic one authorises one control call with a value known to resolve · an overshoot → capped at the smallest amount that proves the guard is gone · a reverse already known to be missing → declared, the stuck value is the expected artifact · the budget's unit → the PROPERTY being demonstrated, not the round · a background process the accepted probe starts → not terminated, its id and state recorded · a paid probe shaped as a timed burst (simultaneous and offset calls) → its mechanics rehearsed first, free: the same code with a harmless read under the mutation's alias, no budget flag set, nothing stored, the measured offsets reported before the pause · the probe's BODY → written out whole by the manager, each field checked against the knowledge base for a value known to crash or page someone, the other fields chosen by the order of the checks (`planning.md`) · the OBJECT the sanction question names → checked free before the question is put (the test code by its id and name, the object's own description, the environment snapshot); an object swapped after the answer → put back to the user as a question of its own, the sanction covered the old name · an action that must fall BETWEEN two steps of a scenario → a step in that scenario's row, never the sanctions block alone
+- **A sanctioned mutating probe: what the permission must also say** — the «Sanctioned probe» block answers in advance what the executor would otherwise decide mid-probe: is the read channel for the effect alive → asked before the sanction, a dead oracle defers the probe with its carrier · who presses an irreversible step → the user through the pause protocol or the manager, never the executor · may the hostile values be combined → yes if each stays identifiable, unwound on a failure · an unanticipated refusal → a literal cause needs no control, a generic one authorises one control call with a value known to resolve · an overshoot → capped at the smallest amount that proves the guard is gone · a reverse already known to be missing → declared, the stuck value is the expected artifact · the budget's unit → the PROPERTY being demonstrated, not the round · a background process the accepted probe starts → not terminated, its id and state recorded · a paid probe shaped as a timed burst (simultaneous and offset calls) → its mechanics rehearsed first, free: the same code with a harmless read under the mutation's alias, no budget flag set, nothing stored, the measured offsets reported before the pause · the probe's BODY → written out whole by the manager, each field checked against the knowledge base for a value known to crash or page someone, the other fields chosen by the order of the checks (`planning.md`) · the OBJECT the sanction question names → checked free before the question is put (the test code by its id and name, the object's own description, the environment snapshot) and able to serve (holds what the probe consumes); an object swapped after the answer → put back to the user as a question of its own, the sanction covered the old name · an action that must fall BETWEEN two steps of a scenario → a step in that scenario's row, never the sanctions block alone
 - **What a recon fact may claim** — a row of the «Recon facts» table: the value, its kind, its source, its date, its boundary: a value, not a retelling → the numbers themselves, and «is the fix deployed» by a grep of the served bundle · an endpoint → path and method verified by one probe, or marked unverified · dated, with the boundary of the sample → state re-checked, counts with their window, a mechanism dated by the build and by the BRANCH of the process it was read on, a negative naming the places looked · contract values are fact, the composition of the interface is a hypothesis → confirm by looking · a field-name oracle → a hypothesis, never the primary · a minified excerpt → the fragment, never its meaning, and a LOWER bound on what the product does · an identifier scheme → a convention; the object's own id field is the address · a client query document → names only, types unknown, never «can be relied on»
 
 **A retest round** — the template's «Retest» section, filled in
@@ -79,7 +79,7 @@ is in `templates/2-manual-task.md`.
 - a dead READ channel plus an irreversible action → the carrier is preserved, not spent: the action is deferred with the object, its state and the recipe recorded
 - the tooling fails, not the product → «N attempts at an interval, then escalate» written in the brief, the thresholds from the profile
 - the blocker can only be removed by the user acting in their own environment → after two failed detours, one phrase naming what exactly to do and what you will do next
-- **Your own harness refuses a call** — the classifier judges the SHAPE of a call, not its purpose, and is not deterministic; a refusal is sorted before anything is asked: an external instrument the round rests on (a request sink, a tunnel) → opened at preflight, the user asked before slicing, the half that passes measured and handed over dated, the instrument configured by its own interface rather than by script · a refused mutation → moving value is a human click every time; a write into foreign data is repeated once by the manager in its own session after the user's permission, paired with a control, never re-fired · a wallet signature → a script records or refuses it, never originates it · a harmless call refused for its wording → reworded (roles, neutral ids, one mutation per call); a refused MUTATION is never reworded; a refusal naming an allow-list is checked against the list re-read from the file, not from memory · the classifier is sticky → switch the tool and pause, budget ~15 calls · a login refused after passing → the «Identity fallback» slot, an irreversible step waits for the switch; the first fallback is the manager's own session («LOGIN NEEDED»), the user only after that · the refusals that remain → planned around: facts never packed with a refused action, an independent channel per browser step, a refusal told from «could not reach a verdict»
+- **Your own harness refuses a call** — the classifier judges the SHAPE of a call, not its purpose, and is not deterministic; a refusal is sorted before anything is asked: an external instrument the round rests on (a request sink, a tunnel) → opened at preflight, the user asked before slicing, the half that passes measured and handed over dated, the instrument configured by its own interface rather than by script · a refused mutation → moving value is a human click every time; a write into foreign data is repeated once by the manager in its own session after the user's permission, paired with a control, never re-fired · a harmless call refused for its wording → reworded (roles, neutral ids, one mutation per call); a refused MUTATION is never reworded; a refusal naming an allow-list is checked against the list re-read from the file, not from memory · the classifier is sticky → switch the tool and pause, budget ~15 calls · a login refused after passing → the «Identity fallback» slot, an irreversible step waits for the switch; the first fallback is the manager's own session («LOGIN NEEDED»), the user only after that · the refusals that remain → planned around: facts never packed with a refused action, an independent channel per browser step, a refusal told from «could not reach a verdict»
 - **The executor stopped** — the restart depends on WHY: an infrastructure error → resume it with a message saying what is accepted and what remains · killed by the user → a new launch that reads the existing result and continues · killed by you with the environment touched, or its test run died from outside (sleep, a background limit) → the cleanup is yours: global settings restored from the run log, every set-up line with no matching cleanup line, confirmed by reading · waiting on a background run → a checkpoint, not a failure: wait on the log yourself and resume with the verdict
 
 **Accepting the result**
@@ -160,7 +160,7 @@ is what preflight does, and learns, before the brief is written.
   only their state** — a row of the «Recon facts» table, kind «ids of a short-lived contour». State is what the plan reasons about, an id
   is what the executor acts through, and both are collected in the same breath; once the fragile session dies, listing endpoints are often
   closed on the machine contour, lookups by name silently return nothing, and the evidence becomes unreadable through a channel that is
-  otherwise alive. Precedent: three companies snapshotted by name and status in a neighbouring compliance system; the officer session died
+  otherwise alive. Precedent: three accounts snapshotted by name and status in a neighbouring back-office; the operator session died
   before the executor reached that step, the machine contour answered `405` to the listing and had no name-based lookup, and the executor's
   retro asked for exactly this line.
 
@@ -202,20 +202,21 @@ is what preflight does, and learns, before the brief is written.
   the artifact is spent** — the «Role» and «Carriers» slots. Permissions differ between roles that log in identically, and entering under
   the wrong one costs the artifact; a scripted session (a cookie jar, a token file) and a browser session are independent carriers, so
   one's liveness proves nothing about the other, and the identity is handed over per carrier. Precedent: a round re-entered a scripted
-  session three times while the browser session of the same contour lived for over three hours; another spent a login artifact entering
-  under a role the operation refused.
+  session three times while the browser one lived three hours; another spent a login artifact on a role the operation refused.
+
+  *And a connected signer is such a carrier: its identity is the app's ACTIVE connection* (the connector its action button calls,
+  read from the app's state), not what is advertised — a shared profile keeps a previous round's connection. Precedent: preflight
+  recorded two advertised signers; the page acted through a leftover pairing to a third identity.
 
 - **Preflight opens the round's TARGET screen, not just the session — and an observation you explained to yourself on the spot is a
   candidate finding, not noise.** Checking that the credentials work («the identity query answers 200 under the right account») proves the
-  session, and that is a different claim from «the feature under test can be reached». The gap between them is where a whole class of blockers
-  hides: an access guard on that one route, a feature flag off for that role, a page that redirects somewhere harmless. Both halves cost one
+  session, not «the feature under test can be reached»; between them hide whole classes of blockers: a guard on that one route, a flag
+  off for that role, a page that redirects somewhere harmless. Both halves cost one
   navigation: request the exact address the task is about and **compare the resulting address with the one you asked for** — a silent redirect
-  is the whole symptom. The second half of the rule is the expensive one: when the preflight navigation lands somewhere other than where it
-  was aimed, that is a measurement, and «probably just a load-time redirect» is a hypothesis you have not tested. Write it into the brief as a
-  question for the executor rather than explaining it away. Precedent: the manager navigated to the target page during preflight, got a
-  different address back in the same response, read it as a routine redirect and launched the round — the executor found, two hours later,
-  that the page is unreachable for the only role available, which was the round's Blocker and had been visible in the manager's very first
-  call;
+  is the whole symptom. The second half is the expensive one: a landing elsewhere is a measurement, «probably a load-time redirect» an
+  untested hypothesis — it goes into the brief as a question for the executor. Precedent: the manager got a different address back from
+  the preflight navigation, read it as a routine redirect and launched — two hours later the executor found the page unreachable for the
+  only available role, the round's Blocker, visible in the manager's first call;
 
 - **The manager's recon verifies the ADDRESS, never the answer.** Confirming an endpoint's path, method, required headers and the selection
   criterion for a fixture is preflight and belongs to the manager — a brief built on a guessed header costs the executor a tour of 4xx. Running
@@ -299,10 +300,10 @@ is what preflight does, and learns, before the brief is written.
   cannot be told from the norm: a non-deterministic session loss could only be described after the executor assembled a long-lived control
   session on the fly — ~15 minutes and three burned instances. Without a number the executor either economises at the expense of
   cleanliness or spends blindly, and each clause of the slot was paid for once: the unit — «no more than 8 activations» was meaningless
-  because activation did not create a screening, which turned out to be the round's main finding; the control term — a challenge budget of
+  because activation did not create a review, which turned out to be the round's main finding; the control term — a challenge budget of
   five was spent exactly as planned, the one outcome nobody had foreseen then needed a control, and the executor took it as a sixth, over
   budget; the transient term — a budget of «2 + 1 spare» came out at exactly zero, and had the last expendable burned on a browser-extension
-  transient, the last scenario would have gone uncovered; the restoration — a budget of six risk-level changes closed at exactly six only
+  transient, the last scenario would have gone uncovered; the restoration — a budget of six status changes closed at exactly six only
   because the last negative probe happened to return the fixture to a sensible value on its way;
 
 - **On a round about APPEARANCE, «may the executor resize the window and take the focus» is a load-bearing condition of the whole round
@@ -362,12 +363,12 @@ is what preflight does, and learns, before the brief is written.
   scope of the FIX»). Precedent: a retest found a carrier in a picker raised to a thousand records at 993 of its kind, and the
   same picker lost it thirty minutes later at 1019 — only the end-of-round re-check kept «fixed» out of the report.
 
-- **A fixture that changes SHARED behaviour (an active routing rule, a price, a flag other runs read) is disarmed the moment its
+- **A fixture that changes SHARED behaviour (an active rule, a price, a flag other runs read) is disarmed the moment its
   scenario is done — the «Disarm after» column, not the final cleanup step.** The cleanup block is written for the round that finishes;
   rounds also stop in the middle — a lost connection, a user's pause, a killed executor — and a disarm scheduled last does not run then.
   «Done» means the decision the fixture steers has been taken, not that the triggering call has returned: under a propagation lag a
   disarm timed by the trigger reaches that decision first (`planning.md`, the restore rider under «FLIPS A SETTING»). Precedent: an
-  executor disarmed its routing fixture as soon as it proved unusable rather than at the scheduled end; minutes later the user paused
+  executor disarmed its rule fixture as soon as it proved unusable rather than at the scheduled end; minutes later the user paused
   the round for a network outage, and the shared environment's nightly preparation passed untouched.
 
   *And the disarming call is itself an irreversible write on an object the round never probed, so its body is held to the rule for a
@@ -460,21 +461,21 @@ is what preflight does, and learns, before the brief is written.
   source» is unambiguous; «if you can write them out» is not;
 
 - **A negative that needs an entity belonging to someone else carries a concrete identifier in the «Fixture» column — found and
-  verified by you, not «take one from the knowledge base».** Refusals of the kind «this address / account / document already belongs to
+  verified by you, not «take one from the knowledge base».** Refusals of the kind «this email / account / document already belongs to
   another party» cannot be provoked with an invented value, and the real one usually lives in a contour the executor is not logged into
   at that moment; a pointer costs a wasted search or a role switch, and mid-run a switch can cost a whole login cycle. Where you cannot
   get one, say where to look AND say to collect it during the snapshot pass in the other contour, before the run leaves it. Precedent:
-  «take an address of another company from the knowledge base» — it was not there, and the executor was saved only by having taken the
+  «take another tenant's account from the knowledge base» — it was not there, and the executor was saved only by having taken the
   snapshot under the other role first.
 
-- **A counterparty the round sends to — a recipient address, a target account, a webhook URL — is checked against the system's
-  own registry of receivers before the brief names it as neutral.** A system that credits whatever arrives at an address it knows does
-  not ask where the value came from: a «neutral» receiver it recognises turns each outgoing operation of the round into an inbound event
+- **A counterparty the round sends to — a recipient mailbox, a target account, a webhook URL — is checked against the system's
+  own registry of receivers before the brief names it as neutral.** A system that books whatever arrives at a receiver it knows does
+  not ask where it came from: a «neutral» receiver it recognises turns each outgoing operation of the round into an inbound event
   of that system, with every side effect of one — a credit to an owner, a notification to a neighbouring system — the very side effects
   the plan was written to avoid. The receiver that holds is one the round created itself and the system has never seen. Precedent: a
-  brief routed every outgoing operation of the round to the address the team topped its test accounts up from; that address was a
-  receiving address of a seed account wired to a neighbouring system, so each operation would have been credited there and notified
-  onward — the executor spotted it in the operation listing and switched to an address of its own.
+  brief routed every outgoing operation of the round to the account the team funded its test accounts from; that account was the
+  intake of a seed account wired to a neighbouring system, so each operation would have been booked there and notified
+  onward — the executor spotted it in the operation listing and switched to a receiver of its own.
 
 - **The «Acting identity» column is a ROLE plus the exact account handle, and a step under another role begins with «who am I» to
   the API under test, not with the action.** Switching identity is a side effect of tooling — a cookie jar, a header, a client instance
@@ -497,7 +498,7 @@ is what preflight does, and learns, before the brief is written.
   and the requirement left the round uncovered for want of one call the manager could have made before writing the brief.
 
 - **a compound requirement gets a compound verdict.** Half the requirements of a typical spec are «and»: «the status changes **and** the
-  officer sees it», «up to five attempts **and** then it is recorded as FAILED». A binary pass/fail on such an item lies in both directions:
+  admin sees it», «up to five attempts **and** then it is recorded as FAILED». A binary pass/fail on such an item lies in both directions:
   a «pass» hides the half that was not met, a «fail» buries the half that works. Require a third verdict in the brief — **partial, with an
   explicit breakdown of which half passed and which did not** (in one session there turned out to be 14 such items out of 89 — more than the
   clean fails);
@@ -507,20 +508,20 @@ is what preflight does, and learns, before the brief is written.
   protocol» section, filled in. The section exists because an executor adds none of its lines on its own
   initiative, and every one of them was once dictated by the manager mid-run, after the damage: the environment id — the user asked for it
   in as many words («always say which browser profile»); the exact account to type — a form pre-filled with a neighbouring account turned
-  one confirming click into a session under the wrong identity; the network on which confirming is allowed — an executor's request said
-  a production-network window might be confirmed since a failed transaction would also be a result, the manager rewrote it to «reject»,
-  and the window came up on the test network after all; the boundary instead of a value — an on-screen rate nobody could predict was
+  one confirming click into a session under the wrong identity; the environment on which confirming is allowed — an executor's request said
+  a production window might be confirmed since a failure would also be a result, the manager rewrote it to «reject»,
+  and the window came up on the test environment after all; the boundary instead of a value — an on-screen sum nobody could predict was
   replaced by a ceiling inside which confirming is safe at any outcome; the recorder armed BEFORE the request — armed afterwards it sees only the end
-  state, armed before it separated to the millisecond the events a remote wallet sent from the ones the page produced, and that split
-  carried the round's two findings; «do not reload» — a user's reflexive refresh a minute before a signing click left the round holding the
-  transaction but neither the click nor the wallet's answer; the one-word answer — a request asking the user to narrate what they saw came
+  state, armed before it separated to the millisecond the events the signer sent from the ones the page produced, and that split
+  carried the round's two findings; «do not reload» — a user's reflexive refresh a minute before a confirm click left the round holding the
+  result but neither the click nor the signer's answer; the one-word answer — a request asking the user to narrate what they saw came
   back «all done», and the round spent calls establishing which half of a two-step pause had happened; the numbered expectation for a
   human-only result — the entire verdict on alert merging rested on numbers stated in advance, and of five points put to the user, three
   were closed from the invitation workflow's own payload. **The manager's half:** read the request before relaying it — the sentence that
-  licenses a click on the wrong network is yours to catch — and return the user's answer **by continuing the same agent** (the harness adapter's «Continue a running executor»), not
+  licenses a click on the wrong environment is yours to catch — and return the user's answer **by continuing the same agent** (the harness adapter's «Continue a running executor»), not
   a fork, not a new agent. Group the pauses into series, and fill forms in only while the user is available: a pause of a day or more
   nullifies the page's prepared state. Precedent for the re-entry rule: a signature pause of about fifty minutes outlived a session that
-  does not renew; the executor logged in from a second tab, and the signed ownership proof was still in the form when the next signer's
+  does not renew; the executor logged in from a second tab, and the signed approval was still in the form when the next approver's
   step came.
 
   *And a deadline the executor holds during a pause* — a shared setting it switched off and must restore in time — runs on the other
@@ -553,7 +554,7 @@ wording per shape; this section keeps what each shape cost.
 
 - **A claim about the state of the ENVIRONMENT, least of all one with the verdict attached.** Confirming a negative is indistinguishable from
   never having looked, and shared environments accumulate objects nobody in this session created. Precedent: a brief asserted the
-  environment could not hold an entity in the pre-approval state; one aggregate query found nineteen of them, a third of all tenants.
+  environment could not hold an object in an intermediate state; one aggregate query found a third of all such objects in it.
 
 - **A doubt about what an INSTRUMENT can do** hands the executor your uncertainty as a verdict they may adopt without looking. Precedent: a
   brief hedged about whether a request sink could delay its response; the setting sat in the dialog the executor was already using, and
@@ -572,15 +573,15 @@ wording per shape; this section keeps what each shape cost.
 - **A LINK between two records that recon made by their TIME.** A batch process stamps dozens of objects within one second, and a
   background worker acts at the hours a person would. Join through the identifiers the records carry; where neither is in hand, hand the
   link over as unjoined. Precedent: a date on one object was read as the START of a nightly process because a process instance started at
-  that very second — it belonged to another object; in the same brief, late-night closures were labelled an operator's by their hour, and
-  the orchestrator named a vendor-alert workflow instead.
+  that very second — it belonged to another object; in the same brief, late-night edits were labelled an operator's by their hour, and
+  the orchestrator named an automated workflow instead.
 
 - **A hypothesis about the SHAPE of the fix** saves a round when you guessed right and misleads when you did not — the fix may validate the
   value instead of removing the field. Precedent, round 3: the argument stayed in the schema and is still required, while the fix was a
   server-side comparison of the value — a behavioural experiment gave `pass`.
 
 - **The fixer's correction to YOUR previous round's description** arrives with the authority of whoever owns the code and quietly reshapes
-  the block built on it. Precedent: a fix comment said a signing pause «never engaged once, the flag has been false since the migration» —
+  the block built on it. Precedent: a fix comment said a global pause «never engaged once, the flag has been false since the migration» —
   the retest found the flag engaging and clearing normally. *The same holds for the team's claim about the ENVIRONMENT* — «the fix is
   deployed», «our requests went through end to end»: check the state flag and the author and creation time of the records it cites before
   the plan rests on it. Precedent: every request the team cited as proof of a working path had been created by the QA account, before the
@@ -644,7 +645,7 @@ each one cost.
 - **What if the probe is ACCEPTED and starts something that runs on?** A negative that unexpectedly succeeds often leaves something alive
   instead of a record to cancel, and the executor then decides alone whether to stop shared infrastructure. The process is also the
   finding's best evidence. Precedent: a replayed registration was accepted with no request behind it and started a process retrying its
-  quorum check forever; the executor left it running and recorded the id.
+  status check forever; the executor left it running and recorded the id.
 
 - **A paid probe shaped as a timed BURST — does its mechanics work before the money goes?** A race probe sends several calls at chosen
   offsets in one page call and parses each answer, and every part of that — the offsets, the waits, the parser — fails silently: a wait
@@ -663,18 +664,16 @@ each one cost.
   knowledge base already recorded that a non-existent child id there answers a server error with two alerts per call, and the executor
   had to drop the field mid-round to keep the probe silent.
 
-- **WHICH object takes the mutation — and is it free?** The sanction question names the objects by name, and the user answers for
-  those names: an object that turns out to be an autotest's balance anchor or another task's live fixture forces a swap after the
-  answer, so the user sanctioned something that is never done and the probe lands on an object they never saw. «Not used by
-  anything» is a claim like any other, settled before the question by three cheap reads: the test code searched by the object's id
-  and name, the object's own description field, the environment snapshot. A swap that still happens after the answer is a new
-  question, not a footnote: the sanction covered the old name. Precedent: a round asked to write two technical records onto two
-  accounts «not used by the autotests»; after the answer one turned out to be an account whose balance an autotest asserts and the
-  other a developer's fixture labelled with its task, and both were swapped — said in the next message, but on objects the user had
-  never seen.
+- **WHICH object takes the mutation — is it free, and can it serve?** The sanction question names the objects by name, and the user
+  answers for those names: an object that turns out to be an autotest's anchor, another task's live fixture or empty of what the
+  probe consumes forces a swap after the answer, so the user sanctioned something never done. Both are settled before the question:
+  «not used by anything» by three cheap reads — the test code searched by the object's id and name, its own description field, the
+  environment snapshot — and «can serve» by one read of what it holds. A swap after the answer is a new question: the sanction
+  covered the old name. Precedent: sanctions went to an autotest's balance anchor, a developer's fixture and, in a later round, a
+  supplier with nothing in stock — each found out after the answer, the first two swapped onto objects the user never saw.
 
 - **WHEN it runs — inside the scenario it serves.** The executor walks the run order; the sanctions block reads as permissions.
-  Precedent: a tariff change left in the block ran after the resubmit it had to precede; its snapshot came out `partial`.
+  Precedent: a price change left in the block ran after the resubmit it had to precede; its snapshot came out `partial`.
 
 ### What a recon fact may claim
 
@@ -695,7 +694,7 @@ of the contract values beside it. The shapes below are the kinds; the table's le
   executor paid for both with a tour of 4xx.
 
 - **Dated, and with the boundary of the sample.** Contract constants are stable, state is not: an executor built their proof on «the
-  initiator's limit is taken up, the free remainder is 0» and the reservation had been released a day earlier — the fix was proved another
+  coupon's quota is taken up, the free remainder is 0» and the held share had been released a day earlier — the fix was proved another
   way only because they went and checked the precondition. Counts carry their window: recon looked at three days while the brief required
   the whole retention window, the full window added a run the manager had never seen, and the executor lost a pass working out whose
   numbers were right. A *mechanism* claim is dated by the build, because it arrives with a consequence for the method («therefore assert on
@@ -707,7 +706,7 @@ of the contract values beside it. The shapes below are the kinds; the table's le
 
   *And where the mechanism was read off a process's history, it names the BRANCH that execution took, besides the build.* A history shows
   only the path that ran, so a fingerprint read off a success says nothing about the failure path a fix may live in. Precedent: a retest
-  brief carried «on the current build the long timer is still started after the hash», read off a request whose reconciliation
+  brief carried «on the current build the long timer is still started after the call», read off a request whose reconciliation
   succeeded; the fix cancelled that timer only after a failed reconciliation, and the true fact read as evidence against the fix.
 
 - **Contract values are fact; the composition of the interface is a hypothesis to confirm by looking.** Mixed into one table, the second
@@ -771,7 +770,7 @@ section states the rule.
   by another actor, a restarted worker, a neighbouring run. Both facts coexist: the mechanism fired correctly AND the row it acted on
   was already overwritten. A last-modified that predates the expected event is the whole detector, and the sweep of the entire waiting
   interval is what explains the discrepancy. Precedent: a three-day expiry experiment came back with a textbook timer event and a clean
-  terminal result, while the request itself had been failed two days earlier by a restarted watcher replaying old blocks — found half an
+  terminal result, while the request itself had been failed two days earlier by a restarted worker replaying old jobs — found half an
   hour of verdicts later, and the executor's retro asked for exactly this inversion.
 
 - **On a retest, first check that the observation path itself is still alive, and rest the verdict on the final artifact rather than on
@@ -825,7 +824,7 @@ section states the rule.
   filter; it was caught only by the report's reviewer reading the first round's request log.
 
 - **A discrepancy found PASSIVELY on a retest proves that it exists, not that the defect reproduces on the current build.** Before the
-  verdict «still broken», either date it — did it arise after the fix (for on-chain data, the explorer's own timestamps) — or reproduce
+  verdict «still broken», either date it — did it arise after the fix (for external data, its holder's own timestamps) — or reproduce
   it by a controlled fresh action with a baseline before and the value after: «the discrepancy exists» → «when it arose» → «reproduces /
   fixed». Precedent: a mismatch inherited from before the fix was nearly reported as the defect living on. The fresh action is the TARGET
   operation alone; operations that re-synchronise the same state through another path mask the trigger under test, and the brief names
@@ -918,15 +917,13 @@ section states the rule.
 
 - **An external instrument the round rests on — a public request sink, a mail catcher, a tunnel, a third-party sandbox — is opened at preflight, because the thing most likely to block it is your own harness, not the environment.** The instrument is alive and reachable, and the classifier refuses to navigate to it or to script writes against it, because a service whose whole purpose is to capture arbitrary requests looks exactly like exfiltration. Discovered by the executor mid-round, that costs the block twice over — they cannot lift the policy, and retrying changes nothing. Where preflight is refused, put it to the user **before slicing the plan**, as a choice with prices: allow this host, stand up a receiver they control, or drop the block to a later round. The refusal is rarely total — in one round reads and UI clicks passed while scripted `POST`/`PUT` to the same origin stayed blocked — so measure which half works and hand the executor that dated split, with the instruction to configure the instrument by its own interface rather than by script; the instrument's free-tier caps (retained requests, response options, lifetime) are measured in the same pass, since they size the scenarios. Precedent: a round whose main block was webhook delivery found the agreed receiver refused at preflight; one question to the user restored it, the scripted-writes half stayed blocked, and the brief carried both facts — the executor configured the receiver by clicking and closed sixteen requirements.
 
-- **A refused mutation is sorted before anything is asked: moving value, or writing into data that is not yours.** Classifiers pass configuration writes on the round's own objects and refuse the same operation carrying a valid value against a foreign one, because it could damage someone else's data. Moving value (creating, signing or broadcasting a transfer) is a human click every time and no permission lifts it — plan it as one. A write into foreign or possibly damaged data IS lifted by the user's explicit permission: the executor records the refused call verbatim, the manager asks with the outcome and the residue described, and the identical call is repeated once — **by the manager, in the manager's own session**, where the user's words sit in context: a permission relayed to the executor in a message does not reach the executor's classifier, and the repeat is refused exactly like the first attempt. Pair it with the control the executor would have run (the same operation on the round's own object), so the refusal is attributable to the guard under test. The permission buys that one repeat, not a loop — refused again, it is recorded and reported, never re-fired, because the classifier's own noise can pass or refuse it either way. Precedent: a cross-tenant write probe was refused as a write into another tenant's object, in the executor's session both before and after the user's permission was forwarded; the manager ran the same call once in its own session — the server answered `access denied` — and a same-minute control on the fixture's own tenant succeeded, which proved the tenant isolation directly.
-
-  *And the same holds for any request that asks a wallet to sign, a free typed-data signature included.* A page script may record the wallet's traffic or refuse a call, never originate one, so a brief that queues signature requests from a script plans a step that will be refused — let the human press the product's own control instead. Precedent: a brief queued two ownership-proof signatures from the page to save a pause; the call was refused before dispatch, and the round moved those cycles onto a locally held key.
+- **A refused mutation is sorted before anything is asked: moving value, or writing into data that is not yours.** Classifiers pass configuration writes on the round's own objects and refuse the same operation carrying a valid value against a foreign one, because it could damage someone else's data. Moving value (creating, confirming or sending a payment) is a human click every time and no permission lifts it — plan it as one. A write into foreign or possibly damaged data IS lifted by the user's explicit permission: the executor records the refused call verbatim, the manager asks with the outcome and the residue described, and the identical call is repeated once — **by the manager, in the manager's own session**, where the user's words sit in context: a permission relayed to the executor in a message does not reach the executor's classifier, and the repeat is refused exactly like the first attempt. Pair it with the control the executor would have run (the same operation on the round's own object), so the refusal is attributable to the guard under test. The permission buys that one repeat, not a loop — refused again, it is recorded and reported, never re-fired, because the classifier's own noise can pass or refuse it either way. Precedent: a cross-tenant write probe was refused as a write into another tenant's object, in the executor's session both before and after the user's permission was forwarded; the manager ran the same call once in its own session — the server answered `access denied` — and a same-minute control on the fixture's own tenant succeeded, which proved the tenant isolation directly.
 
 - **The classifier reads the TEXT of a script, so a HARMLESS call can be refused for its wording — and only a harmless call is reworded.** A READ-ONLY script that names actions in its selectors or search strings («Confirm order») is refused as a write: find elements by role, class or index and compare the text in the answer. Placeholder UUIDs of zeros read as an attack on a real id: use neutral ones (`aaaaaaaa-bbbb-…`). Several DIFFERENT mutations packed into one call read as a batch attack and get the whole call refused, so different operations go one per call; a series of the SAME non-destructive mutation with varying payloads — a burst, an alias batch — passes. **A refused MUTATION is never reworded to get it through** — not assembled from variables, not split, not disguised — it is sorted by the entry above: moving value is a human click, a write into foreign data waits for the user's permission. Rewording a mutation until the classifier stops recognising it removes the one check that stands between the round and somebody else's data. A refusal that names an allow-list is checked against the allow-list re-read from the file, not from memory. Precedent: an executor escalated «the account is not on the allow-list» for half a round; the blocker did not exist — the same call, reworded, went through, so the refusal had been about the wording, not the account.
 - **The classifier is sticky: after a refusal it refuses harmless reads in the same context for several calls.** Switch the tool (the page-text tool instead of a page script) and pause, rather than retrying the same read; budget for it — one round spent about fifteen calls this way.
 - **An identity switch that passed several times is not cleared for the next one — so the brief names the fallback for every switch, and an irreversible step waits until the switch it depends on has succeeded.** A login that goes through a local redirect, a callback page or a one-time link can be refused on any attempt, and the one refused is the one in front of the decisive step. The template's «Pause protocol» carries both as its «Identity fallback» slot, and an irreversible step that has to be observed under that identity is not performed until the identity is in place, so a refused login does not spend the fixture. Precedent: the sixth browser login of a round, through the same local redirect as the first five, was refused; the executor held back the irreversible role revocation it was about to observe, and the scenario ran after the login was made by other hands, without another grant of the role.
   *And the first fallback is the MANAGER's own session, not the user's hands.* The refusal is the executor's classifier judging the executor's call, and the manager holds the same login tooling against the same browser profile, so the switch is requested by a marker («LOGIN NEEDED: <account>», the executor ending its turn), performed by the manager, and confirmed by the identity oracle before the executor resumes; the session's cookies are the profile's, so the executor's own tab picks the identity up. The user is asked only when the manager's attempt is refused too — a login relayed to the user costs their attention for a step the session can do itself, and the user notices. Precedent: an executor's first login was refused, the manager forwarded a «please log in as X» request to the user, and the user answered «but you can log in yourself»; the manager's one attempt passed, and the remaining four switches of the round went through the marker without the user.
-- **Around the refusals that remain, the brief plans rather than retries.** Never combine a potentially refused action (installing a substitution, a click that looks like a payment) with collecting facts in one call, or the refusal takes both — the one exception is the packed expendable attempt («The observation channel»), under its own condition. **A message that the tool could not reach a verdict** («Could not verify this site's safety category») is not a refusal: nothing went out, and the call is repeated (`browser-techniques.md`); a message naming a blocked category IS one, and is sorted here. Give every browser-dependent step a plan on an independent channel (the shell to the orchestrator's history, a public explorer, a plain request). A refused `navigate` may pass as a `location.reload()` from a page script, or the other way round — try the other once. When the browser layer is refused entirely, the user can remove your interceptors by reloading the page, the state of live operations is read from the orchestrator, and the report is written from what is collected rather than waited for. Precedent: in one round the browser refused eleven calls and the result still stood, because the key measurements had been taken outside it.
+- **Around the refusals that remain, the brief plans rather than retries.** Never combine a potentially refused action (installing a substitution, a click that looks like a payment) with collecting facts in one call, or the refusal takes both — the one exception is the packed expendable attempt («The observation channel»), under its own condition. **A message that the tool could not reach a verdict** («Could not verify this site's safety category») is not a refusal: nothing went out, and the call is repeated (`browser-techniques.md`); a message naming a blocked category IS one, and is sorted here. Give every browser-dependent step a plan on an independent channel (the shell to the orchestrator's history, a vendor console, a plain request). A refused `navigate` may pass as a `location.reload()` from a page script, or the other way round — try the other once. When the browser layer is refused entirely, the user can remove your interceptors by reloading the page, the state of live operations is read from the orchestrator, and the report is written from what is collected rather than waited for. Precedent: in one round the browser refused eleven calls and the result still stood, because the key measurements had been taken outside it.
 
 ### The executor stopped
 
@@ -936,7 +933,7 @@ section states the rule.
 
 - **The user killed it** — then it is not resumed: a new launch, with an explicit instruction to read the existing result in full and continue from it rather than replay what is done. An incremental result makes that possible — precedent: a killed executor's own result file carried enough of the run for the replacement to pick up mid-scenario instead of starting over.
 
-- **You killed it after it had already touched the environment — the cleanup is now yours.** Killing an agent runs no rollback: whatever it set up stays set up, and the executor's own restore step (usually its last) never runs. Look first at **global settings** — the ones a test switches on at the start and restores at the end; they are visible in the code as a «save the original …» step, and their original values are usually printed in the run log; the full list is the run log's set-up lines with no matching cleanup line. Restore them, **confirm by reading**, then record in the report what was left and what you returned. A test run that died from outside with nobody killing it — the machine's sleep, the tool's background limit — leaves the same (`shell-pitfalls.md`, the lid and the power source). Precedent: an automator stopped mid-run left a global anti-fraud rule switched on for the whole shared environment — every account was one failed operation away from an automatic ban, and other people's runs would have collected false bans; the original values were recovered from the killed run's own log.
+- **You killed it after it had already touched the environment — the cleanup is now yours.** Killing an agent runs no rollback: whatever it set up stays set up, and the executor's own restore step (usually its last) never runs. Look first at **global settings** — the ones a test switches on at the start and restores at the end; they are visible in the code as a «save the original …» step, and their original values are usually printed in the run log; the full list is the run log's set-up lines with no matching cleanup line. Restore them, **confirm by reading**, then record in the report what was left and what you returned. A test run that died from outside with nobody killing it — the machine's sleep, the tool's background limit — leaves the same (`shell-pitfalls.md`, the lid and the power source). Precedent: an automator stopped mid-run left a global lockout rule switched on for the whole shared environment — every account was one failed operation away from an automatic lock, and other people's runs would have collected false locks; the original values were recovered from the killed run's own log.
 
 - **It stopped at «waiting for the background run to finish» — that is a checkpoint, not a failure**: no notification from its background process will reach it. Take the waiting on yourself (a background until-loop over the run's log file with success/failure markers and the stop condition «the log stops growing»), then resume the executor with a message carrying the verdict and the path to the log. Precedent: an automator stopped at «waiting» three times, the manager waited for the log and woke it up three times — and not once was work lost.
 
@@ -992,7 +989,7 @@ section states the rule.
   withdrew it — the environment's registered receivers were leftovers of earlier rounds, and the round had measured nothing that told the
   two causes apart.
 
-- **An item the executor closed as «not covered — the channel cannot show it» is worth one deeper read of that same channel before the row is published.** The executor's boundary is usually honest and usually drawn at the level they were working at: they read the *outcome* a process reported (a status, a result payload, a summary field) and correctly concluded it says nothing about the question. One level down — the steps that process actually performed, the payload of the individual activity, the sub-records behind the aggregate — the answer is frequently sitting in plain text, because a system that calls an external party generally records *what it asked for*, even when it cannot record what that cost. The read is cheap at acceptance (the identifiers are already in the result file) and it changes the row's class: «our oracles do not reach this» becomes «the protocol of the call contains exactly two steps and neither is the one in question», with the boundary kept in the sentence after it. Do not let the upgrade erase the boundary — the deeper read licenses a stronger claim about what the system *did*, never about what happened on the other side. Precedent: a round closed «does this operation start a paid vendor subscription» as unverifiable after checking the flag on the entity and the workflow's own result; the activity's decoded payload named the two steps the vendor was asked to perform, neither of which was a subscription, and the answer went out as evidence with the billing boundary intact.
+- **An item the executor closed as «not covered — the channel cannot show it» is worth one deeper read of that same channel before the row is published.** The executor's boundary is usually honest and usually drawn at the level they were working at: they read the *outcome* a process reported (a status, a result payload, a summary field) and correctly concluded it says nothing about the question. One level down — the steps that process actually performed, the payload of the individual activity, the sub-records behind the aggregate — the answer is frequently sitting in plain text, because a system that calls an external party generally records *what it asked for*, even when it cannot record what that cost. The read is cheap at acceptance (the identifiers are already in the result file) and it changes the row's class: «our oracles do not reach this» becomes «the protocol of the call contains exactly two steps and neither is the one in question», with the boundary kept in the sentence after it. Do not let the upgrade erase the boundary — the deeper read licenses a stronger claim about what the system *did*, never about what happened on the other side. Precedent: a round closed «does this operation switch on a paid vendor feature» as unverifiable after checking the flag on the entity and the workflow's own result; the activity's decoded payload named the two steps the vendor was asked to perform, neither of which was that feature, and the answer went out as evidence with the billing boundary intact.
 
 - **«survived / did not reproduce» is accepted only with the boundary of observation stated**: «alive ≥600 s» without the note «we did not
   look further» reads as a property of the system while describing only the length of the run. Precedent: a round's conclusion «the control
@@ -1012,21 +1009,21 @@ section states the rule.
 
 - **An observation about an environment INCIDENT is dated to the minute and re-checked with one request before the report is finalised.**
   The team fixes shared environments while rounds run, so a conclusion written at 15:43 may be false at 16:03. While development is working
-  on it, write «as of HH:MM UTC», never «does not work». Precedent: a «missed deposit proven live» section had to be rewritten after a
-  watcher restart picked the deposit up twenty minutes later.
+  on it, write «as of HH:MM UTC», never «does not work». Precedent: a «missed event proven live» section had to be rewritten after a
+  worker restart picked the event up twenty minutes later.
 
 - **An orchestrator step reported COMPLETED is a fact about what the backend did, not about the state the product ended in.** An execution
   history proves the mechanism and the cause; a verdict on an entity's status rests only on the product's own read (its API or UI). Where
-  the state is carried by several stores — the database, a push notification, an external chain — each is checked separately, because a
+  the state is carried by several stores — the database, a push notification, a third party — each is checked separately, because a
   notification can announce a status the database never took — and a derived store legitimately differs from its source by the
-  operations still in flight, so a gap equal to the pending ones is compared again once they settle, never filed as a divergence. Precedent: an activity that «marked the transaction failed» completed
+  operations still in flight, so a gap equal to the pending ones is compared again once they settle, never filed as a divergence. Precedent: an activity that «marked the order failed» completed
   successfully while the status stayed unchanged; the finding went out as a Critical and one product read refuted it.
 
 - **reconcile the numbers in the case against the numbers in the measurements**: the executor writes the case's preconditions before
   finishing the measurement, and a draft value stays behind in the case. Precedent: «TTL ≈600 s» in the case against the ≈300 s measured in
   the same result.
 
-- **Before the findings are locked, search the tracker twice more: by the OPERATION's name and by the REQUIREMENT's subject.** The step-1 search (`planning.md`, «The tracker is searched at step 1») was run on what the round expected to find; by acceptance you know the endpoint, the mutation and the field the evidence actually names, and those are the words somebody else's entry is titled in — often under the wrong area or a neighbouring contour, which is why a search on your own business wording missed it and the report is about to hand the customer a duplicate. **And when the entry is found, read what it CLAIMS**: a discrepancy between «the check exists, its list is just wider» and your executor's «there is no check at all» is not phrasing but a gap in the round — settle it with one more probe before the report goes out. The subject search pays differently: a requirement phrased as «… according to the spec» delegates its content to a neighbouring task, and that task's comments are where the decision lives. Where it sits in a testing status and its own item was explicitly descoped («we asked to skip this one»), the finding changes shape entirely — not «nobody wrote the requirement» but «two tasks contradict each other, one of them is being accepted right now», which is a different sentence to the customer and a different fix. Name both tasks in the cell. **The same two searches also pay on what the round could NOT close** — an item heading for «not covered» is searched by the operation that was supposed to answer it, because a neighbouring task's requirements routinely state the rule the round was trying to measure. That does not make the row disappear: the measurement is still missing. It changes what the row says, from «our oracles do not reach this» to «the requirement says X happens at moment Y, we observed that moment and X did not happen there» — which is an answer the customer can act on, assembled from a document that was one query away. Precedent: an analyst's fork («does this operation switch on the vendor's paid subscription — if so it is a blocker») was written up as unverifiable for want of the vendor's billing; a neighbouring task's user story, found by searching the operation's subject, legislated that the subscription switches on when the client is CREATED at the vendor — and the round had already measured that this operation does not create one, which turned the fork's answer from silence into evidence. Precedent: a finding presented as new turned out to have been filed five weeks earlier under a title naming the wrong contour, and its text corrected the executor's over-broad claim in the process; in another round a section marked «no target list exists, needs an analyst's decision» turned out to be owned, verbatim, by a task in review whose corresponding item had been dropped by request three weeks earlier — and the same comment thread disproved two of that task's own claims about the contract.
+- **Before the findings are locked, search the tracker twice more: by the OPERATION's name and by the REQUIREMENT's subject.** The step-1 search (`planning.md`, «The tracker is searched at step 1») was run on what the round expected to find; by acceptance you know the endpoint, the mutation and the field the evidence actually names, and those are the words somebody else's entry is titled in — often under the wrong area or a neighbouring contour, which is why a search on your own business wording missed it and the report is about to hand the customer a duplicate. **And when the entry is found, read what it CLAIMS**: a discrepancy between «the check exists, its list is just wider» and your executor's «there is no check at all» is not phrasing but a gap in the round — settle it with one more probe before the report goes out. The subject search pays differently: a requirement phrased as «… according to the spec» delegates its content to a neighbouring task, and that task's comments are where the decision lives. Where it sits in a testing status and its own item was explicitly descoped («we asked to skip this one»), the finding changes shape entirely — not «nobody wrote the requirement» but «two tasks contradict each other, one of them is being accepted right now», which is a different sentence to the customer and a different fix. Name both tasks in the cell. **The same two searches also pay on what the round could NOT close** — an item heading for «not covered» is searched by the operation that was supposed to answer it, because a neighbouring task's requirements routinely state the rule the round was trying to measure. That does not make the row disappear: the measurement is still missing. It changes what the row says, from «our oracles do not reach this» to «the requirement says X happens at moment Y, we observed that moment and X did not happen there» — which is an answer the customer can act on, assembled from a document that was one query away. Precedent: an analyst's fork («does this operation switch on the vendor's paid feature — if so it is a blocker») was written up as unverifiable for want of the vendor's billing; a neighbouring task's user story, found by searching the operation's subject, legislated that the feature switches on when a record is CREATED at the vendor — and the round had already measured that this operation does not create one, which turned the fork's answer from silence into evidence. Precedent: a finding presented as new turned out to have been filed five weeks earlier under a title naming the wrong contour, and its text corrected the executor's over-broad claim in the process; in another round a section marked «no target list exists, needs an analyst's decision» turned out to be owned, verbatim, by a task in review whose corresponding item had been dropped by request three weeks earlier — and the same comment thread disproved two of that task's own claims about the contract.
 
 ## A finding of the shape «the control does nothing»
 
@@ -1067,12 +1064,12 @@ withdrawn, its id burned, and every derived artifact had to be edited.
 
 The «Amount cap» slot carries the fee, or the minimum viable amount, beside the cap — the two checked against each other while planning —
 because a cap agreed with the customer («small amounts only, 1–10 of the unit») can be arithmetically unreachable on the platform the round runs on: if the fee exceeds the cap, every
-attempt dies on «fees exceed amount», the executor discovers it only after measuring, and the instruction handed to the human has to be
+attempt dies on the fee check, the executor discovers it only after measuring, and the instruction handed to the human has to be
 rewritten with a different number. The same holds for any precondition expressed as a limit — a balance, a quota, a remaining allowance.
 
-And where the operation costs something irreversible **before** the platform refuses it — a signature, gas, a consumed one-time token —
+And where the operation costs something irreversible **before** the platform refuses it — a fee charged on sending, a one-time token —
 the refusal arrives after the cost is paid, so an unreachable cap is a wasted irreversible act, not merely an unrunnable scenario. There
 the slot names no figure and prescribes the measurement: «measure the fee across a few amounts, take the smallest one that leaves a
-positive result, and record it». Precedent: a brief named the minimum unit as the amount to sign; at that amount the fee exceeded the sum,
-so the signature and the gas would have been spent and only then refused — the executor measured five points, found the real minimum
-and signed once, correctly.
+positive result, and record it». Precedent: a brief named the minimum unit as the amount to submit; at that amount the fee exceeded the sum,
+so the irreversible cost would have been paid and only then refused — the executor measured five points, found the real minimum
+and submitted once, correctly.

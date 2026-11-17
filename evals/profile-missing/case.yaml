@@ -7,7 +7,7 @@ tags: [step-0, degradation]
 context:
   scaffold_script: setup.sh
 execution:
-  prompt: /qa https://tracker.example.com/acme/shop/-/work_items/412
+  prompt: /qa https://tracker.example.com/browse/ACME-412
   max_turns: 8
   allowed_tools: [Read, Glob, Grep, Skill, Write]
 runs: 2

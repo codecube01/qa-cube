@@ -34,7 +34,7 @@ project's tooling stays in its profile.
   wait for the lid or the charger. *And a run that dies from outside — the sleep, the tool's background limit — skips the test's own
   teardown*: every mutation its fixture made stays on the shared environment and is restored by hand at once, as for a killed executor
   (`manual-brief.md`, «The executor stopped»), and named in the result. Precedent: three runs of one test broke in a row and the first
-  two were written off as a proxy fault; the third left two accounts holding the top routing priority, ready to intercept other runs'
+  two were written off as a proxy fault; the third left two accounts flagged as the default handler, ready to intercept other runs'
   operations, until they were restored by hand.
 - **A helper that can run in two processes at once writes its temp files under a name unique to the call** — `mktemp`, or the pid plus a
   counter. A fixed `_out.txt` shared by a background batch and the foreground checks lets one call's body land in another call's
@@ -56,16 +56,16 @@ project's tooling stays in its profile.
   helper leaves every later command `command not found` — `local path=$1` included, `local` does not protect it; `fpath`, `cdpath` and
   `manpath` are tied the same way. `status` is read-only (the assignment aborts with `read-only variable`), `argv=…` rewrites the
   positional parameters, `pipestatus` is overwritten by the next pipeline — name variables `url_path`, `code`, `args`. A colon right after
-  a variable is a history modifier: `"$tx:e…"` eats `:e` and the key comes out wrong — brace it, `"${tx}:e…"`; the failure reads as «not
+  a variable is a history modifier: `"$id:e…"` eats `:e` and the key comes out wrong — brace it, `"${id}:e…"`; the failure reads as «not
   found» from the API, not as a shell error.
 - **A wide-context search is run with `python3` + `re`, not `grep`.** macOS grep (ugrep) aborts with «exceeds complexity limits» on
   wide quantifiers (`.{0,400}`) over a minified bundle, and on a narrower one (`.{0,200}`) over ordinary markdown in a non-Latin script —
   multibyte characters widen the automaton the same way a one-line file does; `re.finditer` over the same file answers at once.
 - **The shape of a secrets file is read with its VALUES replaced, never through a filter that masks the keys it guesses are secret.**
   A mask keyed on field names (`key`, `priv`, `token`) prints every secret stored under a name it did not foresee — a short alias, a
-  nested map keyed by address — straight into the transcript, and nothing warns that it did. Print the structure instead: keys and value
+  nested map keyed by account — straight into the transcript, and nothing warns that it did. Print the structure instead: keys and value
   types (or lengths) at every level, with no value at all. Precedent: a keys file masked by «`key` or `priv` in the name» printed every
-  private key in full, because they sat under a two-letter field.
+  secret in full, because they sat under a two-letter field.
 - **A script whose source carries non-ASCII text (Cyrillic strings, quoted UI captions) goes into a file via Write, not into a heredoc,
   and its first line is `# -*- coding: utf-8 -*-`.** The system Python rejects such a source with a "Non-UTF-8 code" SyntaxError and
   runs nothing — silently enough to be mistaken for an empty result — and the file being valid UTF-8 does not save it: a line past ~8 KB of

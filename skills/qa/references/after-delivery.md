@@ -9,7 +9,7 @@ the context. First work out which of the two things you are looking at.
 
 ## Contents
 
-- a question — answer it, and propose a rule only if one grows out of the answer
+- a question — answer it, and propose a rule only if one grows out of the answer; a fact about an artifact → read it fresh, a dead connector → the profile's other route
 - an objection about a fact — re-check by direct observation, before anything else
 - the objection is confirmed — fix the facts before the rules
 - only then a mini-retro, in the same session's retro file
@@ -23,6 +23,14 @@ the context. First work out which of the two things you are looking at.
 «Why is it like this?», «what about X?», «does it really work that way?» — answer on the merits, do not run a mini-retro. If a rule grows
 out of your answer (the question reveals a recurring blind spot), **propose it in one phrase and ask whether to adopt it** — do not write
 into the files yourself: not every question means the process must change.
+
+**A question about an artifact — what a case covers, what a test asserts, what a file says — is answered from a fresh read of it, never
+from the session's memory of writing it.** Memory holds what was meant, the artifact holds what was written, and an answer to a question
+is published as surely as a report line. A connector that failed to start is not the system out of reach: the profile names another
+route (a script, the REST API), and «I could not check» is said only after that route fails too — the rule of `report.md`, «"Not
+covered — no access to X" is a claim about a fact», applied to an answer. Precedent: asked which of two tasks a
+case covered, the manager answered «only the first» from memory, adding that the case tool had not connected; the user's next question
+made it read the case through the REST API — the case covered both tasks, its steps through the second task's path.
 
 ## An objection about a fact
 

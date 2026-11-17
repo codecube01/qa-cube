@@ -1,10 +1,9 @@
 # Deciding what to automate
 
 Read at step 5 of `../SKILL.md`, before the automation choice is put to the user and before `4-automator-task.md` is written. Each entry is
-a way the automation decision has gone wrong — a test nobody wanted, a price that did not exist, a question read as an order — and the line
+a way the automation decision has gone wrong and the line
 that would have settled it before the automator touched the code; the precedent that closes an entry is what paid for the rule.
-**The «Contents» below is read whole, and it is the rules** — one line
-per entry, the trigger and what the manager does; an entry's body is opened for its mechanism and its precedent only when its line fired —
+**The «Contents» below is read whole, and it is the rules**; an entry's body is opened for its mechanism and its precedent only when its line fired —
 that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines from there, never the file without a `limit`.
 
 ## Contents
@@ -24,10 +23,10 @@ that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines fro
 **The brief**
 
 - a rule of the project's own profile is about to go into the brief as an instruction («these helpers assert 200 internally, add a raw variant») → it is checked against the specific helpers this round touches first; true of the profile's general case, it may be false of these two; a call quoted into the brief → in the helper's own signature types, read off its declaration
-- a lever the brief names for a new step («drive it by X») → its window is computed under the HOST test's own configuration (every party's rates and fees, every filter ahead of the one under test) before the brief goes out, and an empty window → the brief says what in the setup must change; where the same arithmetic predicts how the existing test fares on the new build, it replaces the confirming run
+- a lever the brief names for a new step («drive it by X») → its window is computed under the HOST test's own configuration (every party's own values, every filter ahead of the one under test) before the brief goes out, and an empty window → the brief says what in the setup must change; where the same arithmetic predicts how the existing test fares on the new build, it replaces the confirming run
 - the scenarios being automated are steps of an existing TMS case → the brief cites the case's step numbers as the source of each expected result and quotes nothing it could paraphrase; the automator reads the case itself
-- a negative control proving a new step can go red → the brief names the assert the red must land on and suspends the step's precondition asserts for that run, restored after
-- the user asks what the coverage costs → say what measures it: run logs often carry no timestamps on step lines, so a step's duration is measured by a run on reverted code, repeated where the run-to-run spread rivals the delta
+- a negative control proving a new step can go red → the brief names the assert the red must land on and suspends the step's precondition asserts for that run, restored after · a red run leaving a live timed artifact → the green run waits out its lifetime
+- the user asks what the coverage costs → a step's duration is measured by a run on reverted code (run logs rarely time steps), repeated where the run-to-run spread rivals the delta
 - the change removes or renames a contract element (a field, a route) → the brief lists EVERY existing test it breaks, each with the count of what changes in it, taken from a scheduled run on the build with the change plus a search of all test classes for the removed name — never from the one test the manual result happened to name; a run that fails at step K proves nothing about the steps after K → the brief lists them as unverified, and the old negatives among them are replayed by hand before the automator starts
 
 ## The decision
@@ -40,7 +39,7 @@ exactly the waits, and the choice is made at a price that does not exist. Preced
 
 *And where the session was opened with the automation question itself* («does this need a test?»), the answer still waits for the plan,
 its review, the price and the lever window of «The brief»: they decide whether the option can work at all. Precedent: a merge chosen at a lever
-read off a neighbouring session could not change the sign — the host's parties sat on different rate sources.
+read off a neighbouring session could not change the sign — the host's parties sat on different price lists.
 
 **A test NEW to its host class pays that class's fixed cost too** — its provisioning, its per-test hooks, its stabilising reads — which no
 manual timing contains: read it off a neighbouring test's recent run log and add it. Precedent: a new test priced at
@@ -77,15 +76,14 @@ later round with no finding skipped the file altogether, and its five analyst qu
 the host is skipped, if it is, and which unmerged changes its earlier steps rest on. Where no build holds those changes together with the
 task, the option says «written, not run until both land», beside «no test»; a blocked host does not make a follow-up big enough for a
 standalone test (step 5). Precedent: a merge into a host parked for an unmerged sibling was chosen and could not run anywhere; in another
-round the parked host turned the advice into a standalone test for one extra document in an existing flow — «isn't that too small for a test?».
+round the parked host turned the advice into a standalone test for one extra document — «too small for a test?».
 
 **An answer to the automation question that is itself a question is a question, not the choice.** «Isn't a test required by our rules?» is answered on
 the merits, and then the choice is put again; acting on it starts work nobody ordered. Precedent: a reply of that shape was read as «write
 it», and the user stopped the first tool call of the automator's brief with «that was a question, not a request».
 
 **A statistical criterion is translated into a stable assertion by the manager.** The manual run's acceptance threshold («each variant
-≥ 20 %») flakes in a test; what should be asserted is the degenerate outcome («each variant occurred at least once»), and the brief says so
-rather than leaving the translation to the automator.
+≥ 20 %») flakes in a test; what should be asserted is the degenerate outcome («each variant occurred at least once»), and the brief says so.
 
 ## The brief
 
@@ -97,32 +95,36 @@ iteration for the automator. A quoted call is written in the types its declarati
 is a decimal object does not compile when copied literally.
 
 **A lever named in the brief has a window in the host test, or it is not a lever.** The manual round proved the lever on a fixture
-where the manager chose every rate and fee; the host test carries its own, and an earlier filter in the same pipeline may decide the
+where the manager chose every input value; the host test carries its own, and an earlier filter in the same pipeline may decide the
 outcome first, so the window «the stage under test fails, every stage before it passes» (`planning.md`, «The order of the server-side
 checks») can be empty there. Compute it from
 the host test's setup and the formula the manual round recovered before naming the lever, and say in the brief what has to change in the
 setup for the window to exist. The same arithmetic often predicts how the existing test fares on the new build; then it is the evidence,
-and a run that only confirms it is not ordered. Precedent: a brief told the automator to drive a step by one party's fee; under the
-host test's own rates no fee made the earlier filter pass and the later one fail, the automator had to re-base the test's rates first, and
+and a run that only confirms it is not ordered. Precedent: a brief told the automator to drive a step by one party's price; under the
+host test's own prices no price made the earlier filter pass and the later one fail, the automator had to re-base its prices first, and
 a six-minute run the brief ordered «to check» reproduced a failure the manager had already computed.
 
 **The expected results of a case's steps are cited by step number, not retold.** Where the scenarios to automate are steps of a case
 that already exists, the brief names the case and its step numbers as the source of each expectation, and the automator reads them
 there. A paraphrase is a second, shorter copy of the expectation: it keeps what the manager thought mattered and drops the rest, and
-the automator asserts the paraphrase. Precedent: a brief retold a case step as «the three remainders reach zero»; the case's step also
-expected the margin at zero and the status unchanged — the automator noticed only by reading the case, and ran both tests a third time.
+the automator asserts the paraphrase. Precedent: a brief retold a case step as «the three counters reach zero»; the case's step also
+expected the total at zero and the status unchanged — the automator noticed only by reading the case, and ran both tests a third time.
 
 **A negative control of a new step names the assert it is aimed at, and suspends the guards that would fire before it.** «Run it once
 with the condition flipped — it must go red» proves the step can fail only if the red lands on the step's own verdict assert; a step that
 first asserts its precondition (the setting really produces the state under test) goes red on that precondition instead, and the control
 proves the precondition, not the step. The brief says which assert the red must come from and that the precondition asserts are switched
-off for the control run and restored after. Precedent: a step asserting «this setting makes the margin negative» before «the payout
-fails» was briefed a control with a profitable setting — it failed on the precondition, and the automator had to improvise a switch.
+off for the control run and restored after. Precedent: a step asserting «this setting makes the total negative» before «the checkout
+fails» was briefed a control with an ordinary setting — it failed on the precondition, and the automator had to improvise a switch.
 
-**Asked what the coverage costs, say what measures it.** Run logs often lack timestamps on step lines, so a step's duration is unreadable
-from the log — then measure by a run on reverted code, repeated when the run-to-run spread rivals the delta.
+*And where the red run leaves a live timed artifact* (a lock, a hold), the green run starts after its lifetime, or it may be handed
+the red run's leftover. Precedent: a red control left a stock reservation alive for five minutes, in the green run's value
+band; the automator waited it out unbriefed.
 
-**A change that removes or renames a contract element breaks tests the manual round never looked at.** The manual tester reports the breakage it can see from its own scenarios — one admin test asserting a removed field — while the same assertion sits in the neighbouring tests of the other roles, and a shared helper calling the removed route drags in tests of another class. The cheapest complete list already exists when the environment has run its scheduled suite on the build with the change: every red test with the removed name in its error is on it; a search of all test classes for the removed field and route closes what the schedule did not run. The brief names each test with the count of what changes in it. Precedent: a brief named one export test with «seven» assertions of a removed field; it held six, two neighbouring role tests held six more, and the night's scheduled run on that build had already failed all three — the automator found them only by grepping on its own.
+**Asked what the coverage costs, say what measures it.** Run logs often lack step timestamps, so a step's duration is unreadable
+from them — then measure by a run on reverted code, repeated where the spread rivals the delta.
+
+**A change that removes or renames a contract element breaks tests the manual round never looked at.** The manual round sees the breakage in its own scenarios — one admin test asserting a removed field — while the same assertion sits in the other roles' tests, and a shared helper calling the removed route drags in another class. The cheapest complete list already exists when the environment has run its scheduled suite on the build with the change: every red test with the removed name in its error is on it; a search of all test classes for the removed field and route closes what the schedule did not run. The brief names each test with the count of what changes in it. Precedent: a brief named one export test with «seven» assertions of a removed field; it held six, two neighbouring role tests held six more, and the night's scheduled run on that build had already failed all three — the automator found them only by grepping on its own.
 
 *And where the list comes from a run of the existing test on the new build* — that run stops at its first failure, and every step after it is
 untested, not «still fine». The steps most likely to hide a regression there are the old NEGATIVES: a guard of the previous contract is

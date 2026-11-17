@@ -30,7 +30,7 @@ starts working, and narrating what it does, before it has opened the profile, an
 final summary — is shown to the user in the same console as your own; a round whose language lived only in the profile read as English
 in the console while its files came out right.
 
-**A number in the text the user reads says what it is: its kind and title in brackets** — `ACME-123 (task «Export of payouts»)`,
+**A number in the text the user reads says what it is: its kind and title in brackets** — `ACME-123 (task «Export of orders»)`,
 `merge request 45 («Add export», draft)`, `pipeline 2071 (the nightly run)`. A title not in hand is looked up in the tracker or the TMS
 before the message goes out, never left bare, and «(the same title)» or «(see above)» is no title: it sends the reader up the scroll. A
 file writes the full title at the first mention; **in the chat every mention carries its bracket** — the full title first in a message, a
@@ -65,6 +65,11 @@ agent's instruction — and from the moment it is written it counts as one more 
 No file → nothing to read. A profile still below contract version 6 may keep the rows at the old address, `<sessions>/engine-feedback.md` —
 read them from there; the contract-version line above already tells the user that `/qa-setup` moves the file.
 
+**And the profile's «Domain rules», where it names a subfile** — process rules that hold for this product's KIND (a coupon, a
+shipment), learned by retros here or in a sibling project. Unlike other subfiles it is not targeted: read whole before planning (step 3),
+each row counted as one more entry at the engine address it names, exactly like a feedback row — and a row addressed to an executor goes
+into the brief verbatim.
+
 The profile and this file never carry the same rule — **two layers**: the profile holds what is true only for this project, the feedback
 file holds what would hold in anyone's. Step 7 decides which is which.
 
@@ -72,8 +77,8 @@ The `<sessions>` path below is the value of `sessions` from the profile (e.g. `d
 
 **The harness — before the first action it answers.** Read `references/harness/README.md` and the adapter it names for the harness you run in (`claude-code.md`, `codex.md`, `opencode.md`, `generic.md`): it says how this file's actions are done there — launching a role, continuing an executor, asking the user, `<plugin root>` (the plugin's own directory, in every script path below), the transcripts — and what to do where the harness lacks one. `0-session.md` records it as `Harness: <name>`; the profile never does. The browser tool is the profile's `browser` (`default`/`dedicated` → `claude-in-chrome`), its adapter `references/browser/<browser>.md`.
 
-**The manager runs the shell too** — the sweep, preflight, on-chain and bundle recon — so `references/shell-pitfalls.md` is read whole
-before the session's first shell command beyond reading the profile: a manager once printed every private key of a secrets file into the
+**The manager runs the shell too** — the sweep, preflight, data and bundle recon — so `references/shell-pitfalls.md` is read whole
+before the session's first shell command beyond reading the profile: a manager once printed every secret of a secrets file into the
 transcript through a pitfall that file already named.
 
 **`--preflight` in the input (`/qa --preflight <task>`) → a preflight run**: everything up to the first executor that touches the
@@ -175,7 +180,7 @@ Then check whether a session for this task (and for the related ones) already ex
   trigger, what the rename must bring to the convention besides the date, what the executor's brief carries over from the previous round,
   when the analyst is re-launched at all, and how stale evidence is marked — all of it is decided before planning and cannot be added
   afterwards.
-- **There was no session** → a new folder `<sessions>/<YYYY-MM-DD>_<source>-<slug>/` (example: `2026-08-10_acme-412-partial-cascade`).
+- **There was no session** → a new folder `<sessions>/<YYYY-MM-DD>_<source>-<slug>/` (example: `2026-08-10_acme-412-coupon-stacking`).
 
 **A folder holding files under the old naming scheme** (`session.md`, `report.md`, `*-r2.md`, …) → the same file, section «Folders from the
 old scheme»: what is left as it is, and the two files that are renamed even so.
@@ -274,7 +279,7 @@ nothing» groups of the same Contents are read again when the result comes back.
   fingerprint, the fix's scope, the previous round's verdicts line by line), the scenarios with their expected effects, where to write the
   result, and **the targeted reading list**: which profile subfiles and knowledge-base files (and, where needed, which of their sections) are
   relevant to exactly this task — you built the plan and know that better than the executor (a BE task needs no browser techniques; a task
-  about fees needs the wallets domain). The executor reads what is listed — a file, or the sections named after it — whole, plus the
+  about carts needs the orders domain). The executor reads what is listed — a file, or the sections named after it — whole, plus the
   profile map; the rest — only when stuck. **Plus the engine's references, by ABSOLUTE path** (the executor's cwd is the project):
   `shell-pitfalls.md` and `executor.md` always; `api-techniques.md` on any round that sends requests to the API (its «GraphQL» section only where the
   product's API is GraphQL); `browser-techniques.md` plus the tool's `browser/<browser>.md` on a browser round — a round is one by its INSTRUMENT, not its subject: an API round
@@ -435,18 +440,23 @@ pass**. There are four addresses for fixes:
   version bump is the retro's most expensive mistake: the engine has several consumers, and their profiles drift apart silently, without a
   single warning from `/qa`. The converse matters too: **an edit that does not affect the profile does not bump the contract version** —
   otherwise every project gets a false «your profile is behind» alarm and a needless `/qa-setup` run;
-- **the project's profile and local skills** — what is true for this project alone: tooling pitfalls, access, code maps; if an executor
-  tripped over a project skill, the pitfall gets written into it;
+- **the project's profile and local skills** — what is true for this project alone: tooling pitfalls, access, code maps, and its
+  «Domain rules» (the noun test below); if an executor tripped over a project skill, the pitfall gets written into it;
 - **the project's knowledge base** (the path comes from the profile) — what was learned about the **product**: API contracts, feature
   behavior, limits, «why it is this way». This is exactly what the manager reads at step 1, and that is how sessions feed the sessions that
   follow. Fixes about the **working process** go into the engine or the profile, not into the knowledge. When moving a finding over,
   distinguish a contract from an observation: a regularity drawn from N runs without support from the spec is recorded with the note
-  «observation», not as an assertion. Precedent: «the cascade picks X first», from three lucky runs, went into the KB as a fact and was
+  «observation», not as an assertion. Precedent: «the queue picks X first», from three lucky runs, went into the KB as a fact and was
   refuted by the fourth;
 - in doubt whether it is the engine or the profile: the rule would work in any project → the engine (without a clone — the feedback
   file); it mentions a specific tool/environment/class → the profile. **A lesson with both halves is split, not copied**: the mechanics go
   to the engine's layer, and only their application here («on this environment that means X») to the profile — every rule lives in
-  exactly one layer.
+  exactly one layer. **«Any project» is settled by the noun test, not by «it is about the process»:** rewrite the rule's trigger without
+  the product's own nouns (a coupon, a cart, a shipment, a warehouse). Still a rule → that kernel goes to the engine, its
+  precedent told in class words («a discount», «a selection rule»). Nothing left → it is a **domain rule**: the profile's «Domain
+  rules» subfile, with the engine address it applies at — even when it holds for every product of that kind, because the engine serves
+  projects of every kind and its catalogues are read by all of them. Precedent: a clean-up found over a hundred engine passages filed as «process» whose rules needed one product's own objects;
+  together they portrayed the two products they came from, and a project of another kind could use none of them.
 
 **Inside the engine a lesson has an address, and the address is not this file.** A rule keyed to a situation goes into the matching
 `references/` catalogue — `planning.md` for the shape of a scenario, `manual-brief.md` for briefing and the run, `executor.md` for a
@@ -602,4 +612,5 @@ do what the right-hand cell says.
 | «The template will do for the report» | the project's format from the profile outranks it, read before the first line (step 6) |
 | «The user is wrong — my report says otherwise» | an objection about a fact is re-checked by your own direct observation, never by re-reading the report (step 9) |
 | «It's only a preflight — I'll ask and they'll answer soon» / «the entry is alive and the brief is ready — I'll launch it myself» | in a preflight run no question waits and nothing is launched: both go into the card (`references/preflight-run.md`) |
+| «It is about the process, so it goes into the engine» | a process rule that needs the product's nouns is a domain rule — the noun test first, then the profile's «Domain rules» (step 7) |
 | «The round went cleanly, there is nothing for a retro» | the retro is mandatory; «no edits» is an outcome written after it, not a reason to skip it (step 7) |

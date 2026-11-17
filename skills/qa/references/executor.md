@@ -43,8 +43,8 @@ budget, and after the snapshot of every scalar field that precedes the first wri
 
 **Before REPEATING an operation the server refused on the theory «maybe it was stale / cached», find out where the validating side reads
 its data.** If that source does not change between attempts, the retry cannot give a different answer and only spends the expendable it
-consumes — often a user's signature or click. One read of the contract (does the API even expose the list the check runs against?) is
-cheaper than the second attempt. Precedent: a removal refused with «X is not a member» was retried and burned a second user signature;
+consumes — often a user's approval or click. One read of the contract (does the API even expose the list the check runs against?) is
+cheaper than the second attempt. Precedent: a removal refused with «X is not a member» was retried and burned a second user approval;
 introspection would have shown the member list lives only on the backend's side.
 
 **Single-use artifacts (an invite link, a one-time token, the only application in the queue) are consumed by any touch, including a trial
@@ -62,12 +62,12 @@ its own start — one timer then covers every point to the second, and the rest 
 
 **A reference value you compute yourself — a hash, a signature, a checksum, an aggregate: first self-check the primitives, then show the
 decomposition of the input, and only then compare.** Primitives are verified with a known vector (the reference hash of an empty string, an
-address encoder against an address from the same data) — two minutes remove a whole class of «my parser lies». The field-by-field
+encoder against an encoded value from the same data) — two minutes remove a whole class of «my parser lies». The field-by-field
 decomposition of the input is printed BEFORE the comparison: a «does not match» verdict passed before the structure was taken apart is
-useless and more often points at your parsing than at the product. Precedent: a «MISMATCH» on a transaction hash turned out to be a wrongly
-posed question — the field held a 12-field form while the hash covers nine — and cost twenty minutes.
+useless and more often points at your parsing than at the product. Precedent: a «MISMATCH» on a record's hash turned out to be a wrongly
+posed question — the field held the full form while the hash covers a subset — and cost twenty minutes.
 
-*And where you replicate a whole artifact a client builds* (a wallet's envelope), rebuild the incident's own instance from its parts and require byte equality before a scenario rests on your copy: a copy off by one field verifies an artifact the client never sends. Precedent: a wrapped transaction matched the incident's bytes before the fix was judged, so the fix was confirmed in the incident's exact form, not in a lookalike.
+*And where you replicate a whole artifact a client builds* (an SDK's envelope), rebuild the incident's own instance from its parts and require byte equality before a scenario rests on your copy: a copy off by one field verifies an artifact the client never sends. Precedent: a wrapped request matched the incident's bytes before the fix was judged, so the fix was confirmed in the incident's exact form, not in a lookalike.
 
 **Text the user sees is quoted as RENDERED, never with the template's markup.** A caption read from the bundle arrives as
 `<b>{email}</b> …`, and pasting the rendered string back in that form makes the one question a text finding exists to answer — «is the
@@ -89,8 +89,8 @@ probes held on its original values.
 
 **Before writing «the system rejects a valid input», diff your input against a recent SUCCESSFUL call of the same type** — decode what the
 product itself sent and compare element by element: a refusal of a home-made request more often means the request is not the one the
-product sends. Precedent: a «valid» set of signatures was refused as short by one; the last successful operation of that type carried an
-extra service signature first, which the hand-built set lacked.
+product sends. Precedent: a «valid» set of approvals was refused as short by one; the last successful operation of that type carried an
+extra service approval first, which the hand-built set lacked.
 
 **A conclusion drawn from one passive observation is driven to an action before it is written down** — «the interface does not flag X»,
 «the component is locked»: press the control, call the method that would refute it. Precedent: twice in one round a conclusion already in

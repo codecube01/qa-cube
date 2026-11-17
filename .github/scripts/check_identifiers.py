@@ -12,7 +12,7 @@ What counts as a leak — each family is a separate detector below:
   · a legal entity         a legal form beside a name: «ООО «…»», «ОсОО …», «… LLC», «… и КО»
   · an IP address          anything but loopback and the documentation ranges
   · a home directory path  /Users/<name>/…, /home/<name>/… — it names a person and a machine
-  · a real entity id       a random-looking UUID or on-chain address copied from an environment
+  · a real entity id       a random-looking UUID or a 0x… account address copied from an environment
   · a secret               the shapes check_session.py knows (JWT, cloud keys, tokens, one-time links)
   · a private name         a company, client, service or person from the local denylist
 
@@ -257,7 +257,7 @@ TRUNCATED_ID = re.compile(r"(?<![\w-])(?:0x)?[0-9a-fA-F]{8,}-?(?:…|\.{3})")
 def _entity_ids(text: str) -> list[Finding]:
     out = [Finding("a truncated entity id", m.group(0)) for m in TRUNCATED_ID.finditer(text) if _random_looking(m.group(0), 5)]
     out += [Finding("an entity id (UUID)", m.group(0)) for m in UUID.finditer(text) if _random_looking(m.group(0))]
-    out += [Finding("an on-chain address", m.group(0)) for m in CHAIN_ADDRESS.finditer(text) if _random_looking(m.group(0))]
+    out += [Finding("a hex account address (0x…)", m.group(0)) for m in CHAIN_ADDRESS.finditer(text) if _random_looking(m.group(0))]
     return out
 
 
@@ -470,7 +470,9 @@ EXPLANATION = (
     "companies, services, clients and accounts stay out of its files, file names, branch names, "
     "commit messages, PR titles and bodies.\n"
     "Write the lesson by its mechanics instead: «precedent: a retest where the defect's "
-    "symptom went stale together with the build»."
+    "symptom went stale together with the build».\n"
+    "A domain term from the denylist (a product's own kind of object) is not reworded around: "
+    "a rule that needs it belongs in the project profile's «Domain rules» (skills/qa/SKILL.md, step 7)."
 )
 
 

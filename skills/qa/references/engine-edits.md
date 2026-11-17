@@ -12,6 +12,10 @@ line. The steps below are that review, moved to the place where the edit is made
 
 ## Before writing: find the entry that already says it
 
+- **First, is it an engine edit at all — the noun test of step 7.** Rewrite the lesson's trigger without the product's own nouns; what
+  is left is the most the engine may take, its precedent in class words, and a lesson with nothing left goes to the profile's «Domain
+  rules» and touches no file here. A validator hit on a domain term (`check_identifiers.py`, the private denylist) means the same: the
+  rule is routed, not reworded around the term.
 - **Search the whole clone for the lesson, not the catalogue you are about to open** — by the symptom (the error text, the observable),
   by the mechanism, by two or three of the lesson's key nouns: `grep -rn` over `skills/` and `agents/`. An entry that already states the
   rule or its symptom takes the lesson IN — a new shape, a sharper sentence, a better precedent — and nothing is written elsewhere except,

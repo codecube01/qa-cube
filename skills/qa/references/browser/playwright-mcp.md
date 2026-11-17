@@ -2,7 +2,7 @@
 
 An MCP server that drives a browser of its own through Playwright. Read beside `../browser-techniques.md` when the profile's `browser`
 is `playwright-mcp`. Its browser is NOT the user's: no sign-ins, no cookies, no extensions — every round logs in through the profile's
-Secrets section, and a flow that needs the user's own session (a wallet extension, an SSO only their browser holds) is out of its reach.
+Secrets section, and a flow that needs the user's own session (a password manager, an SSO only their browser holds) is out of its reach.
 That is why it is never the fallback for a tool the harness lacks (`../../SKILL.md`, «Capability degradations»).
 
 ## Install

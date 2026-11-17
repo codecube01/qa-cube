@@ -28,7 +28,7 @@ holds the run until somebody happens to look, which is exactly what the run exis
 - **A choice that shapes the plan** — the environment, the width of a bundle of related tasks, step 1's start question → the plan is built
   on an assumption stated in it, and the card puts that assumption as a question together with what changes if the answer differs —
   except a layer of the bundle deployed but not in testing, which goes on the card's `❗` line instead («The finale: the card»).
-- **What needs the user's hands** — a sign-in the profile says only the user can make, a wallet, a one-time code, the «Window and focus»
+- **What needs the user's hands** — a sign-in the profile says only the user can make, a signer, a one-time code, the «Window and focus»
   slot → not attempted; the scenarios resting on it are marked blocked in the plan, and the card names what is needed.
 - **A mutation a normal round sanctions with the user** → not performed; the brief carries it as the sanction question, answered at the
   continuation.
