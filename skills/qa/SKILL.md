@@ -237,7 +237,7 @@ and what to add — at most eight items, those that would change a verdict, a bu
 whose subject is security (sign-in, tokens, access), the brief opens with one line of context — an authorised test of the team's own
 product — and asks for process wording, not attack steps: the harness's classifier refused one such reviewer's answer after it had read
 the whole catalogue, and the re-launch paid for that read twice. Apply what it returns by targeted edits — the file is in your context, do not re-read it — and say in it, in one line, what the
-review added. Why a reviewer and not your own reading: the value of a catalogue is in the shapes you did not think of, and an author
+review added; an item of the return is rejected only after reading the body of the entry it cites («Red flags»). Why a reviewer and not your own reading: the value of a catalogue is in the shapes you did not think of, and an author
 who reads the whole catalogue for them pays for every entry in every later step; a reader with no stake reads it once and leaves. Steps 4 and 6 reuse it.
 
 **3.5. Test design** (only with `test-cases: upfront`; with `inline` and `none` the step is skipped entirely). The plan's scenarios are
@@ -610,6 +610,7 @@ do what the right-hand cell says.
 | «The classifier refused the mutation — I'll phrase it differently» | a refused MUTATION is never reworded: the user's permission, then one repeat in your own session, paired with a control (`references/manual-brief.md`, «Your own harness refuses a call») |
 | «The automation dialog carries the counts — the status list can wait for 6.5» / «the list is printed — the dialog can follow in the same turn» / «no findings, the report can wait for the automation answer» | the status list goes to the chat before the automation question, in a turn no dialog covers — the question as plain text at its end, or the dialog next turn; verdict rows and analyst questions go into the report at acceptance (step 5, `references/automation.md`) |
 | «The template will do for the report» | the project's format from the profile outranks it, read before the first line (step 6) |
+| «The reviewer misread the catalogue — its index line says otherwise» | a catalogue reviewer's return is rejected only after reading the BODY of the entry it cites: the index line states the rule in one sentence, the body holds the case it was written for; a rejection resting on the index alone judges a case you have not read (step 3) |
 | «The user is wrong — my report says otherwise» | an objection about a fact is re-checked by your own direct observation, never by re-reading the report (step 9) |
 | «It's only a preflight — I'll ask and they'll answer soon» / «the entry is alive and the brief is ready — I'll launch it myself» | in a preflight run no question waits and nothing is launched: both go into the card (`references/preflight-run.md`) |
 | «It is about the process, so it goes into the engine» | a process rule that needs the product's nouns is a domain rule — the noun test first, then the profile's «Domain rules» (step 7) |

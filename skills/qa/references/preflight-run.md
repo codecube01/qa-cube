@@ -57,8 +57,8 @@ Next: «continue» launches <qa-manual | qa-automator>; «stop» closes the sess
 
 **READY** — the round can be launched as briefed. **READY WITH CAVEATS** — it can, but some scenarios are blocked or rest on an
 assumption the questions name. **BLOCKED** — it cannot start without the user: the environment is unreachable, the entry needs hands, the
-build under test is not on the environment. The first line is the decision, because the user reads several cards in a row; a line with
-nothing in it (no questions) is left out.
+build under test is not on the environment, another manager is running the folder («The continuation», the last paragraph). The
+first line is the decision, because the user reads several cards in a row; a line with nothing in it (no questions) is left out.
 
 **A fact that decides whether the round should start at all stands on the `❗` line right under the first line, never among the
 questions** — above all a layer the round rests on that is deployed but not in a testing status (the other half of a bundle, a backend
@@ -84,3 +84,8 @@ to drop the round and wait for the backend, and to have that fact stand out next
 `--preflight` on a session that already exists (a retest) stops at the same point of the new round: the round's plan, the preflight, the
 brief, the card. On a session still `preflight-done` (the watcher fired twice) it is no new round either: the new comments go into «Raw
 source», the preflight is redone, «Entry state» and the card are rewritten, and no file is added.
+
+Every case here but the same session's own — a continuation in a new session, a `--preflight` on an existing session, either status —
+first checks for **a folder another manager is running right now** (`session-folder.md`, «Before the first write»), which stops the run before
+anything is written (the list of what is not touched is that entry's). A preflight run then prints the card
+alone, `BLOCKED: run by <that session> since <time>`, and «Next» says the round goes on there.

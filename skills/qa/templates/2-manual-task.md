@@ -121,6 +121,7 @@ The wording that keeps a row a question:
 ## Sanctioned probe (a mutation the user authorised — one block per probe; delete the section otherwise)
 
 - Probe: <the call, the object (checked free before the question: the test code by its id and name, its own description, the environment snapshot), the hostile value(s), what the permission said>
+- Acting identity and carrier: <as in scenario <N>'s row — never restated here>
 - Body: <written out whole, field by field — each checked against the knowledge base for a value known to crash or page someone; the other fields chosen by the order of the checks>
 - Read channel for the effect: <alive, proven by <a read the manager took at planning> — a probe whose oracle recon already showed dead is not sanctioned; it is deferred with its carrier recorded>
 - Who presses: <the executor — a reversible step | the user, through the pause protocol | the manager, by its own call or in the executor's prepared tab (through the executor's session where the tool has sessions, `browser/<tool>.md`) — an IRREVERSIBLE step is never the executor's; the sanction question already said who>
@@ -221,5 +222,6 @@ block only what it cannot run safely without, the rest right after it.
 
 - Write to: `3-manual-result.md` (incrementally, after each scenario)
 - Mandatory: a trace id for every failure (if the project defines one — with `logs: none` there is none), severity for bugs, one screenshot in `screenshots/` per frontend candidate and none for anything else (`📎` on its line), exact request/response evidence (the autotest is written from it), case `<TMS case>` in the «Summary» (with `test-cases: none` there are no cases — write «cases are not maintained in this project» instead of an id), the «Product findings» and «Executor retro» sections
+- The «Summary» verdict table, one row per requirement: `| requirement | verdict | what stands against it | evidence |`. The third column lists every finding that breaks the item, new or already filed, and every half of it measured neither in this round nor in an earlier one quoted here; empty is «—», and any entry there makes the verdict not `pass`
 - With `test-cases: upfront` do not create cases. Do not edit the expected result of a case whose expectation source is `spec` — a mismatch is recorded as a defect; a case sourced from an `assumption` or the `KB` is refined against the facts. Steps and preconditions are always refined.
 - As separate lists in the result: **case corrections** (`case → was → now → why`) and **case candidates** (a scenario surfaced with no case behind it — do not create it yourself).

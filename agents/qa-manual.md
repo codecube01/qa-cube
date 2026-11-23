@@ -240,7 +240,8 @@ As your final text, return a short 5–10 line summary to the manager; the detai
 - A scenario resists for 30+ minutes — record the blocker in the result (what you tried, how it ended, the trace id) and move to the next
   one.
 - Do not launch a long process (seeding via a test run and the like) in the background expecting to «wait for a notification» — it will
-  never reach you. Wait synchronously; if it did go to the background — record a checkpoint in the result (what was launched, where the log
+  never reach you. Wait it out yourself — by bounded foreground polls on a process started in the background (`shell-pitfalls.md`, «A wait
+  is a bounded poll», its last rider); if the waiting itself breaks — record a checkpoint in the result (what was launched, where the log
   is, what remains) and finish: the manager will wait it out and resume you.
 - **Shell pitfalls of the harness (macOS, zsh), waiting included** — `shell-pitfalls.md`, from your reading list.
 - **Never paste passwords, tokens or keys anywhere**: not into session files (the folders may be backed up off-site), not into TMS cases.

@@ -62,8 +62,10 @@ manual that the method's existing assertions already half-covered.
   explicitly.
 - Running it — per the launch rules in the profile; fix until green, five iterations at most.
 - **Do not launch a long run in the background expecting to «wait for a notification»** — no notification from a background process will
-  reach you, and your stop on «waiting for it to finish» hangs until the manager pokes you. Wait synchronously (foreground, with a generous
-  timeout); if the run did go to the background — record a checkpoint in the result (what was launched, the path to the log, what remains)
+  reach you, and your stop on «waiting for it to finish» hangs until the manager pokes you. You wait it out yourself: a run longer than one
+  shell call starts in the background and is waited on by bounded foreground polls on its log — a generous `timeout` does not keep a call
+  in the foreground (`shell-pitfalls.md`, «A wait is a bounded poll», its last rider); if the waiting itself breaks (a poll lost to the
+  background, your work ending before the run) — record a checkpoint in the result (what was launched, the path to the log, what remains)
   and finish: the manager will wait the run out and resume you with a message carrying the verdict.
 - **An identifier that feeds an IRREVERSIBLE operation (a credential reset, a block, a deletion) is taken only after the record's own
   identity field has been compared with the entity the test itself created.** A lookup by name is usually a substring or prefix filter, and
