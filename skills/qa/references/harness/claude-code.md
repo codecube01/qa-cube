@@ -22,6 +22,11 @@ and tell the user in one line that `/login` restores it (in a preflight run, on 
 without it). Another launch on the same model learns nothing. Precedent: two catalogue reviewers died at their first call with that error; the
 same brief on another model ran, and the executor launched after the user's `/login`.
 
+## A long shell command
+
+A command that may outlive one shell call starts with `run_in_background`; the harness's ceiling, the poll length and the precedent
+are in one place: `../shell-pitfalls.md`, «A wait is a bounded poll in the FOREGROUND», its last rider.
+
 ## Continue a running executor
 
 `SendMessage` to the same agent (by the id the launch returned): the executor keeps its context, and the

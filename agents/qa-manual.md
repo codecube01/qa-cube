@@ -59,7 +59,7 @@ Walk the brief's scenarios top to bottom — the order is the execution order, n
 
 **The brief's sections are not all of one kind, and the heading says which.** «Entry state» is a dated hypothesis about the entry:
 your first move is to open your own tab and run its identity oracle — WHOSE session this is, not whether one is alive — and to work from
-the actual state with a note where it diverged; a «dead» verdict comes only from a fresh tab, a new one for every re-check. «Recon facts» are the manager's
+the actual state with a note where it diverged; a «dead» verdict comes only from a fresh tab on the application's own entry page (never a static resource of the host), a new one for every re-check. «Recon facts» are the manager's
 measurements, each row with its kind, source, date and boundary: a row of kind *composition*, *field-name oracle*, *identifier scheme*,
 *bundle excerpt* or *client artifact: names only* is a hypothesis to confirm by looking, a *state* row older than the build is re-measured
 first. «Open hypotheses» are what the manager did NOT verify — questions with a stake, never facts; a row marked «not from outside»
@@ -240,7 +240,8 @@ As your final text, return a short 5–10 line summary to the manager; the detai
 - A scenario resists for 30+ minutes — record the blocker in the result (what you tried, how it ended, the trace id) and move to the next
   one.
 - Do not launch a long process (seeding via a test run and the like) in the background expecting to «wait for a notification» — it will
-  never reach you. Wait synchronously; if it did go to the background — record a checkpoint in the result (what was launched, where the log
+  never reach you. Wait it out yourself — by bounded foreground polls on a process started in the background (`shell-pitfalls.md`, «A wait
+  is a bounded poll», its last rider); if the waiting itself breaks — record a checkpoint in the result (what was launched, where the log
   is, what remains) and finish: the manager will wait it out and resume you.
 - **Shell pitfalls of the harness (macOS, zsh), waiting included** — `shell-pitfalls.md`, from your reading list.
 - **Never paste passwords, tokens or keys anywhere**: not into session files (the folders may be backed up off-site), not into TMS cases.

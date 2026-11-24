@@ -18,6 +18,12 @@ touches the environment, stops, and leaves a card the user can decide on from it
   The cases it writes stay in the TMS whatever the user decides — the card says so in its «Plan» line.
 - **Not done at all**: the report (`99-report.md`), the delivery of step 6.5, the retro, and any write to the tracker — no comment, no
   status, no assignee. The team must not see a round that the user has not yet decided to run.
+- **The input names a deliverable narrower than a round** («only prepare the bug texts», «only the list of cases») → the run stops at
+  that deliverable, not at the executor: produce it, close the session (`done`, not `preflight-done`; the registry's verdict cell names the deliverable), and the card carries no
+  launch — no «continue», no retest offered, no `❗` about what a round would need; a fact the deliverable rests on (it was measured on
+  an older build) goes into the deliverable itself. Precedent: asked only to turn an analyst's verdicts into bug texts, a run wrote them,
+  then left the session open and closed its card by offering an executor to re-check the bugs on the new build; the user had to repeat
+  that the task was only the texts.
 
 ## Nobody answers
 
@@ -57,8 +63,8 @@ Next: «continue» launches <qa-manual | qa-automator>; «stop» closes the sess
 
 **READY** — the round can be launched as briefed. **READY WITH CAVEATS** — it can, but some scenarios are blocked or rest on an
 assumption the questions name. **BLOCKED** — it cannot start without the user: the environment is unreachable, the entry needs hands, the
-build under test is not on the environment. The first line is the decision, because the user reads several cards in a row; a line with
-nothing in it (no questions) is left out.
+build under test is not on the environment, another manager is running the folder («The continuation», the last paragraph). The
+first line is the decision, because the user reads several cards in a row; a line with nothing in it (no questions) is left out.
 
 **A fact that decides whether the round should start at all stands on the `❗` line right under the first line, never among the
 questions** — above all a layer the round rests on that is deployed but not in a testing status (the other half of a bundle, a backend
@@ -84,3 +90,8 @@ to drop the round and wait for the backend, and to have that fact stand out next
 `--preflight` on a session that already exists (a retest) stops at the same point of the new round: the round's plan, the preflight, the
 brief, the card. On a session still `preflight-done` (the watcher fired twice) it is no new round either: the new comments go into «Raw
 source», the preflight is redone, «Entry state» and the card are rewritten, and no file is added.
+
+Every case here but the same session's own — a continuation in a new session, a `--preflight` on an existing session, either status —
+first checks for **a folder another manager is running right now** (`session-folder.md`, «Before the first write»), which stops the run before
+anything is written (the list of what is not touched is that entry's). A preflight run then prints the card
+alone, `BLOCKED: run by <that session> since <time>`, and «Next» says the round goes on there.

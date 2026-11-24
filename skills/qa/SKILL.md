@@ -113,7 +113,7 @@ The executors ask no questions — not one of them.
 
 ## The pipeline
 
-**1. Understand the task and assemble the bundle.** **Where entering the environment needs the user's hands (per the profile), the liveness oracle is this step's FIRST call** — a dead session then overlaps your reading instead of following it; that call and every re-check of it is a new tab → navigate → the call, never the tab that answered `401`; the entry in `references/manual-brief.md` is read only at step 4, too late for this rule. The input is a link/id of a tracker task or free-form text. Read the task with the tools
+**1. Understand the task and assemble the bundle.** **Where entering the environment needs the user's hands (per the profile), the liveness oracle is this step's FIRST call** — a dead session then overlaps your reading instead of following it; that call and every re-check of it is a new tab → the application's own entry page, loaded → the call, never the tab that answered `401` and never a static resource of the host; the entry in `references/manual-brief.md` is read only at step 4, too late for this rule. The input is a link/id of a tracker task or free-form text. Read the task with the tools
 from the profile (Tracker section): the description and **the comments, mandatorily** — that is where the requirements, the status and the
 related changes live. Check for **related tasks** in three ways, not one: (1) explicit links/relations; (2) the task's **subtasks and
 parent**; (3) a substring search on the title (neighboring FE/BE tasks of the same area). Empty relations do not mean «there are none». If a
@@ -195,6 +195,7 @@ The file skeletons live in `templates/` next to this skill:
 5-automator-result.md  # written by the automator
 7-retro.md             # the retro
 99-report.md           # the manager's report — one per session, updated every round
+issue.md               # bug-reports/issue-<ID>.md: a ready-to-paste tracker task, only on request
 ```
 
 **The task's raw source goes into `0-session.md`.** Everything read at step 1 goes in there verbatim: the full text of the task (and of the
@@ -237,7 +238,7 @@ and what to add — at most eight items, those that would change a verdict, a bu
 whose subject is security (sign-in, tokens, access), the brief opens with one line of context — an authorised test of the team's own
 product — and asks for process wording, not attack steps: the harness's classifier refused one such reviewer's answer after it had read
 the whole catalogue, and the re-launch paid for that read twice. Apply what it returns by targeted edits — the file is in your context, do not re-read it — and say in it, in one line, what the
-review added. Why a reviewer and not your own reading: the value of a catalogue is in the shapes you did not think of, and an author
+review added; an item of the return is rejected only after reading the body of the entry it cites («Red flags»). Why a reviewer and not your own reading: the value of a catalogue is in the shapes you did not think of, and an author
 who reads the whole catalogue for them pays for every entry in every later step; a reader with no stake reads it once and leaves. Steps 4 and 6 reuse it.
 
 **3.5. Test design** (only with `test-cases: upfront`; with `inline` and `none` the step is skipped entirely). The plan's scenarios are
@@ -405,8 +406,8 @@ and `*automator-result*.md` (the executors are obliged to write them), **the ana
 carry it into `7-retro.md` from your own context; the analyst most often complains about the plan and the profile rather than the
 environment) plus your own view: where you got bogged down, what you violated, what information was missing, what the manager planned badly.
 **Then the numbers, which nobody's memory holds**: `python3 "<plugin root>/skills/qa/scripts/transcripts.py" <folder>` (plus `--root` where the adapter's «Transcripts» names one; exit 1 → the line «no transcript numbers in this harness») — per
-manager and executor transcript: time, context peak, tool errors, refusals, retries after a failure, compactions. Its table goes into
-`7-retro.md` as printed (the harness may delete transcripts — Claude Code after 30 days). **Every note it prints is answered**: either it becomes a row
+manager and executor transcript: time, context peak, processed context and what filled it, tool errors, refusals, retries after a
+failure, compactions. Its tables go into `7-retro.md` as printed (the harness may delete transcripts — Claude Code after 30 days). **Every note it prints is answered**: either it becomes a row
 of the observation table with an address, or it gets one line under «Numbers» saying why it is normal («navigate ×6 — waiting for the
 deploy, per the brief»); a note passed over in silence leaves the numbers on the page and no lesson drawn from them.
 Precedent: over one week of sessions it showed managers at 400–750k tokens and one compacted mid-session — invisible from inside.
@@ -610,6 +611,7 @@ do what the right-hand cell says.
 | «The classifier refused the mutation — I'll phrase it differently» | a refused MUTATION is never reworded: the user's permission, then one repeat in your own session, paired with a control (`references/manual-brief.md`, «Your own harness refuses a call») |
 | «The automation dialog carries the counts — the status list can wait for 6.5» / «the list is printed — the dialog can follow in the same turn» / «no findings, the report can wait for the automation answer» | the status list goes to the chat before the automation question, in a turn no dialog covers — the question as plain text at its end, or the dialog next turn; verdict rows and analyst questions go into the report at acceptance (step 5, `references/automation.md`) |
 | «The template will do for the report» | the project's format from the profile outranks it, read before the first line (step 6) |
+| «The reviewer misread the catalogue — its index line says otherwise» | a catalogue reviewer's return is rejected only after reading the BODY of the entry it cites: the index line states the rule in one sentence, the body holds the case it was written for; a rejection resting on the index alone judges a case you have not read (step 3) |
 | «The user is wrong — my report says otherwise» | an objection about a fact is re-checked by your own direct observation, never by re-reading the report (step 9) |
 | «It's only a preflight — I'll ask and they'll answer soon» / «the entry is alive and the brief is ready — I'll launch it myself» | in a preflight run no question waits and nothing is launched: both go into the card (`references/preflight-run.md`) |
 | «It is about the process, so it goes into the engine» | a process rule that needs the product's nouns is a domain rule — the noun test first, then the profile's «Domain rules» (step 7) |

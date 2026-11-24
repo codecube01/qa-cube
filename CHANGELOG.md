@@ -11,6 +11,133 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.19.105] — 2026-11-24
+
+### Added
+
+- **One shape for every issue file — `templates/issue.md`** (`report.md`, «When the customer files the finding by hand»): it outranks
+  the profile and the tracker's habits; the files live in `bug-reports/`, their `📎` markers resolve against the session's `screenshots/`.
+
+- **An earlier round's automation recommendation is re-derived before it is quoted** (`automation.md`, «The decision», a
+  rider of its own): its insertion point and price were sized for that round's shape — read the host for every path and recount the requests.
+
+- **The shared client action every UI scenario passes through is exercised once through the real UI before the batteries**
+  (`manual-brief.md`, «A check able to REFUTE the round's central hypothesis»): a sibling change can break that action itself, and the
+  served code read at recon is only a lower bound.
+
+- **One executor verdict row stays one report row** (`report.md`, transcribing verdicts): merged rows inherit each other's verdicts and
+  drop rows silently.
+
+- **A preflight told to produce one thing stops at it** (`preflight-run.md`, «Where it stops»): an input like «only prepare the
+  bug texts» ends the run once they are written — the session is closed and the card offers no executor and no retest.
+
+- **A seeding test is read for what it does to the environment, not only for what it needs** (`manual-brief.md`, the seeding-route
+  entry): the shared settings it switches for its run and restores at the end, and whether it is disabled at all — before the brief
+  plans windows or names it as a fallback.
+
+- **What the reverse leaves behind is planned before the probe** (`manual-brief.md`, reversibility questions): a switched-off process
+  gets its residue and drain named; a probe parked on an unproven cleanup runs conditionally, never «not covered».
+
+- **A retest of a bug without acceptance criteria is planned by the smallest set** (`planning.md`, the bug-task entry): the task's
+  own steps, one probe per path and binding field with its own «does not exist» reference, one neighbour per axis — about six to
+  eight scenarios; the full grid only after a row fails.
+
+- **A path through an adjacent system is searched in that system's own records before a carrier is made there** (`planning.md`,
+  «The tracker is searched at step 1»): its tracker and QA sessions by the path's mechanism — a documented limitation closes the path
+  by citation, with no sign-up or submission spent.
+
+- **Several irreversible steps the manager presses go over as one package** (`manual-brief.md`, «Who presses»): ordered commands, each
+  with its own gate and a latch against a second run — one read, one run, no relay per step.
+
+- **A seam between two systems is crossed by the sender itself at preflight** (`planning.md`, recon entry): one «send test» from the
+  sending system's own worker to the real receiver address before the return path is sliced — a call from the tester's shell proves the
+  receiver's logic, not the seam, since the shell sits on the environment's allow-list and the worker may not.
+
+- **`transcripts.py` shows what a session paid and what filled the context** (step 7, «Numbers»): a «processed» column (the sum
+  of the context over calls) and a table splitting it into start, engine, profile+KB, this session, other sessions, model output
+  and product work — measured by the context's growth between calls, not by characters.
+
+- **«No such control» needs a listing of the block's interactive elements** (`browser-techniques.md`, «Component-library
+  interaction»): icon-only buttons and `menuitemradio` options escape a search by text or by the usual roles.
+
+- **A prepared press opens its own dialog** (`browser/playwriter.md`, «Another actor's tab»): a function the manager calls for the
+  executor opens, fills and checks the dialog inside the call — a modal left open in a background tab can close by itself.
+
+- **A round on one layer dates every layer its state comes from** (`planning.md`, «Dating the build», the fresh-deploy entry): a backend
+  redeploy wipes the fixtures a screen renders, so the plan reads the other layer's live registry before naming one.
+
+- **A method filter misses a read that writes** (`browser-techniques.md`, «Intercepting…», the block-every-write rider): a zero-mutation
+  round names the application's writing GETs and third-party beacons, and proves «nothing went out» by the route handler's own journal.
+
+- **The reference of a scope assert comes from another role's channel** (`automation.md`, «The brief»): a role's own listing is widened by
+  the same regression as the result under test, so the brief names an unfiltered administrator read instead.
+
+- **Files a round produces are written by Write/Edit at absolute paths** (`shell-pitfalls.md`): no shell redirect, no `cd $VAR`, no
+  zsh expansion flags — the harness's permission check cannot resolve them and stops the round on a manual approval.
+
+- **Cookies of a browser session for shell-side calls** (`browser/playwriter.md`, «Known failures»): `context.cookies()` fails in
+  extension mode — read them per page through `getCDPSession({page})` + `Network.getCookies`, into a file, never printed.
+
+- **A long shell command in Claude Code** (`shell-pitfalls.md`, «A wait is a bounded poll»; `harness/claude-code.md`; `browser/playwriter.md`): a foreground
+  call past ~3 minutes is backgrounded whatever its `timeout`, so a long test run starts in the background and is waited on by
+  foreground polls of ~160 s — `qa-manual` and `qa-automator` no longer wait «synchronously with a generous timeout».
+
+- **A folder another manager is running right now stops the session before its first write** (`session-folder.md`, «Continuing
+  a session»; `preflight-run.md`): fresh files or a live transcript that wrote into it → no rename, no file, no sign-in; a preflight
+  run's card says `BLOCKED: run by <session>`.
+
+- **A catalogue reviewer's return is rejected only after reading the cited entry's body** (`SKILL.md`, step 3 and «Red flags»): the index line
+  states the rule, the body the case it was written for, and a rejection resting on the line alone judges a case nobody read.
+
+- **The executor's verdict table gets a «what stands against it» column** (`templates/2-manual-task.md`, «Deliverable»): findings,
+  new or filed, and halves of the item never measured; any entry there means the verdict is not `pass`.
+
+- **A role guard is proven only by a refusal on the caller's own object, and that probe runs on the round's expendable object**
+  (`planning.md`, «The order of the server-side checks», a rider of the proven-guard entry): a refusal on a non-existent or foreign
+  target proves the ownership check; a shared fixture never carries the role probe.
+
+- **A brief step that differs from the plan is corrected in the plan or marked «departs from the plan because …»**
+  (`manual-brief.md`, «What goes into the brief»).
+
+- **Values, fixtures and pauses in the brief** (`manual-brief.md`; `templates/2-manual-task.md`, «Sanctioned probe»): a full value the
+  round writes to is copied from its source read, never retyped; a STOP fixture condition is settled at preflight; a step resumed on a
+  recorded user action is continued by a watcher; the acting identity is stated once, in the scenario's row.
+
+- **Playwriter routes, actions and versions** (`browser/playwriter.md`): no route across a `goto`/reload; an action on an unsure control
+  carries its own short timeout; the session id taken by pattern, never `tail`, in both output forms (0.11.0: `Session <N> created`); an outdated-CLI notice is a brief decision, and a CLI
+  matching the running relay restarts nothing; guards re-armed after a re-bind.
+
+- **A slow channel told from a broken tool** (`browser-techniques.md`, «The page-scripting sandbox»): the bundle timed from the shell
+  against a public file; a stalled load freed by `window.stop()`, mutations first.
+
+- **API helpers** (`api-techniques.md`): GraphQL variable types printed from the type-ref with their wrappers; a session store never
+  written back after an error answer; the open tab parked before a dense shell series; a «new bundle» path that downloads is no deploy.
+
+- **Shell pitfalls** (`shell-pitfalls.md`): separator lines quoted; no helper named after a standard-library module; timezone-aware
+  waits; a poll that ends when the value leaves its pending set, never on a list of expected outcomes; a dump whose keys you did not
+  write printed through a whitelist of fields, never a mask.
+
+- **Planning order and earlier evidence** (`planning.md`): a write whose undo needs the same session goes early; a session-revoking
+  scenario goes last; a check marked uncovered is looked for in earlier rounds' results before it is re-run.
+
+- **Every screen the requirements name is looked up in the served route map before the brief** (`planning.md`, the recon entry): an
+  absent one is dated against older builds and goes to the analyst, instead of the executor being sent to find it.
+
+### Changed
+
+- **Size budgets +10%** for `manual-brief.md`, `report.md`, `browser-techniques.md`, `automation.md` and `browser/playwriter.md`
+  (`check_engine_edits.py`): the rules and precedents squeezed out to fit are back.
+
+- **The liveness probe navigates to the application's own entry page and waits for it to load** (`manual-brief.md`, the
+  human-entry entry; the «Identity oracle» slot; step 1): a static resource of the host does not renew the session and reports a live
+  session as dead.
+
+- **A user click that needs nothing the executor prepares is asked for as soon as its event goes out** (`manual-brief.md`, the pause
+  entry), in parallel with the run, not in the end-of-turn series.
+
+- **A dry run asking which request a control sends blocks every write of the tab** (`browser-techniques.md`, the fail-closed
+  wrapper), sign-in endpoints included — not only the expected operation.
+
 ## [0.19.78] — 2026-11-17
 
 ### Added

@@ -83,12 +83,13 @@ def rename_shot(folder: Path, candidate: str, finding: str) -> tuple[int, list[s
     out = [f"screenshots/{old.name} → screenshots/{new.name}"]
     # a period that ends the sentence still ends the marker; one followed by a word character continues the name
     marker = re.compile(r"(📎\s*`?)" + re.escape(old.name) + r"(?![\w-]|\.\w)")
-    for md in sorted(folder.glob("*.md")):
+    # issue files sit one level down, in bug-reports/, and attach the session's own screenshots
+    for md in sorted([*folder.glob("*.md"), *folder.glob("bug-reports/*.md")]):
         text = md.read_text(encoding="utf-8")
         fixed, n = marker.subn(lambda x: x.group(1) + new.name, text)
         if n:
             md.write_text(fixed, encoding="utf-8")
-            out.append(f"{md.name}: {n} marker(s) rewritten")
+            out.append(f"{md.relative_to(folder)}: {n} marker(s) rewritten")
     out.append(f"the finding's Tech. part ends with: 📎 {new.name}")
     return 0, out
 

@@ -245,6 +245,15 @@ def image_info(path: Path) -> tuple[str, int] | None:
     return None
 
 
+ISSUE_FOLDER = "bug-reports"
+
+
+def session_folder(path: Path) -> Path:
+    """The folder whose `screenshots/` a file's markers resolve against: issue files live one level down,
+    in `bug-reports/`, and attach the session's own screenshots rather than copies of them."""
+    return path.parent.parent if path.parent.name == ISSUE_FOLDER else path.parent
+
+
 def scan_screenshots(lines: list[str], folder: Path) -> list[tuple[int, str]]:
     out: list[tuple[int, str]] = []
     for n, line in enumerate(lines, 1):
@@ -418,7 +427,7 @@ def check_file(path: Path, max_cell: int, min_sections: int) -> list[str]:
     # not depend on the session's language.
     sections_needed = min_sections if "result" in path.stem.lower() else 0
     problems = (scan_secrets(lines) + scan_tables(lines, max_cell) + scan_structure(lines, sections_needed)
-                + scan_screenshots(lines, path.parent) + scan_scenarios(lines, path))
+                + scan_screenshots(lines, session_folder(path)) + scan_scenarios(lines, path))
     return [f"{path}:{n}: {message}" for n, message in sorted(problems)]
 
 

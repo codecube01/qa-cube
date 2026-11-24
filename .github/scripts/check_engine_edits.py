@@ -59,14 +59,14 @@ BROWSER_QUESTIONS = ("## Install", "## Preflight", "## Connect and pick the tab"
 # validate-plugin.py.
 BUDGETS = {
     "skills/qa/references/planning.md": 236_500,  # its index carries the rules (~21k) since 0.18.19; +10% at 0.19.42 (215k full)
-    "skills/qa/references/manual-brief.md": 154_000,  # its index carries the rules since 0.18.23
-    "skills/qa/references/report.md": 95_000,  # its index carries the rules since 0.18.23
-    "skills/qa/references/browser-techniques.md": 39_600,  # lowered after the tool-specific entries left for browser/ (33.3k); +10% at 0.19.42
+    "skills/qa/references/manual-brief.md": 169_400,  # its index carries the rules since 0.18.23; +10% at 0.19.105 (154k full)
+    "skills/qa/references/report.md": 104_500,  # its index carries the rules since 0.18.23; +10% at 0.19.105 (95k full)
+    "skills/qa/references/browser-techniques.md": 43_560,  # lowered after the tool-specific entries left for browser/ (33.3k); +10% at 0.19.42 and 0.19.105
     # the default budget, full at 0.19.42 — +10% each
-    "skills/qa/references/automation.md": 16_500,
+    "skills/qa/references/automation.md": 18_150,  # +10% more at 0.19.105 (16.5k full)
     "skills/qa/references/session-folder.md": 16_500,
     "skills/qa/references/executor.md": 16_500,
-    "skills/qa/references/browser/playwriter.md": 16_500,
+    "skills/qa/references/browser/playwriter.md": 18_150,  # +10% more at 0.19.105 (16.5k full)
     "agents/qa-manual.md": 25_000,  # lowered after the 0.18.25 audit (22.7k), so the room does not come back
 }
 DEFAULT_BUDGET = 15_000

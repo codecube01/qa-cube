@@ -19,6 +19,7 @@ a way the folder has already been broken once, and the precedent that closes it 
 
 **Continuing a session: round 2+**
 
+- before the first write: is another manager running this folder right now — then stop, writing nothing
 - date the round's trigger before anything else
 - the previous findings' triage is read in every thread they were posted into, not only the task's own
 - «posted» is checked in the thread itself: a previous comment that never reached the tracker carries its questions forward in full
@@ -60,6 +61,19 @@ profile and the knowledge base — including the profile's own pointer to the sa
 moved, and a pointer to a session never migrated at all; the prefix rewrite fixed neither, and the grep came back clean.
 
 ## Continuing a session: round 2+
+
+### Before the first write: is another manager running this folder right now
+
+A folder found at step 2 may be mid-round under another manager: one started by hand that a watcher missed, or two launches
+for one task. The signs: files of the folder changed within the last half hour while its status is `in progress`, and, strongest, a
+harness transcript (the adapter's «Transcripts») active minutes ago that wrote into this folder or launched an executor with its
+path. Either one → stop before the first move: no rename, no new file, no line in `0-session.md`, the registries or `environment-state.md`, no sign-in —
+a login «just to check» can sign the running round out through a shared cookie store or rate limit. Say which session runs the
+folder and since when (a preflight run, in its card: `preflight-run.md`); new input for that round goes to its manager. Old files
+and no live transcript mean an abandoned round, finished by this one (below, «checked for being FINISHED»); a `preflight-done`
+folder whose transcript ended on the card is parked, and is continued (`preflight-run.md`, «The continuation»). Precedent: a watcher
+launched a preflight on a round another manager had briefed minutes before and was signing its identities into; the preflight
+stopped with nothing written — its own access check would have overwritten the sessions the running round had just opened.
 
 ### Date the round's trigger before anything else
 

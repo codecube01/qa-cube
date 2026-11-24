@@ -16,8 +16,8 @@ its endpoints, its wrappers, its own auth flow — stays in the profile. Every r
 
 ## Contents
 
-- requests and answers — the replay, the status and raw text, an error body printed whole, a redirect chain hop by hop, a write-then-read helper that checks the read's own status, a rate-limited series run outside the page
-- does it exist — the SPA catch-all and the responder that answers every key alike
+- requests and answers — the replay, the status and raw text, an error body printed whole, a redirect chain hop by hop, a write-then-read helper that checks the read's own status, a rate-limited series run outside the page and the tab parked before it, a session store never written back from an error answer
+- does it exist — the SPA catch-all and the responder that answers every key alike, a «new bundle» path that is the fallback page
 - GraphQL (only where the product's API is GraphQL) — the schema, replaying an operation, the error object and a null `data`, the client's cache, what arrived and what is missing
 
 ## Requests and answers
@@ -27,6 +27,9 @@ its endpoints, its wrappers, its own auth flow — stays in the profile. Every r
 - **A «write, then read back» helper checks the READ's own status before comparing values** — a throttled (`429`), expired or failed read that returns no object must come out as «read failed», never as a field equal to `null`. Otherwise a rate limit reads as «the write erased the field», and the finding is filed against the write path. Precedent: a validation sweep paired every write with a read; one read hit the environment's rate limit, the helper mapped the missing profile to `null`, and «a four-character address wipes the field» stood in the result until the journal showed the write had landed. Pace a sweep below the environment's limit and retry the read on `429`.
 
   *And where a series may hit the limit, it runs outside the page* wherever the browser tool has an outside (Playwriter's Node side, the credential from its state): a `429` may reload the page and kill an in-page loop with its count. Precedent: a series broke twice in the page and ran clean from Node.
+
+  *And a series from the shell shares the limit with the tab still open on the application* — the tab that gets the `429` may not retry and stays stale for the rest of the round, so before a dense series that tab is parked on a static file of the origin (`browser-techniques.md`, «A session is observed without the application»).
+- **A helper over a stored session never writes the store back after an error answer.** A `401` carries the server's cookie deletions, and saving the jar after it throws away the refresh credential the next call would have renewed the session with — write back only after a success. Precedent: one expired session, saved back after its `401`, became one spent one-time login.
 - **Trim a response's output only when it succeeded; an error response from `curl`/Python is printed whole** (in a page, the same
   rule as «Read the status and the raw text first» above). A «keep the interesting keys» filter turned a `400` into `{}`, which read as
   «the contract promises an error schema and sends an empty body» — the formatter nearly became the source of a finding.
@@ -38,6 +41,8 @@ its endpoints, its wrappers, its own auth flow — stays in the profile. Every r
 
 - **An SPA catch-all answers `200` with the index document on any path** — `/health`, `/openapi.json`, `/docs` and a certainly non-existent path alike. «The endpoint exists» needs a body that differs from the non-existent path's one, compared byte for byte; and a documented path may carry an API prefix the probe forgot. The same control unmasks any responder that answers every key alike — a fallback handler returning zeros for every method looks like «the method exists, its value is 0» until a certainly non-existent key gets the same answer.
 
+  *And the same fallback fakes a deploy*: a hashed bundle path reported or guessed as new downloads with `200` — the index page. A build's fingerprint is the script the served index page names (`browser-techniques.md`, «A blank white page»), never a fetched asset path. Precedent: an executor reported a redeploy from a hashed path the server had answered with its fallback page.
+
 ## GraphQL
 
 Named in the brief only where the product's API is GraphQL; a product without it never reads this section.
@@ -45,7 +50,7 @@ Named in the brief only where the product's API is GraphQL; a product without it
 ### The schema
 
 - **The schema is read before the first real query, never guessed.** Start with `{__schema{queryType{fields{name args{name}}}}}` (and `mutationType`), then `__type(name: "X")` for each type you touch. Every guessed field is a lost round, and «obvious» ones are the usual casualties — a list that needs a parent id, a wrapper whose array is not called `items`.
-- **Read the `kind` of every field and argument.** An object or list field without a selection fails with «must have selections»; a `NON_NULL` argument needs `!` in the variable declaration. Take the RESPONSE type of a mutation too, not only its arguments — wrappers are inconsistent even between paired operations (one returns `{entity {…}}`, its sibling the entity itself).
+- **Read the `kind` of every field and argument.** An object or list field without a selection fails with «must have selections»; a `NON_NULL` argument needs `!` in the variable declaration — and that declaration is generated, not typed: print each variable's type from the introspected type-ref with its `!`/`[]` wrappers, since a helper that unwraps to the bare name, or a type name built from the operation's name, fails validation (three executors lost a call each to it). Take the RESPONSE type of a mutation too, not only its arguments — wrappers are inconsistent even between paired operations (one returns `{entity {…}}`, its sibling the entity itself).
 - **A nested type's name needs four to five levels of `ofType`** — `NON_NULL(LIST(NON_NULL(OBJECT)))` returns `name: null` after three, and `__type` on a guessed name returns `null`. Unwrap `ofType{kind name ofType{…}}` deep enough, or list `__schema{types{name fields{name}}}`.
 - **Introspect in small queries** — the root type's fields first, then the fields or input fields of one type; a full dump is truncated by the output limit.
 - **A contract read from the client's embedded query text has names without types** — `manual-brief.md`, «A contract read out of the CLIENT's own query documents».
