@@ -11,6 +11,8 @@ section gathers everything since the previous one.
 
 ## [Unreleased]
 
+## [0.19.105] — 2026-11-24
+
 ### Added
 
 - **One shape for every issue file — `templates/issue.md`** (`report.md`, «When the customer files the finding by hand»): it outranks
