@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """What the session's transcripts say happened — the retro's numbers, not anybody's memory of them.
 
-    transcripts.py <session folder>                 # one row per manager and executor transcript, then the notes
+    transcripts.py <session folder>                 # one row per manager and executor transcript, where each one's context went, then the notes
     transcripts.py <session folder> --root <dir>    # transcripts kept somewhere other than ~/.claude/projects
 
 The retro is written from the manager's memory and the executors' own retro sections, and both are summaries
@@ -14,6 +14,12 @@ A transcript belongs to the session when it names the folder's slug — the name
 continued session renames the folder to the current date: an executor by its prompt, a manager by a write into
 the folder or a launch that names it (reading the folder is not enough — a later session may only consult it).
 A manager is counted from its first such line, its time is the sum of its turns (the user's pauses excluded).
+
+The cost of a transcript is its processed context — every call re-sends the whole context, so the sum over calls,
+not the peak, is what a session pays (and why a long tail at a large context costs more than the plan did). Where it
+went is measured, not guessed from characters: between two calls the context grows by the first call's output (its
+usage) plus what came back, and that growth is split among the items that came back by their characters, within that
+gap only. A drop (compaction, thinking stripped at a new user turn) removes thinking first, then scales the rest.
 
 Exit code 0 when transcripts were found, 1 when none were, 2 on a usage error.
 """
@@ -35,6 +41,24 @@ LAUNCHES = {"Agent", "Task"}                            # by `prompt`
 REPEAT_AT = 3   # the same call answered the same way this many times is worth a look
 IDLE_MS = 15 * 60 * 1000   # a gap longer than this is a pause (resumed later), not work
 SHOWN = 3       # notes per kind per transcript
+IMAGE_CHARS = 9000   # an image in a tool result weighs about as much as this much text
+
+# Where the context went: the columns of the second table, in order.
+START, ENGINE, PROFILE, OWN, OTHER_SESSIONS, OUTPUT, WORK = (
+    "start", "engine", "profile+KB", "this session", "other sessions", "model output", "product & other")
+PARTS = (START, ENGINE, PROFILE, OWN, OTHER_SESSIONS, OUTPUT, WORK)
+_ENGINE = re.compile(r"qa-cube|/skills/qa/|/agents/qa-")
+_FEEDBACK = re.compile(r"qa-cube-feedback\.md")   # the project's file, though its name says qa-cube
+_PROFILE = re.compile(r"\.claude/qa-profile|(^|[\s'\"/=])knowledge[\w-]*(/|$|[\s'\"])", re.I)   # the profile, the KB as a directory
+
+
+def mentions_dir(aim: str, d: Path) -> bool:
+    """`aim` names a path inside `d` — in full, or relative through `d`'s own name as a whole path component.
+    A URL never counts: an API's `/sessions/` is not the sessions folder."""
+    if str(d) in aim:
+        return True
+    return any("://" not in tok and (tok.startswith(f"{d.name}/") or f"/{d.name}/" in tok)
+               for tok in re.split(r"[\s'\"=]+", aim))
 
 
 def slug_of(folder: Path) -> str:
@@ -71,6 +95,8 @@ class Stats:
     pauses: list[int] = field(default_factory=list)
     compactions: list[int] = field(default_factory=list)
     models: Counter = field(default_factory=Counter)
+    processed: int = 0
+    parts: Counter = field(default_factory=Counter)   # PARTS → tokens summed over calls
 
 
 def lines(path: Path):
@@ -114,17 +140,118 @@ def names_folder(entry: dict, slug: str) -> bool:
     return False
 
 
-def read(path: Path, who: str, slug: str | None = None) -> Stats | None:
-    """Stats of one transcript; with `slug`, a manager's, counted from its first line that works on the folder."""
+def target(block: dict, folder: Path | None) -> str:
+    """Which column of «where the context went» a tool's result belongs to, by what the call was aimed at."""
+    inp = block.get("input") if isinstance(block.get("input"), dict) else {}
+    aim = " ".join(str(inp.get(k, "")) for k in ("file_path", "command", "path", "pattern", "skill"))
+    if _FEEDBACK.search(aim):
+        return PROFILE
+    if block.get("name") == "Skill" or _ENGINE.search(aim):
+        return ENGINE
+    if _PROFILE.search(aim):
+        return PROFILE
+    if folder is not None and slug_of(folder) in aim:
+        return OWN
+    if folder is not None and mentions_dir(aim, folder.parent):
+        return OTHER_SESSIONS
+    return WORK
+
+
+def size(block: dict) -> int:
+    content = block.get("content")
+    if isinstance(content, str):
+        return len(content)
+    if isinstance(content, list):
+        return sum(len(str(b.get("text", ""))) + (IMAGE_CHARS if b.get("type") == "image" else 0)
+                   for b in content if isinstance(b, dict))
+    return 0
+
+
+class Ledger:
+    """What the context of the next call is made of, kept call by call (the module docstring says how)."""
+
+    def __init__(self):
+        self.base: int | None = None
+        self.held = Counter()
+        self.thinking = 0.0
+        self.incoming = Counter()   # what came back since the last call, in characters
+
+    def call(self, context: int) -> Counter:
+        """The composition of this call's context, in tokens."""
+        if self.base is None:
+            self.base = context
+        else:
+            gap = context - self.base - sum(self.held.values()) - self.thinking
+            if gap < 0:
+                cut = min(self.thinking, -gap)
+                self.thinking -= cut
+                rest = -gap - cut
+                total = sum(self.held.values())
+                if rest and total:
+                    keep = max(0.0, 1 - rest / total)
+                    for k in self.held:
+                        self.held[k] *= keep
+                if rest > total:   # below the first call's size: what is left of the start shrinks too
+                    self.base = max(0, self.base - (rest - total))
+            elif gap:
+                came = sum(self.incoming.values())
+                for k, v in (self.incoming.items() if came else [(WORK, 1)]):
+                    self.held[k] += gap * v / (came or 1)
+        self.incoming = Counter()
+        now = Counter(self.held)
+        now[START] += self.base
+        now[OUTPUT] += self.thinking
+        return now
+
+    def output(self, usage: dict) -> None:
+        """A call's output stays in the context: its thinking (dropped first when the context shrinks) and the rest."""
+        out = int(usage.get("output_tokens") or 0)
+        think = min(out, int((usage.get("output_tokens_details") or {}).get("thinking_tokens") or 0))
+        self.thinking += think
+        self.held[OUTPUT] += out - think
+
+
+def read(path: Path, who: str, slug: str | None = None, folder: Path | None = None) -> Stats | None:
+    """Stats of one transcript; with `slug`, a manager's, counted from its first line that works on the folder.
+    `folder` sorts what the transcript read into this session's files, other sessions' and the rest."""
     s = Stats(who, path)
     started = slug is None
     usage: dict[str, dict] = {}
     model: dict[str, str] = {}
     pending: dict[str, str] = {}   # tool_use id → its call
+    aimed: dict[str, str] = {}     # tool_use id → the column its result goes to
     failed: set[str] = set()
+    ledger = Ledger()
+    every: dict[str, dict] = {}   # every call's usage, before the start too: the ledger needs the whole history
+    last_id = ""
     for entry in lines(path):
+        kind = entry.get("type")
+        msg = entry.get("message") or {}
+        if kind == "assistant" and msg.get("id") and msg.get("usage"):
+            if msg["id"] not in every:   # a new call: the previous one's output is in, its growth is measurable now
+                if last_id:
+                    ledger.output(every[last_id])
+                context = sum(int(msg["usage"].get(k) or 0) for k in
+                              ("input_tokens", "cache_creation_input_tokens", "cache_read_input_tokens"))
+                now = ledger.call(context)
+                if started or names_folder(entry, slug):
+                    s.parts.update(now)
+                    s.processed += context
+                last_id = msg["id"]
+            every[msg["id"]] = msg["usage"]
+            for b in blocks(entry):
+                if b.get("type") == "tool_use":
+                    aimed.setdefault(b.get("id"), target(b, folder))
+        elif kind == "user" and last_id:
+            content = msg.get("content")
+            texts = [content] if isinstance(content, str) else [b.get("text", "") for b in blocks(entry) if b.get("type") == "text"]
+            for t in texts:
+                ledger.incoming[ENGINE if "qa-cube" in t and "Base directory for this skill" in t else WORK] += len(t)
+            for b in blocks(entry):
+                if b.get("type") == "tool_result":
+                    ledger.incoming[aimed.get(b.get("tool_use_id"), WORK)] += size(b)
         if not started:
-            if entry.get("type") != "assistant" or not names_folder(entry, slug):
+            if kind != "assistant" or not names_folder(entry, slug):
                 continue
             started = True
         ts = entry.get("timestamp")
@@ -204,12 +331,12 @@ def collect(root: Path, folder: Path) -> list[Stats]:
     found: list[Stats] = []
     dirs = set(project_dirs(root, folder))
     for t in sorted({*root.glob("*/subagents/*.jsonl"), *root.glob("*/*/subagents/*.jsonl")}):
-        if slug in first_prompt(t) and (s := read(t, executor_label(t))) is not None:
+        if slug in first_prompt(t) and (s := read(t, executor_label(t), folder=folder)) is not None:
             found.append(s)
             dirs.add(t.parent.parent if t.parent.parent.parent == root else t.parent.parent.parent)
     for d in sorted(dirs):
         for t in sorted(d.glob("*.jsonl")):
-            if (s := read(t, f"manager {t.stem[:8]}", slug)) is not None:
+            if (s := read(t, f"manager {t.stem[:8]}", slug, folder)) is not None:
                 found.append(s)
     return sorted(found, key=lambda s: s.first)
 
@@ -231,17 +358,31 @@ def short(key: str, width: int = 90) -> str:
     return key if len(key) <= width else key[: width - 1] + "…"
 
 
+def where_it_went(found: list[Stats]) -> list[str]:
+    """The second table: each transcript's processed context split by what put it there, in percent."""
+    def row(label: str, parts: Counter) -> str:
+        total = sum(parts.values()) or 1
+        return f"| {label} | " + " | ".join(f"{100 * parts[p] / total:.0f}%" for p in PARTS) + " |"
+    head = ["Where the context went (share of each transcript's processed context; «start» is its first call: system prompt, "
+            "tools, agent file, launch prompt):", "",
+            "| # | " + " | ".join(PARTS) + " |", "|---|" + "---|" * len(PARTS)]
+    rows = [row(f"{i}", s.parts) for i, s in enumerate(found, 1) if s.processed]
+    total = sum((s.parts for s in found), Counter())
+    return head + rows + ([row("all", total)] if len(rows) > 1 else [])
+
+
 def render(found: list[Stats], folder: Path) -> list[str]:
     out = [f"Transcripts of {folder.name}: {sum(s.who.startswith('manager') for s in found)} manager, "
            f"{sum(not s.who.startswith('manager') for s in found)} subagent",
            "",
-           "| # | who | model | started | time | context peak | output | tool calls | errors | refused | compacted |",
-           "|---|---|---|---|---|---|---|---|---|---|---|"]
+           "| # | who | model | started | time | context peak | processed | output | tool calls | errors | refused | compacted |",
+           "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for i, s in enumerate(found, 1):
         comp = ", ".join(f"at {k(p)}" for p in s.compactions) or "—"
         top = s.models.most_common(1)[0][0].removeprefix("claude-") if s.models else "?"
-        out.append(f"| {i} | {s.who} | {top} | {when(s.first)} | {minutes(s.active_ms)} | {k(s.peak)} | {k(s.output)} | "
+        out.append(f"| {i} | {s.who} | {top} | {when(s.first)} | {minutes(s.active_ms)} | {k(s.peak)} | {k(s.processed)} | {k(s.output)} | "
                    f"{sum(s.tools.values())} | {s.errors} | {sum(s.denied.values())} | {comp} |")
+    out += ["", *where_it_went(found)]
     notes = []
     for i, s in enumerate(found, 1):
         if s.denied:

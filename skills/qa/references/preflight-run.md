@@ -18,6 +18,12 @@ touches the environment, stops, and leaves a card the user can decide on from it
   The cases it writes stay in the TMS whatever the user decides — the card says so in its «Plan» line.
 - **Not done at all**: the report (`99-report.md`), the delivery of step 6.5, the retro, and any write to the tracker — no comment, no
   status, no assignee. The team must not see a round that the user has not yet decided to run.
+- **The input names a deliverable narrower than a round** («only prepare the bug texts», «only the list of cases») → the run stops at
+  that deliverable, not at the executor: produce it, close the session (`done`, not `preflight-done`; the registry's verdict cell names the deliverable), and the card carries no
+  launch — no «continue», no retest offered, no `❗` about what a round would need; a fact the deliverable rests on (it was measured on
+  an older build) goes into the deliverable itself. Precedent: asked only to turn an analyst's verdicts into bug texts, a run wrote them,
+  then left the session open and closed its card by offering an executor to re-check the bugs on the new build; the user had to repeat
+  that the task was only the texts.
 
 ## Nobody answers
 

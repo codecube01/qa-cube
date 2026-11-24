@@ -29,7 +29,7 @@ one session each reported it.
 ## Connect and pick the tab
 
 A session per actor: `playwriter session new --tab-group qa-<task> [--browser <key>]` prints its id, then tips — take it by
-`grep -oE '^[0-9]+'` over the whole output, never `tail` (a tip line taken for it once cost a second session); every later call is
+`grep -oE '^(Session )?[0-9]+' | grep -oE '[0-9]+'` (0.11.0: `Session <N> created`), never `tail` (a tip line taken for it once cost a second session); every later call is
 `playwriter -s <id> -e '<code>'`. **One group per task, not per actor**: `<task>` is the tracker id in lower case (`qa-acme-412`), or
 the session folder's name without its date — one string for every actor and round, given in the brief.
 Sessions with one group name share one Chrome group (0.9.0) and keep their own `state`: actors stay apart by session id and the

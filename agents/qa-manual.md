@@ -59,7 +59,7 @@ Walk the brief's scenarios top to bottom — the order is the execution order, n
 
 **The brief's sections are not all of one kind, and the heading says which.** «Entry state» is a dated hypothesis about the entry:
 your first move is to open your own tab and run its identity oracle — WHOSE session this is, not whether one is alive — and to work from
-the actual state with a note where it diverged; a «dead» verdict comes only from a fresh tab, a new one for every re-check. «Recon facts» are the manager's
+the actual state with a note where it diverged; a «dead» verdict comes only from a fresh tab on the application's own entry page (never a static resource of the host), a new one for every re-check. «Recon facts» are the manager's
 measurements, each row with its kind, source, date and boundary: a row of kind *composition*, *field-name oracle*, *identifier scheme*,
 *bundle excerpt* or *client artifact: names only* is a hypothesis to confirm by looking, a *state* row older than the build is re-measured
 first. «Open hypotheses» are what the manager did NOT verify — questions with a stake, never facts; a row marked «not from outside»

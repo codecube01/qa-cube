@@ -7,7 +7,7 @@ project's tooling stays in its profile.
 ## Contents
 
 - reading and output — markdown by the Read tool, a quoted separator line, a wide search by `python3` + `re`
-- time and processes — no `timeout`, a stop by PID, a background task judged by its artifact, a wait as a bounded foreground poll (an exact second, an absolute moment, the harness's limit), the lid and the power source, a monitor buffered by its last stage
+- time and processes — no `timeout`, a stop by PID, a background task judged by its artifact, a wait as a bounded foreground poll (its end as leaving the pending set, an exact second, an absolute moment, the harness's limit), the lid and the power source, a monitor buffered by its last stage
 - helpers — a temp file unique to the call, no helper named after a standard-library module, path arguments resolved before `cd`
 - zsh — no word-splitting, words starting with `=`, unmatched globs, tied and read-only parameters, a colon after a variable
 - secrets and files — a secrets file or a foreign dump read by structure or a whitelist, a non-ASCII source written with a coding line, files written by Write/Edit at absolute paths, no secret on argv, a `\uXXXX` in a tool's JSON
@@ -33,7 +33,7 @@ project's tooling stays in its profile.
 - **A wait is a bounded poll in the FOREGROUND.** A foreground `sleep` is refused, and a background task's completion never reaches a
   subagent — so the wait is one call that checks the condition in a loop and returns when it holds, when its limit runs out, or on the first
   ERROR response: a Python script (`time.sleep` inside it) or, in a page, the `MessageChannel` loop from `browser-techniques.md`, kept under
-  the tool call's limit. A wait longer than one call is a chain of such polls on a command started in the background (the rider below);
+  the tool call's limit. A wait longer than one call is a chain of such polls on a command started in the background (the last rider);
   when the chain becomes a checkpoint is what your instruction says to do with a long process. The error
   exit is not optional — a poll that tests only its condition spins to the limit on a malformed request, since an unknown field errors on
   every iteration. Precedent: such a poll lost nine minutes of a time-boxed window. **A measurement due at an exact second is
@@ -42,6 +42,10 @@ project's tooling stays in its profile.
   (a Python one run as `python3 -u`, below — buffered, the file stays empty until it exits). A wait until an absolute moment compares
   timezone-aware datetimes (`datetime.now(timezone.utc)` against the parsed moment): a naive `now()` is local time, and the wait ends
   hours off or dies on `can't compare offset-naive and offset-aware datetimes`.
+  *And the condition is «the value left its PENDING set», never «the value reached one of the outcomes I expect»*: a list of expected
+  outcomes misses the one the product actually has, and the poll spins to its limit on an answer it already holds — inside a window that
+  holds a shared setting open. Precedent: a transfer window waited for accepted/rejected/retrying, the product answered «not sent», and
+  the integration stayed switched on for ninety extra seconds.
   *And the tool call's limit is the harness's, not the call's `timeout`*: past it — in Claude Code about three minutes — a foreground
   call is moved to the background whatever its `timeout` says, and its output is lost. So a command expected to run longer — a test
   run, a seed — starts in the background, is judged by its artifact, and each wait on it is a foreground poll well under the limit

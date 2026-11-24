@@ -196,6 +196,15 @@ class ScreenshotTest(unittest.TestCase):
         self.assertEqual(len(found), 1)
         self.assertIn("c3.png", found[0])
 
+    def test_an_issue_file_resolves_against_the_session_screenshots(self):
+        (self.dir / "bug-reports").mkdir()
+        issue = self.dir / "bug-reports" / "issue-ACME-12.md"
+        issue.write_text("**Environment:** stage, 📎 ACME-12.png\n", encoding="utf-8")
+        self.assertEqual(check_session.session_folder(issue), self.dir)
+        self.assertEqual(check_session.check_file(issue, 1000, 0), [])
+        issue.write_text("**Environment:** stage, 📎 ACME-13.png\n", encoding="utf-8")
+        self.assertTrue(check_session.check_file(issue, 1000, 0))
+
     def test_a_marker_in_backticks_is_resolved_too(self):
         self.assertEqual(self.shots("📎 `ACME-12.png`\n"), [])
         self.assertTrue(self.shots("📎 `ACME-13.png`\n"))

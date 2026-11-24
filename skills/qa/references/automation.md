@@ -12,7 +12,7 @@ that entry alone, by `grep -n` for its first words and a `Read` of ~25 lines fro
 
 **The decision**
 
-- the scenario needs dozens of operations or long waits to reach its conclusion → the price of a run is an input to the decision, computed from the manual result's own timings (operations × measured durations + every propagation lag), never from intuition; a noticeable price goes to the user BEFORE the automator is launched · the session's own input IS the automation question → the options wait for the plan, its review, the price and the lever window
+- the scenario needs dozens of operations or long waits to reach its conclusion → the price of a run is an input to the decision, computed from the manual result's own timings (operations × measured durations + every propagation lag), never from intuition; a noticeable price goes to the user BEFORE the automator is launched · the session's own input IS the automation question → the options wait for the plan, its review, the price and the lever window · an earlier round's insertion point and price → re-derived, never quoted
 - the test is NEW to its host class → the class's fixed cost (provisioning, per-test hooks, stabilising reads) is read off a recent run log of a neighbouring test and added — no manual timing contains it · the class's hooks change SHARED state and do not restore it → the brief's «Host class» slot, with the snapshot and the restore owed after each run, every runner seen first
 - the feature is the size of one query parameter (a filter, a flag) → its size is a ground of its own, beside the price: «is this feature worth a test at all» is asked before the automator edits the code, whatever the run costs
 - the automation question is put to the user → it comes before the delivery at 6.5, so the round's status list (step 6.5's format, one line per requirement) goes to the chat FIRST, in a turn the question dialog cannot cover (where the harness's dialog hides the text printed with it — the adapter's «Ask the user» — the question is plain text at the end of the list's message, or a dialog in the next turn), and the question carries three lines above the options: what the change is and whether it is merged, the verdict with its counts, what the test would assert; the round's verdict rows, findings and analyst questions are written into the report file at ACCEPTANCE, before the list goes out — a round with no finding id included
@@ -41,6 +41,9 @@ exactly the waits, and the choice is made at a price that does not exist. Preced
 *And where the session was opened with the automation question itself* («does this need a test?»), the answer still waits for the plan,
 its review, the price and the lever window of «The brief»: they decide whether the option can work at all. Precedent: a merge chosen at a lever
 read off a neighbouring session could not change the sign — the host's parties sat on different price lists.
+
+*And an earlier round's insertion point and price are re-derived, never quoted*: the host re-read per path, requests recounted.
+Precedent: a retest re-quoted the old «host X, both paths, +4 requests» — X never ran the second path; the delta: one.
 
 **A test NEW to its host class pays that class's fixed cost too** — its provisioning, its per-test hooks, its stabilising reads — which no
 manual timing contains: read it off a neighbouring test's recent run log and add it. Precedent: priced at ~3 min, a new test ran

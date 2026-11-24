@@ -19,7 +19,7 @@
 - Instance / profile id: <the id of the browser profile, instance or device — never its caption, never a tab id; «if the tool moves you
   elsewhere, select this id back»>
 - Tab group: <where the tool names groups (Playwriter's `--tab-group`): `qa-<task>`, the manager's own string for this task — one group for every actor and round, no role or round suffix (`browser/<tool>.md`, «Connect and pick the tab»); delete the line otherwise>
-- Identity oracle: <the call that answers who is logged in>; a «dead» verdict is believed only from a FRESH tab — new tab → navigate → the call, for every re-check
+- Identity oracle: <the call that answers who is logged in>; a «dead» verdict is believed only from a FRESH tab — new tab → the application's own entry page, loaded and off the sign-in page → the call, for every re-check (never a static resource of the host: it does not renew the session)
 - Who is logged in: <account · organisation / tenant · role> — your first move is to open your own tab and check WHOSE session this is, not
   whether one is alive: a live session under someone else's role turns its refusals into «the result of a permissions check»
 - Role for this round's operations: <the role the operations need — permissions differ between roles that log in identically, and the wrong
@@ -124,11 +124,11 @@ The wording that keeps a row a question:
 - Acting identity and carrier: <as in scenario <N>'s row — never restated here>
 - Body: <written out whole, field by field — each checked against the knowledge base for a value known to crash or page someone; the other fields chosen by the order of the checks>
 - Read channel for the effect: <alive, proven by <a read the manager took at planning> — a probe whose oracle recon already showed dead is not sanctioned; it is deferred with its carrier recorded>
-- Who presses: <the executor — a reversible step | the user, through the pause protocol | the manager, by its own call or in the executor's prepared tab (through the executor's session where the tool has sessions, `browser/<tool>.md`) — an IRREVERSIBLE step is never the executor's; the sanction question already said who>
+- Who presses: <the executor — a reversible step | the user, through the pause protocol | the manager, by its own call or in the executor's prepared tab (through the executor's session where the tool has sessions, `browser/<tool>.md`) — an IRREVERSIBLE step is never the executor's; the sanction question already said who; several pressed by the manager → one ordered package, each command with its own gate and a latch against a second run>
 - Combining hostile values: <allowed into one artifact if each stays identifiable in the output; one failing the operation → unwind into separate probes | not allowed>
 - Unanticipated refusal: <names the cause literally → the response proves the mechanism, no control; generic → one control call with <a value known to resolve> is authorised, leaving <residue>>
 - Overshoot cap: <exceed the available amount by the smallest amount that still proves the guard is gone>
-- Reverse: <works | known not to work — the stuck value is the expected artifact and the evidence; record it under environment artifacts, not as a protocol failure>
+- Reverse: <works | known not to work — the stuck value is the expected artifact and the evidence; record it under environment artifacts, not as a protocol failure | a switch-off of a process — the residue it leaves (a queue, a retry, a job) and its drain: <…>, gated | not yet known — a probe parked on it runs once scenario <N> proves it, never «not covered»>
 - Budget unit: <one pair of mutations per PROPERTY to be shown, on the same object, each reversed before the next; restorations count>
 - A process the probe starts: <not terminated by you — record its id, state and attempt count at the end of the round; the report hands the decision to the team>
 - Timed burst (a paid probe of simultaneous and offset calls): <rehearsed first, free — the same code with a harmless read under the mutation's alias, no budget flag, nothing stored; the measured offsets reported before the pause | not a burst>

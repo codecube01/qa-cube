@@ -3,7 +3,9 @@
 The fixture is a fake `~/.claude/projects`: a manager that writes into the session folder, an executor whose prompt
 names it, a later session that only reads the folder, and one that moves it in a sweep. A case here is a way the
 numbers came out wrong on real transcripts: a streamed message counted twice, a reader taken for the manager, an
-executor resumed three days later reported as three days of work, a renamed folder losing its round 1.
+executor resumed three days later reported as three days of work, a renamed folder losing its round 1 — and, for
+«where the context went», a share computed from characters instead of the measured growth (a one-off measurement put
+the instructions at half their real share that way).
 
 Run: python3 -m unittest discover -s tests
 """
@@ -169,6 +171,85 @@ class Numbers(Fixture):
         [s] = transcripts.collect(self.root, self.folder)
         self.assertEqual(s.active_ms, 15 * 60_000)
         self.assertEqual(len(s.pauses), 1)
+
+
+def call(minute: int, msg_id: str, context: int, out: int = 0, thinking: int = 0, *calls: tuple[str, str, dict]) -> dict:
+    e = assistant(minute, msg_id, *calls, context=context, out=out)
+    e["message"]["usage"]["output_tokens_details"] = {"thinking_tokens": thinking}
+    return e
+
+
+class WhereItWent(Fixture):
+    """Every call's context split by what put it there — measured by the growth between calls, not by a guess of
+    characters per token; the sum over calls is the processed context, which is what a session pays."""
+
+    def test_growth_goes_to_what_came_back_and_output_stays(self):
+        engine = "/plugins/cache/qa-cube/qa-cube/0.1.0/skills/qa/references/planning.md"
+        write(self.proj / "s" / "subagents" / "agent-a.jsonl", [
+            prompt(0, f"folder 2026-10-01_{SLUG}"),
+            call(1, "a", 1000, 100, 0, ("t1", "Read", {"file_path": engine})), result(1, "t1", "x" * 300),
+            call(2, "b", 1500, 50, 0, ("t2", "Read", {"file_path": "/repo/.claude/qa-profile.md"})), result(2, "t2", "y" * 900),
+            call(3, "c", 1750),
+        ])
+        [s] = transcripts.collect(self.root, self.folder)
+        self.assertEqual(s.processed, 1000 + 1500 + 1750)
+        P = transcripts
+        self.assertEqual({k: round(v) for k, v in s.parts.items() if v},
+                         {P.START: 3000, P.OUTPUT: 250, P.ENGINE: 800, P.PROFILE: 200})   # 300 chars became 400 tokens: measured, not guessed
+
+    def test_a_drop_takes_thinking_first(self):
+        write(self.proj / "s" / "subagents" / "agent-b.jsonl", [
+            prompt(0, f"folder 2026-10-01_{SLUG}"),
+            call(1, "a", 1000, 300, 200, ("t1", "Read", {"file_path": f"{self.folder}/1-plan.md"})), result(1, "t1", "p" * 500),
+            call(2, "b", 1800),
+            prompt(3, "a new user turn: the earlier thinking is stripped"),
+            call(4, "c", 1600),
+        ])
+        [s] = transcripts.collect(self.root, self.folder)
+        P = transcripts
+        self.assertEqual(round(s.parts[P.OWN]), 500 + 500)     # the plan stays whole in b and in c
+        self.assertEqual(round(s.parts[P.OUTPUT]), 300 + 100)  # b holds thinking and text, c only the text
+
+    def test_a_drop_below_the_start_shrinks_the_start(self):
+        write(self.proj / "s" / "subagents" / "agent-d.jsonl", [
+            prompt(0, f"folder 2026-10-01_{SLUG}"),
+            call(1, "a", 1000, 100), call(2, "b", 600),
+        ])
+        [s] = transcripts.collect(self.root, self.folder)
+        self.assertEqual(round(sum(s.parts.values())), s.processed)   # the shares never add up to more than was sent
+
+    def test_targets(self):
+        other = self.folder.parent / "2026-09-20_acme-300-old"
+        T, P = transcripts.target, transcripts
+        cases = {
+            ("Read", f"{self.folder}/3-manual-result.md"): P.OWN,
+            ("Read", f"{other}/3-manual-result.md"): P.OTHER_SESSIONS,
+            ("Read", f"{self.folder.parent}/environment-state.md"): P.OTHER_SESSIONS,
+            ("Read", "/repo/.claude/qa-profile/browser.md"): P.PROFILE,
+            ("Read", "/repo/.claude/qa-cube-feedback.md"): P.PROFILE,     # not the engine, though it says qa-cube
+            ("Read", "/repo/docs/knowledge/payments.md"): P.PROFILE,
+            ("Read", "/opt/claude/plugins/cache/qa-cube/qa-cube/0.1.0/skills/qa/SKILL.md"): P.ENGINE,
+            ("Bash", "curl -s https://api.example.test/v1/orders"): P.WORK,
+            ("Bash", f"curl -s https://api.example.test/{self.folder.parent.name}/42"): P.WORK,   # an API path, not the folder
+            ("Bash", f"cat {self.folder.parent.name}/2026-09-20_acme-300-old/1-plan.md"): P.OTHER_SESSIONS,
+            ("Bash", "grep -rn knowledge /opt/claude/plugins/cache/qa-cube/qa-cube/0.1.0/skills/qa/"): P.ENGINE,
+            ("Read", "/repo/docs/product-knowledge.md"): P.WORK,
+        }
+        for (name, aim), want in cases.items():
+            key = "file_path" if name == "Read" else "command"
+            self.assertEqual(T({"name": name, "input": {key: aim}}, self.folder), want, aim)
+
+    def test_the_table_is_printed_with_processed_and_a_total(self):
+        write(self.proj / "m.jsonl", [
+            call(1, "a", 2000, 10, 0, ("t1", "Write", {"file_path": f"{self.folder}/1-plan.md", "content": "x"})),
+            result(1, "t1", "ok"), call(2, "b", 2100),
+        ])
+        write(self.proj / "s" / "subagents" / "agent-c.jsonl", [prompt(0, f"folder 2026-10-01_{SLUG}"), call(1, "a", 900)])
+        code, out = self.run_cli()
+        self.assertEqual(code, 0)
+        self.assertIn("| processed |", out)
+        self.assertIn("4k |", out)                     # the manager's 2000 + 2100
+        self.assertRegex(out, r"\n\| all \| \d+% \|")
 
 
 class Cli(Fixture):

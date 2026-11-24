@@ -113,7 +113,7 @@ The executors ask no questions — not one of them.
 
 ## The pipeline
 
-**1. Understand the task and assemble the bundle.** **Where entering the environment needs the user's hands (per the profile), the liveness oracle is this step's FIRST call** — a dead session then overlaps your reading instead of following it; that call and every re-check of it is a new tab → navigate → the call, never the tab that answered `401`; the entry in `references/manual-brief.md` is read only at step 4, too late for this rule. The input is a link/id of a tracker task or free-form text. Read the task with the tools
+**1. Understand the task and assemble the bundle.** **Where entering the environment needs the user's hands (per the profile), the liveness oracle is this step's FIRST call** — a dead session then overlaps your reading instead of following it; that call and every re-check of it is a new tab → the application's own entry page, loaded → the call, never the tab that answered `401` and never a static resource of the host; the entry in `references/manual-brief.md` is read only at step 4, too late for this rule. The input is a link/id of a tracker task or free-form text. Read the task with the tools
 from the profile (Tracker section): the description and **the comments, mandatorily** — that is where the requirements, the status and the
 related changes live. Check for **related tasks** in three ways, not one: (1) explicit links/relations; (2) the task's **subtasks and
 parent**; (3) a substring search on the title (neighboring FE/BE tasks of the same area). Empty relations do not mean «there are none». If a
@@ -195,6 +195,7 @@ The file skeletons live in `templates/` next to this skill:
 5-automator-result.md  # written by the automator
 7-retro.md             # the retro
 99-report.md           # the manager's report — one per session, updated every round
+issue.md               # bug-reports/issue-<ID>.md: a ready-to-paste tracker task, only on request
 ```
 
 **The task's raw source goes into `0-session.md`.** Everything read at step 1 goes in there verbatim: the full text of the task (and of the
@@ -405,8 +406,8 @@ and `*automator-result*.md` (the executors are obliged to write them), **the ana
 carry it into `7-retro.md` from your own context; the analyst most often complains about the plan and the profile rather than the
 environment) plus your own view: where you got bogged down, what you violated, what information was missing, what the manager planned badly.
 **Then the numbers, which nobody's memory holds**: `python3 "<plugin root>/skills/qa/scripts/transcripts.py" <folder>` (plus `--root` where the adapter's «Transcripts» names one; exit 1 → the line «no transcript numbers in this harness») — per
-manager and executor transcript: time, context peak, tool errors, refusals, retries after a failure, compactions. Its table goes into
-`7-retro.md` as printed (the harness may delete transcripts — Claude Code after 30 days). **Every note it prints is answered**: either it becomes a row
+manager and executor transcript: time, context peak, processed context and what filled it, tool errors, refusals, retries after a
+failure, compactions. Its tables go into `7-retro.md` as printed (the harness may delete transcripts — Claude Code after 30 days). **Every note it prints is answered**: either it becomes a row
 of the observation table with an address, or it gets one line under «Numbers» saying why it is normal («navigate ×6 — waiting for the
 deploy, per the brief»); a note passed over in silence leaves the numbers on the page and no lesson drawn from them.
 Precedent: over one week of sessions it showed managers at 400–750k tokens and one compacted mid-session — invisible from inside.

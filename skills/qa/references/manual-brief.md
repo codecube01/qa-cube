@@ -21,7 +21,7 @@ is in `templates/2-manual-task.md`.
 - a config edit made in the same session → does not reach the executor's context: the values go into «Values the round depends on», and any claim about a file's contents is made after reading it
 - an adjacent system with short-lived access → preflight hands over its entity IDs, not only their state (a «Recon facts» row of kind «ids of a short-lived contour»)
 - the name you gave an environment may never reach the executor's listing → the address is an id; where the tooling exposes no id either, the «On a refusal» slot names the identity oracle to sweep the candidates with, most-recently-connected first, the handshake last; where the user can re-enter quickly, pin ONE environment and make a refusal a stop, not a search
-- entering the environment needs a human → the liveness oracle is the session's FIRST call, before reading anything; a «dead» verdict is believed only from a fresh tab — every re-check, not only the first: the tab that answered `401` is a leftover from that moment on
+- entering the environment needs a human → the liveness oracle is the session's FIRST call, before reading anything; a «dead» verdict is believed only from a fresh tab — every re-check, not only the first: the tab that answered `401` is a leftover from that moment on · the fresh tab → the app's own entry page, loaded, never a static resource: only the app's load renews the session
 - each entry spends a one-time artifact (a login link, a code) → choose the role the operations need and probe the existing session first; a scripted and a browser session are independent carriers, an identity per carrier (the «Role» and «Carriers» slots) · a connected signer → its carrier is the app's ACTIVE connection, never what is advertised
 - preflight proves the session → open the round's TARGET screen too, and compare the address you land on with the one you asked for; a redirect you explained to yourself is a question for the executor, not noise
 - the manager's recon → verifies the ADDRESS (path, method, headers, the selection criterion) and stops at the first response that proves it; running the scenario is the executor's work; the VALUES the probe returned are handed over as «Recon facts» rows
@@ -42,7 +42,7 @@ is in `templates/2-manual-task.md`.
 - a «harmless» write (a report request, an export, a log entry) on an environment where an automated run reads the newest record of that kind → a mutation of that run's input: behind the same «run finished» gate as the other mutations, or carrying a discriminator the run filters out · a record the round LEAVES BEHIND (a seed, an open operation) → judged against the automated runs' PRECONDITIONS too («no live record of that kind» waits), not only against what they read
 - which scenarios the executor can close alone → the «Closable alone» column, and the closable ones go first
 - `test-cases: upfront` → the brief carries the case ids and the verdict on the requirements; an expected result sourced from `spec` is untouchable, one from an `assumption` or the `KB` is refined against the facts; steps and preconditions are always refined
-- a check able to REFUTE the round's central hypothesis (a contract file, a schema, a route table) → scenario 0 of the table, never the tail of the reading list; where the hypothesis is that a NEW BRANCH of an operation fires at all → scenario 0 is its cheapest single trigger on a minimal fixture, in the requirement's central case (not at an edge of the input range), run before the fixture the rest of the round needs is built; a proof of deployment does not stand in for it
+- a check able to REFUTE the round's central hypothesis (a contract file, a schema, a route table) → scenario 0 of the table, never the tail of the reading list; where the hypothesis is that a NEW BRANCH of an operation fires at all → scenario 0 is its cheapest single trigger on a minimal fixture, in the requirement's central case (not at an edge of the input range), run before the fixture the rest of the round needs is built; a proof of deployment does not stand in for it · every UI scenario passes one shared client action (an upload, a submit) → that action once through the real UI, its request body captured, before the fixture and the lever window
 - a profile rule the executor breaks before it reaches the paragraph that states it (what to open files with, what to read first) → duplicated as the first line of the reading list
 - a scenario whose expectation is a RESPONSE CODE → the «Expected effect» column adds «and what actually happened», with the channel that shows it, even where the requirement is only about the code
 - after negative permission probes → the table's last row reads the journal for the run's window: what each refusal was recorded as, each refusal's text whole
@@ -57,8 +57,8 @@ is in `templates/2-manual-task.md`.
 - a UI round on a task that links a design → the brief names the frames the round compares, read by the manager at planning, and the screen verdicts get a «design» column; «do not pull the design» is never written, because a visual finding the design itself prescribes is a spec-versus-design question, not a defect
 - a brief step that differs from the plan's → the plan corrected in the same pass, or the step marked «departs from the plan because …»
 - after recon nothing is left that can be done by hand → do not launch the executor: file the recon as `<N>-recon-<source>.md` and say in the report why there was no manual run
-- **What you have not checked yourself is handed over as a question** — the «Open hypotheses» table, a question with its stake, never a fact, a verdict or a menu: a claim about the environment → «is there an object in state X? it would close Y» · a doubt about an instrument → «check whether it can do X; if so, that closes Y» · a seeding route you have not run → «as far as I know it yields …; if not, what else produces this state»; a route through the project's own test framework → its preconditions (the hosts it pings, the channels its asserts read) checked by you at preflight, one call each · a link between two records joined by TIME → «matched by time only, the join by id is the question» · a hypothesis about the shape of the fix → «the marker not found is not a verdict, verify by behaviour» · the fixer's correction to your previous description, or the team's claim about the environment → quoted and attributed, the measurement is the verdict · a hypothesis nothing outside the product can settle → marked so, no calls, replaced by its observable consequence · a list of expected outcomes → illustrations only, «any other outcome is also a result»
-- **A sanctioned mutating probe: what the permission must also say** — the «Sanctioned probe» block answers in advance what the executor would otherwise decide mid-probe: is the read channel for the effect alive → asked before the sanction, a dead oracle defers the probe with its carrier · who presses an irreversible step → the user through the pause protocol or the manager, never the executor · may the hostile values be combined → yes if each stays identifiable, unwound on a failure · an unanticipated refusal → a literal cause needs no control, a generic one authorises one control call with a value known to resolve · an overshoot → capped at the smallest amount that proves the guard is gone · a reverse already known to be missing → declared, the stuck value is the expected artifact · the budget's unit → the PROPERTY being demonstrated, not the round · a background process the accepted probe starts → not terminated, its id and state recorded · a paid probe shaped as a timed burst (simultaneous and offset calls) → its mechanics rehearsed first, free: the same code with a harmless read under the mutation's alias, no budget flag set, nothing stored, the measured offsets reported before the pause · the probe's BODY → written out whole by the manager, each field checked against the knowledge base for a value known to crash or page someone, the other fields chosen by the order of the checks (`planning.md`) · the OBJECT the sanction question names → checked free before the question is put (the test code by its id and name, the object's own description, the environment snapshot) and able to serve (holds what the probe consumes); an object swapped after the answer → put back to the user as a question of its own, the sanction covered the old name · an action that must fall BETWEEN two steps of a scenario → a step in that scenario's row, never the sanctions block alone
+- **What you have not checked yourself is handed over as a question** — the «Open hypotheses» table, a question with its stake, never a fact, a verdict or a menu: a claim about the environment → «is there an object in state X? it would close Y» · a doubt about an instrument → «check whether it can do X; if so, that closes Y» · a seeding route you have not run → «as far as I know it yields …; if not, what else produces this state»; a route through the project's own test framework → its preconditions (the hosts it pings, the channels its asserts read) checked by you at preflight, one call each, plus what it switches on the shared environment for its run and whether it is disabled · a link between two records joined by TIME → «matched by time only, the join by id is the question» · a hypothesis about the shape of the fix → «the marker not found is not a verdict, verify by behaviour» · the fixer's correction to your previous description, or the team's claim about the environment → quoted and attributed, the measurement is the verdict · a hypothesis nothing outside the product can settle → marked so, no calls, replaced by its observable consequence · a list of expected outcomes → illustrations only, «any other outcome is also a result»
+- **A sanctioned mutating probe: what the permission must also say** — the «Sanctioned probe» block answers in advance what the executor would otherwise decide mid-probe: is the read channel for the effect alive → asked before the sanction, a dead oracle defers the probe with its carrier · who presses an irreversible step → the user through the pause protocol or the manager, never the executor; several pressed by the manager → one ordered package of commands, each with its own gate and a latch against a second run · may the hostile values be combined → yes if each stays identifiable, unwound on a failure · an unanticipated refusal → a literal cause needs no control, a generic one authorises one control call with a value known to resolve · an overshoot → capped at the smallest amount that proves the guard is gone · a reverse already known to be missing → declared, the stuck value is the expected artifact; a reverse that switches a process off → the residue it leaves (a queue, a retry, a job) and its drain named, gated; a reverse not yet known → parked probes run conditionally once a scenario proves it · the budget's unit → the PROPERTY being demonstrated, not the round · a background process the accepted probe starts → not terminated, its id and state recorded · a paid probe shaped as a timed burst (simultaneous and offset calls) → its mechanics rehearsed first, free: the same code with a harmless read under the mutation's alias, no budget flag set, nothing stored, the measured offsets reported before the pause · the probe's BODY → written out whole by the manager, each field checked against the knowledge base for a value known to crash or page someone, the other fields chosen by the order of the checks (`planning.md`) · the OBJECT the sanction question names → checked free before the question is put (the test code by its id and name, the object's own description, the environment snapshot) and able to serve (holds what the probe consumes); an object swapped after the answer → put back to the user as a question of its own, the sanction covered the old name · an action that must fall BETWEEN two steps of a scenario → a step in that scenario's row, never the sanctions block alone
 - **What a recon fact may claim** — a row of the «Recon facts» table: the value, its kind, its source, its date, its boundary: a value, not a retelling → the numbers themselves, and «is the fix deployed» by a grep of the served bundle · an endpoint → path and method verified by one probe, or marked unverified · dated, with the boundary of the sample → state re-checked, counts with their window, a mechanism dated by the build and by the BRANCH of the process it was read on, a negative naming the places looked · contract values are fact, the composition of the interface is a hypothesis → confirm by looking · a field-name oracle → a hypothesis, never the primary · a minified excerpt → the fragment, never its meaning, and a LOWER bound on what the product does · an identifier scheme → a convention; the object's own id field is the address · a client query document → names only, types unknown, never «can be relied on»
 
 **A retest round** — the template's «Retest» section, filled in
@@ -191,14 +191,17 @@ is what preflight does, and learns, before the brief is written.
   and the knowledge base, wrote the plan, and only then found the session dead — the manual re-login was the round's longest pause, and
   it could have overlapped every one of those reads.
 
-  *And a «dead» answer is believed only from a FRESH navigation in a new tab* (the «Identity oracle» slot says so) — and fresh is per
-  check, not per session: the tab you opened for the first probe becomes a leftover the moment it answered `401`. A leftover tab outlives
-  what made it a valid probe — the extension reconnects, the page's own client runs its refresh-then-logout chain on the refusal, the page
-  keeps a state from before the user's re-login — and its identity call keeps answering `401` while the profile's session is alive; a false
-  «dead» costs the user a re-login they did not need, or a wait on one they already made. So every re-check, and above all the one before
-  telling the user «still dead», is a new tab → navigate → the call. Precedent: a manager probed once from a new tab, got `401`, asked for
-  a re-login and then re-checked four times over forty minutes from that same tab, reporting «still dead» each time; the user answered
-  that the session was there, and a new tab in the same profile answered `200` at once.
+  *And a «dead» answer is believed only from a FRESH navigation to the application itself* (the «Identity oracle» slot says so) — and
+  fresh is per check, not per session: the tab you opened for the first probe becomes a leftover the moment it answered `401`. A leftover
+  tab outlives what made it a valid probe — the extension reconnects, the page's own client runs its refresh-then-logout chain on the
+  refusal, the page keeps a state from before the user's re-login — and its identity call keeps answering `401` while the profile's
+  session is alive. The navigation goes to the application's own entry page, loaded and off the sign-in page: its load may renew the
+  session (a silent identity-provider redirect, a refresh on boot), while a static resource of the host reads only the stored token. A
+  false «dead» costs the user a re-login they did not need, or a wait on one they already made. So every re-check, and above all the one
+  before telling the user «still dead», is a new tab → the entry page → the call. Precedent: a manager probed once from a new tab, got
+  `401`, asked for a re-login and then re-checked four times over forty minutes from that same tab, reporting «still dead» each time; the
+  user answered that the session was there, and a new tab in the same profile answered `200` at once. Another preflight probed fresh
+  tabs on the host's icon file, got `401` twice and blocked the round, while opening the main page showed the session alive.
 
 - **Where each entry spends a one-time artifact (a login link, a code), the identity is chosen and the existing session probed BEFORE
   the artifact is spent** — the «Role» and «Carriers» slots. Permissions differ between roles that log in identically, and entering under
@@ -429,6 +432,10 @@ is what preflight does, and learns, before the brief is written.
   before the fixture would have reshaped the round at its start — and its retest first placed that probe outside the range of free values,
   caught only by the brief's reviewer.
 
+  *And where every UI scenario passes one shared client action* (an upload, a submit), that action is the round's hidden hypothesis: a
+  sibling change merged into the branch can break it, and every screen behind it goes dark. Precedent: a form round learned at its first
+  click — fixture built, switches on — that the client put the chosen file into the request twice and the server refused every upload.
+
 - **A profile rule that the executor breaks before they get around to finishing the profile must be duplicated straight into the brief — as
   the first line of the reading list.** This concerns rules about reading itself and about the order of work (what to open files with, what
   to read before the first request to the environment, where not to go): the executor takes their first action before reaching the relevant
@@ -581,11 +588,14 @@ wording per shape; this section keeps what each shape cost.
   whether it is the right one. Two failures in one round: the claimed producer created nothing (the provisioning lived in a neighbouring
   step of the same suite), and the claimed path was forbidden outright by server-side validation.
 
-  *And where the route is a run of the project's own test framework* — the framework checks its own preconditions before it provisions
-  anything (a ping of every host it knows, a delivery channel its asserts wait on), and those are not the hosts and channels your recon
-  touched. Run them by hand at preflight, one call each. Precedent: recon read the admin host only, the framework's setup pinged two
-  front-end hosts that had answered `503` for days, and the executor stopped before creating a single fixture; the next executor lost
-  minutes to a delivery service that had died between the rounds.
+  *And where the route is a run of the project's own test framework*, read the test before handing it over. Its preconditions: the
+  framework checks them before it provisions anything (a ping of every host it knows, a delivery channel its asserts wait on), and those
+  are not the hosts and channels your recon touched — run them by hand at preflight, one call each. What it switches on the shared
+  environment for its run: everything created meanwhile inherits it, and a run killed from outside leaves it switched. And whether it is
+  disabled at all. Precedent: recon read the admin host only, the framework's setup pinged two front-end hosts that had answered `503` for
+  days, and the executor stopped before creating a single fixture; the next executor lost minutes to a delivery service that had died
+  between the rounds. Precedent: a brief planned five-minute windows on a test that set the shared timer to thirty seconds for its run,
+  and named a disabled test as its fallback.
 
 - **A LINK between two records that recon made by their TIME.** A batch process stamps dozens of objects within one second, and a
   background worker acts at the hours a person would. Join through the identifiers the records carry; where neither is in hand, hand the
@@ -637,6 +647,11 @@ each one cost.
   chat; the executor filled the form, stopped at the button and asked for the user's click, and the second record was dropped mid-pause
   once it proved to add nothing to the verdict.
 
+  *And where the manager presses several,* the executor hands them over as ONE ordered package — each a complete command with its own
+  gate (identity, object state) and a latch that aborts a second run — read once, run in order: relays eat a short session, the latch
+  makes a re-run harmless (a press: `browser/playwriter.md`, «Another actor's tab»). Precedent: six irreversible steps went in two
+  packages, each run in a minute.
+
 - **May the hostile values be COMBINED?** Escaping, encoding and injection checks come as a matrix, and one artifact usually carries all of
   them — four mutations become one and the restore shrinks to a single call. Precedent: four hostile characters were folded into a single
   rename by the executor's own initiative, closing the escaping requirement in one mutation and one restore.
@@ -649,10 +664,20 @@ each one cost.
   through the fixture and leaves a journal entry of that size forever. Precedent: an executor kept the excess minimal on their own and noted
   that the brief had not said to — the restore had to pass a sum two orders of magnitude larger than anything else in the round.
 
-- **When the reverse is already known not to work, say so and declare the residue expected.** A reversibility protocol reads as a promise,
+- **What does the REVERSE leave behind? Where it is already known not to work, say so and declare the residue expected.** A reversibility protocol reads as a promise,
   so a known defect that makes the restore impossible costs attempts hunting for a way back, or the probe skipped. You usually know before
   the round — it sits in a review remark or a comment on a neighbouring task, read at step 1. Precedent: a probe aimed at the one field
   whose clearing was already filed as a deferred remark came back with the value stuck — the right outcome, obtained without cover.
+
+  *And where the reverse is a lever that switches a process OFF*, it does not drain what the process holds: a queue, a pending retry or
+  a scheduled job started under the lever fires at the next switch-on, on whoever flips it, against whatever the carrier has become.
+  Before the lever is pulled the brief names that residue and its drain (a window where it fails harmlessly, a cancel, the carrier
+  moved out of reach), with its own gate. Precedent: an integration switched off to end a retry observation still queued one
+  transmission; the executor improvised a gated drain, and it went out for a carrier that had left the eligible status — filed as a defect.
+
+  *And where it is not yet KNOWN whether the reverse works*, a probe parked only for that reason is written conditional on the scenario
+  that settles it («once N removed its object cleanly, run X within the budget left»), never «not covered». Precedent: two probes
+  parked as «would create a record» were sent back once clean deletion was proven.
 
 - **The budget's unit is the PROPERTY being demonstrated, not the round.** A scenario about rendering, formatting or derivation has two or
   three independent properties, each needing its own crafted value; a per-round cap silently picks one and the verdict borrows the rest

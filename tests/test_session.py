@@ -208,6 +208,15 @@ class Shot(unittest.TestCase):
         self.assertEqual(text.count("ABC-15-2.png"), 2)
         self.assertIn("📎 c13-2.png", text)
 
+    def test_a_marker_in_an_issue_file_follows_too(self):
+        (self.dir / "bug-reports").mkdir()
+        issue = self.dir / "bug-reports" / "issue-ABC-15.md"
+        issue.write_text("**Environment:** stage. 📎 c3-2.png\n", encoding="utf-8")
+        code, out = session.rename_shot(self.dir, "c3-2", "ABC-15")
+        self.assertEqual(code, 0, out)
+        self.assertIn("📎 ABC-15-2.png", issue.read_text(encoding="utf-8"))
+        self.assertTrue(any(line.startswith("bug-reports/issue-ABC-15.md:") for line in out), out)
+
     def test_a_marker_that_ends_a_sentence_follows_too(self):
         (self.dir / "3-manual-result.md").write_text(
             "the window is empty. 📎 c3-2.png. A control run followed.\nnot a marker: 📎 c3-2.png.bak\n", encoding="utf-8")
